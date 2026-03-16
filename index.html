@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BSTM - Africa's First Digital Nation Marketplace</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        
+        * { font-family: 'Inter', sans-serif; }
+        
+        .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .glass-morphism { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.2); }
+        .card-hover { transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .card-hover:hover { transform: translateY(-12px) scale(1.02); box-shadow: 0 25px 50px -12px rgba(102, 126, 234, 0.25); }
+        .shimmer { position: relative; overflow: hidden; }
+        .shimmer::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent); animation: shimmer 2s infinite; }
+        @keyframes shimmer { to { left: 100%; } }
+        .pulse-animation { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+        .floating { animation: float 3s ease-in-out infinite; }
+        @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-20px); } }
+        .gradient-text { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .btn-glow { box-shadow: 0 0 20px rgba(102, 126, 234, 0.5); transition: all 0.3s ease; }
+        .btn-glow:hover { box-shadow: 0 0 30px rgba(102, 126, 234, 0.8); transform: translateY(-2px); }
+        .thb-badge { background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%); box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4); }
+        .sovereign-badge { background: linear-gradient(135deg, #10b981 0%, #059669 100%); box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3); }
+        #offlineNotice { position: fixed; bottom: 20px; right: 20px; background: #ef4444; color: white; padding: 12px 20px; border-radius: 8px; display: none; z-index: 9999; }
+        #demoToast { position: fixed; top: 80px; right: 20px; background: #10b981; color: white; padding: 16px 24px; border-radius: 12px; display: none; z-index: 9999; box-shadow: 0 10px 40px rgba(0,0,0,0.3); }
+        #installPrompt { position: fixed; bottom: 20px; left: 20px; background: white; padding: 16px; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); display: none; z-index: 9999; max-width: 320px; }
+        .theme-dark { background: #1a202c; color: white; }
+        .theme-dark .bg-white { background: #2d3748; }
+        .theme-dark .text-gray-800 { color: #e2e8f0; }
+        .theme-dark .text-gray-600 { color: #cbd5e0; }
+        .theme-dark .border-gray-200 { border-color: #4a5568; }
+    </style>
+</head>
+<body class="bg-gray-50" id="mainBody">
+    
+    <!-- Digital Nation Banner -->
+    <div class="bg-gradient-to-r from-purple-900 via-purple-800 to-indigo-900 text-white text-center py-3 px-4">
+        <div class="flex items-center justify-center space-x-3">
+            <i class="fas fa-globe-africa text-yellow-300"></i>
+            <p class="text-sm md:text-base font-semibold">🇧🇼 Africa's First Digital Nation – Powered by BSTM</p>
+            <a href="https://todd366.github.io/bstm-ecosystem-network/" class="text-yellow-300 hover:text-yellow-100 text-sm underline ml-2">
+                Explore Network →
+            </a>
+        </div>
+    </div>
+
+    <!-- Top Announcement Bar -->
+    <div class="gradient-bg text-white text-sm py-2">
+        <div class="container mx-auto px-4 flex justify-between items-center">
+            <div class="flex items-center space-x-6">
+                <span><i class="fas fa-phone-alt mr-2"></i>+267 XX XXX XXX</span>
+                <span><i class="fas fa-envelope mr-2"></i>bstm366@gmail.com</span>
+                <span class="flex items-center">
+                    <span class="w-2 h-2 bg-green-400 rounded-full mr-2 pulse-animation"></span>
+                    <span id="liveUserCount">1,247</span> Active Users
+                </span>
+            </div>
+            <div class="flex items-center space-x-4">
+                <a href="https://t.me/BSTM_Bot" target="_blank" class="hover:text-gray-200"><i class="fab fa-telegram"></i> Chat Bot</a>
+                <a href="#" class="hover:text-gray-200"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="hover:text-gray-200"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="hover:text-gray-200"><i class="fab fa-whatsapp"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Navigation -->
+    <header class="glass-morphism sticky top-0 z-50 shadow-xl">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-8">
+                    <a href="/" class="flex items-center group">
+                        <div class="w-12 h-12 gradient-bg rounded-xl flex items-center justify-center mr-3 transform group-hover:rotate-12 transition-transform">
+                            <span class="text-white font-bold text-2xl">B</span>
+                        </div>
+                        <div>
+                            <span class="text-2xl font-bold gradient-text">BSTM</span>
+                            <p class="text-xs text-gray-600">Room 18 Marketplace</p>
+                        </div>
+                    </a>
+                    
+                    <nav class="hidden lg:flex items-center space-x-6">
+                        <a href="#" class="text-gray-700 hover:text-purple-600 font-semibold transition-colors">Home</a>
+                        <a href="#categories" class="text-gray-700 hover:text-purple-600 font-semibold transition-colors">Categories</a>
+                        <a href="#room22" class="text-gray-700 hover:text-purple-600 font-semibold transition-colors">Room 22 Farm</a>
+                        <a href="https://todd366.github.io/bstm-ecosystem-network/" target="_blank" class="text-gray-700 hover:text-purple-600 font-semibold transition-colors">
+                            <i class="fas fa-project-diagram mr-1"></i>Network Map
+                        </a>
+                        <a href="#" class="text-gray-700 hover:text-purple-600 font-semibold transition-colors">About</a>
+                    </nav>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <button id="themeToggle" class="text-gray-700 hover:text-purple-600">
+                        <i class="fas fa-moon" id="themeIcon"></i>
+                    </button>
+                    <button class="relative text-gray-700 hover:text-purple-600">
+                        <i class="fas fa-bell text-xl"></i>
+                        <span class="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">3</span>
+                    </button>
+                    <button class="relative text-gray-700 hover:text-purple-600">
+                        <i class="fas fa-heart text-xl"></i>
+                        <span class="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">5</span>
+                    </button>
+                    <button id="loginBtn" class="bg-gray-100 hover:bg-gray-200 text-gray-800 py-2 px-6 rounded-lg font-semibold transition-all">
+                        Login
+                    </button>
+                    <a href="https://todd366.github.io/bstm-ecosystem-network/" target="_blank" class="gradient-bg text-white py-2 px-6 rounded-lg font-semibold btn-glow hidden md:block">
+                        Network Map
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Enhanced Search Bar -->
+            <div class="mt-4">
+                <div class="bg-white rounded-xl shadow-lg p-2 flex items-center">
+                    <i class="fas fa-search text-gray-400 text-xl ml-4"></i>
+                    <input type="text" id="searchInput" placeholder="Search products, services, or sellers..." class="flex-1 outline-none text-gray-700 px-4 py-2">
+                    <button id="voiceSearch" class="text-purple-600 hover:text-purple-800 mx-2">
+                        <i class="fas fa-microphone text-xl"></i>
+                    </button>
+                    <select id="roomSelector" class="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg outline-none mx-2">
+                        <option value="">All Rooms</option>
+                        <option value="22">Room 22 Farm</option>
+                        <option value="18">Room 18 Marketplace</option>
+                    </select>
+                    <select class="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg outline-none mx-2">
+                        <option>All Categories</option>
+                        <option>Fresh Produce</option>
+                        <option>Electronics</option>
+                        <option>Fashion</option>
+                    </select>
+                    <select class="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg outline-none mr-2">
+                        <option>All Locations</option>
+                        <option>Gaborone</option>
+                        <option>Francistown</option>
+                    </select>
+                    <button class="gradient-bg text-white px-8 py-3 rounded-lg font-semibold">Search</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="gradient-bg py-20 text-white relative overflow-hidden">
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <div class="inline-block bg-white bg-opacity-20 backdrop-filter backdrop-blur-lg rounded-full px-4 py-2 mb-6">
+                        <span class="flex items-center text-sm font-semibold">
+                            <span class="w-2 h-2 bg-green-400 rounded-full mr-2 pulse-animation"></span>
+                            <span id="heroStats">1,247 Sellers • 15,892 Products</span>
+                        </span>
+                    </div>
+                    <h1 class="text-5xl md:text-6xl font-bold mb-6 leading-tight">
+                        Botswana's Digital <span class="text-yellow-300">Nation</span> Marketplace
+                    </h1>
+                    <p class="text-xl mb-8 text-gray-100">
+                        Shop from verified sellers, earn THB rewards, and support local businesses.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4 mb-8">
+                        <button class="bg-white text-purple-600 hover:bg-gray-100 py-4 px-8 rounded-xl font-bold text-lg shadow-2xl transform hover:scale-105 transition-all">
+                            <i class="fas fa-shopping-bag mr-2"></i>Start Shopping
+                        </button>
+                        <a href="https://cablink.bstm.bw" target="_blank" class="bg-yellow-400 hover:bg-yellow-500 text-gray-900 py-4 px-8 rounded-xl font-bold text-lg transform hover:scale-105 transition-all text-center">
+                            <i class="fas fa-car mr-2"></i>Ride & Earn THB
+                        </a>
+                    </div>
+                    <div class="grid grid-cols-3 gap-6 mb-6">
+                        <div>
+                            <p class="text-3xl font-bold" id="customerCount">50,000+</p>
+                            <p class="text-sm text-gray-200">Customers</p>
+                        </div>
+                        <div>
+                            <p class="text-3xl font-bold">98%</p>
+                            <p class="text-sm text-gray-200">Satisfaction</p>
+                        </div>
+                        <div>
+                            <p class="text-3xl font-bold">24/7</p>
+                            <p class="text-sm text-gray-200">Support</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Quest Teaser -->
+                    <div class="bg-white bg-opacity-10 backdrop-blur-lg rounded-xl p-4 border border-white border-opacity-20">
+                        <p class="text-sm font-semibold mb-2"><i class="fas fa-trophy text-yellow-300 mr-2"></i>Active Quest</p>
+                        <p class="text-lg">CabLink: <span class="font-bold">1/500</span> users – Join to unlock rewards!</p>
+                    </div>
+                </div>
+                <div class="hidden lg:block">
+                    <div class="relative floating">
+                        <img src="/api/placeholder/600/500" alt="BSTM Marketplace" class="rounded-3xl shadow-2xl">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trust Bar -->
+    <section class="py-8 bg-white shadow-md">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-6">
+                <div class="flex items-center justify-center space-x-3">
+                    <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
+                        <i class="fas fa-shield-alt text-purple-600 text-xl"></i>
+                    </div>
+                    <div>
+                        <p class="font-bold text-gray-800">Paystack</p>
+                        <p class="text-xs text-gray-600">Secure</p>
+                    </div>
+                </div>
+                <div class="flex items-center justify-center space-x-3">
+                    <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                        <i class="fas fa-user-check text-green-600 text-xl"></i>
+                    </div>
+                    <div>
+                        <p class="font-bold text-gray-800">Verified</p>
+                        <p class="text-xs text-gray-600">KYC Sellers</p>
+                    </div>
+                </div>
+                <div class="flex items-center justify-center space-x-3">
+                    <div class="w-12 h-12 thb-badge rounded-full flex items-center justify-center">
+                        <i class="fas fa-coins text-gray-900 text-xl"></i>
+                    </div>
+                    <div>
+                        <p class="font-bold text-gray-800">Earn THB</p>
+                        <p class="text-xs text-gray-600">Wallet Ready</p>
+                    </div>
+                </div>
+                <a href="https://todd366.github.io/bstm-ecosystem-network/" target="_blank" class="flex items-center justify-center space-x-3">
+                    <div class="w-12 h-12 sovereign-badge rounded-full flex items-center justify-center">
+                        <i class="fas fa-certificate text-white text-xl"></i>
+                    </div>
+                    <div>
+                        <p class="font-bold text-gray-800">Sovereign</p>
+                        <p class="text-xs text-gray-600">Network</p>
+                    </div>
+                </a>
+                <div class="flex items-center justify-center space-x-3">
+                    <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                        <i class="fas fa-chart-line text-blue-600 text-xl"></i>
+                    </div>
+                    <div>
+                        <p class="font-bold text-gray-800">FlowLedger</p>
+                        <p class="text-xs text-gray-600">Analytics</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories -->
+    <section class="py-20 bg-gradient-to-b from-gray-50 to-white" id="categories">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold text-gray-800 mb-4">Explore Our Ecosystem</h2>
+                <p class="text-xl text-gray-600">Connected rooms across BSTM</p>
+            </div>
+            
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+                <!-- Room 22 Farm -->
+                <div id="room22" class="card-hover bg-white rounded-2xl shadow-lg overflow-hidden cursor-pointer border-2 border-green-500">
+                    <div class="h-40 bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center relative shimmer">
+                        <i class="fas fa-leaf text-6xl text-white"></i>
+                        <span class="absolute top-3 left-3 bg-white text-green-600 text-xs font-bold px-3 py-1 rounded-full">Room 22</span>
+                        <span class="absolute top-3 right-3 bg-yellow-400 text-gray-900 text-xs font-bold px-2 py-1 rounded-full">NEW</span>
+                    </div>
+                    <div class="p-4 text-center">
+                        <h3 class="font-bold text-gray-800 text-lg">Fresh Produce</h3>
+                        <p class="text-sm text-gray-600 mb-3">Farm Direct</p>
+                        <a href="https://cablink.bstm.bw" target="_blank" class="block w-full bg-green-600 text-white py-2 rounded-lg text-sm font-semibold hover:bg-green-700">
+                            Order + CabLink
+                        </a>
+                    </div>
+                </div>
+
+                <div class="card-hover bg-white rounded-2xl shadow-lg overflow-hidden cursor-pointer">
+                    <div class="h-40 bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center relative shimmer">
+                        <i class="fas fa-mobile-alt text-6xl text-white"></i>
+                        <span class="absolute top-3 right-3 bg-white text-blue-600 text-xs font-bold px-3 py-1 rounded-full">2.4K</span>
+                    </div>
+                    <div class="p-4 text-center">
+                        <h3 class="font-bold text-gray-800 text-lg">Electronics</h3>
+                        <p class="text-sm text-gray-600">Tech & Gadgets</p>
+                    </div>
+                </div>
+
+                <div class="card-hover bg-white rounded-2xl shadow-lg overflow-hidden cursor-pointer">
+                    <div class="h-40 bg-gradient-to-br from-pink-400 to-pink-600 flex items-center justify-center relative shimmer">
+                        <i class="fas fa-tshirt text-6xl text-white"></i>
+                        <span class="absolute top-3 right-3 bg-white text-pink-600 text-xs font-bold px-3 py-1 rounded-full">3.1K</span>
+                    </div>
+                    <div class="p-4 text-center">
+                        <h3 class="font-bold text-gray-800 text-lg">Fashion</h3>
+                        <p class="text-sm text-gray-600">Style & Trends</p>
+                    </div>
+                </div>
+
+                <div class="card-hover bg-white rounded-2xl shadow-lg overflow-hidden cursor-pointer">
+                    <div class="h-40 bg-gradient-to-br from-red-400 to-red-600 flex items-center justify-center relative shimmer">
+                        <i class="fas fa-car text-6xl text-white"></i>
+                        <span class="absolute top-3 right-3 bg-white text-red-600 text-xs font-bold px-3 py-1 rounded-full">892</span>
+                    </div>
+                    <div class="p-4 text-center">
+                        <h3 class="font-bold text-gray-800 text-lg">Vehicles</h3>
+                        <p class="text-sm text-gray-600">Cars & Parts</p>
+                    </div>
+                </div>
+
+                <div class="card-hover bg-white rounded-2xl shadow-lg overflow-hidden cursor-pointer">
+                    <div class="h-40 bg-gradient-to-br from-yellow-400 to-yellow-600 flex items-center justify-center relative shimmer">
+                        <i class="fas fa-tools text-6xl text-white"></i>
+                        <span class="absolute top-3 right-3 bg-white text-yellow-700 text-xs font-bold px-3 py-1 rounded-full">1.5K</span>
+                    </div>
+                    <div class="p-4 text-center">
+                        <h3 class="font-bold text-gray-800 text-lg">Services</h3>
+                        <p class="text-sm text-gray-600">Skills & More</p>
+                    </div>
+                </div>
+
+                <div class="card-hover bg-white rounded-2xl shadow-lg overflow-hidden cursor-pointer">
+                    <div class="h-40 bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center relative shimmer">
+                        <i class="fas fa-car-side text-6xl text-white"></i>
+                        <span class="absolute top-3 right-3 thb-badge text-gray-900 text-xs font-bold px-2 py-1 rounded-full">THB</span>
+                    </div>
+                    <div class="p-4 text-center">
+                        <h3 class="font-bold text-gray-800 text-lg">CabLink</h3>
+                        <p class="text-sm text-gray-600">Rides & Earn</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products -->
+    <section class="py-20 bg-white" id="products">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center mb-12">
+                <div>
+                    <h2 class="text-4xl font-bold text-gray-800 mb-2">Trending Products</h2>
+                    <p class="text-gray-600">Shop and earn THB</p>
+                </div>
+                <div class="flex space-x-3">
+                    <button class="px-6 py-2 gradient-bg text-white rounded-lg font-semibold">All</button>
+                    <button class="px-6 py-2 bg-gray-100 text-gray-700 rounded-lg font-semibold hover:bg-gray-200">Room 22</button>
+                </div>
+            </div>
+
+            <div id="productGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Product 1: Room 22 Tomatoes -->
+                <div class="card-hover bg-white rounded-2xl border border-gray-200 overflow-hidden">
+                    <div class="relative">
+                        <img src="/api/placeholder/400/300" alt="Fresh Tomatoes" class="w-full h-64 object-cover">
+                        <span class="absolute top-4 left-4 thb-badge text-gray-800 text-xs font-bold px-3 py-2 rounded-full">
+                            <i class="fas fa-coins mr-1"></i>Earn 0.5 THB
+                        </span>
+                        <button class="absolute top-4 right-4 w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-lg">
+                            <i class="far fa-heart text-red-500"></i>
+                        </button>
+                    </div>
+                    <div class="p-5">
+                        <div class="flex items-center mb-2">
+                            <span class="sovereign-badge text-white text-xs font-bold px-2 py-1 rounded-full mr-2">
+                                <i class="fas fa-check-circle mr-1"></i>Verified
+                            </span>
+                            <span class="bg-green-100 text-green-800 text-xs font-semibold px-2 py-1 rounded">Room 22</span>
+                        </div>
+                        <h3 class="font-bold text-lg text-gray-800 mb-2">Fresh Tomatoes (5kg)</h3>
+                        <p class="text-gray-600 text-sm mb-3">Organic, locally grown</p>
+                        <div class="flex justify-between items-center mb-4">
+                            <div>
+                                <span class="text-2xl font-bold text-gray-800">P50</span>
+                                <span class="text-sm text-purple-600 ml-2">or 0.5 THB</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center text-sm text-gray-600 mb-4">
+                            <i class="fas fa-truck mr-2 text-purple-600"></i>
+                            <span>CabLink Delivery</span>
+                        </div>
+                        <button class="w-full gradient-bg text-white py-3 rounded-lg font-semibold hover:shadow-lg">
+                            <i class="fas fa-shopping-cart mr-2"></i>Add to Cart
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Product 2: iPhone -->
+                <div class="card-hover bg-white rounded-2xl border border-gray-200 overflow-hidden">
+                    <div class="relative">
+                        <img src="/api/placeholder/400/300" alt="iPhone" class="w-full h-64 object-cover">
+                        <span class="absolute top-4 left-4 thb-badge text-gray-800 text-xs font-bold px-3 py-2 rounded-full">
+                            <i class="fas fa-coins mr-1"></i>Earn 6.5 THB
+                        </span>
+                        <button class="absolute top-4 right-4 w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-lg">
+                            <i class="far fa-heart text-red-500"></i>
+                        </button>
+                    </div>
+                    <div class="p-5">
+                        <div class="flex items-center mb-2">
+                            <span class="sovereign-badge text-white text-xs font-bold px-2 py-1 rounded-full mr-2">
+                                <i class="fas fa-check-circle mr-1"></i>Verified
+                            </span>
+                            <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2 py-1 rounded">Electronics</span>
+                        </div>
+                        <h3 class="font-bold text-lg text-gray-800 mb-2">iPhone 13 Pro Max</h3>
+                        <p class="text-gray-600 text-sm mb-3">256GB, Excellent condition</p>
+                        <div class="flex justify-between items-center mb-4">
+                            <div>
+                                <span class="text-2xl font-bold text-gray-800">P6,500</span>
+                                <span class="text-sm text-purple-600 ml-2">or 65 THB</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center text-sm text-gray-600 mb-4">
+                            <i class="fas fa-map-marker-alt mr-2 text-purple-600"></i>
+                            <span>Gaborone</span>
+                        </div>
+                        <button class="w-full gradient-bg text-white py-3 rounded-lg font-semibold hover:shadow-lg">
+                            <i class="fas fa-shopping-cart mr-2"></i>Add to Cart
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Product 3: Leather Sofa -->
+                <div class="card-hover bg-white rounded-2xl border border-gray-200 overflow-hidden">
+                    <div class="relative">
+                        <img src="/api/placeholder/400/300" alt="Sofa" class="w-full h-64 object-cover">
+                        <span class="absolute top-4 left-4 thb-badge text-gray-800 text-xs font-bold px-3 py-2 rounded-full">
+                            <i class="fas fa-coins mr-1"></i>Earn 8.9 THB
+                        </span>
+                        <button class="absolute top-4 right-4 w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-lg">
+                            <i class="far fa-heart text-red-500"></i>
+                        </button>
+                    </div>
+                    <div class="p-5">
+                        <div class="flex items-center mb-2">
+                            <span class="sovereign-badge text-white text-xs font-bold px-2 py-1 rounded-full mr-2">
+                                <i class="fas fa-check-circle mr-1"></i>Verified
+                            </span>
+                            <span class="bg-green-100 text-green-800 text-xs font-semibold px-2 py-1 rounded">Home</span>
+                        </div>
+                        <h3 class="font-bold text-lg text-gray-800 mb-2">Leather Sofa Set</h3>
+                        <p class="text-gray-600 text-sm mb-3">3-seater, premium quality</p>
+                        <div class="flex justify-between items-center mb-4">
+                            <div>
+                                <span class="text-2xl font-bold text-gray-800">P8,900</span>
+                                <span class="text-sm text-purple-600 ml-2">or 89 THB</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center text-sm text-gray-600 mb-4">
+                            <i class="fas fa-map-marker-alt mr-2 text-purple-600"></i>
+                            <span>Maun</span>
+                        </div>
+                        <button class="w-full gradient-bg text-white py-3 rounded-lg font-semibold hover:shadow-lg">
+                            <i class="fas fa-shopping-cart mr-2"></i>Add to Cart
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Product 4: Photography Service -->
+                <div class="card-hover bg-white rounded-2xl border border-gray-200 overflow-hidden">
+                    <div class="relative">
+                        <img src="/api/placeholder/400/300" alt="Photography" class="w-full h-64 object-cover">
+                        <span class="absolute top-4 left-4 thb-badge text-gray-800 text-xs font-bold px-3 py-2 rounded-full">
+                            <i class="fas fa-coins mr-1"></i>Earn 1.2 THB
+                        </span>
+                        <button class="absolute top-4 right-4 w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-lg">
+                            <i class="far fa-heart text-red-500"></i>
+                        </button>
+                    </div>
+                    <div class="p-5">
+                        <div class="flex items-center mb-2">
+                            <span class="sovereign-badge text-white text-xs font-bold px-2 py-1 rounded-full mr-2">
+                                <i class="fas fa-check-circle mr-1"></i>Verified
+                            </span>
+                            <span class="bg-yellow-100 text-yellow-800 text-xs font-semibold px-2 py-1 rounded">Services</span>
+                        </div>
+                        <h3 class="font-bold text-lg text-gray-800 mb-2">Pro Photography</h3>
+                        <p class="text-gray-600 text-sm mb-3">Events & portraits</p>
+                        <div class="flex justify-between items-center mb-4">
+                            <div>
+                                <span class="text-2xl font-bold text-gray-800">P1,200</span>
+                                <span class="text-sm text-purple-600 ml-2">or 12 THB</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center text-sm text-gray-600 mb-4">
+                            <i class="fas fa-map-marker-alt mr-2 text-purple-600"></i>
+                            <span>Gaborone</span>
+                        </div>
+                        <button class="w-full gradient-bg text-white py-3 rounded-lg font-semibold hover:shadow-lg">
+                            <i class="fas fa-calendar-check mr-2"></i>Book Now
+                        </button>
+                    </div>
+                </div>
+
+                <!-- TODO: Load more products dynamically from Supabase -->
+            </div>
+        </div>
+    </section>
+
+    <!-- CabLink Section -->
+    <section class="py-20 bg-gradient-to-br from-purple-50 to-indigo-50">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-bold text-gray-800 mb-4">Book Rides with CabLink</h2>
+                <p class="text-xl text-gray-600">Earn THB rewards with every trip</p>
+            </div>
+            <div class="max-w-4xl mx-auto bg-white rounded-2xl shadow-2xl p-8">
+                <div class="text-center">
+                    <p class="text-gray-600 mb-6">Experience the future of ride-booking in Botswana</p>
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                        <a href="https://cablink.bstm.bw" target="_blank" class="inline-block gradient-bg text-white py-4 px-12 rounded-xl font-bold text-lg shadow-lg hover:shadow-2xl transition-all">
+                            <i class="fas fa-car mr-2"></i>Open CabLink PWA
+                        </a>
+                        <button id="demoRideBtn" class="inline-block bg-yellow-400 hover:bg-yellow-500 text-gray-900 py-4 px-12 rounded-xl font-bold text-lg shadow-lg transition-all">
+                            <i class="fas fa-bolt mr-2"></i>Demo Ride
+                        </button>
+                    </div>
+                    <p class="text-sm text-gray-500 mt-4">Track rides, earn THB, connect with BSTM</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white pt-16 pb-8">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+                <div>
+                    <div class="flex items-center mb-6">
+                        <div class="w-12 h-12 gradient-bg rounded-xl flex items-center justify-center mr-3">
+                            <span class="text-white font-bold text-2xl">B</span>
+                        </div>
+                        <span class="text-2xl font-bold">BSTM</span>
+                    </div>
+                    <p class="text-gray-400 mb-6">Africa's First Digital Nation - Room 18</p>
+                    <div class="flex space-x-4 mb-4">
+                        <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-purple-600">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="https://t.me/BSTM_Bot" target="_blank" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-purple-600">
+                            <i class="fab fa-telegram"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-purple-600">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                    </div>
+                    <p class="text-sm text-gray-500">Offline? Book rides—sync later</p>
+                </div>
+
+                <div>
+                    <h3 class="text-xl font-bold mb-6">Ecosystem</h3>
+                    <ul class="space-y-3">
+                        <li><a href="https://todd366.github.io/bstm-ecosystem-network/" target="_blank" class="text-gray-400 hover:text-white">Network Map</a></li>
+                        <li><a href="#room22" class="text-gray-400 hover:text-white">Room 22 Farm</a></li>
+                        <li><a href="https://cablink.bstm.bw" target="_blank" class="text-gray-400 hover:text-white">CabLink</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">THoBoCoin (THB)</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-xl font-bold mb-6">Support</h3>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-gray-400 hover:text-white">Help Center</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Safety Tips</a></li>
+                        <li><a href="https://t.me/BSTM_Bot" target="_blank" class="text-gray-400 hover:text-white">Chat with Bot</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-xl font-bold mb-6">Quest Progress</h3>
+                    <div class="bg-gray-800 rounded-xl p-4 mb-4">
+                        <p class="text-sm text-gray-400 mb-2">CabLink Challenge</p>
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-2xl font-bold">1/500</span>
+                            <span class="text-sm text-green-400">0.2%</span>
+                        </div>
+                        <div class="w-full bg-gray-700 rounded-full h-2">
+                            <div class="bg-green-500 h-2 rounded-full" style="width: 0.2%"></div>
+                        </div>
+                        <a href="https://cablink.bstm.bw" target="_blank" class="block w-full bg-purple-600 text-white py-2 rounded-lg text-sm font-semibold hover:bg-purple-700 mt-3 text-center">
+                            Join Now
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-800 pt-8">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <p class="text-gray-400 text-sm mb-4 md:mb-0">
+                        © 2025 BSTM Digital Nation • v1.1 – March 16, 2026 – Phone Built
+                    </p>
+                    <div class="flex space-x-6 text-sm">
+                        <a href="#" class="text-gray-400 hover:text-white">Privacy</a>
+                        <a href="#" class="text-gray-400 hover:text-white">Terms</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Toasts & Modals -->
+    <div id="offlineNotice"><i class="fas fa-wifi-slash mr-2"></i>Offline Mode</div>
+    <div id="demoToast"><i class="fas fa-check-circle mr-2"></i>Ride booked! +0.8 THB earned 🎉</div>
+
+    <div id="installPrompt">
+        <div class="flex items-start justify-between mb-3">
+            <div class="flex items-center">
+                <div class="w-10 h-10 gradient-bg rounded-lg flex items-center justify-center mr-3">
+                    <span class="text-white font-bold">B</span>
+                </div>
+                <div>
+                    <p class="font-bold text-gray-800">Install BSTM</p>
+                    <p class="text-xs text-gray-600">App-like experience</p>
+                </div>
+            </div>
+            <button id="closeInstall" class="text-gray-400 hover:text-gray-600">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <p class="text-sm text-gray-600 mb-4">Add to home for offline support</p>
+        <div class="flex space-x-2">
+            <button id="installBtn" class="flex-1 gradient-bg text-white py-2 rounded-lg font-semibold">Install</button>
+            <button id="laterBtn" class="flex-1 bg-gray-100 text-gray-700 py-2 rounded-lg font-semibold">Later</button>
+        </div>
+    </div>
+
+    <div id="loginModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-2xl p-8 max-w-md w-full mx-4">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">Welcome to BSTM</h2>
+            <form id="loginForm">
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-semibold mb-2">Email</label>
+                    <input type="email" id="emailInput" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="your@email.com">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-semibold mb-2">Password</label>
+                    <input type="password" id="passwordInput" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="••••••••">
+                </div>
+                <div class="mb-6">
+                    <label class="block text-gray-700 text-sm font-semibold mb-2">Referral Code (Optional)</label>
+                    <input type="text" id="referralInput" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="Room 22">
+                </div>
+                <button type="submit" class="w-full gradient-bg text-white py-3 rounded-lg font-semibold hover:shadow-lg mb-3">
+                    Sign In / Sign Up
+                </button>
+                <button type="button" id="closeModal" class="w-full bg-gray-100 text-gray-700 py-3 rounded-lg font-semibold hover:bg-gray-200">
+                    Cancel
+                </button>
+            </form>
+            <div id="errorToast" class="hidden mt-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg"></div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        // Live Stats Update
+        function updateLiveStats() {
+            const users = Math.floor(Math.random() * 100) + 1200;
+            document.getElementById('liveUserCount').textContent = users.toLocaleString();
+            document.getElementById('customerCount').textContent = (users * 40).toLocaleString() + '+';
+            document.getElementById('heroStats').textContent = users + ' Sellers • ' + (users * 12) + ' Products';
+        }
+        
+        // Run immediately
+        updateLiveStats();
+        
+        // Offline Detection
+        function checkOnlineStatus() {
+            document.getElementById('offlineNotice').style.display = navigator.onLine ? 'none' : 'block';
+        }
+        
+        // PWA Install
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            if ('standalone' in navigator && !navigator.standalone) {
+                document.getElementById('installPrompt').style.display = 'block';
+            }
+        });
+        
+        document.getElementById('installBtn')?.addEventListener('click', async () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                await deferredPrompt.userChoice;
+                deferredPrompt = null;
+                document.getElementById('installPrompt').style.display = 'none';
+            }
+        });
+        
+        document.getElementById('closeInstall')?.addEventListener('click', () => {
+            document.getElementById('installPrompt').style.display = 'none';
+        });
+        
+        document.getElementById('laterBtn')?.addEventListener('click', () => {
+            document.getElementById('installPrompt').style.display = 'none';
+        });
+        
+        // Theme Toggle
+        document.getElementById('themeToggle')?.addEventListener('click', () => {
+            document.getElementById('mainBody').classList.toggle('theme-dark');
+            const icon = document.getElementById('themeIcon');
+            icon.classList.toggle('fa-moon');
+            icon.classList.toggle('fa-sun');
+        });
+        
+        // Voice Search
+        document.getElementById('voiceSearch')?.addEventListener('click', () => {
+            if ('webkitSpeechRecognition' in window) {
+                const recognition = new webkitSpeechRecognition();
+                recognition.lang = 'en-US';
+                recognition.onresult = (event) => {
+                    document.getElementById('searchInput').value = event.results[0][0].transcript;
+                };
+                recognition.start();
+            } else {
+                alert('Voice search not supported');
+            }
+        });
+        
+        // Demo Ride Button
+        document.getElementById('demoRideBtn')?.addEventListener('click', () => {
+            const toast = document.getElementById('demoToast');
+            toast.style.display = 'block';
+            setTimeout(() => toast.style.display = 'none', 4000);
+        });
+        
+        // Login Modal
+        document.getElementById('loginBtn')?.addEventListener('click', () => {
+            document.getElementById('loginModal').style.display = 'flex';
+        });
+        
+        document.getElementById('closeModal')?.addEventListener('click', () => {
+            document.getElementById('loginModal').style.display = 'none';
+        });
+        
+        document.getElementById('loginForm')?.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const errorToast = document.getElementById('errorToast');
+            errorToast.textContent = 'Login feature coming soon!';
+            errorToast.classList.remove('hidden');
+            setTimeout(() => errorToast.classList.add('hidden'), 4000);
+        });
+        
+        // Vibration
+        document.querySelectorAll('button, a').forEach(el => {
+            el.addEventListener('click', () => {
+                if (navigator.vibrate) navigator.vibrate(50);
+            });
+        });
+        
+        // Auto-sync
+        setInterval(() => {
+            if (navigator.onLine) updateLiveStats();
+        }, 60000);
+        
+        // Init
+        $(document).ready(function() {
+            checkOnlineStatus();
+            window.addEventListener('online', checkOnlineStatus);
+            window.addEventListener('offline', checkOnlineStatus);
+        });
+    </script>
+</body>
+  </html>
