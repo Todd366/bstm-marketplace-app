@@ -1,12 +1,16 @@
 {
-  "name": "bstm-marketplace-app",
-  "version": "1.1.0",
-  "description": "BSTM Room 18 - Digital Nation Marketplace",
+  "name": "bstm-digital-nation",
+  "version": "2.0.0",
+  "description": "Africa's First Digital Nation",
   "scripts": {
-    "dev": "cd frontend && npm start",
-    "build": "cd frontend && npm run build",
-    "deploy": "npm run build && firebase deploy"
+    "test": "echo \"Tests coming soon\"",
+    "lint": "htmlhint **/*.html",
+    "deploy": "gh-pages -d ."
   },
-  "author": "BSTM",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/todd366/bstm-marketplace-app"
+  },
+  "author": "Thobo Atlang Mosanako",
   "license": "MIT"
 }
