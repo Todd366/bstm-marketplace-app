@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Room 22 Farm - Fresh Organic Produce</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <script src="js/bstm-auth.js"></script>
+    <style>
+        .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .farm-gradient { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
+        .farm-pattern {
+            background-color: #10b981;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    
+    <!-- Navigation -->
+    <div id="bstm-nav"></div>
+
+    <!-- Hero Section -->
+    <section class="farm-pattern text-white py-20">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <div class="inline-block bg-white bg-opacity-20 rounded-full px-4 py-2 mb-6">
+                        <span class="font-bold text-sm">🌾 ROOM 22 - FRESH FARM</span>
+                    </div>
+                    <h1 class="text-6xl font-bold mb-6">Farm Fresh, Delivered Fresh</h1>
+                    <p class="text-xl text-green-100 mb-8">
+                        Organic produce grown with care in Gaborone. 
+                        From our farm to your table in under 2 hours via CabLink.
+                    </p>
+                    
+                    <!-- Stats -->
+                    <div class="grid grid-cols-3 gap-6 mb-8">
+                        <div>
+                            <p class="text-4xl font-bold">100%</p>
+                            <p class="text-sm text-green-200">Organic</p>
+                        </div>
+                        <div>
+                            <p class="text-4xl font-bold">&lt;2hr</p>
+                            <p class="text-sm text-green-200">Delivery</p>
+                        </div>
+                        <div>
+                            <p class="text-4xl font-bold">1.5%</p>
+                            <p class="text-sm text-green-200">THB Rewards</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex space-x-4">
+                        <a href="#products" class="bg-white text-green-600 hover:bg-green-50 px-8 py-4 rounded-xl font-bold text-lg shadow-xl">
+                            <i class="fas fa-shopping-basket mr-2"></i>Shop Now
+                        </a>
+                        <a href="https://cablink.bstm.bw" target="_blank" class="bg-green-700 hover:bg-green-800 px-8 py-4 rounded-xl font-bold text-lg">
+                            <i class="fas fa-car mr-2"></i>Book Delivery
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="hidden lg:block">
+                    <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?w=600&h=400&fit=crop" alt="Fresh Farm" class="rounded-3xl shadow-2xl">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="py-12 bg-white">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-leaf text-green-600 text-2xl"></i>
+                    </div>
+                    <p class="font-bold text-gray-800">100% Organic</p>
+                    <p class="text-sm text-gray-600">No pesticides</p>
+                </div>
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-truck text-green-600 text-2xl"></i>
+                    </div>
+                    <p class="font-bold text-gray-800">Fast Delivery</p>
+                    <p class="text-sm text-gray-600">Via CabLink</p>
+                </div>
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-coins text-green-600 text-2xl"></i>
+                    </div>
+                    <p class="font-bold text-gray-800">Extra THB</p>
+                    <p class="text-sm text-gray-600">1.5% rewards</p>
+                </div>
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-seedling text-green-600 text-2xl"></i>
+                    </div>
+                    <p class="font-bold text-gray-800">Local Farm</p>
+                    <p class="text-sm text-gray-600">Gaborone grown</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section id="products" class="py-20 bg-gradient-to-b from-gray-50 to-white">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-12">
+                <h2 class="text-5xl font-bold text-gray-800 mb-4">Fresh This Week</h2>
+                <p class="text-xl text-gray-600">Harvested daily, delivered fresh</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                
+                <!-- Tomatoes -->
+                <div class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1546470427-227f98f60a93?w=400&h=300&fit=crop" alt="Tomatoes" class="w-full h-48 object-cover">
+                        <span class="absolute top-4 left-4 bg-green-500 text-white text-xs font-bold px-3 py-2 rounded-full">
+                            <i class="fas fa-coins mr-1"></i>Earn 0.75 THB
+                        </span>
+                        <span class="absolute top-4 right-4 bg-red-500 text-white text-xs font-bold px-3 py-2 rounded-full">
+                            FRESH TODAY
+                        </span>
+                    </div>
+                    <div class="p-5">
+                        <div class="flex items-center mb-2">
+                            <span class="bg-green-100 text-green-800 text-xs font-semibold px-2 py-1 rounded">Organic</span>
+                        </div>
+                        <h3 class="font-bold text-lg text-gray-800 mb-2">Fresh Tomatoes (5kg)</h3>
+                        <p class="text-gray-600 text-sm mb-3">Vine-ripened, pesticide-free</p>
+                        <div class="flex justify-between items-center mb-4">
+                            <div>
+                                <span class="text-2xl font-bold text-gray-800">P50</span>
+                                <span class="text-sm text-green-600 ml-2">or 0.5 THB</span>
+                            </div>
+                        </div>
+                        <button onclick="addToCart('tomatoes')" class="w-full farm-gradient text-white py-3 rounded-lg font-semibold hover:shadow-lg">
+                            <i class="fas fa-shopping-basket mr-2"></i>Add to Basket
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Onions -->
+                <div class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1618512496248-a07fe83aa8cb?w=400&h=300&fit=crop" alt="Onions" class="w-full h-48 object-cover">
+                        <span class="absolute top-4 left-4 bg-green-500 text-white text-xs font-bold px-3 py-2 rounded-full">
+                            <i class="fas fa-coins mr-1"></i>Earn 0.45 THB
+                        </span>
+                    </div>
+                    <div class="p-5">
+                        <div class="flex items-center mb-2">
+                            <span class="bg-green-100 text-green-800 text-xs font-semibold px-2 py-1 rounded">Organic</span>
+                        </div>
+                        <h3 class="font-bold text-lg text-gray-800 mb-2">Fresh Onions (3kg)</h3>
+                        <p class="text-gray-600 text-sm mb-3">Sweet & flavorful</p>
+                        <div class="flex justify-between items-center mb-4">
+                            <div>
+                                <span class="text-2xl font-bold text-gray-800">P30</span>
+                                <span class="text-sm text-green-600 ml-2">or 0.3 THB</span>
+                            </div>
+                        </div>
+                        <button onclick="addToCart('onions')" class="w-full farm-gradient text-white py-3 rounded-lg font-semibold hover:shadow-lg">
+                            <i class="fas fa-shopping-basket mr-2"></i>Add to Basket
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Spinach -->
+                <div class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1576045057995-568f588f82fb?w=400&h=300&fit=crop" alt="Spinach" class="w-full h-48 object-cover">
+                        <span class="absolute top-4 left-4 bg-green-500 text-white text-xs font-bold px-3 py-2 rounded-full">
+                            <i class="fas fa-coins mr-1"></i>Earn 0.53 THB
+                        </span>
+                        <span class="absolute top-4 right-4 bg-red-500 text-white text-xs font-bold px-3 py-2 rounded-full">
+                            LIMITED
+                        </span>
+                    </div>
+                    <div class="p-5">
+                        <div class="flex items-center mb-2">
+                            <span class="bg-green-100 text-green-800 text-xs font-semibold px-2 py-1 rounded">Organic</span>
+                        </div>
+                        <h3 class="font-bold text-lg text-gray-800 mb-2">Fresh Spinach (2kg)</h3>
+                        <p class="text-gray-600 text-sm mb-3">Iron-rich greens</p>
+                        <div class="flex justify-between items-center mb-4">
+                            <div>
+                                <span class="text-2xl font-bold text-gray-800">P35</span>
+                                <span class="text-sm text-green-600 ml-2">or 0.35 THB</span>
+                            </div>
+                        </div>
+                        <button onclick="addToCart('spinach')" class="w-full farm-gradient text-white py-3 rounded-lg font-semibold hover:shadow-lg">
+                            <i class="fas fa-shopping-basket mr-2"></i>Add to Basket
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Carrots -->
+                <div class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1598170845058-32b9d6a5da37?w=400&h=300&fit=crop" alt="Carrots" class="w-full h-48 object-cover">
+                        <span class="absolute top-4 left-4 bg-green-500 text-white text-xs font-bold px-3 py-2 rounded-full">
+                            <i class="fas fa-coins mr-1"></i>Earn 0.68 THB
+                        </span>
+                    </div>
+                    <div class="p-5">
+                        <div class="flex items-center mb-2">
+                            <span class="bg-green-100 text-green-800 text-xs font-semibold px-2 py-1 rounded">Organic</span>
+                        </div>
+                        <h3 class="font-bold text-lg text-gray-800 mb-2">Carrots (4kg)</h3>
+                        <p class="text-gray-600 text-sm mb-3">Crunchy & sweet</p>
+                        <div class="flex justify-between items-center mb-4">
+                            <div>
+                                <span class="text-2xl font-bold text-gray-800">P45</span>
+                                <span class="text-sm text-green-600 ml-2">or 0.45 THB</span>
+                            </div>
+                        </div>
+                        <button onclick="addToCart('carrots')" class="w-full farm-gradient text-white py-3 rounded-lg font-semibold hover:shadow-lg">
+                            <i class="fas fa-shopping-basket mr-2"></i>Add to Basket
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- View All Link -->
+            <div class="text-center mt-12">
+                <a href="index.html?room=22" class="inline-block bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-xl font-bold text-lg">
+                    View All Room 22 Products
+                    <i class="fas fa-arrow-right ml-2"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- CabLink Integration -->
+    <section class="py-20 bg-gradient-to-br from-blue-50 to-indigo-50">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="bg-white rounded-3xl shadow-2xl overflow-hidden">
+                <div class="grid grid-cols-1 lg:grid-cols-2">
+                    <div class="p-12">
+                        <div class="w-16 h-16 bg-blue-500 rounded-2xl flex items-center justify-center mb-6">
+                            <i class="fas fa-car text-white text-3xl"></i>
+                        </div>
+                        <h2 class="text-4xl font-bold text-gray-800 mb-6">
+                            Delivered Fresh via CabLink
+                        </h2>
+                        <p class="text-xl text-gray-600 mb-8">
+                            Order your fresh produce and get it delivered to your door in under 2 hours. 
+                            Track your delivery in real-time and earn extra THB on every order.
+                        </p>
+                        
+                        <div class="space-y-4 mb-8">
+                            <div class="flex items-center space-x-4">
+                                <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-check text-green-600 text-xl"></i>
+                                </div>
+                                <div>
+                                    <p class="font-bold text-gray-800">Same-Day Delivery</p>
+                                    <p class="text-sm text-gray-600">Order before 5 PM</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center space-x-4">
+                                <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-map-marker-alt text-green-600 text-xl"></i>
+                                </div>
+                                <div>
+                                    <p class="font-bold text-gray-800">Real-Time Tracking</p>
+                                    <p class="text-sm text-gray-600">Know exactly when it arrives</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center space-x-4">
+                                <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-coins text-green-600 text-xl"></i>
+                                </div>
+                                <div>
+                                    <p class="font-bold text-gray-800">Earn THB on Delivery</p>
+                                    <p class="text-sm text-gray-600">Double rewards!</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <a href="https://cablink.bstm.bw" target="_blank" class="inline-block bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-xl font-bold text-lg">
+                            <i class="fas fa-external-link-alt mr-2"></i>Open CabLink
+                        </a>
+                    </div>
+                    
+                    <div class="bg-gradient-to-br from-blue-500 to-indigo-600 p-12 text-white flex items-center justify-center">
+                        <div class="text-center">
+                            <i class="fas fa-truck text-8xl mb-6 opacity-20"></i>
+                            <p class="text-2xl font-bold">FREE Delivery</p>
+                            <p class="text-lg">on orders over P100</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Room 22 -->
+    <section class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h2 class="text-4xl font-bold text-gray-800 mb-6">About Room 22 Farm</h2>
+                    <p class="text-lg text-gray-700 mb-6">
+                        Room 22 is BSTM's organic farming division, committed to providing 
+                        fresh, pesticide-free produce to the people of Botswana. We grow 
+                        everything locally in Gaborone using sustainable farming practices.
+                    </p>
+                    <p class="text-lg text-gray-700 mb-6">
+                        Every purchase from Room 22 supports local agriculture, reduces 
+                        food miles, and earns you extra THB rewards. It's healthy for you 
+                        and healthy for the nation.
+                    </p>
+                    
+                    <div class="grid grid-cols-2 gap-6">
+                        <div class="text-center bg-green-50 rounded-xl p-6">
+                            <p class="text-4xl font-bold text-green-600 mb-2">0</p>
+                            <p class="text-sm text-gray-700">Pesticides Used</p>
+                        </div>
+                        <div class="text-center bg-green-50 rounded-xl p-6">
+                            <p class="text-4xl font-bold text-green-600 mb-2">100%</p>
+                            <p class="text-sm text-gray-700">Local Grown</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <img src="https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=600&h=400&fit=crop" alt="Farm" class="rounded-3xl shadow-2xl">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <div id="bstm-footer"></div>
+
+    <!-- Modals -->
+    <div id="bstm-modals"></div>
+
+    <script>
+    function addToCart(product) {
+        // Add to cart logic
+        const products = {
+            tomatoes: { name: 'Fresh Tomatoes (5kg)', price: 50, thb: 0.5, room: 22 },
+            onions: { name: 'Fresh Onions (3kg)', price: 30, thb: 0.3, room: 22 },
+            spinach: { name: 'Fresh Spinach (2kg)', price: 35, thb: 0.35, room: 22 },
+            carrots: { name: 'Carrots (4kg)', price: 45, thb: 0.45, room: 22 }
+        };
+        
+        const item = products[product];
+        
+        // Get cart from localStorage
+        let cart = JSON.parse(localStorage.getItem('bstm_cart') || '[]');
+        cart.push(item);
+        localStorage.setItem('bstm_cart', JSON.stringify(cart));
+        
+        // Show success message
+        alert(`${item.name} added to basket!\nYou'll earn ${item.thb} THB on purchase.`);
+        
+        // Vibrate if supported
+        if (navigator.vibrate) {
+            navigator.vibrate(50);
+        }
+    }
+
+    // Load components
+    function loadComponents() {
+        fetch('components/universal-nav.html')
+            .then(r => r.text())
+            .then(html => document.getElementById('bstm-nav').innerHTML = html);
+
+        fetch('components/universal-footer.html')
+            .then(r => r.text())
+            .then(html => document.getElementById('bstm-footer').innerHTML = html);
+
+        fetch('components/room-switcher.html')
+            .then(r => r.text())
+            .then(html => {
+                const container = document.getElementById('bstm-modals');
+                container.innerHTML = html;
+            });
+    }
+
+    document.addEventListener('DOMContentLoaded', loadComponents);
+    </script>
+</body>
+</html>
