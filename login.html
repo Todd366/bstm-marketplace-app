@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - BSTM Marketplace</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .hero-pattern {
+            background-color: #667eea;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        .tab-active { border-bottom: 3px solid #667eea; color: #667eea; }
+    </style>
+</head>
+<body class="bg-gray-50">
+    
+    <!-- Hero Header -->
+    <div class="hero-pattern text-white py-16">
+        <div class="max-w-7xl mx-auto px-6 text-center">
+            <div class="w-20 h-20 gradient-bg rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-2xl">
+                <span class="text-white font-bold text-4xl">B</span>
+            </div>
+            <h1 class="text-5xl font-bold mb-4">Welcome to BSTM</h1>
+            <p class="text-xl text-purple-100">Africa's First Digital Nation Marketplace</p>
+        </div>
+    </div>
+
+    <div class="max-w-md mx-auto px-6 -mt-12">
+        <!-- Login/Signup Card -->
+        <div class="bg-white rounded-2xl shadow-2xl overflow-hidden">
+            <!-- Tabs -->
+            <div class="flex border-b">
+                <button id="loginTab" onclick="switchTab('login')" class="flex-1 py-4 font-bold text-gray-700 tab-active">
+                    Login
+                </button>
+                <button id="signupTab" onclick="switchTab('signup')" class="flex-1 py-4 font-bold text-gray-400">
+                    Sign Up
+                </button>
+            </div>
+
+            <!-- Login Form -->
+            <div id="loginForm" class="p-8">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">Welcome Back!</h2>
+                
+                <form onsubmit="handleLogin(event)">
+                    <div class="mb-6">
+                        <label class="block text-gray-700 font-semibold mb-2">Email Address</label>
+                        <input type="email" id="loginEmail" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-purple-600" placeholder="you@example.com">
+                    </div>
+
+                    <div class="mb-6">
+                        <label class="block text-gray-700 font-semibold mb-2">Password</label>
+                        <div class="relative">
+                            <input type="password" id="loginPassword" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-purple-600" placeholder="••••••••">
+                            <button type="button" onclick="togglePassword('loginPassword')" class="absolute right-4 top-4 text-gray-500">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between mb-6">
+                        <label class="flex items-center">
+                            <input type="checkbox" class="mr-2">
+                            <span class="text-sm text-gray-600">Remember me</span>
+                        </label>
+                        <a href="#" class="text-sm text-purple-600 hover:text-purple-800">Forgot password?</a>
+                    </div>
+
+                    <button type="submit" class="w-full gradient-bg text-white py-4 rounded-xl font-bold text-lg hover:shadow-2xl transition-all mb-4">
+                        <i class="fas fa-sign-in-alt mr-2"></i>Login
+                    </button>
+
+                    <div class="relative my-6">
+                        <div class="absolute inset-0 flex items-center">
+                            <div class="w-full border-t border-gray-300"></div>
+                        </div>
+                        <div class="relative flex justify-center text-sm">
+                            <span class="px-4 bg-white text-gray-500">Or continue with</span>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <button type="button" class="flex items-center justify-center py-3 border-2 border-gray-300 rounded-lg hover:border-purple-600 transition-all">
+                            <i class="fab fa-google text-red-500 mr-2"></i>
+                            <span class="font-semibold">Google</span>
+                        </button>
+                        <button type="button" class="flex items-center justify-center py-3 border-2 border-gray-300 rounded-lg hover:border-purple-600 transition-all">
+                            <i class="fab fa-facebook text-blue-600 mr-2"></i>
+                            <span class="font-semibold">Facebook</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Signup Form -->
+            <div id="signupForm" class="p-8 hidden">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">Create Account</h2>
+                
+                <form onsubmit="handleSignup(event)">
+                    <div class="mb-6">
+                        <label class="block text-gray-700 font-semibold mb-2">Full Name</label>
+                        <input type="text" id="signupName" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-purple-600" placeholder="Mpho Kgosi">
+                    </div>
+
+                    <div class="mb-6">
+                        <label class="block text-gray-700 font-semibold mb-2">Email Address</label>
+                        <input type="email" id="signupEmail" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-purple-600" placeholder="you@example.com">
+                    </div>
+
+                    <div class="mb-6">
+                        <label class="block text-gray-700 font-semibold mb-2">Phone Number</label>
+                        <input type="tel" id="signupPhone" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-purple-600" placeholder="+267 XX XXX XXX">
+                    </div>
+
+                    <div class="mb-6">
+                        <label class="block text-gray-700 font-semibold mb-2">Password</label>
+                        <input type="password" id="signupPassword" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-purple-600" placeholder="••••••••">
+                    </div>
+
+                    <div class="mb-6">
+                        <label class="block text-gray-700 font-semibold mb-2">I want to:</label>
+                        <div class="space-y-3">
+                            <label class="flex items-center p-4 border-2 border-gray-300 rounded-lg cursor-pointer hover:border-purple-600">
+                                <input type="radio" name="userType" value="buyer" checked class="mr-3">
+                                <div>
+                                    <p class="font-semibold text-gray-800">Buy Products</p>
+                                    <p class="text-sm text-gray-600">Shop from verified sellers</p>
+                                </div>
+                            </label>
+                            <label class="flex items-center p-4 border-2 border-gray-300 rounded-lg cursor-pointer hover:border-purple-600">
+                                <input type="radio" name="userType" value="seller" class="mr-3">
+                                <div>
+                                    <p class="font-semibold text-gray-800">Sell Products</p>
+                                    <p class="text-sm text-gray-600">Start selling to customers nationwide</p>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="mb-6">
+                        <label class="block text-gray-700 font-semibold mb-2">Referral Code (Optional)</label>
+                        <input type="text" id="referralCode" class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-purple-600" placeholder="e.g., ROOM22">
+                    </div>
+
+                    <div class="mb-6">
+                        <label class="flex items-start">
+                            <input type="checkbox" required class="mr-3 mt-1">
+                            <span class="text-sm text-gray-600">
+                                I agree to the <a href="#" class="text-purple-600 hover:underline">Terms of Service</a> and <a href="#" class="text-purple-600 hover:underline">Privacy Policy</a>
+                            </span>
+                        </label>
+                    </div>
+
+                    <button type="submit" class="w-full gradient-bg text-white py-4 rounded-xl font-bold text-lg hover:shadow-2xl transition-all mb-4">
+                        <i class="fas fa-user-plus mr-2"></i>Create Account
+                    </button>
+
+                    <div class="relative my-6">
+                        <div class="absolute inset-0 flex items-center">
+                            <div class="w-full border-t border-gray-300"></div>
+                        </div>
+                        <div class="relative flex justify-center text-sm">
+                            <span class="px-4 bg-white text-gray-500">Or sign up with</span>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <button type="button" class="flex items-center justify-center py-3 border-2 border-gray-300 rounded-lg hover:border-purple-600 transition-all">
+                            <i class="fab fa-google text-red-500 mr-2"></i>
+                            <span class="font-semibold">Google</span>
+                        </button>
+                        <button type="button" class="flex items-center justify-center py-3 border-2 border-gray-300 rounded-lg hover:border-purple-600 transition-all">
+                            <i class="fab fa-facebook text-blue-600 mr-2"></i>
+                            <span class="font-semibold">Facebook</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Back to Home -->
+        <div class="text-center mt-8 mb-12">
+            <a href="index.html" class="text-gray-600 hover:text-purple-600">
+                <i class="fas fa-arrow-left mr-2"></i>Back to Marketplace
+            </a>
+        </div>
+    </div>
+
+    <script>
+        function switchTab(tab) {
+            if (tab === 'login') {
+                document.getElementById('loginForm').classList.remove('hidden');
+                document.getElementById('signupForm').classList.add('hidden');
+                document.getElementById('loginTab').classList.add('tab-active');
+                document.getElementById('loginTab').classList.remove('text-gray-400');
+                document.getElementById('signupTab').classList.remove('tab-active');
+                document.getElementById('signupTab').classList.add('text-gray-400');
+            } else {
+                document.getElementById('signupForm').classList.remove('hidden');
+                document.getElementById('loginForm').classList.add('hidden');
+                document.getElementById('signupTab').classList.add('tab-active');
+                document.getElementById('signupTab').classList.remove('text-gray-400');
+                document.getElementById('loginTab').classList.remove('tab-active');
+                document.getElementById('loginTab').classList.add('text-gray-400');
+            }
+        }
+
+        function togglePassword(fieldId) {
+            const field = document.getElementById(fieldId);
+            field.type = field.type === 'password' ? 'text' : 'password';
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            
+            // TODO: Implement Supabase authentication
+            alert('Login successful!\nEmail: ' + email);
+            window.location.href = 'buyer-dashboard.html';
+        }
+
+        function handleSignup(e) {
+            e.preventDefault();
+            const name = document.getElementById('signupName').value;
+            const userType = document.querySelector('input[name="userType"]:checked').value;
+            
+            // TODO: Implement Supabase authentication
+            alert('Account created!\nName: ' + name + '\nType: ' + userType);
+            
+            if (userType === 'seller') {
+                window.location.href = 'seller-dashboard.html';
+            } else {
+                window.location.href = 'buyer-dashboard.html';
+            }
+        }
+    </script>
+</body>
+</html>
