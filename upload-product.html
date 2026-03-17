@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Product - BSTM Seller</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .image-preview { width: 100px; height: 100px; object-fit: cover; }
+        .drop-zone { border: 2px dashed #cbd5e0; transition: all 0.3s; }
+        .drop-zone.dragover { border-color: #667eea; background: #f7fafc; }
+    </style>
+</head>
+<body class="bg-gray-50">
+    
+    <!-- Header -->
+    <header class="gradient-bg text-white shadow-xl">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-4">
+                    <div class="w-10 h-10 bg-white rounded-xl flex items-center justify-center">
+                        <span class="text-purple-600 font-bold text-xl">B</span>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-bold">Add New Product</h1>
+                        <p class="text-sm text-purple-100">List your product on BSTM Marketplace</p>
+                    </div>
+                </div>
+                <a href="seller-dashboard.html" class="bg-purple-700 hover:bg-purple-800 px-4 py-2 rounded-lg">
+                    <i class="fas fa-arrow-left mr-2"></i>Back to Dashboard
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <div class="max-w-4xl mx-auto px-6 py-8">
+        <form id="productForm" onsubmit="handleSubmit(event)" class="space-y-6">
+            
+            <!-- Product Images -->
+            <div class="bg-white rounded-2xl shadow-lg p-8">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">
+                    <i class="fas fa-images text-purple-600 mr-3"></i>Product Images
+                </h2>
+                
+                <div class="drop-zone p-8 rounded-xl text-center mb-6" id="dropZone">
+                    <i class="fas fa-cloud-upload-alt text-6xl text-gray-400 mb-4 block"></i>
+                    <p class="text-gray-600 mb-2">Drag & drop images here or click to browse</p>
+                    <p class="text-sm text-gray-500">Upload up to 5 images (JPG, PNG - Max 5MB each)</p>
+                    <input type="file" id="imageInput" accept="image/*" multiple class="hidden">
+                    <button type="button" onclick="document.getElementById('imageInput').click()" class="mt-4 bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-semibold">
+                        Choose Files
+                    </button>
+                </div>
+
+                <div id="imagePreview" class="grid grid-cols-5 gap-4"></div>
+            </div>
+
+            <!-- Basic Information -->
+            <div class="bg-white rounded-2xl shadow-lg p-8">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">
+                    <i class="fas fa-info-circle text-purple-600 mr-3"></i>Basic Information
+                </h2>
+
+                <div class="mb-6">
+                    <label class="block text-gray-700 font-semibold mb-2">Product Title *</label>
+                    <input type="text" id="title" required maxlength="100" class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-purple-600" placeholder="e.g., Fresh Organic Tomatoes (5kg)">
+                    <p class="text-sm text-gray-500 mt-1">Be clear and descriptive (max 100 characters)</p>
+                </div>
+
+                <div class="mb-6">
+                    <label class="block text-gray-700 font-semibold mb-2">Description *</label>
+                    <textarea id="description" required rows="5" class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-purple-600" placeholder="Describe your product in detail..."></textarea>
+                    <p class="text-sm text-gray-500 mt-1">Include key features, condition, and any important details</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-gray-700 font-semibold mb-2">Category *</label>
+                        <select id="category" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-purple-600">
+                            <option value="">Select Category</option>
+                            <option value="fresh-produce">Fresh Produce (Room 22)</option>
+                            <option value="electronics">Electronics & Gadgets</option>
+                            <option value="fashion">Fashion & Accessories</option>
+                            <option value="home">Home & Garden</option>
+                            <option value="vehicles">Vehicles & Auto Parts</option>
+                            <option value="services">Services & Skills</option>
+                            <option value="agriculture">Agriculture & Livestock</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-gray-700 font-semibold mb-2">Condition *</label>
+                        <select id="condition" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-purple-600">
+                            <option value="">Select Condition</option>
+                            <option value="new">New</option>
+                            <option value="like-new">Like New</option>
+                            <option value="excellent">Excellent</option>
+                            <option value="good">Good</option>
+                            <option value="fair">Fair</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pricing -->
+            <div class="bg-white rounded-2xl shadow-lg p-8">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">
+                    <i class="fas fa-tag text-purple-600 mr-3"></i>Pricing
+                </h2>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <div>
+                        <label class="block text-gray-700 font-semibold mb-2">Price (BWP) *</label>
+                        <div class="relative">
+                            <span class="absolute left-4 top-4 text-gray-500 font-bold">P</span>
+                            <input type="number" id="price" required min="1" step="0.01" class="w-full pl-10 pr-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-purple-600" placeholder="0.00">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-gray-700 font-semibold mb-2">THB Reward</label>
+                        <div class="relative">
+                            <input type="number" id="thbReward" min="0" step="0.1" class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-purple-600 bg-gray-50" placeholder="Auto-calculated (1% of price)">
+                            <p class="text-sm text-gray-500 mt-1">Buyers earn THB when they purchase</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-purple-50 border-2 border-purple-200 rounded-lg p-4">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="font-semibold text-gray-800">BSTM Commission: 5%</p>
+                            <p class="text-sm text-gray-600">You'll receive 95% of the sale price</p>
+                        </div>
+                        <p class="text-2xl font-bold text-purple-600" id="earnings">P0.00</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Inventory & Shipping -->
+            <div class="bg-white rounded-2xl shadow-lg p-8">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">
+                    <i class="fas fa-boxes text-purple-600 mr-3"></i>Inventory & Shipping
+                </h2>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <div>
+                        <label class="block text-gray-700 font-semibold mb-2">Quantity Available *</label>
+                        <input type="number" id="quantity" required min="1" class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-purple-600" placeholder="0">
+                    </div>
+
+                    <div>
+                        <label class="block text-gray-700 font-semibold mb-2">Location *</label>
+                        <select id="location" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-purple-600">
+                            <option value="">Select Location</option>
+                            <option value="Gaborone">Gaborone</option>
+                            <option value="Francistown">Francistown</option>
+                            <option value="Maun">Maun</option>
+                            <option value="Molepolole">Molepolole</option>
+                            <option value="Kasane">Kasane</option>
+                            <option value="Palapye">Palapye</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <label class="block text-gray-700 font-semibold mb-2">Shipping Options</label>
+                    <div class="space-y-3">
+                        <label class="flex items-center p-4 border-2 border-gray-300 rounded-lg cursor-pointer hover:border-purple-600">
+                            <input type="checkbox" name="shipping" value="cablink" checked class="mr-3">
+                            <div class="flex-1">
+                                <p class="font-semibold text-gray-800">CabLink Delivery</p>
+                                <p class="text-sm text-gray-600">Fast delivery via CabLink partners</p>
+                            </div>
+                            <span class="text-green-600 font-semibold">FREE</span>
+                        </label>
+
+                        <label class="flex items-center p-4 border-2 border-gray-300 rounded-lg cursor-pointer hover:border-purple-600">
+                            <input type="checkbox" name="shipping" value="pickup" class="mr-3">
+                            <div class="flex-1">
+                                <p class="font-semibold text-gray-800">Buyer Pickup</p>
+                                <p class="text-sm text-gray-600">Buyers collect from your location</p>
+                            </div>
+                            <span class="text-green-600 font-semibold">FREE</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Additional Options -->
+            <div class="bg-white rounded-2xl shadow-lg p-8">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">
+                    <i class="fas fa-cog text-purple-600 mr-3"></i>Additional Options
+                </h2>
+
+                <div class="space-y-4">
+                    <label class="flex items-center">
+                        <input type="checkbox" id="featured" class="mr-3">
+                        <div>
+                            <p class="font-semibold text-gray-800">Feature this product (+P10)</p>
+                            <p class="text-sm text-gray-600">Appear in featured section for 7 days</p>
+                        </div>
+                    </label>
+
+                    <label class="flex items-center">
+                        <input type="checkbox" id="urgent" class="mr-3">
+                        <div>
+                            <p class="font-semibold text-gray-800">Mark as Urgent Sale</p>
+                            <p class="text-sm text-gray-600">Show urgency badge to attract buyers</p>
+                        </div>
+                    </label>
+
+                    <label class="flex items-center">
+                        <input type="checkbox" id="negotiable" class="mr-3">
+                        <div>
+                            <p class="font-semibold text-gray-800">Price Negotiable</p>
+                            <p class="text-sm text-gray-600">Allow buyers to make offers</p>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Submit Buttons -->
+            <div class="bg-white rounded-2xl shadow-lg p-8">
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <button type="button" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-800 py-4 px-8 rounded-xl font-bold text-lg transition-all">
+                        <i class="fas fa-save mr-2"></i>Save as Draft
+                    </button>
+                    <button type="submit" class="flex-1 gradient-bg text-white py-4 px-8 rounded-xl font-bold text-lg hover:shadow-2xl transition-all">
+                        <i class="fas fa-check-circle mr-2"></i>Publish Product
+                    </button>
+                </div>
+                <p class="text-sm text-center text-gray-500 mt-4">
+                    <i class="fas fa-info-circle mr-1"></i>
+                    Your product will be reviewed within 24 hours
+                </p>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Image upload handling
+        const dropZone = document.getElementById('dropZone');
+        const imageInput = document.getElementById('imageInput');
+        const imagePreview = document.getElementById('imagePreview');
+        let uploadedImages = [];
+
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('dragover');
+        });
+
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('dragover');
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+            handleFiles(e.dataTransfer.files);
+        });
+
+        imageInput.addEventListener('change', (e) => {
+            handleFiles(e.target.files);
+        });
+
+        function handleFiles(files) {
+            Array.from(files).forEach(file => {
+                if (uploadedImages.length >= 5) {
+                    alert('Maximum 5 images allowed');
+                    return;
+                }
+                
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    uploadedImages.push(e.target.result);
+                    displayImages();
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function displayImages() {
+            imagePreview.innerHTML = uploadedImages.map((img, index) => `
+                <div class="relative">
+                    <img src="${img}" class="image-preview rounded-lg border-2 border-gray-300">
+                    <button type="button" onclick="removeImage(${index})" class="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600">
+                        <i class="fas fa-times text-xs"></i>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function removeImage(index) {
+            uploadedImages.splice(index, 1);
+            displayImages();
+        }
+
+        // Calculate earnings
+        document.getElementById('price').addEventListener('input', (e) => {
+            const price = parseFloat(e.target.value) || 0;
+            const earnings = (price * 0.95).toFixed(2);
+            document.getElementById('earnings').textContent = 'P' + earnings;
+            
+            // Auto-calculate THB reward
+            const thbReward = (price * 0.01).toFixed(2);
+            document.getElementById('thbReward').value = thbReward;
+        });
+
+        function handleSubmit(e) {
+            e.preventDefault();
+            
+            if (uploadedImages.length === 0) {
+                alert('Please upload at least one product image');
+                return;
+            }
+
+            const formData = {
+                title: document.getElementById('title').value,
+                description: document.getElementById('description').value,
+                category: document.getElementById('category').value,
+                condition: document.getElementById('condition').value,
+                price: document.getElementById('price').value,
+                thbReward: document.getElementById('thbReward').value,
+                quantity: document.getElementById('quantity').value,
+                location: document.getElementById('location').value,
+                images: uploadedImages
+            };
+
+            // TODO: Send to Supabase
+            console.log('Product data:', formData);
+            alert('Product published successfully!\n\nIt will be reviewed within 24 hours.');
+            window.location.href = 'seller-dashboard.html';
+        }
+    </script>
+</body>
+  </html>
