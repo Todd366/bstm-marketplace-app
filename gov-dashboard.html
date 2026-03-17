@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Government Dashboard - BSTM Digital Nation</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/recharts@2.5.0/dist/Recharts.js"></script>
+    <script src="js/bstm-auth.js"></script>
+    <style>
+        .gradient-bg { background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%); }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+        const { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, AreaChart, Area } = Recharts;
+
+        // Check admin access
+        if (!BSTMAuth.isLoggedIn() || !BSTMAuth.hasRole('admin')) {
+            window.location.href = 'index.html';
+        }
+
+        // Mock platform data
+        const platformData = {
+            totalUsers: 15847,
+            totalSellers: 1247,
+            totalProducts: 8945,
+            totalOrders: 4521,
+            totalRevenue: 892450,
+            thbCirculation: 45678,
+            activeRooms: 6,
+            pendingReviews: 23
+        };
+
+        const roomsData = [
+            { room: 'Room 18', name: 'Marketplace', users: 15847, revenue: 450000, status: 'active', thb: 25000 },
+            { room: 'Room 22', name: 'Farm', users: 8234, revenue: 125000, status: 'active', thb: 8500 },
+            { room: 'CabLink', name: 'Rides', users: 12456, revenue: 280000, status: 'active', thb: 9800 },
+            { room: 'THB Wallet', name: 'Currency', users: 8942, revenue: 0, status: 'active', thb: 45678 },
+            { room: 'Gov', name: 'Admin', users: 12, revenue: 0, status: 'active', thb: 0 },
+            { room: 'Help', name: 'Support', users: 3421, revenue: 0, status: 'active', thb: 0 }
+        ];
+
+        const revenueData = [
+            { month: 'Jan', revenue: 125000, thb: 12500, users: 12000 },
+            { month: 'Feb', revenue: 156000, thb: 15600, users: 12800 },
+            { month: 'Mar', revenue: 189000, thb: 18900, users: 13500 },
+            { month: 'Apr', revenue: 162000, thb: 16200, users: 14200 },
+            { month: 'May', revenue: 215000, thb: 21500, users: 14900 },
+            { month: 'Jun', revenue: 243000, thb: 24300, users: 15847 }
+        ];
+
+        function GovDashboard() {
+            const [activeView, setActiveView] = useState('overview');
+
+            return (
+                <div className="min-h-screen bg-gray-50">
+                    {/* Header */}
+                    <div className="bg-gradient-to-r from-red-600 to-red-800 text-white shadow-2xl">
+                        <div className="max-w-7xl mx-auto px-6 py-4">
+                            <div className="flex justify-between items-center">
+                                <div className="flex items-center space-x-4">
+                                    <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center">
+                                        <span className="text-red-600 font-bold text-2xl">🏛️</span>
+                                    </div>
+                                    <div>
+                                        <h1 className="text-3xl font-bold">BSTM GOVERNMENT</h1>
+                                        <p className="text-sm text-red-100">Central Administration & Nation Control</p>
+                                    </div>
+                                </div>
+                                <div className="flex items-center space-x-4">
+                                    <button className="relative bg-red-700 hover:bg-red-800 px-4 py-2 rounded-lg">
+                                        <i className="fas fa-bell"></i>
+                                        <span className="absolute -top-1 -right-1 w-5 h-5 bg-yellow-400 text-red-800 text-xs rounded-full flex items-center justify-center font-bold">
+                                            {platformData.pendingReviews}
+                                        </span>
+                                    </button>
+                                    <a href="index.html" className="bg-red-700 hover:bg-red-800 px-4 py-2 rounded-lg">
+                                        View Nation
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="max-w-7xl mx-auto px-6 py-8">
+                        
+                        {/* Nation Stats */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                            <div className="bg-white rounded-2xl shadow-lg p-6">
+                                <div className="flex items-center justify-between mb-4">
+                                    <div className="w-14 h-14 bg-blue-100 rounded-xl flex items-center justify-center">
+                                        <i className="fas fa-users text-blue-600 text-2xl"></i>
+                                    </div>
+                                    <span className="text-sm font-semibold px-3 py-1 rounded-full bg-green-100 text-green-700">
+                                        ↑ 12.5%
+                                    </span>
+                                </div>
+                                <p className="text-3xl font-bold text-gray-800">{platformData.totalUsers.toLocaleString()}</p>
+                                <p className="text-sm text-gray-600">Total Citizens</p>
+                            </div>
+
+                            <div className="bg-white rounded-2xl shadow-lg p-6">
+                                <div className="flex items-center justify-between mb-4">
+                                    <div className="w-14 h-14 bg-green-100 rounded-xl flex items-center justify-center">
+                                        <i className="fas fa-box text-green-600 text-2xl"></i>
+                                    </div>
+                                    <span className="text-sm font-semibold px-3 py-1 rounded-full bg-green-100 text-green-700">
+                                        ↑ 8.2%
+                                    </span>
+                                </div>
+                                <p className="text-3xl font-bold text-gray-800">{platformData.totalProducts.toLocaleString()}</p>
+                                <p className="text-sm text-gray-600">Products Listed</p>
+                            </div>
+
+                            <div className="bg-white rounded-2xl shadow-lg p-6">
+                                <div className="flex items-center justify-between mb-4">
+                                    <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center">
+                                        <i className="fas fa-shopping-cart text-purple-600 text-2xl"></i>
+                                    </div>
+                                    <span className="text-sm font-semibold px-3 py-1 rounded-full bg-green-100 text-green-700">
+                                        ↑ 15.3%
+                                    </span>
+                                </div>
+                                <p className="text-3xl font-bold text-gray-800">{platformData.totalOrders.toLocaleString()}</p>
+                                <p className="text-sm text-gray-600">Total Orders</p>
+                            </div>
+
+                            <div className="bg-white rounded-2xl shadow-lg p-6">
+                                <div className="flex items-center justify-between mb-4">
+                                    <div className="w-14 h-14 bg-yellow-100 rounded-xl flex items-center justify-center">
+                                        <i className="fas fa-coins text-yellow-600 text-2xl"></i>
+                                    </div>
+                                    <span className="text-sm font-semibold px-3 py-1 rounded-full bg-green-100 text-green-700">
+                                        ↑ 22.1%
+                                    </span>
+                                </div>
+                                <p className="text-3xl font-bold text-gray-800">P{platformData.totalRevenue.toLocaleString()}</p>
+                                <p className="text-sm text-gray-600">Platform Revenue</p>
+                            </div>
+                        </div>
+
+                        {/* Room Status Grid */}
+                        <div className="bg-white rounded-2xl shadow-lg p-8 mb-8">
+                            <div className="flex justify-between items-center mb-6">
+                                <h2 className="text-2xl font-bold text-gray-800">
+                                    <i className="fas fa-door-open text-red-600 mr-3"></i>All Rooms Status
+                                </h2>
+                                <span className="bg-green-100 text-green-800 font-bold px-4 py-2 rounded-full">
+                                    {platformData.activeRooms} / 63 Active
+                                </span>
+                            </div>
+
+                            <div className="overflow-x-auto">
+                                <table className="min-w-full">
+                                    <thead className="bg-gray-50">
+                                        <tr>
+                                            <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">Room</th>
+                                            <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">Name</th>
+                                            <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">Users</th>
+                                            <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">Revenue</th>
+                                            <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">THB</th>
+                                            <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">Status</th>
+                                            <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="bg-white divide-y divide-gray-200">
+                                        {roomsData.map((room) => (
+                                            <tr key={room.room} className="hover:bg-gray-50">
+                                                <td className="px-6 py-4 text-sm font-medium text-gray-900">{room.room}</td>
+                                                <td className="px-6 py-4 text-sm text-gray-900">{room.name}</td>
+                                                <td className="px-6 py-4 text-sm text-gray-900">{room.users.toLocaleString()}</td>
+                                                <td className="px-6 py-4 text-sm font-bold text-gray-900">P{room.revenue.toLocaleString()}</td>
+                                                <td className="px-6 py-4 text-sm text-gray-900">{room.thb.toLocaleString()} THB</td>
+                                                <td className="px-6 py-4">
+                                                    <span className="px-3 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
+                                                        {room.status}
+                                                    </span>
+                                                </td>
+                                                <td className="px-6 py-4">
+                                                    <button className="text-purple-600 hover:text-purple-800 font-semibold text-sm">
+                                                        Manage
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        {/* Revenue Chart */}
+                        <div className="bg-white rounded-2xl shadow-lg p-8 mb-8">
+                            <h3 className="text-2xl font-bold text-gray-800 mb-6">
+                                <i className="fas fa-chart-line text-red-600 mr-3"></i>Nation Revenue Overview
+                            </h3>
+                            <ResponsiveContainer width="100%" height={300}>
+                                <AreaChart data={revenueData}>
+                                    <defs>
+                                        <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
+                                            <stop offset="5%" stopColor="#dc2626" stopOpacity={0.3}/>
+                                            <stop offset="95%" stopColor="#dc2626" stopOpacity={0}/>
+                                        </linearGradient>
+                                    </defs>
+                                    <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                                    <XAxis dataKey="month" stroke="#6b7280" />
+                                    <YAxis stroke="#6b7280" />
+                                    <Tooltip />
+                                    <Legend />
+                                    <Area type="monotone" dataKey="revenue" stroke="#dc2626" strokeWidth={3} fillOpacity={1} fill="url(#colorRevenue)" name="Revenue (BWP)" />
+                                    <Area type="monotone" dataKey="users" stroke="#3b82f6" strokeWidth={2} fill="#3b82f6" fillOpacity={0.1} name="Users" />
+                                </AreaChart>
+                            </ResponsiveContainer>
+                        </div>
+
+                        {/* THB Treasury */}
+                        <div className="bg-gradient-to-br from-yellow-400 to-orange-500 rounded-2xl shadow-lg p-8 text-white mb-8">
+                            <h3 className="text-3xl font-bold mb-6">
+                                <i className="fas fa-vault mr-3"></i>THB National Treasury
+                            </h3>
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <div className="bg-white bg-opacity-20 rounded-xl p-6">
+                                    <p className="text-sm mb-2">Total in Circulation</p>
+                                    <p className="text-4xl font-bold">{platformData.thbCirculation.toLocaleString()} THB</p>
+                                    <p className="text-sm mt-2">≈ P{(platformData.thbCirculation * 10).toLocaleString()} BWP</p>
+                                </div>
+                                <div className="bg-white bg-opacity-20 rounded-xl p-6">
+                                    <p className="text-sm mb-2">Distributed This Month</p>
+                                    <p className="text-4xl font-bold">23,456 THB</p>
+                                    <p className="text-sm mt-2">+18% vs last month</p>
+                                </div>
+                                <div className="bg-white bg-opacity-20 rounded-xl p-6">
+                                    <p className="text-sm mb-2">Active Wallets</p>
+                                    <p className="text-4xl font-bold">8,942</p>
+                                    <p className="text-sm mt-2">56% of users</p>
+                                </div>
+                            </div>
+                            
+                            <div className="mt-6 flex space-x-4">
+                                <button className="bg-white text-orange-600 hover:bg-gray-100 px-6 py-3 rounded-xl font-bold">
+                                    <i className="fas fa-coins mr-2"></i>Mint THB
+                                </button>
+                                <button className="bg-white bg-opacity-20 hover:bg-opacity-30 px-6 py-3 rounded-xl font-bold">
+                                    <i className="fas fa-history mr-2"></i>Transaction Log
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* Admin Actions */}
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <a href="admin-dashboard.html" className="bg-white rounded-2xl shadow-lg p-6 hover:shadow-2xl transition-all">
+                                <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
+                                    <i className="fas fa-tasks text-purple-600 text-2xl"></i>
+                                </div>
+                                <h3 className="text-xl font-bold text-gray-800 mb-2">Product Approvals</h3>
+                                <p className="text-gray-600 text-sm mb-4">Review pending products</p>
+                                <span className="bg-yellow-100 text-yellow-800 font-bold px-3 py-1 rounded-full text-sm">
+                                    {platformData.pendingReviews} pending
+                                </span>
+                            </a>
+
+                            <button className="bg-white rounded-2xl shadow-lg p-6 hover:shadow-2xl transition-all text-left">
+                                <div className="w-14 h-14 bg-red-100 rounded-xl flex items-center justify-center mb-4">
+                                    <i className="fas fa-user-shield text-red-600 text-2xl"></i>
+                                </div>
+                                <h3 className="text-xl font-bold text-gray-800 mb-2">User Management</h3>
+                                <p className="text-gray-600 text-sm mb-4">Manage citizens & sellers</p>
+                                <span className="text-purple-600 font-semibold text-sm">
+                                    View all users →
+                                </span>
+                            </button>
+
+                            <button className="bg-white rounded-2xl shadow-lg p-6 hover:shadow-2xl transition-all text-left">
+                                <div className="w-14 h-14 bg-blue-100 rounded-xl flex items-center justify-center mb-4">
+                                    <i className="fas fa-cogs text-blue-600 text-2xl"></i>
+                                </div>
+                                <h3 className="text-xl font-bold text-gray-800 mb-2">System Settings</h3>
+                                <p className="text-gray-600 text-sm mb-4">Configure nation parameters</p>
+                                <span className="text-purple-600 font-semibold text-sm">
+                                    Open settings →
+                                </span>
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+            );
+        }
+
+        ReactDOM.render(<GovDashboard />, document.getElementById('root'));
+    </script>
+</body>
+</html>
