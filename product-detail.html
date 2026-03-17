@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fresh Tomatoes - BSTM Marketplace</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .product-image { max-height: 500px; object-fit: cover; }
+        .thumbnail { cursor: pointer; transition: all 0.3s ease; }
+        .thumbnail:hover { transform: scale(1.1); border-color: #667eea; }
+        .thumbnail.active { border-color: #667eea; border-width: 3px; }
+    </style>
+</head>
+<body class="bg-gray-50">
+    
+    <!-- Header -->
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <a href="index.html" class="flex items-center space-x-3">
+                    <div class="w-10 h-10 gradient-bg rounded-xl flex items-center justify-center">
+                        <span class="text-white font-bold text-xl">B</span>
+                    </div>
+                    <span class="text-2xl font-bold text-gray-800">BSTM</span>
+                </a>
+                <div class="flex items-center space-x-4">
+                    <a href="index.html" class="text-gray-600 hover:text-purple-600">
+                        <i class="fas fa-arrow-left mr-2"></i>Back to Store
+                    </a>
+                    <button class="relative text-gray-700 hover:text-purple-600">
+                        <i class="fas fa-shopping-cart text-xl"></i>
+                        <span class="absolute -top-2 -right-2 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">0</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="max-w-7xl mx-auto px-6 py-8">
+        <!-- Breadcrumb -->
+        <nav class="text-sm mb-8">
+            <a href="index.html" class="text-gray-600 hover:text-purple-600">Home</a>
+            <span class="mx-2 text-gray-400">/</span>
+            <a href="index.html#categories" class="text-gray-600 hover:text-purple-600">Fresh Produce</a>
+            <span class="mx-2 text-gray-400">/</span>
+            <span class="text-gray-800 font-semibold">Fresh Tomatoes</span>
+        </nav>
+
+        <!-- Product Section -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-12">
+            <!-- Product Images -->
+            <div>
+                <div class="bg-white rounded-2xl shadow-lg overflow-hidden mb-4">
+                    <img id="mainImage" src="https://via.placeholder.com/600x500/4ade80/ffffff?text=Fresh+Tomatoes" alt="Fresh Tomatoes" class="w-full product-image">
+                </div>
+                <div class="grid grid-cols-4 gap-4">
+                    <img src="https://via.placeholder.com/150/4ade80/ffffff?text=1" class="thumbnail active border-4 border-gray-300 rounded-lg" onclick="changeImage(this)">
+                    <img src="https://via.placeholder.com/150/4ade80/ffffff?text=2" class="thumbnail border-4 border-gray-300 rounded-lg" onclick="changeImage(this)">
+                    <img src="https://via.placeholder.com/150/4ade80/ffffff?text=3" class="thumbnail border-4 border-gray-300 rounded-lg" onclick="changeImage(this)">
+                    <img src="https://via.placeholder.com/150/4ade80/ffffff?text=4" class="thumbnail border-4 border-gray-300 rounded-lg" onclick="changeImage(this)">
+                </div>
+            </div>
+
+            <!-- Product Info -->
+            <div>
+                <div class="flex items-center mb-4">
+                    <span class="bg-green-100 text-green-800 text-xs font-bold px-3 py-1 rounded-full mr-2">
+                        <i class="fas fa-leaf mr-1"></i>Room 22 Farm
+                    </span>
+                    <span class="bg-yellow-100 text-yellow-800 text-xs font-bold px-3 py-1 rounded-full">
+                        <i class="fas fa-coins mr-1"></i>Earn 0.5 THB
+                    </span>
+                </div>
+
+                <h1 class="text-4xl font-bold text-gray-800 mb-4">Fresh Tomatoes (5kg)</h1>
+
+                <div class="flex items-center mb-6">
+                    <div class="flex text-yellow-400 mr-3">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                    </div>
+                    <span class="text-gray-600 text-sm">(4.8) 124 reviews</span>
+                </div>
+
+                <div class="bg-gray-100 rounded-xl p-6 mb-6">
+                    <div class="flex items-baseline mb-4">
+                        <span class="text-5xl font-bold text-gray-800">P50</span>
+                        <span class="text-xl text-purple-600 ml-4">or 0.5 THB</span>
+                    </div>
+                    <p class="text-sm text-gray-600">≈ $3.50 USD • Includes delivery</p>
+                </div>
+
+                <div class="space-y-4 mb-6">
+                    <div class="flex items-center">
+                        <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                        <span class="text-gray-700">Organic & Locally Grown</span>
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fas fa-truck text-purple-600 mr-3"></i>
+                        <span class="text-gray-700">CabLink Delivery Available</span>
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fas fa-shield-alt text-blue-600 mr-3"></i>
+                        <span class="text-gray-700">Verified Seller</span>
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fas fa-map-marker-alt text-red-500 mr-3"></i>
+                        <span class="text-gray-700">Ships from: Gaborone</span>
+                    </div>
+                </div>
+
+                <!-- Quantity Selector -->
+                <div class="flex items-center mb-6">
+                    <span class="text-gray-700 font-semibold mr-4">Quantity:</span>
+                    <div class="flex items-center border-2 border-gray-300 rounded-lg">
+                        <button onclick="decreaseQty()" class="px-4 py-2 text-gray-600 hover:bg-gray-100">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                        <input type="number" id="quantity" value="1" min="1" class="w-16 text-center border-0 focus:outline-none">
+                        <button onclick="increaseQty()" class="px-4 py-2 text-gray-600 hover:bg-gray-100">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                    <span class="ml-4 text-sm text-gray-600">12 available</span>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex space-x-4 mb-8">
+                    <button onclick="addToCart()" class="flex-1 gradient-bg text-white py-4 px-8 rounded-xl font-bold text-lg hover:shadow-2xl transition-all">
+                        <i class="fas fa-shopping-cart mr-2"></i>Add to Cart
+                    </button>
+                    <button class="bg-gray-100 hover:bg-gray-200 text-gray-800 py-4 px-6 rounded-xl transition-all">
+                        <i class="far fa-heart text-2xl"></i>
+                    </button>
+                </div>
+
+                <a href="checkout.html" class="block w-full bg-green-600 hover:bg-green-700 text-white text-center py-4 px-8 rounded-xl font-bold text-lg transition-all">
+                    <i class="fas fa-bolt mr-2"></i>Buy Now
+                </a>
+
+                <!-- Seller Info -->
+                <div class="mt-8 bg-white border-2 border-gray-200 rounded-xl p-6">
+                    <h3 class="font-bold text-gray-800 mb-4">Sold by</h3>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <img src="https://via.placeholder.com/60" alt="Seller" class="w-14 h-14 rounded-full">
+                            <div>
+                                <h4 class="font-bold text-gray-800">Room 22 Farm</h4>
+                                <div class="flex text-yellow-400 text-sm">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                                <p class="text-xs text-gray-600">1,247 sales</p>
+                            </div>
+                        </div>
+                        <button class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-lg font-semibold">
+                            <i class="fas fa-comment mr-2"></i>Chat
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Product Details Tabs -->
+        <div class="bg-white rounded-2xl shadow-lg p-8 mb-8">
+            <div class="border-b mb-6">
+                <button class="px-6 py-3 border-b-2 border-purple-600 font-semibold text-purple-600">Description</button>
+                <button class="px-6 py-3 text-gray-600 hover:text-purple-600">Reviews (124)</button>
+                <button class="px-6 py-3 text-gray-600 hover:text-purple-600">Shipping</button>
+            </div>
+
+            <div>
+                <h3 class="text-2xl font-bold text-gray-800 mb-4">Product Description</h3>
+                <p class="text-gray-700 leading-relaxed mb-4">
+                    Fresh, organic tomatoes grown at Room 22 Farm in Gaborone. Hand-picked daily to ensure maximum freshness and quality. Our tomatoes are grown using sustainable farming practices without harmful pesticides.
+                </p>
+                <p class="text-gray-700 leading-relaxed mb-4">
+                    Perfect for salads, cooking, or making fresh tomato sauce. Each 5kg bag contains approximately 30-40 medium-sized tomatoes.
+                </p>
+                <h4 class="font-bold text-gray-800 mb-2 mt-6">Key Features:</h4>
+                <ul class="list-disc list-inside text-gray-700 space-y-2 ml-4">
+                    <li>100% Organic & Pesticide-Free</li>
+                    <li>Locally grown in Gaborone</li>
+                    <li>Harvested fresh daily</li>
+                    <li>Rich in vitamins and antioxidants</li>
+                    <li>Supports local farmers</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Related Products -->
+        <div class="mb-8">
+            <h3 class="text-3xl font-bold text-gray-800 mb-8">You May Also Like</h3>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+                    <img src="https://via.placeholder.com/300x200/10b981/ffffff?text=Onions" alt="Onions" class="w-full h-48 object-cover">
+                    <div class="p-4">
+                        <h4 class="font-bold text-gray-800 mb-2">Fresh Onions (3kg)</h4>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xl font-bold">P30</span>
+                            <span class="text-sm text-purple-600">0.3 THB</span>
+                        </div>
+                        <button class="w-full mt-3 gradient-bg text-white py-2 rounded-lg font-semibold">Add to Cart</button>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+                    <img src="https://via.placeholder.com/300x200/f59e0b/ffffff?text=Potatoes" alt="Potatoes" class="w-full h-48 object-cover">
+                    <div class="p-4">
+                        <h4 class="font-bold text-gray-800 mb-2">Potatoes (10kg)</h4>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xl font-bold">P80</span>
+                            <span class="text-sm text-purple-600">0.8 THB</span>
+                        </div>
+                        <button class="w-full mt-3 gradient-bg text-white py-2 rounded-lg font-semibold">Add to Cart</button>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+                    <img src="https://via.placeholder.com/300x200/3b82f6/ffffff?text=Spinach" alt="Spinach" class="w-full h-48 object-cover">
+                    <div class="p-4">
+                        <h4 class="font-bold text-gray-800 mb-2">Fresh Spinach (2kg)</h4>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xl font-bold">P35</span>
+                            <span class="text-sm text-purple-600">0.35 THB</span>
+                        </div>
+                        <button class="w-full mt-3 gradient-bg text-white py-2 rounded-lg font-semibold">Add to Cart</button>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+                    <img src="https://via.placeholder.com/300x200/ec4899/ffffff?text=Carrots" alt="Carrots" class="w-full h-48 object-cover">
+                    <div class="p-4">
+                        <h4 class="font-bold text-gray-800 mb-2">Carrots (4kg)</h4>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xl font-bold">P45</span>
+                            <span class="text-sm text-purple-600">0.45 THB</span>
+                        </div>
+                        <button class="w-full mt-3 gradient-bg text-white py-2 rounded-lg font-semibold">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-8">
+        <div class="max-w-7xl mx-auto px-6 text-center">
+            <p class="text-gray-400">© 2025 BSTM Marketplace • Room 18</p>
+        </div>
+    </footer>
+
+    <script>
+        function changeImage(img) {
+            document.getElementById('mainImage').src = img.src.replace('150', '600x500');
+            document.querySelectorAll('.thumbnail').forEach(t => t.classList.remove('active'));
+            img.classList.add('active');
+        }
+
+        function increaseQty() {
+            const input = document.getElementById('quantity');
+            input.value = parseInt(input.value) + 1;
+        }
+
+        function decreaseQty() {
+            const input = document.getElementById('quantity');
+            if (parseInt(input.value) > 1) {
+                input.value = parseInt(input.value) - 1;
+            }
+        }
+
+        function addToCart() {
+            alert('Added to cart! Quantity: ' + document.getElementById('quantity').value);
+            if (navigator.vibrate) navigator.vibrate(50);
+        }
+    </script>
+</body>
+  </html>
