@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Notifications - BSTM</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <script src="js/bstm-auth.js"></script>
+</head>
+<body class="bg-gray-50">
+    
+    <!-- Navigation -->
+    <div id="bstm-nav"></div>
+
+    <div class="max-w-4xl mx-auto px-6 py-8">
+        
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-8">
+            <div>
+                <h1 class="text-4xl font-bold text-gray-800 mb-2">
+                    <i class="fas fa-bell text-purple-600 mr-3"></i>Notifications
+                </h1>
+                <p class="text-gray-600">Stay updated with your BSTM activity</p>
+            </div>
+            <button onclick="markAllAsRead()" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-xl font-semibold">
+                <i class="fas fa-check-double mr-2"></i>Mark All Read
+            </button>
+        </div>
+
+        <!-- Filter Tabs -->
+        <div class="bg-white rounded-2xl shadow-lg mb-8">
+            <div class="flex border-b">
+                <button onclick="filterNotifications('all')" class="notif-filter active flex-1 py-4 font-bold text-purple-600 border-b-2 border-purple-600">
+                    All
+                </button>
+                <button onclick="filterNotifications('orders')" class="notif-filter flex-1 py-4 font-bold text-gray-600">
+                    Orders
+                </button>
+                <button onclick="filterNotifications('thb')" class="notif-filter flex-1 py-4 font-bold text-gray-600">
+                    THB
+                </button>
+                <button onclick="filterNotifications('system')" class="notif-filter flex-1 py-4 font-bold text-gray-600">
+                    System
+                </button>
+            </div>
+        </div>
+
+        <!-- Notifications List -->
+        <div id="notificationsList" class="space-y-4">
+            <!-- Will be populated by JS -->
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <div id="bstm-footer"></div>
+
+    <script>
+    const mockNotifications = [
+        {
+            id: 1,
+            type: 'order',
+            title: 'Order Delivered! 🎉',
+            message: 'Your Fresh Tomatoes order has been delivered',
+            timestamp: new Date(Date.now() - 2*60000).toISOString(),
+            read: false,
+            icon: 'check',
+            color: 'green',
+            link: 'order-tracking.html?id=1'
+        },
+        {
+            id: 2,
+            type: 'thb',
+            title: 'You earned 0.5 THB! 💰',
+            message: 'Purchase reward from your recent order',
+            timestamp: new Date(Date.now() - 3600000).toISOString(),
+            read: false,
+            icon: 'coins',
+            color: 'yellow',
+            link: 'thb-wallet.html'
+        },
+        {
+            id: 3,
+            type: 'order',
+            title: 'New message from Room 22 Farm',
+            message: '"Your order is ready for pickup!"',
+            timestamp: new Date(Date.now() - 3*3600000).toISOString(),
+            read: false,
+            icon: 'comment',
+            color: 'blue',
+            link: 'messages.html'
+        },
+        {
+            id: 4,
+            type: 'system',
+            title: 'Special Offer: 10% off Room 22 Products',
+            message: 'Use code ROOM22 at checkout',
+            timestamp: new Date(Date.now() - 86400000).toISOString(),
+            read: true,
+            icon: 'tag',
+            color: 'purple',
+            link: 'room22-farm.html'
+        },
+        {
+            id: 5,
+            type: 'thb',
+            title: 'Referral Bonus Earned!',
+            message: 'Your friend joined BSTM. +50 THB',
+            timestamp: new Date(Date.now() - 2*86400000).toISOString(),
+            read: true,
+            icon: 'users',
+            color: 'green',
+            link: 'thb-wallet.html#referrals'
+        }
+    ];
+
+    let currentFilter = 'all';
+    let notifications = JSON.parse(localStorage.getItem('bstm_notifications') || JSON.stringify(mockNotifications));
+
+    function loadNotifications() {
+        const container = document.getElementById('notificationsList');
+        
+        let filtered = notifications;
+        if (currentFilter !== 'all') {
+            filtered = notifications.filter(n => n.type === currentFilter);
+        }
+
+        if (filtered.length === 0) {
+            container.innerHTML = `
+                <div class="bg-white rounded-2xl p-12 text-center">
+                    <i class="fas fa-inbox text-gray-300 text-6xl mb-4"></i>
+                    <p class="text-gray-600">No ${currentFilter === 'all' ? '' : currentFilter} notifications</p>
+                </div>
+            `;
+            return;
+        }
+
+        container.innerHTML = filtered.map(notif => `
+            <a href="${notif.link}" class="block bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all overflow-hidden ${!notif.read ? 'border-l-4 border-' + notif.color + '-500' : ''}">
+                <div class="p-6">
+                    <div class="flex items-start space-x-4">
+                        <div class="w-12 h-12 bg-${notif.color}-100 rounded-full flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-${notif.icon} text-${notif.color}-600"></i>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex justify-between items-start mb-2">
+                                <p class="font-bold text-gray-800">${notif.title}</p>
+                                ${!notif.read ? '<span class="w-2 h-2 bg-' + notif.color + '-500 rounded-full"></span>' : ''}
+                            </div>
+                            <p class="text-gray-600 mb-2">${notif.message}</p>
+                            <p class="text-xs text-gray-500">${formatTime(notif.timestamp)}</p>
+                        </div>
+                        <i class="fas fa-chevron-right text-gray-400"></i>
+                    </div>
+                </div>
+            </a>
+        `).join('');
+    }
+
+    function filterNotifications(filter) {
+        currentFilter = filter;
+
+        // Update button states
+        document.querySelectorAll('.notif-filter').forEach(btn => {
+            btn.classList.remove('active', 'text-purple-600', 'border-purple-600');
+            btn.classList.add('text-gray-600');
+        });
+        event.target.classList.add('active', 'text-purple-600', 'border-purple-600');
+        event.target.classList.remove('text-gray-600');
+
+        loadNotifications();
+    }
+
+    function markAllAsRead() {
+        notifications = notifications.map(n => ({ ...n, read: true }));
+        localStorage.setItem('bstm_notifications', JSON.stringify(notifications));
+        loadNotifications();
+        
+        // Update badge in nav
+        const badge = document.getElementById('notifBadge');
+        if (badge) badge.textContent = '0';
+    }
+
+    function formatTime(timestamp) {
+        const now = Date.now();
+        const time = new Date(timestamp).getTime();
+        const diff = now - time;
+
+        const minutes = Math.floor(diff / 60000);
+        const hours = Math.floor(diff / 3600000);
+        const days = Math.floor(diff / 86400000);
+
+        if (minutes < 1) return 'Just now';
+        if (minutes < 60) return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
+        if (hours < 24) return `${hours} hour${hours > 1 ? 's' : ''} ago`;
+        if (days < 7) return `${days} day${days > 1 ? 's' : ''} ago`;
+        
+        return new Date(timestamp).toLocaleDateString();
+    }
+
+    // Load components
+    function loadComponents() {
+        fetch('components/universal-nav.html')
+            .then(r => r.text())
+            .then(html => document.getElementById('bstm-nav').innerHTML = html);
+
+        fetch('components/universal-footer.html')
+            .then(r => r.text())
+            .then(html => document.getElementById('bstm-footer').innerHTML = html);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        BSTMAuth.requireAuth();
+        loadNotifications();
+        loadComponents();
+    });
+    </script>
+</body>
+</html>
