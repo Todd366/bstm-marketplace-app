@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - BSTM Marketplace</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <script src="https://js.paystack.co/v1/inline.js"></script>
+    <style>
+        .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .step-active { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+        .step-inactive { background: #e5e7eb; color: #6b7280; }
+    </style>
+</head>
+<body class="bg-gray-50">
+    
+    <!-- Header -->
+    <header class="bg-white shadow-md">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <a href="index.html" class="flex items-center space-x-3">
+                    <div class="w-10 h-10 gradient-bg rounded-xl flex items-center justify-center">
+                        <span class="text-white font-bold text-xl">B</span>
+                    </div>
+                    <span class="text-2xl font-bold text-gray-800">BSTM Checkout</span>
+                </a>
+                <div class="flex items-center space-x-4">
+                    <span class="text-sm text-gray-600"><i class="fas fa-lock mr-2"></i>Secure Checkout</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Progress Steps -->
+    <div class="bg-white border-b">
+        <div class="max-w-7xl mx-auto px-6 py-6">
+            <div class="flex items-center justify-center space-x-4">
+                <div class="flex items-center">
+                    <div class="w-10 h-10 step-active rounded-full flex items-center justify-center font-bold">1</div>
+                    <span class="ml-2 font-semibold text-purple-600">Cart</span>
+                </div>
+                <div class="w-16 h-1 bg-purple-600"></div>
+                <div class="flex items-center">
+                    <div class="w-10 h-10 step-active rounded-full flex items-center justify-center font-bold">2</div>
+                    <span class="ml-2 font-semibold text-purple-600">Shipping</span>
+                </div>
+                <div class="w-16 h-1 bg-gray-300"></div>
+                <div class="flex items-center">
+                    <div class="w-10 h-10 step-inactive rounded-full flex items-center justify-center font-bold">3</div>
+                    <span class="ml-2 font-semibold text-gray-600">Payment</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-6 py-8">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Main Checkout Form -->
+            <div class="lg:col-span-2">
+                <!-- Delivery Information -->
+                <div class="bg-white rounded-2xl shadow-lg p-8 mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6">
+                        <i class="fas fa-truck text-purple-600 mr-3"></i>Delivery Information
+                    </h2>
+                    <form id="checkoutForm">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <div>
+                                <label class="block text-gray-700 font-semibold mb-2">Full Name *</label>
+                                <input type="text" id="fullName" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-purple-600" placeholder="Mpho Kgosi">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 font-semibold mb-2">Phone Number *</label>
+                                <input type="tel" id="phone" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-purple-600" placeholder="+267 XX XXX XXX">
+                            </div>
+                        </div>
+
+                        <div class="mb-6">
+                            <label class="block text-gray-700 font-semibold mb-2">Email Address *</label>
+                            <input type="email" id="email" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-purple-600" placeholder="mpho@example.com">
+                        </div>
+
+                        <div class="mb-6">
+                            <label class="block text-gray-700 font-semibold mb-2">Delivery Address *</label>
+                            <input type="text" id="address" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-purple-600 mb-3" placeholder="Street Address">
+                            <div class="grid grid-cols-2 gap-4">
+                                <select id="city" required class="px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-purple-600">
+                                    <option value="">Select City</option>
+                                    <option value="Gaborone">Gaborone</option>
+                                    <option value="Francistown">Francistown</option>
+                                    <option value="Maun">Maun</option>
+                                    <option value="Molepolole">Molepolole</option>
+                                </select>
+                                <input type="text" id="postal" placeholder="Postal Code" class="px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-purple-600">
+                            </div>
+                        </div>
+
+                        <div class="mb-6">
+                            <label class="block text-gray-700 font-semibold mb-2">Delivery Notes (Optional)</label>
+                            <textarea id="notes" rows="3" class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-purple-600" placeholder="Any special delivery instructions..."></textarea>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Delivery Method -->
+                <div class="bg-white rounded-2xl shadow-lg p-8 mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6">
+                        <i class="fas fa-shipping-fast text-purple-600 mr-3"></i>Delivery Method
+                    </h2>
+                    <div class="space-y-4">
+                        <label class="flex items-center justify-between p-4 border-2 border-purple-600 rounded-lg cursor-pointer bg-purple-50">
+                            <div class="flex items-center">
+                                <input type="radio" name="delivery" value="cablink" checked class="mr-4">
+                                <div>
+                                    <p class="font-bold text-gray-800">CabLink Express</p>
+                                    <p class="text-sm text-gray-600">Delivered in 1-2 hours</p>
+                                </div>
+                            </div>
+                            <span class="font-bold text-purple-600">FREE</span>
+                        </label>
+
+                        <label class="flex items-center justify-between p-4 border-2 border-gray-300 rounded-lg cursor-pointer hover:border-purple-400">
+                            <div class="flex items-center">
+                                <input type="radio" name="delivery" value="standard" class="mr-4">
+                                <div>
+                                    <p class="font-bold text-gray-800">Standard Delivery</p>
+                                    <p class="text-sm text-gray-600">Delivered in 2-3 days</p>
+                                </div>
+                            </div>
+                            <span class="font-bold text-gray-800">P20</span>
+                        </label>
+
+                        <label class="flex items-center justify-between p-4 border-2 border-gray-300 rounded-lg cursor-pointer hover:border-purple-400">
+                            <div class="flex items-center">
+                                <input type="radio" name="delivery" value="pickup" class="mr-4">
+                                <div>
+                                    <p class="font-bold text-gray-800">Pickup from Seller</p>
+                                    <p class="text-sm text-gray-600">Room 22 Farm, Gaborone</p>
+                                </div>
+                            </div>
+                            <span class="font-bold text-green-600">FREE</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Payment Method -->
+                <div class="bg-white rounded-2xl shadow-lg p-8">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6">
+                        <i class="fas fa-credit-card text-purple-600 mr-3"></i>Payment Method
+                    </h2>
+                    <div class="space-y-4">
+                        <label class="flex items-center justify-between p-4 border-2 border-purple-600 rounded-lg cursor-pointer bg-purple-50">
+                            <div class="flex items-center">
+                                <input type="radio" name="payment" value="paystack" checked class="mr-4">
+                                <div>
+                                    <p class="font-bold text-gray-800">Paystack (Card / Mobile Money)</p>
+                                    <p class="text-sm text-gray-600">Secure payment via Paystack</p>
+                                </div>
+                            </div>
+                            <i class="fas fa-shield-alt text-green-600 text-2xl"></i>
+                        </label>
+
+                        <label class="flex items-center justify-between p-4 border-2 border-gray-300 rounded-lg cursor-pointer hover:border-purple-400">
+                            <div class="flex items-center">
+                                <input type="radio" name="payment" value="thb" class="mr-4">
+                                <div>
+                                    <p class="font-bold text-gray-800">Pay with THB</p>
+                                    <p class="text-sm text-gray-600">Balance: 12.5 THB (≈ P125)</p>
+                                </div>
+                            </div>
+                            <i class="fas fa-coins text-yellow-600 text-2xl"></i>
+                        </label>
+
+                        <label class="flex items-center justify-between p-4 border-2 border-gray-300 rounded-lg cursor-pointer hover:border-purple-400">
+                            <div class="flex items-center">
+                                <input type="radio" name="payment" value="cod" class="mr-4">
+                                <div>
+                                    <p class="font-bold text-gray-800">Cash on Delivery</p>
+                                    <p class="text-sm text-gray-600">Pay when you receive</p>
+                                </div>
+                            </div>
+                            <i class="fas fa-money-bill-wave text-green-600 text-2xl"></i>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Order Summary -->
+            <div class="lg:col-span-1">
+                <div class="bg-white rounded-2xl shadow-lg p-8 sticky top-8">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6">Order Summary</h2>
+
+                    <!-- Cart Items -->
+                    <div class="space-y-4 mb-6 pb-6 border-b">
+                        <div class="flex items-center space-x-4">
+                            <img src="https://via.placeholder.com/80/4ade80/ffffff?text=Tomatoes" alt="Product" class="w-16 h-16 rounded-lg">
+                            <div class="flex-1">
+                                <h4 class="font-semibold text-gray-800">Fresh Tomatoes (5kg)</h4>
+                                <p class="text-sm text-gray-600">Qty: 2</p>
+                                <span class="text-xs text-green-600">+1.0 THB</span>
+                            </div>
+                            <span class="font-bold text-gray-800">P100</span>
+                        </div>
+                    </div>
+
+                    <!-- Price Breakdown -->
+                    <div class="space-y-3 mb-6 pb-6 border-b">
+                        <div class="flex justify-between text-gray-700">
+                            <span>Subtotal</span>
+                            <span>P100</span>
+                        </div>
+                        <div class="flex justify-between text-gray-700">
+                            <span>Delivery (CabLink)</span>
+                            <span class="text-green-600 font-semibold">FREE</span>
+                        </div>
+                        <div class="flex justify-between text-gray-700">
+                            <span>THB Discount</span>
+                            <span class="text-green-600">-P0</span>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between text-xl font-bold text-gray-800 mb-6">
+                        <span>Total</span>
+                        <span>P100</span>
+                    </div>
+
+                    <!-- THB Earnings -->
+                    <div class="bg-yellow-50 border-2 border-yellow-300 rounded-lg p-4 mb-6">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm text-gray-700 mb-1">You'll Earn</p>
+                                <p class="text-2xl font-bold text-yellow-700">
+                                    <i class="fas fa-coins mr-2"></i>1.0 THB
+                                </p>
+                            </div>
+                            <i class="fas fa-gift text-yellow-600 text-3xl"></i>
+                        </div>
+                    </div>
+
+                    <!-- Place Order Button -->
+                    <button onclick="proceedToPayment()" class="w-full gradient-bg text-white py-4 rounded-xl font-bold text-lg hover:shadow-2xl transition-all mb-4">
+                        <i class="fas fa-lock mr-2"></i>Place Order
+                    </button>
+
+                    <p class="text-xs text-center text-gray-500">
+                        <i class="fas fa-shield-alt mr-1"></i>
+                        Secure checkout powered by Paystack
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-8 mt-12">
+        <div class="max-w-7xl mx-auto px-6 text-center">
+            <p class="text-gray-400">© 2025 BSTM Marketplace • Room 18</p>
+        </div>
+    </footer>
+
+    <script>
+        function proceedToPayment() {
+            const form = document.getElementById('checkoutForm');
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+
+            const email = document.getElementById('email').value;
+            const amount = 100; // Total in BWP
+
+            // Initialize Paystack
+            const handler = PaystackPop.setup({
+                key: 'pk_test_YOUR_PAYSTACK_KEY_HERE', // Replace with your key
+                email: email,
+                amount: amount * 100, // Convert to kobo
+                currency: 'BWP',
+                ref: 'BSTM-' + Math.floor(Math.random() * 1000000000),
+                metadata: {
+                    custom_fields: [
+                        {
+                            display_name: "Order Type",
+                            variable_name: "order_type",
+                            value: "Fresh Produce"
+                        }
+                    ]
+                },
+                callback: function(response) {
+                    alert('Payment successful! Reference: ' + response.reference);
+                    window.location.href = 'order-tracking.html?ref=' + response.reference;
+                },
+                onClose: function() {
+                    alert('Payment cancelled');
+                }
+            });
+
+            handler.openIframe();
+        }
+
+        // Vibrate on button click
+        document.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('click', () => {
+                if (navigator.vibrate) navigator.vibrate(50);
+            });
+        });
+    </script>
+</body>
+                      </html>
