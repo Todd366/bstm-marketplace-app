@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CabLink - Ride & Earn THB | BSTM</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .cablink-gradient { background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%); }
+    </style>
+</head>
+<body class="bg-gray-50">
+    
+    <!-- Navigation -->
+    <div id="bstm-nav"></div>
+
+    <!-- Hero -->
+    <section class="cablink-gradient text-white py-20">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <div class="inline-block bg-white bg-opacity-20 rounded-full px-4 py-2 mb-6">
+                        <span class="font-bold text-sm">🚗 CABLINK - POWERED BY BSTM</span>
+                    </div>
+                    <h1 class="text-6xl font-bold mb-6">Book Rides, Earn THB</h1>
+                    <p class="text-xl text-blue-100 mb-8">
+                        Botswana's smart ride-booking platform integrated with BSTM Digital Nation. 
+                        Every ride earns you THoBoCoin rewards.
+                    </p>
+                    
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <a href="https://cablink.bstm.bw" target="_blank" class="bg-white text-blue-600 hover:bg-blue-50 px-8 py-4 rounded-xl font-bold text-lg text-center shadow-xl">
+                            <i class="fas fa-external-link-alt mr-2"></i>Open CabLink PWA
+                        </a>
+                        <button onclick="showDemoRide()" class="bg-yellow-400 hover:bg-yellow-500 text-gray-900 px-8 py-4 rounded-xl font-bold text-lg">
+                            <i class="fas fa-play mr-2"></i>Demo Ride
+                        </button>
+                    </div>
+
+                    <!-- Stats -->
+                    <div class="grid grid-cols-3 gap-6 mt-12">
+                        <div>
+                            <p class="text-4xl font-bold">0.8</p>
+                            <p class="text-sm text-blue-200">THB per ride</p>
+                        </div>
+                        <div>
+                            <p class="text-4xl font-bold">&lt;5min</p>
+                            <p class="text-sm text-blue-200">Avg pickup</p>
+                        </div>
+                        <div>
+                            <p class="text-4xl font-bold">24/7</p>
+                            <p class="text-sm text-blue-200">Available</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="hidden lg:block">
+                    <div class="bg-white rounded-3xl shadow-2xl p-8">
+                        <h3 class="text-2xl font-bold text-gray-800 mb-6">Quick Fare Estimate</h3>
+                        
+                        <div class="space-y-4 mb-6">
+                            <div>
+                                <label class="block text-gray-700 font-semibold mb-2">Pickup Location</label>
+                                <input type="text" placeholder="Enter pickup address" class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:border-blue-600">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-gray-700 font-semibold mb-2">Drop-off Location</label>
+                                <input type="text" placeholder="Enter destination" class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:border-blue-600">
+                            </div>
+                        </div>
+
+                        <button class="w-full cablink-gradient text-white py-4 rounded-xl font-bold text-lg">
+                            Calculate Fare
+                        </button>
+
+                        <div class="mt-6 bg-yellow-50 border-2 border-yellow-300 rounded-xl p-4">
+                            <p class="text-sm text-gray-700">
+                                <i class="fas fa-coins text-yellow-600 mr-2"></i>
+                                You'll earn <strong>0.8 THB</strong> on this ride!
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-5xl font-bold text-gray-800 mb-4">Why CabLink?</h2>
+                <p class="text-xl text-gray-600">More than just a ride - it's part of your digital nation</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-8 border-2 border-blue-200">
+                    <div class="w-16 h-16 bg-blue-500 rounded-2xl flex items-center justify-center mb-6">
+                        <i class="fas fa-coins text-white text-3xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Earn THB Rewards</h3>
+                    <p class="text-gray-700">
+                        Get 0.8 THB per ride automatically added to your wallet. 
+                        Use it in the marketplace or convert to BWP.
+                    </p>
+                </div>
+
+                <div class="bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-8 border-2 border-green-200">
+                    <div class="w-16 h-16 bg-green-500 rounded-2xl flex items-center justify-center mb-6">
+                        <i class="fas fa-map-marked-alt text-white text-3xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Real-Time Tracking</h3>
+                    <p class="text-gray-700">
+                        Track your driver's location in real-time. Know exactly when they'll arrive 
+                        with live ETA updates.
+                    </p>
+                </div>
+
+                <div class="bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl p-8 border-2 border-purple-200">
+                    <div class="w-16 h-16 bg-purple-500 rounded-2xl flex items-center justify-center mb-6">
+                        <i class="fas fa-shield-alt text-white text-3xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Verified Drivers</h3>
+                    <p class="text-gray-700">
+                        All drivers are KYC verified and rated by passengers. 
+                        Your safety is our priority.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="py-20 bg-gradient-to-b from-gray-50 to-white">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-5xl font-bold text-gray-800 mb-4">How CabLink Works</h2>
+                <p class="text-xl text-gray-600">Book a ride in 3 simple steps</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+                <div class="text-center">
+                    <div class="w-24 h-24 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <span class="text-white text-4xl font-bold">1</span>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Enter Destination</h3>
+                    <p class="text-gray-600">
+                        Open CabLink, enter your pickup and drop-off locations. 
+                        See instant fare estimate.
+                    </p>
+                </div>
+
+                <div class="text-center">
+                    <div class="w-24 h-24 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <span class="text-white text-4xl font-bold">2</span>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Get Matched</h3>
+                    <p class="text-gray-600">
+                        We find the nearest driver. Track them in real-time as they 
+                        head to your location.
+                    </p>
+                </div>
+
+                <div class="text-center">
+                    <div class="w-24 h-24 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <span class="text-white text-4xl font-bold">3</span>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Ride & Earn</h3>
+                    <p class="text-gray-600">
+                        Enjoy your ride, pay via BSTM wallet or card, and earn 0.8 THB 
+                        automatically!
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Integration with BSTM -->
+    <section class="py-20 bg-gradient-to-br from-purple-50 to-indigo-50">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="bg-white rounded-3xl shadow-2xl overflow-hidden">
+                <div class="grid grid-cols-1 lg:grid-cols-2">
+                    <div class="p-12">
+                        <h2 class="text-4xl font-bold text-gray-800 mb-6">
+                            Seamlessly Connected to BSTM
+                        </h2>
+                        <p class="text-xl text-gray-600 mb-8">
+                            CabLink is fully integrated with your BSTM Nation account. 
+                            One wallet, one identity, endless possibilities.
+                        </p>
+
+                        <div class="space-y-6">
+                            <div class="flex items-start space-x-4">
+                                <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-shopping-bag text-purple-600"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-gray-800 mb-2">Shop & Ride</h4>
+                                    <p class="text-gray-600">
+                                        Buy from Room 22 Farm, get it delivered via CabLink, 
+                                        earn double THB rewards.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start space-x-4">
+                                <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-wallet text-purple-600"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-gray-800 mb-2">Pay with THB</h4>
+                                    <p class="text-gray-600">
+                                        Use your THB balance to pay for rides. 1 THB = P10 BWP 
+                                        on all CabLink trips.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start space-x-4">
+                                <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-user text-purple-600"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-gray-800 mb-2">One Account</h4>
+                                    <p class="text-gray-600">
+                                        Your BSTM login works everywhere. No need to sign up again.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-gradient-to-br from-blue-500 to-indigo-600 p-12 flex items-center justify-center">
+                        <div class="text-center text-white">
+                            <i class="fas fa-link text-8xl mb-6 opacity-20"></i>
+                            <h3 class="text-3xl font-bold mb-4">Fully Integrated</h3>
+                            <p class="text-xl">One Nation, One Platform</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="py-20 cablink-gradient text-white">
+        <div class="max-w-4xl mx-auto px-6 text-center">
+            <h2 class="text-5xl font-bold mb-6">Ready to Ride?</h2>
+            <p class="text-2xl text-blue-100 mb-12">
+                Download the CabLink PWA and start earning THB today
+            </p>
+            <a href="https://cablink.bstm.bw" target="_blank" class="inline-block bg-white text-blue-600 hover:bg-blue-50 px-12 py-5 rounded-2xl font-bold text-2xl shadow-2xl">
+                <i class="fas fa-rocket mr-3"></i>Launch CabLink
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <div id="bstm-footer"></div>
+
+    <!-- Demo Modal -->
+    <div id="demoModal" class="fixed inset-0 bg-black bg-opacity-70 hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-8">
+            <div class="text-center mb-6">
+                <div class="w-20 h-20 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-car text-white text-3xl"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-800 mb-2">Demo Ride Booked!</h3>
+                <p class="text-gray-600">Simulating a CabLink ride...</p>
+            </div>
+
+            <div class="space-y-4 mb-6">
+                <div class="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
+                    <span class="text-gray-700">Pickup:</span>
+                    <span class="font-bold text-gray-800">Gaborone CBD</span>
+                </div>
+                <div class="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
+                    <span class="text-gray-700">Destination:</span>
+                    <span class="font-bold text-gray-800">Mmopane</span>
+                </div>
+                <div class="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
+                    <span class="text-gray-700">Fare:</span>
+                    <span class="font-bold text-gray-800">P80</span>
+                </div>
+                <div class="flex items-center justify-between p-4 bg-green-50 rounded-xl border-2 border-green-300">
+                    <span class="text-gray-700">You'll Earn:</span>
+                    <span class="font-bold text-green-600">+0.8 THB</span>
+                </div>
+            </div>
+
+            <button onclick="completeDemoRide()" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-xl font-bold text-lg mb-3">
+                Complete Ride
+            </button>
+            <button onclick="closeDemoModal()" class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 py-4 rounded-xl font-bold">
+                Cancel
+            </button>
+        </div>
+    </div>
+
+    <script>
+    function showDemoRide() {
+        document.getElementById('demoModal').classList.remove('hidden');
+    }
+
+    function closeDemoModal() {
+        document.getElementById('demoModal').classList.add('hidden');
+    }
+
+    function completeDemoRide() {
+        // Award THB
+        if (typeof THBRewards !== 'undefined') {
+            THBRewards.rewardCabLinkRide('DEMO-' + Date.now(), 80);
+        }
+
+        closeDemoModal();
+        
+        // Show success notification
+        const notification = document.createElement('div');
+        notification.className = 'fixed top-20 right-4 bg-green-500 text-white px-6 py-4 rounded-xl shadow-2xl z-50';
+        notification.innerHTML = `
+            <p class="font-bold">🎉 Ride Completed!</p>
+            <p class="text-sm">You earned 0.8 THB</p>
+        `;
+        document.body.appendChild(notification);
+
+        setTimeout(() => notification.remove(), 3000);
+    }
+
+    // Load components
+    function loadComponents() {
+        fetch('components/universal-nav.html')
+            .then(r => r.text())
+            .then(html => document.getElementById('bstm-nav').innerHTML = html);
+
+        fetch('components/universal-footer.html')
+            .then(r => r.text())
+            .then(html => document.getElementById('bstm-footer').innerHTML = html);
+    }
+
+    document.addEventListener('DOMContentLoaded', loadComponents);
+    </script>
+</body>
+</html>
