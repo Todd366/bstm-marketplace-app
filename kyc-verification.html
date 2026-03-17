@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KYC Verification - BSTM</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <script src="js/bstm-auth.js"></script>
+</head>
+<body class="bg-gray-50">
+    
+    <div id="bstm-nav"></div>
+
+    <div class="max-w-3xl mx-auto px-6 py-12">
+        
+        <!-- Header -->
+        <div class="text-center mb-12">
+            <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                <i class="fas fa-shield-alt text-green-600 text-4xl"></i>
+            </div>
+            <h1 class="text-4xl font-bold text-gray-800 mb-4">Seller Verification (KYC)</h1>
+            <p class="text-xl text-gray-600">Complete verification to start selling on BSTM</p>
+        </div>
+
+        <!-- Progress Steps -->
+        <div class="bg-white rounded-2xl shadow-lg p-8 mb-8">
+            <div class="flex items-center justify-between mb-8">
+                <div class="flex flex-col items-center flex-1">
+                    <div id="step1" class="w-12 h-12 bg-purple-600 text-white rounded-full flex items-center justify-center font-bold mb-2">1</div>
+                    <p class="text-sm font-semibold text-purple-600">Personal Info</p>
+                </div>
+                <div class="flex-1 h-1 bg-gray-300 mx-4"></div>
+                <div class="flex flex-col items-center flex-1">
+                    <div id="step2" class="w-12 h-12 bg-gray-300 text-white rounded-full flex items-center justify-center font-bold mb-2">2</div>
+                    <p class="text-sm font-semibold text-gray-400">Documents</p>
+                </div>
+                <div class="flex-1 h-1 bg-gray-300 mx-4"></div>
+                <div class="flex flex-col items-center flex-1">
+                    <div id="step3" class="w-12 h-12 bg-gray-300 text-white rounded-full flex items-center justify-center font-bold mb-2">3</div>
+                    <p class="text-sm font-semibold text-gray-400">Review</p>
+                </div>
+            </div>
+
+            <!-- Step 1: Personal Info -->
+            <div id="stepContent1" class="step-content">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">Personal Information</h2>
+                <form id="personalInfoForm" class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-2">Full Legal Name *</label>
+                            <input type="text" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:border-purple-600" placeholder="John Doe">
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-2">Date of Birth *</label>
+                            <input type="date" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:border-purple-600">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-2">Omang Number *</label>
+                            <input type="text" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:border-purple-600" placeholder="123456789">
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-2">Phone Number *</label>
+                            <input type="tel" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:border-purple-600" placeholder="+267 71234567">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-gray-700 font-semibold mb-2">Physical Address *</label>
+                        <textarea required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:border-purple-600" rows="3" placeholder="Plot 1234, Block 5, Gaborone"></textarea>
+                    </div>
+
+                    <div>
+                        <label class="block text-gray-700 font-semibold mb-2">Business Type *</label>
+                        <select required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:border-purple-600">
+                            <option value="">Select type...</option>
+                            <option value="individual">Individual Seller</option>
+                            <option value="registered">Registered Business</option>
+                            <option value="cooperative">Cooperative</option>
+                        </select>
+                    </div>
+
+                    <button type="button" onclick="nextStep(2)" class="w-full bg-purple-600 hover:bg-purple-700 text-white py-4 rounded-xl font-bold text-lg">
+                        Continue to Documents
+                        <i class="fas fa-arrow-right ml-2"></i>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Step 2: Documents -->
+            <div id="stepContent2" class="step-content hidden">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">Upload Documents</h2>
+                
+                <div class="space-y-6">
+                    <!-- Omang Upload -->
+                    <div class="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-purple-600 transition-all">
+                        <i class="fas fa-id-card text-gray-400 text-4xl mb-4"></i>
+                        <h3 class="font-bold text-gray-800 mb-2">Omang (National ID)</h3>
+                        <p class="text-sm text-gray-600 mb-4">Upload clear photo of front and back</p>
+                        <input type="file" id="omangUpload" accept="image/*" multiple class="hidden">
+                        <button onclick="document.getElementById('omangUpload').click()" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-semibold">
+                            <i class="fas fa-upload mr-2"></i>Upload Omang
+                        </button>
+                    </div>
+
+                    <!-- Proof of Address -->
+                    <div class="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-purple-600 transition-all">
+                        <i class="fas fa-file-alt text-gray-400 text-4xl mb-4"></i>
+                        <h3 class="font-bold text-gray-800 mb-2">Proof of Address</h3>
+                        <p class="text-sm text-gray-600 mb-4">Utility bill or bank statement (less than 3 months old)</p>
+                        <input type="file" id="proofUpload" accept="image/*,application/pdf" class="hidden">
+                        <button onclick="document.getElementById('proofUpload').click()" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-semibold">
+                            <i class="fas fa-upload mr-2"></i>Upload Proof
+                        </button>
+                    </div>
+
+                    <!-- Business Registration (if applicable) -->
+                    <div class="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-purple-600 transition-all">
+                        <i class="fas fa-building text-gray-400 text-4xl mb-4"></i>
+                        <h3 class="font-bold text-gray-800 mb-2">Business Registration (Optional)</h3>
+                        <p class="text-sm text-gray-600 mb-4">If you're a registered business</p>
+                        <input type="file" id="businessUpload" accept="image/*,application/pdf" class="hidden">
+                        <button onclick="document.getElementById('businessUpload').click()" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-semibold">
+                            <i class="fas fa-upload mr-2"></i>Upload Certificate
+                        </button>
+                    </div>
+                </div>
+
+                <div class="flex space-x-4 mt-8">
+                    <button onclick="nextStep(1)" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-800 py-4 rounded-xl font-bold">
+                        <i class="fas fa-arrow-left mr-2"></i>Back
+                    </button>
+                    <button onclick="nextStep(3)" class="flex-1 bg-purple-600 hover:bg-purple-700 text-white py-4 rounded-xl font-bold">
+                        Review Submission
+                        <i class="fas fa-arrow-right ml-2"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 3: Review -->
+            <div id="stepContent3" class="step-content hidden">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">Review & Submit</h2>
+                
+                <div class="bg-gray-50 rounded-xl p-6 mb-6">
+                    <h3 class="font-bold text-gray-800 mb-4">Application Summary</h3>
+                    <div class="space-y-3 text-sm">
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Full Name:</span>
+                            <span class="font-semibold text-gray-800">John Doe</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Omang Number:</span>
+                            <span class="font-semibold text-gray-800">123456789</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Phone:</span>
+                            <span class="font-semibold text-gray-800">+267 71234567</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Business Type:</span>
+                            <span class="font-semibold text-gray-800">Individual Seller</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Documents Uploaded:</span>
+                            <span class="font-semibold text-green-600">3 files</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-blue-50 border-2 border-blue-200 rounded-xl p-6 mb-6">
+                    <div class="flex items-start space-x-3">
+                        <i class="fas fa-info-circle text-blue-600 mt-1"></i>
+                        <div>
+                            <p class="font-semibold text-blue-900 mb-2">What happens next?</p>
+                            <ul class="text-sm text-blue-800 space-y-1">
+                                <li>• Our team will review your application within 24-48 hours</li>
+                                <li>• You'll receive an email with the verification result</li>
+                                <li>• Once approved, you can start listing products immediately</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex items-start space-x-3 mb-6">
+                    <input type="checkbox" id="termsAgree" class="mt-1">
+                    <label for="termsAgree" class="text-sm text-gray-700">
+                        I confirm that all information provided is accurate and I agree to BSTM's 
+                        <a href="terms.html" class="text-purple-600 hover:underline">Seller Terms & Conditions</a>
+                    </label>
+                </div>
+
+                <div class="flex space-x-4">
+                    <button onclick="nextStep(2)" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-800 py-4 rounded-xl font-bold">
+                        <i class="fas fa-arrow-left mr-2"></i>Back
+                    </button>
+                    <button onclick="submitKYC()" class="flex-1 bg-green-600 hover:bg-green-700 text-white py-4 rounded-xl font-bold">
+                        <i class="fas fa-check mr-2"></i>Submit Application
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="bstm-footer"></div>
+
+    <script>
+    function nextStep(step) {
+        // Hide all steps
+        document.querySelectorAll('.step-content').forEach(el => el.classList.add('hidden'));
+        
+        // Show target step
+        document.getElementById('stepContent' + step).classList.remove('hidden');
+        
+        // Update progress indicators
+        for (let i = 1; i <= 3; i++) {
+            const stepEl = document.getElementById('step' + i);
+            if (i <= step) {
+                stepEl.classList.remove('bg-gray-300');
+                stepEl.classList.add('bg-purple-600');
+                stepEl.nextElementSibling.classList.remove('text-gray-400');
+                stepEl.nextElementSibling.classList.add('text-purple-600', 'font-semibold');
+            } else {
+                stepEl.classList.add('bg-gray-300');
+                stepEl.classList.remove('bg-purple-600');
+                stepEl.nextElementSibling.classList.add('text-gray-400');
+                stepEl.nextElementSibling.classList.remove('text-purple-600', 'font-semibold');
+            }
+        }
+
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function submitKYC() {
+        const agreed = document.getElementById('termsAgree').checked;
+        
+        if (!agreed) {
+            alert('Please agree to the Terms & Conditions');
+            return;
+        }
+
+        // TODO: Upload documents to Supabase Storage
+        // TODO: Submit KYC application to database
+        
+        // For demo: simulate submission
+        alert('KYC Application Submitted!\n\nYour application is under review. You\'ll receive an email within 24-48 hours.');
+        
+        // Update user role
+        const user = BSTMAuth.getCurrentUser();
+        if (user) {
+            BSTMAuth.updateUser({ 
+                kyc_status: 'pending',
+                kyc_submitted_at: new Date().toISOString()
+            });
+        }
+        
+        // Redirect to dashboard
+        setTimeout(() => {
+            window.location.href = 'buyer-dashboard.html';
+        }, 2000);
+    }
+
+    // Load components
+    function loadComponents() {
+        fetch('components/universal-nav.html')
+            .then(r => r.text())
+            .then(html => document.getElementById('bstm-nav').innerHTML = html);
+
+        fetch('components/universal-footer.html')
+            .then(r => r.text())
+            .then(html => document.getElementById('bstm-footer').innerHTML = html);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        BSTMAuth.requireAuth();
+        loadComponents();
+    });
+    </script>
+</body>
+</html>
