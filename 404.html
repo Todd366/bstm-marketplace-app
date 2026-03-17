@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Page Not Found | BSTM</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        .float { animation: float 3s ease-in-out infinite; }
+    </style>
+</head>
+<body class="bg-gray-50">
+    
+    <div class="min-h-screen flex items-center justify-center px-6">
+        <div class="text-center">
+            <!-- Animated 404 -->
+            <div class="mb-12 float">
+                <div class="text-9xl font-bold gradient-bg bg-clip-text text-transparent">404</div>
+            </div>
+
+            <!-- Error Message -->
+            <h1 class="text-4xl font-bold text-gray-800 mb-4">Page Not Found</h1>
+            <p class="text-xl text-gray-600 mb-8">
+                Oops! This room doesn't exist yet in our Digital Nation.
+            </p>
+
+            <!-- Quick Links -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-3xl mx-auto mb-12">
+                <a href="index.html" class="bg-white rounded-xl shadow-lg p-6 hover:shadow-2xl transition-all">
+                    <i class="fas fa-home text-purple-600 text-3xl mb-3"></i>
+                    <p class="font-bold text-gray-800">Go Home</p>
+                </a>
+                <a href="room22-farm.html" class="bg-white rounded-xl shadow-lg p-6 hover:shadow-2xl transition-all">
+                    <i class="fas fa-seedling text-green-600 text-3xl mb-3"></i>
+                    <p class="font-bold text-gray-800">Room 22 Farm</p>
+                </a>
+                <a href="help.html" class="bg-white rounded-xl shadow-lg p-6 hover:shadow-2xl transition-all">
+                    <i class="fas fa-question-circle text-blue-600 text-3xl mb-3"></i>
+                    <p class="font-bold text-gray-800">Get Help</p>
+                </a>
+            </div>
+
+            <!-- Navigation -->
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="index.html" class="gradient-bg text-white px-8 py-4 rounded-xl font-bold text-lg hover:shadow-xl transition-all">
+                    <i class="fas fa-arrow-left mr-2"></i>Return to Marketplace
+                </a>
+                <button onclick="history.back()" class="bg-white text-purple-600 border-2 border-purple-600 px-8 py-4 rounded-xl font-bold text-lg hover:bg-purple-50 transition-all">
+                    <i class="fas fa-undo mr-2"></i>Go Back
+                </button>
+            </div>
+
+            <!-- Room Status -->
+            <div class="mt-12 bg-purple-50 border-2 border-purple-200 rounded-xl p-6 max-w-md mx-auto">
+                <p class="text-sm text-gray-700">
+                    <i class="fas fa-info-circle text-purple-600 mr-2"></i>
+                    <strong>6 of 63 rooms</strong> are currently active. More coming soon!
+                </p>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
