@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THB Wallet - BSTM Digital Nation</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <script src="js/bstm-auth.js"></script>
+    <script src="js/thb-display.js"></script>
+    <style>
+        .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .thb-gradient { background: linear-gradient(135deg, #ffd700 0%, #ff8c00 100%); }
+        .wallet-card { 
+            background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        .wallet-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+        }
+        .crypto-shine {
+            background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.3) 50%, transparent 70%);
+            background-size: 200% 200%;
+            animation: shine 3s infinite;
+        }
+        @keyframes shine {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    
+    <!-- Navigation -->
+    <div id="bstm-nav"></div>
+
+    <div class="max-w-7xl mx-auto px-6 py-8">
+        
+        <!-- Page Header -->
+        <div class="mb-8">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-4xl font-bold text-gray-800 mb-2">💰 THoBoCoin Wallet</h1>
+                    <p class="text-gray-600">Manage your digital currency across BSTM Nation</p>
+                </div>
+                <a href="help.html#thb" class="text-purple-600 hover:text-purple-800 font-semibold">
+                    <i class="fas fa-question-circle mr-2"></i>What is THB?
+                </a>
+            </div>
+        </div>
+
+        <!-- Wallet Card -->
+        <div class="wallet-card rounded-3xl p-8 text-white shadow-2xl mb-8 crypto-shine">
+            <div class="relative z-10">
+                <div class="flex items-center justify-between mb-8">
+                    <div>
+                        <p class="text-sm text-blue-200 mb-2">Total Balance</p>
+                        <div class="flex items-baseline space-x-3">
+                            <h2 class="text-6xl font-bold" id="walletTHBBalance">0.0</h2>
+                            <span class="text-3xl text-yellow-300">THB</span>
+                        </div>
+                        <p class="text-blue-200 mt-2">
+                            ≈ P<span id="walletBWPEquivalent">0.00</span> BWP
+                        </p>
+                    </div>
+                    <div class="text-right">
+                        <div class="w-20 h-20 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center mb-2">
+                            <i class="fas fa-coins text-4xl text-white"></i>
+                        </div>
+                        <p class="text-xs text-blue-200">BSC Testnet</p>
+                    </div>
+                </div>
+
+                <!-- Wallet Address -->
+                <div class="bg-white bg-opacity-10 rounded-xl p-4 backdrop-blur-sm">
+                    <div class="flex items-center justify-between">
+                        <div class="flex-1">
+                            <p class="text-xs text-blue-200 mb-1">Wallet Address</p>
+                            <p class="font-mono text-sm" id="walletAddress">0x0000...0000</p>
+                        </div>
+                        <button onclick="copyWalletAddress()" class="bg-white bg-opacity-20 hover:bg-opacity-30 px-4 py-2 rounded-lg transition-all">
+                            <i class="fas fa-copy mr-2"></i>Copy
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Contract Info -->
+                <div class="mt-4 flex items-center justify-between text-xs text-blue-200">
+                    <span>Contract: 0xaf2f...3c615628</span>
+                    <span>Chain ID: 97 (BSC Testnet)</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+            <button onclick="openEarnModal()" class="bg-white rounded-2xl p-6 text-center hover:shadow-xl transition-all">
+                <div class="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <i class="fas fa-plus text-green-600 text-2xl"></i>
+                </div>
+                <p class="font-bold text-gray-800">Earn THB</p>
+                <p class="text-sm text-gray-600">Shop & earn</p>
+            </button>
+
+            <button onclick="openSendModal()" class="bg-white rounded-2xl p-6 text-center hover:shadow-xl transition-all">
+                <div class="w-14 h-14 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <i class="fas fa-paper-plane text-blue-600 text-2xl"></i>
+                </div>
+                <p class="font-bold text-gray-800">Send THB</p>
+                <p class="text-sm text-gray-600">To friends</p>
+            </button>
+
+            <button onclick="openWithdrawModal()" class="bg-white rounded-2xl p-6 text-center hover:shadow-xl transition-all">
+                <div class="w-14 h-14 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <i class="fas fa-download text-purple-600 text-2xl"></i>
+                </div>
+                <p class="font-bold text-gray-800">Withdraw</p>
+                <p class="text-sm text-gray-600">To bank</p>
+            </button>
+
+            <button onclick="openStakeModal()" class="bg-white rounded-2xl p-6 text-center hover:shadow-xl transition-all">
+                <div class="w-14 h-14 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <i class="fas fa-lock text-yellow-600 text-2xl"></i>
+                </div>
+                <p class="font-bold text-gray-800">Stake THB</p>
+                <p class="text-sm text-gray-600">Earn rewards</p>
+            </button>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-6 border-2 border-green-200">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center">
+                        <i class="fas fa-arrow-down text-white text-xl"></i>
+                    </div>
+                    <span class="text-green-600 font-bold text-sm">This Month</span>
+                </div>
+                <p class="text-3xl font-bold text-gray-800" id="monthlyEarned">0.0</p>
+                <p class="text-sm text-gray-600">THB Earned</p>
+            </div>
+
+            <div class="bg-gradient-to-br from-red-50 to-red-100 rounded-2xl p-6 border-2 border-red-200">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="w-12 h-12 bg-red-500 rounded-full flex items-center justify-center">
+                        <i class="fas fa-arrow-up text-white text-xl"></i>
+                    </div>
+                    <span class="text-red-600 font-bold text-sm">This Month</span>
+                </div>
+                <p class="text-3xl font-bold text-gray-800" id="monthlySpent">0.0</p>
+                <p class="text-sm text-gray-600">THB Spent</p>
+            </div>
+
+            <div class="bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl p-6 border-2 border-purple-200">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="w-12 h-12 bg-purple-500 rounded-full flex items-center justify-center">
+                        <i class="fas fa-chart-line text-white text-xl"></i>
+                    </div>
+                    <span class="text-purple-600 font-bold text-sm">Lifetime</span>
+                </div>
+                <p class="text-3xl font-bold text-gray-800" id="lifetimeEarned">0.0</p>
+                <p class="text-sm text-gray-600">Total Earned</p>
+            </div>
+        </div>
+
+        <!-- Tabs: Transactions / Earn History / Referrals -->
+        <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+            <div class="border-b">
+                <div class="flex">
+                    <button onclick="switchWalletTab('transactions')" class="wallet-tab active flex-1 py-4 font-bold text-purple-600 border-b-2 border-purple-600">
+                        Transactions
+                    </button>
+                    <button onclick="switchWalletTab('earn')" class="wallet-tab flex-1 py-4 font-bold text-gray-600">
+                        Earn History
+                    </button>
+                    <button onclick="switchWalletTab('referrals')" class="wallet-tab flex-1 py-4 font-bold text-gray-600">
+                        Referrals
+                    </button>
+                </div>
+            </div>
+
+            <!-- Transactions Tab -->
+            <div id="transactionsTab" class="p-6">
+                <div class="space-y-4" id="transactionsList">
+                    <p class="text-center text-gray-500 py-12">No transactions yet. Start earning THB!</p>
+                </div>
+            </div>
+
+            <!-- Earn History Tab -->
+            <div id="earnTab" class="p-6 hidden">
+                <div class="space-y-4" id="earnHistoryList">
+                    <div class="flex items-center justify-between p-4 bg-green-50 rounded-xl">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center">
+                                <i class="fas fa-shopping-bag text-white"></i>
+                            </div>
+                            <div>
+                                <p class="font-semibold text-gray-800">Purchase Reward</p>
+                                <p class="text-sm text-gray-600">Fresh Tomatoes order</p>
+                                <p class="text-xs text-gray-500">March 17, 2026</p>
+                            </div>
+                        </div>
+                        <span class="text-green-600 font-bold text-xl">+0.5 THB</span>
+                    </div>
+
+                    <div class="flex items-center justify-between p-4 bg-green-50 rounded-xl">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center">
+                                <i class="fas fa-car text-white"></i>
+                            </div>
+                            <div>
+                                <p class="font-semibold text-gray-800">CabLink Ride</p>
+                                <p class="text-sm text-gray-600">Gaborone to Mmopane</p>
+                                <p class="text-xs text-gray-500">March 16, 2026</p>
+                            </div>
+                        </div>
+                        <span class="text-green-600 font-bold text-xl">+0.8 THB</span>
+                    </div>
+
+                    <div class="flex items-center justify-between p-4 bg-green-50 rounded-xl">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center">
+                                <i class="fas fa-user-plus text-white"></i>
+                            </div>
+                            <div>
+                                <p class="font-semibold text-gray-800">Referral Bonus</p>
+                                <p class="text-sm text-gray-600">Friend joined BSTM</p>
+                                <p class="text-xs text-gray-500">March 15, 2026</p>
+                            </div>
+                        </div>
+                        <span class="text-green-600 font-bold text-xl">+50 THB</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Referrals Tab -->
+            <div id="referralsTab" class="p-6 hidden">
+                <!-- Referral Code -->
+                <div class="bg-gradient-to-br from-purple-50 to-indigo-50 rounded-2xl p-6 mb-6 border-2 border-purple-200">
+                    <h3 class="font-bold text-gray-800 mb-4">Your Referral Code</h3>
+                    <div class="flex items-center space-x-4">
+                        <div class="flex-1 bg-white rounded-xl p-4 border-2 border-purple-300">
+                            <p class="text-3xl font-bold text-purple-600 font-mono text-center" id="referralCode">BSTM-XXXX</p>
+                        </div>
+                        <button onclick="copyReferralCode()" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-4 rounded-xl font-bold">
+                            <i class="fas fa-copy mr-2"></i>Copy
+                        </button>
+                    </div>
+                    <p class="text-sm text-gray-600 mt-4 text-center">
+                        Share this code and earn <strong>50 THB</strong> for each friend who signs up!
+                    </p>
+                </div>
+
+                <!-- Referral Stats -->
+                <div class="grid grid-cols-2 gap-4 mb-6">
+                    <div class="bg-white rounded-xl p-6 text-center border-2 border-gray-200">
+                        <p class="text-3xl font-bold text-purple-600" id="totalReferrals">0</p>
+                        <p class="text-sm text-gray-600">Total Referrals</p>
+                    </div>
+                    <div class="bg-white rounded-xl p-6 text-center border-2 border-gray-200">
+                        <p class="text-3xl font-bold text-green-600" id="referralEarnings">0</p>
+                        <p class="text-sm text-gray-600">THB Earned</p>
+                    </div>
+                </div>
+
+                <!-- Referral List -->
+                <h4 class="font-bold text-gray-800 mb-4">Recent Referrals</h4>
+                <div class="space-y-3" id="referralsList">
+                    <p class="text-center text-gray-500 py-8">No referrals yet. Share your code to start earning!</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <div id="bstm-footer"></div>
+
+    <!-- Modals -->
+    <div id="bstm-modals"></div>
+
+    <!-- Earn Modal -->
+    <div id="earnModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-2xl w-full p-8">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-3xl font-bold text-gray-800">Earn THB</h2>
+                <button onclick="closeEarnModal()" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times text-2xl"></i>
+                </button>
+            </div>
+
+            <div class="space-y-4">
+                <a href="index.html" class="flex items-center justify-between p-4 bg-green-50 rounded-xl hover:bg-green-100 transition-all">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-14 h-14 bg-green-500 rounded-full flex items-center justify-center">
+                            <i class="fas fa-shopping-cart text-white text-xl"></i>
+                        </div>
+                        <div>
+                            <p class="font-bold text-gray-800">Shop on Marketplace</p>
+                            <p class="text-sm text-gray-600">Earn 1% THB on every purchase</p>
+                        </div>
+                    </div>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                </a>
+
+                <a href="https://cablink.bstm.bw" class="flex items-center justify-between p-4 bg-blue-50 rounded-xl hover:bg-blue-100 transition-all">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-14 h-14 bg-blue-500 rounded-full flex items-center justify-center">
+                            <i class="fas fa-car text-white text-xl"></i>
+                        </div>
+                        <div>
+                            <p class="font-bold text-gray-800">Take CabLink Rides</p>
+                            <p class="text-sm text-gray-600">Earn THB on every ride booked</p>
+                        </div>
+                    </div>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                </a>
+
+                <button onclick="shareReferral()" class="w-full flex items-center justify-between p-4 bg-purple-50 rounded-xl hover:bg-purple-100 transition-all">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-14 h-14 bg-purple-500 rounded-full flex items-center justify-center">
+                            <i class="fas fa-users text-white text-xl"></i>
+                        </div>
+                        <div class="text-left">
+                            <p class="font-bold text-gray-800">Refer Friends</p>
+                            <p class="text-sm text-gray-600">Get 50 THB per referral</p>
+                        </div>
+                    </div>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                </button>
+
+                <a href="room22-farm.html" class="flex items-center justify-between p-4 bg-yellow-50 rounded-xl hover:bg-yellow-100 transition-all">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-14 h-14 bg-yellow-500 rounded-full flex items-center justify-center">
+                            <i class="fas fa-leaf text-white text-xl"></i>
+                        </div>
+                        <div>
+                            <p class="font-bold text-gray-800">Buy from Room 22 Farm</p>
+                            <p class="text-sm text-gray-600">Extra THB on organic produce</p>
+                        </div>
+                    </div>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Send THB Modal -->
+    <div id="sendModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-8">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-gray-800">Send THB</h2>
+                <button onclick="closeSendModal()" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times text-2xl"></i>
+                </button>
+            </div>
+
+            <form id="sendTHBForm" onsubmit="sendTHB(event)">
+                <div class="mb-6">
+                    <label class="block text-gray-700 font-semibold mb-2">Recipient Address</label>
+                    <input type="text" id="recipientAddress" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:border-purple-600" placeholder="0x...">
+                </div>
+
+                <div class="mb-6">
+                    <label class="block text-gray-700 font-semibold mb-2">Amount (THB)</label>
+                    <input type="number" id="sendAmount" step="0.1" min="0.1" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:border-purple-600" placeholder="0.0">
+                    <p class="text-sm text-gray-600 mt-2">Available: <span id="availableTHB">0.0</span> THB</p>
+                </div>
+
+                <button type="submit" class="w-full bg-purple-600 hover:bg-purple-700 text-white py-4 rounded-xl font-bold text-lg">
+                    <i class="fas fa-paper-plane mr-2"></i>Send THB
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Withdraw Modal -->
+    <div id="withdrawModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-8">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-gray-800">Withdraw to Bank</h2>
+                <button onclick="closeWithdrawModal()" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times text-2xl"></i>
+                </button>
+            </div>
+
+            <div class="bg-yellow-50 border-2 border-yellow-300 rounded-xl p-4 mb-6">
+                <p class="text-sm text-gray-700">
+                    <i class="fas fa-info-circle text-yellow-600 mr-2"></i>
+                    <strong>Conversion Rate:</strong> 1 THB = P10 BWP
+                </p>
+            </div>
+
+            <form id="withdrawForm" onsubmit="withdrawTHB(event)">
+                <div class="mb-6">
+                    <label class="block text-gray-700 font-semibold mb-2">Amount to Withdraw (THB)</label>
+                    <input type="number" id="withdrawAmount" step="0.1" min="1" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:border-purple-600" placeholder="0.0">
+                    <p class="text-sm text-gray-600 mt-2">
+                        You'll receive: P<span id="withdrawBWP">0.00</span> BWP
+                    </p>
+                </div>
+
+                <div class="mb-6">
+                    <label class="block text-gray-700 font-semibold mb-2">Bank Account</label>
+                    <select class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:border-purple-600">
+                        <option>FNB - ****1234</option>
+                        <option>+ Add New Account</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="w-full bg-purple-600 hover:bg-purple-700 text-white py-4 rounded-xl font-bold text-lg">
+                    <i class="fas fa-university mr-2"></i>Withdraw
+                </button>
+
+                <p class="text-xs text-gray-500 mt-4 text-center">
+                    Withdrawals processed within 1-2 business days
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Stake Modal -->
+    <div id="stakeModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-8">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-gray-800">Stake THB</h2>
+                <button onclick="closeStakeModal()" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times text-2xl"></i>
+                </button>
+            </div>
+
+            <div class="bg-purple-50 border-2 border-purple-300 rounded-xl p-6 mb-6">
+                <div class="flex items-center justify-between mb-4">
+                    <span class="text-gray-700 font-semibold">APY</span>
+                    <span class="text-3xl font-bold text-purple-600">12%</span>
+                </div>
+                <p class="text-sm text-gray-600">
+                    Lock your THB for 30 days and earn 12% annual returns
+                </p>
+            </div>
+
+            <form id="stakeForm" onsubmit="stakeTHB(event)">
+                <div class="mb-6">
+                    <label class="block text-gray-700 font-semibold mb-2">Amount to Stake (THB)</label>
+                    <input type="number" id="stakeAmount" step="0.1" min="10" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:border-purple-600" placeholder="Minimum 10 THB">
+                    <p class="text-sm text-gray-600 mt-2">
+                        Estimated earnings: <span id="stakeEarnings">0.0</span> THB in 30 days
+                    </p>
+                </div>
+
+                <button type="submit" class="w-full bg-purple-600 hover:bg-purple-700 text-white py-4 rounded-xl font-bold text-lg">
+                    <i class="fas fa-lock mr-2"></i>Stake THB
+                </button>
+
+                <p class="text-xs text-gray-500 mt-4 text-center">
+                    Funds will be locked for 30 days. Early withdrawal not available.
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <script>
+    // Load wallet data
+    document.addEventListener('DOMContentLoaded', () => {
+        loadWalletData();
+        loadComponents();
+    });
+
+    function loadWalletData() {
+        const user = BSTMAuth.getCurrentUser();
+        if (!user) {
+            window.location.href = 'login.html';
+            return;
+        }
+
+        // Load balance
+        const balance = user.thb_balance || 0;
+        document.getElementById('walletTHBBalance').textContent = balance.toFixed(1);
+        document.getElementById('walletBWPEquivalent').textContent = (balance * 10).toFixed(2);
+        document.getElementById('availableTHB').textContent = balance.toFixed(1);
+
+        // Load wallet address
+        const address = user.wallet_address || '0x' + Math.random().toString(16).substr(2, 40);
+        document.getElementById('walletAddress').textContent = address.substr(0, 6) + '...' + address.substr(-4);
+
+        // Load referral code
+        const refCode = user.referral_code || 'BSTM-' + user.id.substr(-4).toUpperCase();
+        document.getElementById('referralCode').textContent = refCode;
+
+        // Load stats
+        loadWalletStats();
+        loadTransactions();
+    }
+
+    function loadWalletStats() {
+        // TODO: Load from Supabase
+        document.getElementById('monthlyEarned').textContent = '12.5';
+        document.getElementById('monthlySpent').textContent = '8.2';
+        document.getElementById('lifetimeEarned').textContent = '156.8';
+        document.getElementById('totalReferrals').textContent = '3';
+        document.getElementById('referralEarnings').textContent = '150';
+    }
+
+    function loadTransactions() {
+        const transactions = THBDisplay.getTransactionHistory();
+        const list = document.getElementById('transactionsList');
+
+        if (transactions.length === 0) {
+            list.innerHTML = '<p class="text-center text-gray-500 py-12">No transactions yet. Start earning THB!</p>';
+            return;
+        }
+
+        list.innerHTML = transactions.map(tx => `
+            <div class="flex items-center justify-between p-4 ${tx.type === 'earn' ? 'bg-green-50' : 'bg-red-50'} rounded-xl">
+                <div class="flex items-center space-x-4">
+                    <div class="w-12 h-12 bg-${tx.type === 'earn' ? 'green' : 'red'}-500 rounded-full flex items-center justify-center">
+                        <i class="fas fa-${tx.type === 'earn' ? 'arrow-down' : 'arrow-up'} text-white"></i>
+                    </div>
+                    <div>
+                        <p class="font-semibold text-gray-800">${tx.reason}</p>
+                        <p class="text-xs text-gray-500">${new Date(tx.timestamp).toLocaleString()}</p>
+                    </div>
+                </div>
+                <span class="text-${tx.type === 'earn' ? 'green' : 'red'}-600 font-bold text-xl">
+                    ${tx.type === 'earn' ? '+' : '-'}${tx.amount.toFixed(1)} THB
+                </span>
+            </div>
+        `).join('');
+    }
+
+    // Tab switching
+    function switchWalletTab(tab) {
+        // Update buttons
+        document.querySelectorAll('.wallet-tab').forEach(t => {
+            t.classList.remove('active', 'text-purple-600', 'border-purple-600');
+            t.classList.add('text-gray-600');
+        });
+        event.target.classList.add('active', 'text-purple-600', 'border-purple-600');
+        event.target.classList.remove('text-gray-600');
+
+        // Show/hide tabs
+        document.getElementById('transactionsTab').classList.add('hidden');
+        document.getElementById('earnTab').classList.add('hidden');
+        document.getElementById('referralsTab').classList.add('hidden');
+
+        document.getElementById(tab + 'Tab').classList.remove('hidden');
+    }
+
+    // Modal functions
+    function openEarnModal() {
+        document.getElementById('earnModal').classList.remove('hidden');
+    }
+    function closeEarnModal() {
+        document.getElementById('earnModal').classList.add('hidden');
+    }
+
+    function openSendModal() {
+        document.getElementById('sendModal').classList.remove('hidden');
+    }
+    function closeSendModal() {
+        document.getElementById('sendModal').classList.add('hidden');
+    }
+
+    function openWithdrawModal() {
+        document.getElementById('withdrawModal').classList.remove('hidden');
+    }
+    function closeWithdrawModal() {
+        document.getElementById('withdrawModal').classList.add('hidden');
+    }
+
+    function openStakeModal() {
+        document.getElementById('stakeModal').classList.remove('hidden');
+    }
+    function closeStakeModal() {
+        document.getElementById('stakeModal').classList.add('hidden');
+    }
+
+    // Withdraw amount calculation
+    document.getElementById('withdrawAmount')?.addEventListener('input', (e) => {
+        const thb = parseFloat(e.target.value) || 0;
+        const bwp = thb * 10;
+        document.getElementById('withdrawBWP').textContent = bwp.toFixed(2);
+    });
+
+    // Stake amount calculation
+    document.getElementById('stakeAmount')?.addEventListener('input', (e) => {
+        const amount = parseFloat(e.target.value) || 0;
+        const earnings = (amount * 0.12) / 12; // 12% APY for 30 days
+        document.getElementById('stakeEarnings').textContent = earnings.toFixed(2);
+    });
+
+    // Send THB
+    function sendTHB(e) {
+        e.preventDefault();
+        const amount = parseFloat(document.getElementById('sendAmount').value);
+        const recipient = document.getElementById('recipientAddress').value;
+
+        if (THBDisplay.spendTHB(amount, `Sent to ${recipient.substr(0, 8)}...`)) {
+            alert('THB sent successfully!');
+            closeSendModal();
+            loadWalletData();
+        }
+    }
+
+    // Withdraw THB
+    function withdrawTHB(e) {
+        e.preventDefault();
+        const amount = parseFloat(document.getElementById('withdrawAmount').value);
+
+        if (THBDisplay.spendTHB(amount, 'Withdrawal to bank')) {
+            alert(`Withdrawal request submitted!\nYou'll receive P${(amount * 10).toFixed(2)} BWP in 1-2 business days.`);
+            closeWithdrawModal();
+            loadWalletData();
+        }
+    }
+
+    // Stake THB
+    function stakeTHB(e) {
+        e.preventDefault();
+        const amount = parseFloat(document.getElementById('stakeAmount').value);
+
+        if (amount < 10) {
+            alert('Minimum stake is 10 THB');
+            return;
+        }
+
+        if (THBDisplay.spendTHB(amount, 'Staked for 30 days')) {
+            alert(`${amount} THB staked successfully!\nUnlock date: ${new Date(Date.now() + 30*24*60*60*1000).toLocaleDateString()}`);
+            closeStakeModal();
+            loadWalletData();
+        }
+    }
+
+    // Copy functions
+    function copyWalletAddress() {
+        const address = document.getElementById('walletAddress').textContent;
+        navigator.clipboard.writeText(address);
+        alert('Wallet address copied!');
+    }
+
+    function copyReferralCode() {
+        const code = document.getElementById('referralCode').textContent;
+        navigator.clipboard.writeText(code);
+        alert('Referral code copied! Share it to earn 50 THB per friend.');
+    }
+
+    function shareReferral() {
+        const code = document.getElementById('referralCode').textContent;
+        const text = `Join BSTM Digital Nation and get 50 THB! Use my code: ${code}\n\nhttps://bstm.bw/signup?ref=${code}`;
+        
+        if (navigator.share) {
+            navigator.share({
+                title: 'Join BSTM Nation',
+                text: text
+            });
+        } else {
+            navigator.clipboard.writeText(text);
+            alert('Referral message copied to clipboard!');
+        }
+    }
+
+    // Load components
+    function loadComponents() {
+        fetch('components/universal-nav.html')
+            .then(r => r.text())
+            .then(html => document.getElementById('bstm-nav').innerHTML = html);
+
+        fetch('components/universal-footer.html')
+            .then(r => r.text())
+            .then(html => document.getElementById('bstm-footer').innerHTML = html);
+
+        fetch('components/room-switcher.html')
+            .then(r => r.text())
+            .then(html => {
+                const container = document.getElementById('bstm-modals');
+                container.innerHTML = html;
+            });
+    }
+    </script>
+</body>
+</html>
