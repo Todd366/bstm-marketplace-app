@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BSTM Seller Dashboard</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/recharts@2.5.0/dist/Recharts.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+    
+    <script type="text/babel">
+        const { useState } = React;
+        const { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, AreaChart, Area } = Recharts;
+
+        // Sample Data
+        const salesData = [
+          { month: 'Jan', revenue: 12400, orders: 45, visitors: 890 },
+          { month: 'Feb', revenue: 15600, orders: 52, visitors: 1050 },
+          { month: 'Mar', revenue: 18900, orders: 68, visitors: 1340 },
+          { month: 'Apr', revenue: 16200, orders: 58, visitors: 1120 },
+          { month: 'May', revenue: 21500, orders: 75, visitors: 1580 },
+          { month: 'Jun', revenue: 24300, orders: 89, visitors: 1820 },
+        ];
+
+        const categoryData = [
+          { name: 'Electronics', value: 35, color: '#667eea' },
+          { name: 'Fashion', value: 25, color: '#ec4899' },
+          { name: 'Home', value: 20, color: '#10b981' },
+          { name: 'Vehicles', value: 15, color: '#ef4444' },
+          { name: 'Other', value: 5, color: '#f59e0b' },
+        ];
+
+        const recentOrders = [
+          { id: '#BSTM-1234', product: 'iPhone 13 Pro', buyer: 'Mpho K.', amount: 4500, status: 'paid', location: 'Gaborone', date: '2025-11-28' },
+          { id: '#BSTM-1235', product: 'Leather Sofa', buyer: 'Lesego M.', amount: 6200, status: 'pending', location: 'Maun', date: '2025-11-27' },
+          { id: '#BSTM-1236', product: 'Photography', buyer: 'Tebogo R.', amount: 800, status: 'completed', location: 'Francistown', date: '2025-11-26' },
+        ];
+
+        function BSTMDashboard() {
+          const [activeTab, setActiveTab] = useState('overview');
+
+          return (
+            <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+              {/* Header */}
+              <div className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-xl">
+                <div className="max-w-7xl mx-auto px-6 py-4">
+                  <div className="flex justify-between items-center">
+                    <div className="flex items-center space-x-4">
+                      <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center">
+                        <span className="text-purple-600 font-bold text-xl">B</span>
+                      </div>
+                      <div>
+                        <h1 className="text-2xl font-bold">BSTM Seller Hub</h1>
+                        <p className="text-sm text-purple-100">Manage your marketplace</p>
+                      </div>
+                    </div>
+                    <a href="index.html" className="bg-purple-700 hover:bg-purple-800 px-4 py-2 rounded-lg">
+                      Back to Store
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              <div className="max-w-7xl mx-auto px-6 py-8">
+                {/* Stats Cards */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                  <div className="bg-white rounded-2xl shadow-lg p-6">
+                    <div className="flex items-start justify-between mb-4">
+                      <div className="w-14 h-14 rounded-xl flex items-center justify-center bg-gradient-to-br from-purple-500 to-purple-700">
+                        <span className="text-white text-2xl">💰</span>
+                      </div>
+                      <div className="flex items-center text-sm font-semibold px-3 py-1 rounded-full bg-green-100 text-green-700">
+                        ↑ 12.5%
+                      </div>
+                    </div>
+                    <h3 className="text-gray-600 text-sm font-medium mb-1">Total Revenue</h3>
+                    <p className="text-3xl font-bold text-gray-800">109,000 BWP</p>
+                    <p className="text-xs text-gray-500 mt-2">vs last month</p>
+                  </div>
+
+                  <div className="bg-white rounded-2xl shadow-lg p-6">
+                    <div className="flex items-start justify-between mb-4">
+                      <div className="w-14 h-14 rounded-xl flex items-center justify-center bg-gradient-to-br from-blue-500 to-blue-700">
+                        <span className="text-white text-2xl">🛒</span>
+                      </div>
+                      <div className="flex items-center text-sm font-semibold px-3 py-1 rounded-full bg-green-100 text-green-700">
+                        ↑ 8.2%
+                      </div>
+                    </div>
+                    <h3 className="text-gray-600 text-sm font-medium mb-1">Total Orders</h3>
+                    <p className="text-3xl font-bold text-gray-800">387</p>
+                    <p className="text-xs text-gray-500 mt-2">vs last month</p>
+                  </div>
+
+                  <div className="bg-white rounded-2xl shadow-lg p-6">
+                    <div className="flex items-start justify-between mb-4">
+                      <div className="w-14 h-14 rounded-xl flex items-center justify-center bg-gradient-to-br from-green-500 to-green-700">
+                        <span className="text-white text-2xl">📦</span>
+                      </div>
+                      <div className="flex items-center text-sm font-semibold px-3 py-1 rounded-full bg-red-100 text-red-700">
+                        ↓ 2.3%
+                      </div>
+                    </div>
+                    <h3 className="text-gray-600 text-sm font-medium mb-1">Active Products</h3>
+                    <p className="text-3xl font-bold text-gray-800">24</p>
+                    <p className="text-xs text-gray-500 mt-2">vs last month</p>
+                  </div>
+
+                  <div className="bg-white rounded-2xl shadow-lg p-6">
+                    <div className="flex items-start justify-between mb-4">
+                      <div className="w-14 h-14 rounded-xl flex items-center justify-center bg-gradient-to-br from-yellow-500 to-orange-600">
+                        <span className="text-white text-2xl">⭐</span>
+                      </div>
+                      <div className="flex items-center text-sm font-semibold px-3 py-1 rounded-full bg-green-100 text-green-700">
+                        ↑ 3.1%
+                      </div>
+                    </div>
+                    <h3 className="text-gray-600 text-sm font-medium mb-1">Store Rating</h3>
+                    <p className="text-3xl font-bold text-gray-800">4.8</p>
+                    <p className="text-xs text-gray-500 mt-2">156 reviews</p>
+                  </div>
+                </div>
+
+                {/* Chart Section */}
+                <div className="bg-white rounded-2xl shadow-lg p-6 mb-8">
+                  <h3 className="text-xl font-bold text-gray-800 mb-6">Revenue Overview</h3>
+                  <ResponsiveContainer width="100%" height={300}>
+                    <AreaChart data={salesData}>
+                      <defs>
+                        <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="5%" stopColor="#667eea" stopOpacity={0.3}/>
+                          <stop offset="95%" stopColor="#667eea" stopOpacity={0}/>
+                        </linearGradient>
+                      </defs>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                      <XAxis dataKey="month" stroke="#6b7280" />
+                      <YAxis stroke="#6b7280" />
+                      <Tooltip />
+                      <Area type="monotone" dataKey="revenue" stroke="#667eea" strokeWidth={3} fillOpacity={1} fill="url(#colorRevenue)" />
+                    </AreaChart>
+                  </ResponsiveContainer>
+                </div>
+
+                {/* Recent Orders */}
+                <div className="bg-white rounded-2xl shadow-lg p-6">
+                  <h3 className="text-xl font-bold text-gray-800 mb-6">Recent Orders</h3>
+                  <div className="overflow-x-auto">
+                    <table className="min-w-full">
+                      <thead className="bg-gray-50">
+                        <tr>
+                          <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">Order ID</th>
+                          <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">Product</th>
+                          <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">Customer</th>
+                          <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">Amount</th>
+                          <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">Status</th>
+                        </tr>
+                      </thead>
+                      <tbody className="bg-white divide-y divide-gray-200">
+                        {recentOrders.map((order) => (
+                          <tr key={order.id} className="hover:bg-gray-50">
+                            <td className="px-6 py-4 text-sm font-medium text-gray-900">{order.id}</td>
+                            <td className="px-6 py-4 text-sm text-gray-900">{order.product}</td>
+                            <td className="px-6 py-4 text-sm text-gray-900">{order.buyer}</td>
+                            <td className="px-6 py-4 text-sm font-bold text-gray-900">{order.amount} BWP</td>
+                            <td className="px-6 py-4">
+                              <span className={`px-3 py-1 text-xs font-semibold rounded-full ${
+                                order.status === 'completed' ? 'bg-green-100 text-green-800' :
+                                order.status === 'paid' ? 'bg-blue-100 text-blue-800' :
+                                'bg-yellow-100 text-yellow-800'
+                              }`}>
+                                {order.status}
+                              </span>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+        }
+
+        ReactDOM.render(<BSTMDashboard />, document.getElementById('root'));
+    </script>
+</body>
+      </html>
