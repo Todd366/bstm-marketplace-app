@@ -1,0 +1,177 @@
+<!-- BSTM Universal Navigation - Include on EVERY page -->
+<style>
+  .bstm-nav-mobile { display: none; }
+  @media (max-width: 768px) {
+    .bstm-nav-desktop { display: none; }
+    .bstm-nav-mobile { display: flex; }
+  }
+</style>
+
+<nav class="bg-gradient-to-r from-purple-900 via-indigo-900 to-purple-900 text-white sticky top-0 z-50 shadow-2xl border-b-2 border-yellow-400">
+  <div class="max-w-7xl mx-auto px-4 py-3">
+    <!-- Desktop Nav -->
+    <div class="bstm-nav-desktop flex items-center justify-between">
+      <!-- Logo + Room Switcher -->
+      <button onclick="openRoomSwitcher()" class="flex items-center space-x-3 hover:bg-purple-800 px-3 py-2 rounded-lg transition-all group">
+        <div class="w-10 h-10 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-xl flex items-center justify-center shadow-lg">
+          <span class="text-purple-900 font-bold text-xl">B</span>
+        </div>
+        <div>
+          <span class="font-bold text-lg">BSTM NATION</span>
+          <p class="text-xs text-purple-200">Digital Botswana</p>
+        </div>
+        <i class="fas fa-chevron-down group-hover:rotate-180 transition-transform"></i>
+      </button>
+      
+      <!-- Main Navigation -->
+      <div class="flex items-center space-x-6 text-sm font-semibold">
+        <a href="index.html" class="flex items-center space-x-2 hover:text-yellow-300 transition-colors">
+          <span>🏪</span>
+          <span>Marketplace</span>
+        </a>
+        <a href="cablink.html" class="flex items-center space-x-2 hover:text-yellow-300 transition-colors">
+          <span>🚗</span>
+          <span>CabLink</span>
+        </a>
+        <a href="thb-wallet.html" class="flex items-center space-x-2 hover:text-yellow-300 transition-colors">
+          <span>💰</span>
+          <span>THB Wallet</span>
+        </a>
+        <a href="room22-farm.html" class="flex items-center space-x-2 hover:text-yellow-300 transition-colors">
+          <span>🌾</span>
+          <span>Farm</span>
+        </a>
+        <a href="gov-dashboard.html" class="flex items-center space-x-2 hover:text-yellow-300 transition-colors">
+          <span>🏛️</span>
+          <span>Government</span>
+        </a>
+        <a href="help.html" class="flex items-center space-x-2 hover:text-yellow-300 transition-colors">
+          <span>❓</span>
+          <span>Help</span>
+        </a>
+      </div>
+      
+      <!-- User Actions -->
+      <div class="flex items-center space-x-4">
+        <!-- Search -->
+        <button onclick="openGlobalSearch()" class="hover:bg-purple-800 p-2 rounded-lg">
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <!-- Notifications -->
+        <button onclick="openNotifications()" class="relative hover:bg-purple-800 p-2 rounded-lg">
+          <i class="fas fa-bell"></i>
+          <span id="notifBadge" class="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full text-xs flex items-center justify-center font-bold">3</span>
+        </button>
+        
+        <!-- THB Balance -->
+        <a href="thb-wallet.html" class="bg-yellow-400 text-purple-900 px-4 py-2 rounded-lg font-bold hover:bg-yellow-300 transition-all">
+          <i class="fas fa-coins mr-1"></i>
+          <span id="navTHBBalance">0</span> THB
+        </a>
+        
+        <!-- User Menu -->
+        <div class="relative">
+          <button onclick="toggleUserMenu()" id="userMenuBtn" class="flex items-center space-x-2 hover:bg-purple-800 px-3 py-2 rounded-lg">
+            <img id="navUserAvatar" src="https://via.placeholder.com/40" class="w-8 h-8 rounded-full border-2 border-yellow-400">
+            <i class="fas fa-chevron-down"></i>
+          </button>
+          
+          <!-- Dropdown -->
+          <div id="userMenu" class="hidden absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-2xl overflow-hidden">
+            <div class="bg-gradient-to-r from-purple-600 to-indigo-600 text-white p-4">
+              <p class="font-bold" id="navUserName">Loading...</p>
+              <p class="text-sm text-purple-200" id="navUserEmail">Loading...</p>
+            </div>
+            <a href="buyer-dashboard.html" class="block px-4 py-3 text-gray-700 hover:bg-gray-100">
+              <i class="fas fa-tachometer-alt mr-2"></i>Dashboard
+            </a>
+            <a href="settings.html" class="block px-4 py-3 text-gray-700 hover:bg-gray-100">
+              <i class="fas fa-cog mr-2"></i>Settings
+            </a>
+            <a href="wishlist.html" class="block px-4 py-3 text-gray-700 hover:bg-gray-100">
+              <i class="fas fa-heart mr-2"></i>Wishlist
+            </a>
+            <button onclick="BSTMAuth.logout()" class="w-full text-left px-4 py-3 text-red-600 hover:bg-red-50">
+              <i class="fas fa-sign-out-alt mr-2"></i>Logout
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Mobile Nav -->
+    <div class="bstm-nav-mobile flex items-center justify-between">
+      <button onclick="openMobileMenu()" class="text-white">
+        <i class="fas fa-bars text-2xl"></i>
+      </button>
+      <div class="flex items-center space-x-2">
+        <div class="w-8 h-8 bg-yellow-400 rounded-lg flex items-center justify-center">
+          <span class="text-purple-900 font-bold">B</span>
+        </div>
+        <span class="font-bold">BSTM</span>
+      </div>
+      <button onclick="openNotifications()" class="relative">
+        <i class="fas fa-bell text-xl"></i>
+        <span class="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full text-xs">3</span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile Menu -->
+<div id="mobileMenu" class="fixed inset-0 bg-purple-900 z-50 hidden">
+  <div class="p-6">
+    <div class="flex justify-between items-center mb-8">
+      <span class="text-white font-bold text-2xl">BSTM Menu</span>
+      <button onclick="closeMobileMenu()" class="text-white">
+        <i class="fas fa-times text-2xl"></i>
+      </button>
+    </div>
+    <div class="space-y-4">
+      <a href="index.html" class="block text-white text-lg py-3 border-b border-purple-700">🏪 Marketplace</a>
+      <a href="cablink.html" class="block text-white text-lg py-3 border-b border-purple-700">🚗 CabLink</a>
+      <a href="thb-wallet.html" class="block text-white text-lg py-3 border-b border-purple-700">💰 THB Wallet</a>
+      <a href="room22-farm.html" class="block text-white text-lg py-3 border-b border-purple-700">🌾 Farm</a>
+      <a href="gov-dashboard.html" class="block text-white text-lg py-3 border-b border-purple-700">🏛️ Government</a>
+      <a href="help.html" class="block text-white text-lg py-3 border-b border-purple-700">❓ Help</a>
+    </div>
+  </div>
+</div>
+
+<script>
+// Mobile menu
+function openMobileMenu() {
+  document.getElementById('mobileMenu').classList.remove('hidden');
+}
+function closeMobileMenu() {
+  document.getElementById('mobileMenu').classList.add('hidden');
+}
+
+// User menu
+function toggleUserMenu() {
+  document.getElementById('userMenu').classList.toggle('hidden');
+}
+
+// Load user data into nav
+document.addEventListener('DOMContentLoaded', () => {
+  const user = BSTMAuth.getCurrentUser();
+  if (user) {
+    document.getElementById('navUserName').textContent = user.name;
+    document.getElementById('navUserEmail').textContent = user.email;
+    if (user.avatar) {
+      document.getElementById('navUserAvatar').src = user.avatar;
+    }
+  }
+  
+  // Load THB balance
+  loadTHBBalance();
+});
+
+async function loadTHBBalance() {
+  const user = BSTMAuth.getCurrentUser();
+  if (user && user.thb_balance) {
+    document.getElementById('navTHBBalance').textContent = user.thb_balance.toFixed(1);
+  }
+}
+  </script>
