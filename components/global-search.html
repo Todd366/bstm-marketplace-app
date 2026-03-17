@@ -1,0 +1,291 @@
+<!-- BSTM Global Search Modal - Search Everything -->
+<div id="globalSearch" class="fixed inset-0 bg-black bg-opacity-70 hidden z-[60] flex items-start justify-center pt-20">
+  <div class="bg-white rounded-3xl max-w-3xl w-full mx-4 shadow-2xl overflow-hidden">
+    <!-- Search Input -->
+    <div class="p-6 border-b">
+      <div class="relative">
+        <i class="fas fa-search absolute left-6 top-5 text-purple-600 text-xl"></i>
+        <input 
+          type="text" 
+          id="globalSearchInput" 
+          placeholder="Search products, rooms, help articles..." 
+          class="w-full pl-16 pr-12 py-4 text-xl border-2 border-purple-300 rounded-2xl focus:outline-none focus:border-purple-600"
+          autofocus
+        >
+        <button onclick="closeGlobalSearch()" class="absolute right-4 top-4 text-gray-400 hover:text-gray-600">
+          <i class="fas fa-times text-xl"></i>
+        </button>
+      </div>
+      
+      <!-- Quick Filters -->
+      <div class="flex space-x-2 mt-4">
+        <button onclick="filterSearch('all')" class="filter-btn active px-4 py-2 rounded-lg text-sm font-semibold bg-purple-600 text-white">
+          All
+        </button>
+        <button onclick="filterSearch('products')" class="filter-btn px-4 py-2 rounded-lg text-sm font-semibold bg-gray-100 text-gray-700 hover:bg-gray-200">
+          Products
+        </button>
+        <button onclick="filterSearch('rooms')" class="filter-btn px-4 py-2 rounded-lg text-sm font-semibold bg-gray-100 text-gray-700 hover:bg-gray-200">
+          Rooms
+        </button>
+        <button onclick="filterSearch('help')" class="filter-btn px-4 py-2 rounded-lg text-sm font-semibold bg-gray-100 text-gray-700 hover:bg-gray-200">
+          Help
+        </button>
+      </div>
+    </div>
+    
+    <!-- Search Results -->
+    <div id="searchResults" class="max-h-96 overflow-y-auto">
+      <!-- Loading State -->
+      <div id="searchLoading" class="hidden p-8 text-center">
+        <div class="animate-spin w-12 h-12 border-4 border-purple-600 border-t-transparent rounded-full mx-auto mb-4"></div>
+        <p class="text-gray-600">Searching...</p>
+      </div>
+      
+      <!-- Empty State -->
+      <div id="searchEmpty" class="p-12 text-center">
+        <i class="fas fa-search text-6xl text-gray-300 mb-4"></i>
+        <p class="text-gray-600">Start typing to search across BSTM Nation</p>
+      </div>
+      
+      <!-- Results Container -->
+      <div id="searchResultsContainer" class="hidden">
+        <!-- Products Section -->
+        <div id="productsSection" class="border-b">
+          <div class="bg-gray-50 px-6 py-3 font-bold text-gray-700">
+            <i class="fas fa-box mr-2"></i>Products
+          </div>
+          <div id="productResults" class="divide-y"></div>
+        </div>
+        
+        <!-- Rooms Section -->
+        <div id="roomsSection" class="border-b">
+          <div class="bg-gray-50 px-6 py-3 font-bold text-gray-700">
+            <i class="fas fa-door-open mr-2"></i>Rooms
+          </div>
+          <div id="roomResults" class="divide-y"></div>
+        </div>
+        
+        <!-- Help Section -->
+        <div id="helpSection">
+          <div class="bg-gray-50 px-6 py-3 font-bold text-gray-700">
+            <i class="fas fa-question-circle mr-2"></i>Help Articles
+          </div>
+          <div id="helpResults" class="divide-y"></div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Footer -->
+    <div class="bg-gray-50 px-6 py-3 border-t text-sm text-gray-600 flex items-center justify-between">
+      <div>
+        <kbd class="px-2 py-1 bg-white border rounded">↑↓</kbd> Navigate
+        <kbd class="px-2 py-1 bg-white border rounded ml-2">Enter</kbd> Select
+        <kbd class="px-2 py-1 bg-white border rounded ml-2">Esc</kbd> Close
+      </div>
+      <span id="searchResultCount">0 results</span>
+    </div>
+  </div>
+</div>
+
+<script>
+// Mock search data (replace with Supabase queries)
+const searchData = {
+  products: [
+    { id: 1, name: 'Fresh Tomatoes (5kg)', category: 'Room 22 Farm', price: 50, url: 'product-detail.html?id=1' },
+    { id: 2, name: 'iPhone 13 Pro Max', category: 'Electronics', price: 6500, url: 'product-detail.html?id=2' },
+    { id: 3, name: 'Leather Sofa Set', category: 'Home & Garden', price: 8900, url: 'product-detail.html?id=3' }
+  ],
+  rooms: [
+    { id: 18, name: 'Marketplace', emoji: '🏪', description: 'E-commerce Hub', url: 'index.html' },
+    { id: 22, name: 'Fresh Farm', emoji: '🌾', description: 'Organic Produce', url: 'room22-farm.html' },
+    { id: 0, name: 'CabLink', emoji: '🚗', description: 'Ride Booking', url: 'https://cablink.bstm.bw' },
+    { id: 0, name: 'THB Wallet', emoji: '💰', description: 'Digital Currency', url: 'thb-wallet.html' },
+    { id: 0, name: 'Government', emoji: '🏛️', description: 'Admin Center', url: 'gov-dashboard.html' }
+  ],
+  help: [
+    { title: 'How to place an order?', url: 'help.html#buying' },
+    { title: 'What is THoBoCoin (THB)?', url: 'help.html#thb' },
+    { title: 'How do I become a seller?', url: 'help.html#selling' },
+    { title: 'Payment methods accepted', url: 'help.html#payment' }
+  ]
+};
+
+let currentFilter = 'all';
+
+function openGlobalSearch() {
+  document.getElementById('globalSearch').classList.remove('hidden');
+  document.getElementById('globalSearchInput').focus();
+}
+
+function closeGlobalSearch() {
+  document.getElementById('globalSearch').classList.add('hidden');
+  document.getElementById('globalSearchInput').value = '';
+  document.getElementById('searchResultsContainer').classList.add('hidden');
+  document.getElementById('searchEmpty').classList.remove('hidden');
+}
+
+function filterSearch(filter) {
+  currentFilter = filter;
+  
+  // Update button states
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.classList.remove('active', 'bg-purple-600', 'text-white');
+    btn.classList.add('bg-gray-100', 'text-gray-700');
+  });
+  event.target.classList.add('active', 'bg-purple-600', 'text-white');
+  event.target.classList.remove('bg-gray-100', 'text-gray-700');
+  
+  // Re-run search
+  const query = document.getElementById('globalSearchInput').value;
+  if (query) performSearch(query);
+}
+
+function performSearch(query) {
+  if (!query || query.length < 2) {
+    document.getElementById('searchResultsContainer').classList.add('hidden');
+    document.getElementById('searchEmpty').classList.remove('hidden');
+    return;
+  }
+  
+  // Show loading
+  document.getElementById('searchEmpty').classList.add('hidden');
+  document.getElementById('searchLoading').classList.remove('hidden');
+  
+  // Simulate search delay
+  setTimeout(() => {
+    const results = executeSearch(query);
+    displayResults(results);
+    
+    document.getElementById('searchLoading').classList.add('hidden');
+    document.getElementById('searchResultsContainer').classList.remove('hidden');
+  }, 300);
+}
+
+function executeSearch(query) {
+  query = query.toLowerCase();
+  
+  const results = {
+    products: searchData.products.filter(p => 
+      p.name.toLowerCase().includes(query) || 
+      p.category.toLowerCase().includes(query)
+    ),
+    rooms: searchData.rooms.filter(r => 
+      r.name.toLowerCase().includes(query) || 
+      r.description.toLowerCase().includes(query)
+    ),
+    help: searchData.help.filter(h => 
+      h.title.toLowerCase().includes(query)
+    )
+  };
+  
+  // Apply filter
+  if (currentFilter !== 'all') {
+    return { [currentFilter]: results[currentFilter] };
+  }
+  
+  return results;
+}
+
+function displayResults(results) {
+  let totalResults = 0;
+  
+  // Products
+  const productResults = document.getElementById('productResults');
+  const productsSection = document.getElementById('productsSection');
+  
+  if (results.products && results.products.length > 0) {
+    productResults.innerHTML = results.products.map(product => `
+      <a href="${product.url}" class="flex items-center justify-between p-4 hover:bg-gray-50 cursor-pointer">
+        <div class="flex items-center space-x-4">
+          <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+            <i class="fas fa-box text-purple-600"></i>
+          </div>
+          <div>
+            <p class="font-semibold text-gray-800">${product.name}</p>
+            <p class="text-sm text-gray-600">${product.category}</p>
+          </div>
+        </div>
+        <div class="text-right">
+          <p class="font-bold text-purple-600">P${product.price}</p>
+        </div>
+      </a>
+    `).join('');
+    productsSection.classList.remove('hidden');
+    totalResults += results.products.length;
+  } else {
+    productsSection.classList.add('hidden');
+  }
+  
+  // Rooms
+  const roomResults = document.getElementById('roomResults');
+  const roomsSection = document.getElementById('roomsSection');
+  
+  if (results.rooms && results.rooms.length > 0) {
+    roomResults.innerHTML = results.rooms.map(room => `
+      <a href="${room.url}" class="flex items-center space-x-4 p-4 hover:bg-gray-50 cursor-pointer">
+        <div class="text-3xl">${room.emoji}</div>
+        <div>
+          <p class="font-semibold text-gray-800">${room.name}</p>
+          <p class="text-sm text-gray-600">${room.description}</p>
+        </div>
+      </a>
+    `).join('');
+    roomsSection.classList.remove('hidden');
+    totalResults += results.rooms.length;
+  } else {
+    roomsSection.classList.add('hidden');
+  }
+  
+  // Help
+  const helpResults = document.getElementById('helpResults');
+  const helpSection = document.getElementById('helpSection');
+  
+  if (results.help && results.help.length > 0) {
+    helpResults.innerHTML = results.help.map(article => `
+      <a href="${article.url}" class="flex items-center space-x-4 p-4 hover:bg-gray-50 cursor-pointer">
+        <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+          <i class="fas fa-question-circle text-blue-600"></i>
+        </div>
+        <p class="font-semibold text-gray-800">${article.title}</p>
+      </a>
+    `).join('');
+    helpSection.classList.remove('hidden');
+    totalResults += results.help.length;
+  } else {
+    helpSection.classList.add('hidden');
+  }
+  
+  // Update count
+  document.getElementById('searchResultCount').textContent = `${totalResults} results`;
+  
+  // Show no results if nothing found
+  if (totalResults === 0) {
+    document.getElementById('searchResultsContainer').classList.add('hidden');
+    document.getElementById('searchEmpty').innerHTML = `
+      <i class="fas fa-search text-6xl text-gray-300 mb-4"></i>
+      <p class="text-gray-600">No results found for "${document.getElementById('globalSearchInput').value}"</p>
+    `;
+    document.getElementById('searchEmpty').classList.remove('hidden');
+  }
+}
+
+// Live search as user types
+document.getElementById('globalSearchInput')?.addEventListener('input', (e) => {
+  performSearch(e.target.value);
+});
+
+// Keyboard shortcuts
+document.addEventListener('keydown', (e) => {
+  // Ctrl/Cmd + K to open search
+  if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+    e.preventDefault();
+    openGlobalSearch();
+  }
+  
+  // Escape to close
+  if (e.key === 'Escape') {
+    closeGlobalSearch();
+  }
+});
+  </script>
