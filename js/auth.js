@@ -14,7 +14,7 @@ const db = firebase.firestore();
 const provider = new firebase.auth.GoogleAuthProvider();
 
 function signInWithGoogle() {
-  auth.signInWithPopup(provider)
+  auth.signInWithRedirect(provider)
     .then((result) => {
       const user = result.user;
       alert("Signed in as " + user.displayName + "!");
