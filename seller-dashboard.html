@@ -9,179 +9,60 @@
 </head>
 <body class="bg-gray-50">
     
-    <!-- Navigation -->
-    <div id="bstm-nav"></div>
-
-    <div class="max-w-7xl mx-auto px-6 py-8">
-        
-        <!-- Welcome Section -->
-        <div class="bg-gradient-to-r from-purple-600 to-indigo-600 rounded-2xl shadow-xl p-8 text-white mb-8">
-            <h1 class="text-4xl font-bold mb-2">Seller Dashboard - <span id="sellerName">Seller</span></h1>
-            <p class="text-purple-100">Manage your products and sales</p>
+    <div class="bg-gradient-to-r from-green-600 to-emerald-600 text-white py-4 px-6">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div>
+                <h1 class="text-2xl font-bold">Seller Dashboard</h1>
+                <p class="text-green-100 text-sm">Welcome, <span id="userName">Loading...</span></p>
+            </div>
+            <button onclick="handleLogout()" class="bg-white text-green-600 px-4 py-2 rounded-lg font-semibold hover:bg-green-50">
+                <i class="fas fa-sign-out-alt mr-2"></i>Logout
+            </button>
         </div>
+    </div>
 
-        <!-- Stats Grid -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+        
         <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-            <div class="bg-white rounded-2xl shadow-lg p-6">
-                <div class="flex items-center justify-between mb-4">
-                    <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                        <i class="fas fa-dollar-sign text-green-600 text-xl"></i>
-                    </div>
-                </div>
+            <div class="bg-white rounded-xl shadow-lg p-6">
                 <p class="text-3xl font-bold text-gray-800">P0</p>
                 <p class="text-sm text-gray-600">Total Revenue</p>
             </div>
-
-            <div class="bg-white rounded-2xl shadow-lg p-6">
-                <div class="flex items-center justify-between mb-4">
-                    <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                        <i class="fas fa-box text-blue-600 text-xl"></i>
-                    </div>
-                </div>
+            <div class="bg-white rounded-xl shadow-lg p-6">
                 <p class="text-3xl font-bold text-gray-800">0</p>
                 <p class="text-sm text-gray-600">Products Listed</p>
             </div>
-
-            <div class="bg-white rounded-2xl shadow-lg p-6">
-                <div class="flex items-center justify-between mb-4">
-                    <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
-                        <i class="fas fa-shopping-cart text-purple-600 text-xl"></i>
-                    </div>
-                </div>
+            <div class="bg-white rounded-xl shadow-lg p-6">
                 <p class="text-3xl font-bold text-gray-800">0</p>
-                <p class="text-sm text-gray-600">Total Orders</p>
+                <p class="text-sm text-gray-600">Orders</p>
             </div>
-
-            <div class="bg-white rounded-2xl shadow-lg p-6">
-                <div class="flex items-center justify-between mb-4">
-                    <div class="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
-                        <i class="fas fa-star text-yellow-600 text-xl"></i>
-                    </div>
-                </div>
-                <p class="text-3xl font-bold text-gray-800">5.0</p>
-                <p class="text-sm text-gray-600">Rating</p>
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <p class="text-3xl font-bold text-gray-800" id="thbBalance">0.0</p>
+                <p class="text-sm text-gray-600">THB Balance</p>
             </div>
         </div>
 
-        <!-- Quick Actions -->
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-            <a href="upload-product.html" class="bg-gradient-to-br from-green-500 to-green-600 text-white rounded-xl shadow-lg p-6 text-center hover:shadow-2xl transition-all">
-                <div class="w-14 h-14 bg-white bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-3">
-                    <i class="fas fa-plus text-2xl"></i>
-                </div>
-                <p class="font-bold">Add Product</p>
-            </a>
-
-            <a href="analytics.html" class="bg-white rounded-xl shadow-lg p-6 text-center hover:shadow-2xl transition-all">
-                <div class="w-14 h-14 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                    <i class="fas fa-chart-line text-blue-600 text-2xl"></i>
-                </div>
-                <p class="font-bold text-gray-800">Analytics</p>
-            </a>
-
-            <a href="messages.html" class="bg-white rounded-xl shadow-lg p-6 text-center hover:shadow-2xl transition-all">
-                <div class="w-14 h-14 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                    <i class="fas fa-comments text-purple-600 text-2xl"></i>
-                </div>
-                <p class="font-bold text-gray-800">Messages</p>
-            </a>
-
-            <a href="settings.html" class="bg-white rounded-xl shadow-lg p-6 text-center hover:shadow-2xl transition-all">
-                <div class="w-14 h-14 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                    <i class="fas fa-cog text-gray-600 text-2xl"></i>
-                </div>
-                <p class="font-bold text-gray-800">Settings</p>
-            </a>
-        </div>
-
-        <!-- Getting Started -->
-        <div class="bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-2xl shadow-lg p-8 border-2 border-yellow-200">
-            <h3 class="text-2xl font-bold text-gray-800 mb-6">
-                <i class="fas fa-rocket text-yellow-600 mr-2"></i>Getting Started as a Seller
-            </h3>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div>
-                    <div class="flex items-center mb-3">
-                        <div class="w-8 h-8 bg-yellow-500 text-white rounded-full flex items-center justify-center font-bold mr-3">1</div>
-                        <h4 class="font-bold text-gray-800">Complete KYC</h4>
-                    </div>
-                    <p class="text-sm text-gray-700">Verify your identity to start selling</p>
-                    <a href="kyc-verification.html" class="text-purple-600 hover:text-purple-800 text-sm font-semibold mt-2 inline-block">
-                        Start Verification →
-                    </a>
-                </div>
-
-                <div>
-                    <div class="flex items-center mb-3">
-                        <div class="w-8 h-8 bg-yellow-500 text-white rounded-full flex items-center justify-center font-bold mr-3">2</div>
-                        <h4 class="font-bold text-gray-800">Add Products</h4>
-                    </div>
-                    <p class="text-sm text-gray-700">Upload your first product listing</p>
-                    <a href="upload-product.html" class="text-purple-600 hover:text-purple-800 text-sm font-semibold mt-2 inline-block">
-                        Upload Product →
-                    </a>
-                </div>
-
-                <div>
-                    <div class="flex items-center mb-3">
-                        <div class="w-8 h-8 bg-yellow-500 text-white rounded-full flex items-center justify-center font-bold mr-3">3</div>
-                        <h4 class="font-bold text-gray-800">Start Selling</h4>
-                    </div>
-                    <p class="text-sm text-gray-700">Receive orders and earn 5% commission</p>
-                </div>
-            </div>
+        <div class="bg-gradient-to-r from-green-600 to-emerald-600 rounded-2xl shadow-xl p-8 text-white">
+            <h2 class="text-3xl font-bold mb-4">Start Selling on BSTM! 🚀</h2>
+            <p class="text-lg mb-4">List your first product and reach thousands of buyers.</p>
+            <button class="bg-white text-green-600 px-6 py-3 rounded-lg font-bold hover:bg-green-50">
+                Add Product →
+            </button>
         </div>
 
     </div>
 
-    <!-- Footer -->
-    <div id="bstm-footer"></div>
+    <script type="module">
+    import './js/firebase-auth.js';
 
-    <script>
-    // Load seller data
-    function loadSellerDashboard() {
-        const userStr = localStorage.getItem('bstm_user');
-        
-        if (!userStr) {
-            window.location.href = 'login.html?redirect=' + encodeURIComponent(window.location.pathname);
-            return;
-        }
-        
-        const user = JSON.parse(userStr);
-        
-        // Check if user is seller
-        if (user.role !== 'seller' && user.role !== 'admin') {
-            alert('You need a seller account to access this page');
-            window.location.href = 'buyer-dashboard.html';
-            return;
-        }
-        
-        // Update seller name
-        if (document.getElementById('sellerName')) {
-            document.getElementById('sellerName').textContent = user.name || 'Seller';
-        }
-    }
-
-    // Load components
-    function loadComponents() {
-        fetch('components/universal-nav.html')
-            .then(r => r.text())
-            .then(html => {
-                document.getElementById('bstm-nav').innerHTML = html;
-                if (typeof initializeNav === 'function') {
-                    initializeNav();
-                }
-            });
-
-        fetch('components/universal-footer.html')
-            .then(r => r.text())
-            .then(html => document.getElementById('bstm-footer').innerHTML = html);
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-        loadSellerDashboard();
-        loadComponents();
+    window.BSTMAuth.requireAuth(['seller']).then(({ user, userData }) => {
+        document.getElementById('userName').textContent = userData.name;
+        document.getElementById('thbBalance').textContent = (userData.thb_balance || 0).toFixed(1);
     });
+
+    window.handleLogout = async function() {
+        if (confirm('Logout?')) await window.BSTMAuth.logout();
+    };
     </script>
 </body>
 </html>
