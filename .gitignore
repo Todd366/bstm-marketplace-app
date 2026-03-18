@@ -1,83 +1,42 @@
-# Dependencies
-node_modules/
-.pnp
-.pnp.js
-
-# Testing
-/coverage
-
-# Production
-/build
-/dist
-
 # Environment variables
 .env
 .env.local
-.env.development.local
-.env.test.local
-.env.production.local
+.env.production
+.env.*.local
 
-# Logs
-logs
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-lerna-debug.log*
-
-# OS generated files
-.DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
-Thumbs.db
-
-# IDE - VSCode
-.vscode/
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
-.history/
-
-# IDE - WebStorm
-.idea/
-
-# IDE - Sublime
-*.sublime-workspace
-*.sublime-project
-
-# Misc
-*.swp
-*.swo
-*~
-.sass-cache/
-.tmp/
-
-# Firebase
-.firebase/
-firebase-debug.log
-
-# Supabase
-.supabase/
-
-# Build files
-*.min.js
-*.min.css
-
-# Cache
-.cache/
-*.cache
-
-# Temporary files
-tmp/
-temp/
-
-# .gitignore
-.env
-.env.local
+# API Keys & Secrets
 *.key
+*.pem
 secrets/
 config/secrets.json
+
+# Ngrok
+ngrok.yml
+.ngrok2/
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+npm-debug.log*
+
+# Dependencies
+node_modules/
+package-lock.json
+
+# Build outputs
+dist/
+build/
+.cache/
+
+# Database
+*.sqlite
+*.db
