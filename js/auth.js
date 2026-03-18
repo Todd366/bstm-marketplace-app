@@ -14,11 +14,14 @@ const db = firebase.firestore();
 const provider = new firebase.auth.GoogleAuthProvider();
 
 function signInWithGoogle() {
+  document.getElementById("loading").style.display = "block";
+  document.getElementById("login-form").style.display = "none";
   auth.signInWithRedirect(provider)
     .then((result) => {
       const user = result.user;
       alert("Signed in as " + user.displayName + "!");
       redirectBasedOnRole(user);
+  document.getElementById("loading").style.display = "none";
     })
     .catch((error) => {
       alert("Login failed: " + error.message);
