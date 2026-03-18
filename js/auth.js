@@ -28,6 +28,7 @@ function signInWithGoogle() {
   const provider = new firebase.auth.GoogleAuthProvider();
   provider.setCustomParameters({ prompt: 'select_account' }); // <-- this kills loop
   
+  console.log("Popup opened — waiting for callback...");
   auth.signInWithPopup(provider)
     .then(result => {
       const user = result.user;
