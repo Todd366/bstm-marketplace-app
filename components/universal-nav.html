@@ -1,23 +1,241 @@
-<!-- Add to user menu dropdown -->
-<div class="border-t my-2"></div>
-<div class="px-4 py-2 bg-gray-50">
-    <p class="text-xs font-semibold text-gray-600 mb-2">Quick Access</p>
-    <div class="space-y-1">
-        <a href="https://todd366.github.io/CabLink-pwa/" target="_blank" 
-           class="flex items-center space-x-2 text-sm text-gray-700 hover:text-purple-600">
-            <span>🚗</span><span>CabLink</span>
+<!-- BSTM Universal Navigation - CORRECTED VERSION -->
+<style>
+  .bstm-nav-mobile { display: none; }
+  @media (max-width: 768px) {
+    .bstm-nav-desktop { display: none; }
+    .bstm-nav-mobile { display: flex; }
+  }
+</style>
+
+<nav class="bg-gradient-to-r from-purple-900 via-indigo-900 to-purple-900 text-white sticky top-0 z-50 shadow-2xl border-b-2 border-yellow-400">
+  <div class="max-w-7xl mx-auto px-4 py-3">
+    <!-- Desktop Nav -->
+    <div class="bstm-nav-desktop flex items-center justify-between">
+      <!-- Logo + Room Switcher -->
+      <button onclick="openRoomSwitcher()" class="flex items-center space-x-3 hover:bg-purple-800 px-3 py-2 rounded-lg transition-all group">
+        <div class="w-10 h-10 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-xl flex items-center justify-center shadow-lg">
+          <span class="text-purple-900 font-bold text-xl">B</span>
+        </div>
+        <div>
+          <span class="font-bold text-lg">BSTM NATION</span>
+          <p class="text-xs text-purple-200">Digital Botswana</p>
+        </div>
+        <i class="fas fa-chevron-down group-hover:rotate-180 transition-transform"></i>
+      </button>
+      
+      <!-- Main Navigation -->
+      <div class="flex items-center space-x-6 text-sm font-semibold">
+        <a href="index.html" class="flex items-center space-x-2 hover:text-yellow-300 transition-colors">
+          <span>🏪</span>
+          <span>Marketplace</span>
         </a>
-        <a href="https://thobocoin-project-frontend.vercel.app/" target="_blank" 
-           class="flex items-center space-x-2 text-sm text-gray-700 hover:text-purple-600">
-            <span>💰</span><span>THB Hub</span>
+        <a href="https://todd366.github.io/CabLink-pwa/" target="_blank" class="flex items-center space-x-2 hover:text-yellow-300 transition-colors">
+          <span>🚗</span>
+          <span>CabLink</span>
         </a>
-        <a href="https://todd366.github.io/bstm-ecosystem-network/" target="_blank" 
-           class="flex items-center space-x-2 text-sm text-gray-700 hover:text-purple-600">
-            <span>🗺️</span><span>Network Map</span>
+        <a href="thb-wallet.html" class="flex items-center space-x-2 hover:text-yellow-300 transition-colors">
+          <span>💰</span>
+          <span>THB Wallet</span>
         </a>
-        <a href="https://t.me/Todd366Bot" target="_blank" 
-           class="flex items-center space-x-2 text-sm text-gray-700 hover:text-purple-600">
-            <span>🤖</span><span>Telegram Bot</span>
+        <a href="room22-farm.html" class="flex items-center space-x-2 hover:text-yellow-300 transition-colors">
+          <span>🌾</span>
+          <span>Farm</span>
         </a>
+        <a href="help.html" class="flex items-center space-x-2 hover:text-yellow-300 transition-colors">
+          <span>❓</span>
+          <span>Help</span>
+        </a>
+      </div>
+      
+      <!-- User Actions -->
+      <div class="flex items-center space-x-4" id="navUserSection">
+        <!-- Will be populated by JavaScript -->
+      </div>
     </div>
+    
+    <!-- Mobile Nav -->
+    <div class="bstm-nav-mobile flex items-center justify-between">
+      <button onclick="openMobileMenu()" class="text-white">
+        <i class="fas fa-bars text-2xl"></i>
+      </button>
+      <div class="flex items-center space-x-2">
+        <div class="w-8 h-8 bg-yellow-400 rounded-lg flex items-center justify-center">
+          <span class="text-purple-900 font-bold">B</span>
+        </div>
+        <span class="font-bold">BSTM</span>
+      </div>
+      <button onclick="openNotifications()" class="relative">
+        <i class="fas fa-bell text-xl"></i>
+        <span id="notifBadgeMobile" class="hidden absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full text-xs">0</span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile Menu -->
+<div id="mobileMenu" class="fixed inset-0 bg-purple-900 z-50 hidden">
+  <div class="p-6">
+    <div class="flex justify-between items-center mb-8">
+      <span class="text-white font-bold text-2xl">BSTM Menu</span>
+      <button onclick="closeMobileMenu()" class="text-white">
+        <i class="fas fa-times text-2xl"></i>
+      </button>
+    </div>
+    <div class="space-y-4" id="mobileMenuContent">
+      <!-- Will be populated by JavaScript -->
+    </div>
+  </div>
 </div>
+
+<!-- User Menu Dropdown -->
+<div id="userMenuDropdown" class="hidden absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-2xl overflow-hidden" style="position: absolute; top: 60px; right: 20px; z-index: 1000;">
+  <div class="bg-gradient-to-r from-purple-600 to-indigo-600 text-white p-4">
+    <p class="font-bold" id="dropdownUserName">Loading...</p>
+    <p class="text-sm text-purple-200" id="dropdownUserEmail">Loading...</p>
+  </div>
+  <a href="buyer-dashboard.html" class="block px-4 py-3 text-gray-700 hover:bg-gray-100">
+    <i class="fas fa-tachometer-alt mr-2"></i>Dashboard
+  </a>
+  <a href="settings.html" class="block px-4 py-3 text-gray-700 hover:bg-gray-100">
+    <i class="fas fa-cog mr-2"></i>Settings
+  </a>
+  <a href="wishlist.html" class="block px-4 py-3 text-gray-700 hover:bg-gray-100">
+    <i class="fas fa-heart mr-2"></i>Wishlist
+  </a>
+  <div class="border-t"></div>
+  <button onclick="handleLogout()" class="w-full text-left px-4 py-3 text-red-600 hover:bg-red-50">
+    <i class="fas fa-sign-out-alt mr-2"></i>Logout
+  </button>
+</div>
+
+<script>
+// Initialize navigation
+function initializeNav() {
+  const user = BSTMAuth?.getCurrentUser();
+  const userSection = document.getElementById('navUserSection');
+  const mobileContent = document.getElementById('mobileMenuContent');
+  
+  if (!userSection) return;
+  
+  if (user) {
+    // User is logged in
+    userSection.innerHTML = `
+      <button onclick="openGlobalSearch()" class="hover:bg-purple-800 p-2 rounded-lg">
+        <i class="fas fa-search"></i>
+      </button>
+      
+      <button onclick="openNotifications()" class="relative hover:bg-purple-800 p-2 rounded-lg">
+        <i class="fas fa-bell"></i>
+        <span id="notifBadge" class="hidden absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full text-xs flex items-center justify-center font-bold">0</span>
+      </button>
+      
+      <a href="thb-wallet.html" class="bg-yellow-400 text-purple-900 px-4 py-2 rounded-lg font-bold hover:bg-yellow-300 transition-all">
+        <i class="fas fa-coins mr-1"></i>
+        <span id="navTHBBalance">${(user.thb_balance || 0).toFixed(1)}</span> THB
+      </a>
+      
+      <button onclick="toggleUserMenu()" class="flex items-center space-x-2 hover:bg-purple-800 px-3 py-2 rounded-lg">
+        <img src="${user.avatar || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(user.name)}" 
+             class="w-8 h-8 rounded-full border-2 border-yellow-400">
+        <i class="fas fa-chevron-down"></i>
+      </button>
+    `;
+    
+    // Update dropdown user info
+    if (document.getElementById('dropdownUserName')) {
+      document.getElementById('dropdownUserName').textContent = user.name;
+      document.getElementById('dropdownUserEmail').textContent = user.email;
+    }
+    
+    // Mobile menu for logged-in users
+    if (mobileContent) {
+      mobileContent.innerHTML = `
+        <a href="index.html" class="block text-white text-lg py-3 border-b border-purple-700">🏪 Marketplace</a>
+        <a href="https://todd366.github.io/CabLink-pwa/" class="block text-white text-lg py-3 border-b border-purple-700">🚗 CabLink</a>
+        <a href="thb-wallet.html" class="block text-white text-lg py-3 border-b border-purple-700">💰 THB Wallet</a>
+        <a href="room22-farm.html" class="block text-white text-lg py-3 border-b border-purple-700">🌾 Farm</a>
+        <a href="buyer-dashboard.html" class="block text-white text-lg py-3 border-b border-purple-700">📊 Dashboard</a>
+        <a href="settings.html" class="block text-white text-lg py-3 border-b border-purple-700">⚙️ Settings</a>
+        <a href="help.html" class="block text-white text-lg py-3 border-b border-purple-700">❓ Help</a>
+        <button onclick="handleLogout()" class="w-full text-left text-red-400 text-lg py-3">🚪 Logout</button>
+      `;
+    }
+  } else {
+    // User not logged in
+    userSection.innerHTML = `
+      <a href="login.html" class="bg-yellow-400 text-purple-900 px-6 py-2 rounded-lg font-bold hover:bg-yellow-300 transition-all">
+        Login
+      </a>
+      <a href="login.html?tab=signup" class="bg-purple-700 hover:bg-purple-800 px-6 py-2 rounded-lg font-bold">
+        Sign Up
+      </a>
+    `;
+    
+    if (mobileContent) {
+      mobileContent.innerHTML = `
+        <a href="index.html" class="block text-white text-lg py-3 border-b border-purple-700">🏪 Marketplace</a>
+        <a href="https://todd366.github.io/CabLink-pwa/" class="block text-white text-lg py-3 border-b border-purple-700">🚗 CabLink</a>
+        <a href="room22-farm.html" class="block text-white text-lg py-3 border-b border-purple-700">🌾 Farm</a>
+        <a href="help.html" class="block text-white text-lg py-3 border-b border-purple-700">❓ Help</a>
+        <a href="login.html" class="block text-white text-lg py-3 border-b border-purple-700 bg-yellow-500 bg-opacity-20">🔐 Login</a>
+        <a href="login.html?tab=signup" class="block text-white text-lg py-3 bg-purple-700">✨ Sign Up</a>
+      `;
+    }
+  }
+}
+
+function toggleUserMenu() {
+  const menu = document.getElementById('userMenuDropdown');
+  if (menu) {
+    menu.classList.toggle('hidden');
+  }
+}
+
+function handleLogout() {
+  if (confirm('Are you sure you want to logout?')) {
+    if (typeof BSTMAuth !== 'undefined') {
+      BSTMAuth.logout();
+    } else {
+      localStorage.clear();
+      window.location.href = 'login.html';
+    }
+  }
+}
+
+function openMobileMenu() {
+  document.getElementById('mobileMenu')?.classList.remove('hidden');
+}
+
+function closeMobileMenu() {
+  document.getElementById('mobileMenu')?.classList.add('hidden');
+}
+
+function openGlobalSearch() {
+  document.getElementById('globalSearch')?.classList.remove('hidden');
+}
+
+function openNotifications() {
+  document.getElementById('notificationsPanel')?.classList.remove('hidden');
+}
+
+function openRoomSwitcher() {
+  document.getElementById('roomSwitcher')?.classList.remove('hidden');
+}
+
+// Close user menu when clicking outside
+document.addEventListener('click', (e) => {
+  const menu = document.getElementById('userMenuDropdown');
+  const button = e.target.closest('[onclick="toggleUserMenu()"]');
+  
+  if (menu && !menu.contains(e.target) && !button) {
+    menu.classList.add('hidden');
+  }
+});
+
+// Initialize on load
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initializeNav);
+} else {
+  initializeNav();
+}
+</script>
