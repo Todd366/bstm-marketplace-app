@@ -16,13 +16,15 @@ const provider = new firebase.auth.GoogleAuthProvider();
 function signInWithGoogle() {
   document.getElementById("loading").style.display = "block";
   document.getElementById("login-form").style.display = "none";
-  auth.signInWithRedirect(provider)
+  auth.signInWithPopup(provider)
     .then((result) => {
       const user = result.user;
       alert("Signed in as " + user.displayName + "!");
       redirectBasedOnRole(user);
   document.getElementById("loading").style.display = "none";
+  }, 0);
     })
+  console.error("Auth error:", error.code, error.message);
     .catch((error) => {
       alert("Login failed: " + error.message);
     });
