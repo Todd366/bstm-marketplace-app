@@ -1,5 +1,5 @@
-// Firebase Auth - compat, no Firestore
-console.log('🔥 Auth loading...');
+// Firebase compat - redirect auth, no popup, no billing
+console.log('Auth loading...');
 
 if (typeof firebase === 'undefined') {
   console.error('Firebase SDK missing!');
@@ -21,32 +21,40 @@ function hideLoading() {
   if (f) f.style.display = 'block';
 }
 
+// Start redirect sign-in
 function signInWithGoogle() {
-  console.log('Starting sign-in...');
+  console.log('Starting redirect...');
   showLoading();
   
   const provider = new firebase.auth.GoogleAuthProvider();
-  provider.setCustomParameters({ prompt: 'select_account' }); // <-- this kills loop
+  provider.setCustomParameters({ prompt: 'select_account' });
   
-  console.log("Popup opened — waiting for callback...");
-  auth.signInWithPopup(provider)
-    .then(result => {
-      const user = result.user;
-      alert('Welcome, ' + user.displayName + '! 🎉');
-      window.location.href = 'buyer-dashboard.html';
-    })
-    .catch(error => {
-      console.error('Auth fail:', error);
-      hideLoading();
-      alert('Failed: ' + error.message);
-    });
+  firebase.auth().signInWithRedirect(provider);
 }
 
-auth.onAuthStateChanged(user => {
+// On page load: check if we're back from Google
+firebase.auth().getRedirectResult()
+  .then(result => {
+    if (result.user) {
+      console.log('Sign-in success:', result.user.email);
+      alert('Welcome, ' + result.user.displayName + '! 🎉');
+      window.location.href = 'buyer-dashboard.html';
+    } else {
+      console.log('No redirect result - normal load');
+      hideLoading();
+    }
+  })
+  .catch(error => {
+    console.error('Redirect fail:', error);
+    hideLoading();
+    alert('Failed: ' + error.message);
+  });
+
+// Auto-redirect if already signed in
+firebase.auth().onAuthStateChanged(user => {
   if (user && window.location.pathname.includes('login.html')) {
     window.location.href = 'buyer-dashboard.html';
   }
 });
 
 window.signInWithGoogle = signInWithGoogle;
-function signOutFirst() { auth.signOut().then(() => location.reload()); }
