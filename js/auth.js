@@ -48,3 +48,4 @@ auth.onAuthStateChanged(user => {
 });
 
 window.signInWithGoogle = signInWithGoogle;
+function signOutFirst() { auth.signOut().then(() => location.reload()); }
