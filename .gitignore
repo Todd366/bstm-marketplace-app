@@ -74,3 +74,10 @@ firebase-debug.log
 # Temporary files
 tmp/
 temp/
+
+# .gitignore
+.env
+.env.local
+*.key
+secrets/
+config/secrets.json
