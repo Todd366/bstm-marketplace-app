@@ -3,37 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Wishlist - BSTM Marketplace</title>
+    <title>My Wishlist - BSTM</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-    <script src="js/bstm-auth.js"></script>
 </head>
 <body class="bg-gray-50">
     
     <!-- Navigation -->
     <div id="bstm-nav"></div>
 
-    <div class="max-w-7xl mx-auto px-6 py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-8">
         
         <!-- Header -->
         <div class="mb-8">
-            <h1 class="text-4xl font-bold text-gray-800 mb-2">
+            <h1 class="text-3xl sm:text-4xl font-bold text-gray-800 mb-2">
                 <i class="fas fa-heart text-red-500 mr-3"></i>My Wishlist
             </h1>
             <p class="text-gray-600">Save your favorite products for later</p>
         </div>
 
         <!-- Wishlist Grid -->
-        <div id="wishlistGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div id="wishlistGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             <!-- Items will be loaded here -->
         </div>
 
         <!-- Empty State -->
         <div id="emptyWishlist" class="hidden text-center py-20">
-            <i class="fas fa-heart-broken text-gray-300 text-8xl mb-6"></i>
-            <h2 class="text-3xl font-bold text-gray-800 mb-4">Your wishlist is empty</h2>
+            <i class="fas fa-heart-broken text-gray-300 text-6xl sm:text-8xl mb-6"></i>
+            <h2 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-4">Your wishlist is empty</h2>
             <p class="text-gray-600 mb-8">Start adding products you love!</p>
-            <a href="index.html" class="inline-block bg-purple-600 hover:bg-purple-700 text-white px-8 py-4 rounded-xl font-bold text-lg">
+            <a href="index.html" class="inline-block bg-purple-600 hover:bg-purple-700 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-bold text-base sm:text-lg">
                 <i class="fas fa-shopping-bag mr-2"></i>Browse Products
             </a>
         </div>
@@ -44,6 +43,18 @@
     <div id="bstm-footer"></div>
 
     <script>
+    console.log('Wishlist page loaded');
+    
+    // Check authentication
+    function checkAuth() {
+        const user = localStorage.getItem('bstm_user');
+        if (!user) {
+            window.location.href = 'login.html?redirect=' + encodeURIComponent(window.location.pathname);
+            return false;
+        }
+        return true;
+    }
+    
     // Wishlist management
     const Wishlist = {
         getItems() {
@@ -64,49 +75,57 @@
             const items = this.getItems().filter(i => i.id !== productId);
             localStorage.setItem('bstm_wishlist', JSON.stringify(items));
             loadWishlist();
-        },
-        
-        clear() {
-            localStorage.removeItem('bstm_wishlist');
-            loadWishlist();
         }
     };
 
     function loadWishlist() {
+        console.log('Loading wishlist...');
+        
         const items = Wishlist.getItems();
         const grid = document.getElementById('wishlistGrid');
         const empty = document.getElementById('emptyWishlist');
 
+        if (!grid || !empty) {
+            console.error('Wishlist elements not found');
+            return;
+        }
+
         if (items.length === 0) {
             grid.classList.add('hidden');
             empty.classList.remove('hidden');
+            console.log('Wishlist is empty');
             return;
         }
 
         grid.classList.remove('hidden');
         empty.classList.add('hidden');
+        
+        console.log('Wishlist items:', items.length);
 
         grid.innerHTML = items.map(item => `
             <div class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all">
                 <div class="relative">
-                    <img src="${item.image || 'https://via.placeholder.com/400x300'}" alt="${item.name}" class="w-full h-48 object-cover">
-                    <button onclick="Wishlist.removeItem('${item.id}')" class="absolute top-4 right-4 w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-lg hover:bg-red-50">
+                    <img src="${item.image || 'https://via.placeholder.com/400x300?text=' + encodeURIComponent(item.name)}" 
+                         alt="${item.name}" 
+                         class="w-full h-48 object-cover">
+                    <button onclick="Wishlist.removeItem('${item.id}')" 
+                            class="absolute top-4 right-4 w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-lg hover:bg-red-50">
                         <i class="fas fa-heart text-red-500"></i>
                     </button>
                 </div>
                 <div class="p-5">
-                    <h3 class="font-bold text-lg text-gray-800 mb-2">${item.name}</h3>
-                    <p class="text-gray-600 text-sm mb-3">${item.description || ''}</p>
+                    <h3 class="font-bold text-lg text-gray-800 mb-2 line-clamp-2">${item.name}</h3>
+                    <p class="text-gray-600 text-sm mb-3 line-clamp-2">${item.description || ''}</p>
                     <div class="flex justify-between items-center mb-4">
-                        <div>
-                            <span class="text-2xl font-bold text-gray-800">P${item.price}</span>
-                        </div>
+                        <span class="text-2xl font-bold text-gray-800">P${item.price}</span>
                     </div>
-                    <div class="flex space-x-2">
-                        <button onclick="moveToCart('${item.id}')" class="flex-1 bg-purple-600 hover:bg-purple-700 text-white py-3 rounded-lg font-semibold">
+                    <div class="flex flex-col sm:flex-row gap-2">
+                        <button onclick="moveToCart('${item.id}')" 
+                                class="flex-1 bg-purple-600 hover:bg-purple-700 text-white py-3 rounded-lg font-semibold">
                             <i class="fas fa-shopping-cart mr-2"></i>Add to Cart
                         </button>
-                        <a href="product-detail.html?id=${item.id}" class="px-4 py-3 bg-gray-100 hover:bg-gray-200 rounded-lg flex items-center justify-center">
+                        <a href="product-detail.html?id=${item.id}" 
+                           class="px-4 py-3 bg-gray-100 hover:bg-gray-200 rounded-lg flex items-center justify-center">
                             <i class="fas fa-eye"></i>
                         </a>
                     </div>
@@ -128,25 +147,51 @@
             // Remove from wishlist
             Wishlist.removeItem(productId);
             
-            alert(`${product.name} moved to cart!`);
+            // Show success message
+            showToast(`${product.name} moved to cart!`, 'success');
         }
+    }
+    
+    function showToast(message, type = 'info') {
+        const colors = {
+            success: 'bg-green-500',
+            error: 'bg-red-500',
+            info: 'bg-blue-500'
+        };
+        
+        const toast = document.createElement('div');
+        toast.className = `fixed bottom-4 right-4 ${colors[type]} text-white px-6 py-4 rounded-xl shadow-2xl z-50`;
+        toast.textContent = message;
+        document.body.appendChild(toast);
+        
+        setTimeout(() => toast.remove(), 3000);
     }
 
     // Load components
     function loadComponents() {
+        console.log('Loading components...');
+        
         fetch('components/universal-nav.html')
             .then(r => r.text())
-            .then(html => document.getElementById('bstm-nav').innerHTML = html);
+            .then(html => {
+                document.getElementById('bstm-nav').innerHTML = html;
+                console.log('Nav loaded');
+            })
+            .catch(err => console.error('Nav load error:', err));
 
         fetch('components/universal-footer.html')
             .then(r => r.text())
-            .then(html => document.getElementById('bstm-footer').innerHTML = html);
+            .then(html => document.getElementById('bstm-footer').innerHTML = html)
+            .catch(err => console.error('Footer load error:', err));
     }
 
+    // Initialize
     document.addEventListener('DOMContentLoaded', () => {
-        BSTMAuth.requireAuth();
-        loadWishlist();
-        loadComponents();
+        console.log('DOM loaded');
+        if (checkAuth()) {
+            loadWishlist();
+            loadComponents();
+        }
     });
 
     // Export for global use
