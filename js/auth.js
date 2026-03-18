@@ -82,3 +82,14 @@ auth.onAuthStateChanged((user) => {
 });
 
 console.log('✅ Auth module ready');
+
+// Sign out function for login page
+function signOutFirst() {
+  auth.signOut().then(() => {
+    alert('Signed out successfully. You can now sign in with a different account.');
+    location.reload();
+  }).catch((error) => {
+    console.error('Sign out error:', error);
+    alert('Sign out failed: ' + error.message);
+  });
+}
