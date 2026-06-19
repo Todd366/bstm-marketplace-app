@@ -1,0 +1,32 @@
+./404.html:72:    <div id="bstm-footer"></div>
+./admin-dashboard.html:351:    <div id="bstm-footer"></div>
+./analytics.html:340:    <div id="bstm-footer"></div>
+./buyer-dashboard.html:105:<div id="bstm-footer"></div>
+./cablink.html:262:    <div id="bstm-footer"></div>
+./checkout.html:309:    <div id="bstm-footer"></div>
+./components/smart-loader.js:22:    loadComponent("bstm-footer", "components/universal-footer.html");
+./ecosystem-hub.html:284:    <div id="bstm-footer"></div>
+./gov-dashboard.html:74:    <div id="bstm-footer"></div>
+./help.html:319:    <div id="bstm-footer"></div>
+./index.html:126:<div id="bstm-footer"></div>
+./kyc-verification.html:208:    <div id="bstm-footer"></div>
+./login.html:62:<div id="bstm-footer"></div>
+./marketplace.html:84:<div id="bstm-footer"></div>
+./marketplace.html.backup:74:    <div id="bstm-footer"></div>
+./marketplace.html.backup:80:            document.getElementById("bstm-footer").innerHTML = html;
+./marketplace.html.bak2:89:    <div id="bstm-footer"></div>
+./marketplace.html.bak2:93:        fetch('components/universal-footer.html').then(r => r.text()).then(html => document.getElementById("bstm-footer").innerHTML = html);
+./messages.html:259:    <div id="bstm-footer"></div>
+./monitoring-dashboard.html:102:    <div id="bstm-footer"></div>
+./notifications-all.html:57:    <div id="bstm-footer"></div>
+./order-tracking.html:215:    <div id="bstm-footer"></div>
+./product-detail.html:291:    <div id="bstm-footer"></div>
+./room22-farm.html:342:    <div id="bstm-footer"></div>
+./seller-dashboard.html:84:<div id="bstm-footer"></div>
+./settings.html:336:    <div id="bstm-footer"></div>
+./terms.html:284:    <div id="bstm-footer"></div>
+./thb-wallet.html:284:    <div id="bstm-footer"></div>
+./upload-product.html:340:    <div id="bstm-footer"></div>
+./verify.html:59:<div id="bstm-footer"></div>
+./wishlist.html:34:    <div id="bstm-footer"></div>
+./audit.sh:90:    grep -q 'id="bstm-footer"' "$f" || echo "$f"

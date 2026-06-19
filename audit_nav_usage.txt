@@ -1,0 +1,46 @@
+./404.html:19:    <div id="bstm-nav"></div>
+./admin-dashboard.html:18:    <div id="bstm-nav"></div>
+./analytics.html:16:    <div id="bstm-nav"></div>
+./buyer-dashboard.html:19:<div id="bstm-nav"></div>
+./cablink.html:17:    <div id="bstm-nav"></div>
+./checkout.html:17:    <div id="bstm-nav"></div>
+./components/nav.html:2:  #bstm-nav-bar { background:#fff; border-bottom:1px solid #EDE9FE; position:sticky; top:0; z-index:100; box-shadow:0 1px 12px rgba(124,58,237,0.08); }
+./components/nav.html:3:  #bstm-nav-bar a, #bstm-nav-bar button { font-family:"Inter",sans-serif; }
+./components/nav.html:14:<div id="bstm-nav-bar">
+./components/smart-loader.js:21:    loadComponent("bstm-nav", "components/nav.html");
+./components/universal-nav.html:3:  .bstm-nav-mobile { display: none; }
+./components/universal-nav.html:5:    .bstm-nav-desktop { display: none !important; }
+./components/universal-nav.html:6:    .bstm-nav-mobile { display: flex !important; }
+./components/universal-nav.html:15:    <div class="bstm-nav-desktop hidden md:flex items-center justify-between">
+./components/universal-nav.html:41:    <div class="bstm-nav-mobile flex md:hidden items-center justify-between">
+./components/nav.html.bak:2:  #bstm-nav-bar { background:#fff; border-bottom:1px solid #EDE9FE; position:sticky; top:0; z-index:100; box-shadow:0 1px 12px rgba(124,58,237,0.08); }
+./components/nav.html.bak:3:  #bstm-nav-bar a, #bstm-nav-bar button { font-family:"Inter",sans-serif; }
+./components/nav.html.bak:14:<div id="bstm-nav-bar">
+./ecosystem-hub.html:17:    <div id="bstm-nav"></div>
+./gov-dashboard.html:11:    <div id="bstm-nav"></div>
+./help.html:18:    <div id="bstm-nav"></div>
+./index.html:23:<div id="bstm-nav"></div>
+./js/dark-mode.js:45:    const navActions = document.querySelector('.bstm-nav-desktop .flex.items-center.space-x-4');
+./js/multi-language.js:172:        const nav = document.querySelector('.bstm-nav-desktop');
+./js/role-detection.js:124:    const navContainer = document.querySelector('.bstm-nav-desktop');
+./kyc-verification.html:13:    <div id="bstm-nav"></div>
+./login.html:16:<div id="bstm-nav"></div>
+./marketplace.html:24:<div id="bstm-nav"></div>
+./marketplace.html.backup:17:    <div id="bstm-nav"></div>
+./marketplace.html.backup:77:            document.getElementById("bstm-nav").innerHTML = html;
+./marketplace.html.bak2:17:    <div id="bstm-nav"></div>
+./messages.html:17:    <div id="bstm-nav"></div>
+./monitoring-dashboard.html:11:    <div id="bstm-nav"></div>
+./notifications-all.html:14:    <div id="bstm-nav"></div>
+./order-tracking.html:28:    <div id="bstm-nav"></div>
+./product-detail.html:18:    <div id="bstm-nav"></div>
+./room22-farm.html:22:    <div id="bstm-nav"></div>
+./seller-dashboard.html:18:<div id="bstm-nav"></div>
+./settings.html:16:    <div id="bstm-nav"></div>
+./terms.html:14:    <div id="bstm-nav"></div>
+./thb-wallet.html:42:    <div id="bstm-nav"></div>
+./upload-product.html:17:    <div id="bstm-nav"></div>
+./verify.html:19:<div id="bstm-nav"></div>
+./wishlist.html:13:    <div id="bstm-nav"></div>
+./fix-nav-loader.js:3:    const placeholder = document.getElementById('bstm-nav');
+./audit.sh:84:    grep -q 'id="bstm-nav"' "$f" || echo "$f"

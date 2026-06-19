@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verifying — BSTM</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap");
+    * { font-family:"Inter",sans-serif; }
+    @keyframes spin { to { transform:rotate(360deg); } }
+    @keyframes pop { from{opacity:0;transform:scale(0.8)} to{opacity:1;transform:scale(1)} }
+    .spinner { animation:spin 0.8s linear infinite; }
+    .pop { animation:pop 0.4s cubic-bezier(0.34,1.56,0.64,1) both; }
+  </style>
+</head>
+<body style="background:linear-gradient(135deg,#7C3AED 0%,#4F46E5 100%);min-height:100vh;display:flex;flex-direction:column;">
+
+<div id="bstm-nav"></div>
+
+<div style="flex:1;display:flex;align-items:center;justify-content:center;padding:40px 20px;">
+  <div id="verify-card" style="background:#fff;border-radius:28px;box-shadow:0 24px 80px rgba(0,0,0,0.2);max-width:420px;width:100%;padding:48px 32px;text-align:center;">
+
+    <!-- Loading State -->
+    <div id="state-loading">
+      <div style="width:72px;height:72px;border:4px solid #EDE9FE;border-top-color:#7C3AED;border-radius:50%;margin:0 auto 24px;" class="spinner"></div>
+      <h2 style="font-size:22px;font-weight:900;color:#1E1B4B;margin:0 0 8px;">Verifying your link...</h2>
+      <p style="color:#9CA3AF;font-size:14px;margin:0;">Please wait a moment</p>
+    </div>
+
+    <!-- Success State -->
+    <div id="state-success" style="display:none;" class="pop">
+      <div style="width:80px;height:80px;background:linear-gradient(135deg,#059669,#34D399);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 24px;font-size:36px;box-shadow:0 8px 24px rgba(5,150,105,0.3);">✓</div>
+      <h2 style="font-size:26px;font-weight:900;color:#1E1B4B;margin:0 0 8px;">You're in!</h2>
+      <p id="welcome-msg" style="color:#6B7280;font-size:15px;margin:0 0 28px;"></p>
+      <div style="background:#F8F7FF;border-radius:16px;padding:16px;margin-bottom:28px;border:1px solid #EDE9FE;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+          <span style="font-size:18px;">⚡</span>
+          <span style="font-size:14px;font-weight:700;color:#1E1B4B;">50 THB added to your wallet</span>
+        </div>
+        <p style="color:#9CA3AF;font-size:12px;margin:0;">Welcome bonus — spend it in the mall</p>
+      </div>
+      <p style="color:#C4B5FD;font-size:13px;margin:0 0 16px;">Redirecting to dashboard in <span id="countdown">3</span>s...</p>
+      <a href="buyer-dashboard.html" style="display:block;background:linear-gradient(135deg,#7C3AED,#4F46E5);color:#fff;padding:14px;border-radius:14px;font-weight:800;font-size:15px;text-decoration:none;box-shadow:0 6px 20px rgba(124,58,237,0.35);">Go to Dashboard →</a>
+    </div>
+
+    <!-- Error State -->
+    <div id="state-error" style="display:none;" class="pop">
+      <div style="width:80px;height:80px;background:#FEE2E2;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 24px;font-size:36px;">✕</div>
+      <h2 style="font-size:22px;font-weight:900;color:#1E1B4B;margin:0 0 8px;">Link Expired</h2>
+      <p style="color:#9CA3AF;font-size:14px;margin:0 0 28px;">This magic link has expired or already been used. Links are valid for 15 minutes.</p>
+      <a href="login.html" style="display:block;background:linear-gradient(135deg,#7C3AED,#4F46E5);color:#fff;padding:14px;border-radius:14px;font-weight:800;font-size:15px;text-decoration:none;margin-bottom:12px;">Get a New Link</a>
+      <a href="index.html" style="display:block;color:#9CA3AF;font-size:13px;text-decoration:none;">← Back to Mall</a>
+    </div>
+
+  </div>
+</div>
+
+<div id="bstm-footer"></div>
+<script src="components/smart-loader.js"></script>
+
+(function() {
+  var params = new URLSearchParams(window.location.search);
+  var token = params.get("token");
+  var emailFromUrl = params.get("email");
+
+  function show(state) {
+    ["loading","success","error"].forEach(function(s) {
+      document.getElementById("state-" + s).style.display = s === state ? "block" : "none";
+    });
+  }
+
+  function loginUser(email, name) {
+    var user = {
+      email: email,
+      name: name || email.split("@")[0],
+      role: "buyer",
+      thb_balance: 50,
+      joined: new Date().toISOString(),
+      referral_code: "BSTM-" + Math.random().toString(36).substr(2,6).toUpperCase()
+    };
+    localStorage.setItem("bstm_user", JSON.stringify(user));
+    localStorage.setItem("bstm_token", "tok_" + Date.now());
+    return user;
+  }
+
+  if (!token) {
+    show("error");
+    return;
+  }
+
+  setTimeout(function() {
+    var stored = localStorage.getItem("bstm_pending_" + token);
+
+    if (!stored && emailFromUrl) {
+      var user = loginUser(emailFromUrl);
+      document.getElementById("welcome-msg").textContent = "Welcome, " + user.name + "! Your account is ready.";
+      show("success");
+      startCountdown();
+      return;
+    }
+
+    if (!stored) {
+      show("error");
+      return;
+    }
+
+    var data;
+    try { data = JSON.parse(stored); } catch(e) { show("error"); return; }
+
+    if (Date.now() > data.expires) {
+      localStorage.removeItem("bstm_pending_" + token);
+      show("error");
+      return;
+    }
+
+    localStorage.removeItem("bstm_pending_" + token);
+    var user = loginUser(data.email, data.name);
+    document.getElementById("welcome-msg").textContent = "Welcome back, " + user.name + "!";
+    show("success");
+    startCountdown();
+
+  }, 1200);
+
+  function startCountdown() {
+    var n = 3;
+    var el = document.getElementById("countdown");
+    var iv = setInterval(function() {
+      n--;
+      if (el) el.textContent = n;
+      if (n <= 0) {
+        clearInterval(iv);
+        window.location.href = "buyer-dashboard.html";
+      }
+    }, 1000);
+  }
+})();
+<script type="module" src="js/app.js"></script>
+</body>
+</html>

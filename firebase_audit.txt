@@ -1,0 +1,107 @@
+./backend/db.js:const admin = require('firebase-admin');
+./backend/db.js:  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-fbsvc%40gen-lang-client-0007945213.iam.gserviceaccount.com",
+./backend/db.js:  databaseURL: "https://gen-lang-client-0007945213.firebaseio.com"
+./backend/firebase-admin.js:const admin = require('firebase-admin');
+./backend/firebase-admin.js:  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-fbsvc%40gen-lang-client-0007945213.iam.gserviceaccount.com",
+./backend/firebase-admin.js:  databaseURL: "https://gen-lang-client-0007945213.firebaseio.com"
+./backend/package.json:    "firebase-admin": "^13.0.1",
+./backend/wallet-endpoints.js:const admin = require('firebase-admin');
+./js/auth.js:if (typeof firebase === 'undefined') {
+./js/auth.js:const auth = firebase.auth();
+./js/auth.js:  const provider = new firebase.auth.GoogleAuthProvider();
+./js/auth.js:  firebase.auth().signInWithRedirect(provider);
+./js/auth.js:firebase.auth().getRedirectResult()
+./js/auth.js:firebase.auth().onAuthStateChanged(user => {
+./js/firebase-auth.js:import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+./js/firebase-auth.js:} from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+./js/firebase-auth.js:} from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+./js/firebase-auth.js:const firebaseConfig = {
+./js/firebase-auth.js:  authDomain: "gen-lang-client-0007945213.firebaseapp.com",
+./js/firebase-auth.js:  storageBucket: "gen-lang-client-0007945213.firebasestorage.app",
+./js/firebase-auth.js:const app = initializeApp(firebaseConfig);
+./js/firebase-config.js:import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+./js/firebase-config.js:import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+./js/firebase-config.js:import { getFirestore, collection, addDoc, getDocs, getDoc, doc, updateDoc, deleteDoc, query, where, orderBy } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+./js/firebase-config.js:import { getStorage, ref, uploadBytes, getDownloadURL } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js';
+./js/firebase-config.js:const firebaseConfig = {
+./js/firebase-config.js:  authDomain: "bstm-digital-nation.firebaseapp.com",
+./js/firebase-config.js:const app = initializeApp(firebaseConfig);
+./js/firebase-db.js:import { db } from './firebase-config.js';
+./js/firebase-db.js:import { collection, addDoc, getDocs, getDoc, doc, updateDoc, deleteDoc, query, where, orderBy, setDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+./js/firebase-storage.js:import { storage } from './firebase-config.js';
+./js/firebase-storage.js:import { ref, uploadBytes, getDownloadURL } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js';
+./js/pages/gov-dashboard.js:import './js/firebase-auth.js';
+./audit.sh:grep -R "firebase" . --include="*.js" --include="*.html"
+./tools/bstm-full-debug.sh:grep -R "firebase" js/ --exclude-dir=node_modules > /tmp/firebase.txt 2>/dev/null
+./tools/bstm-full-debug.sh:wc -l /tmp/firebase.txt | tee -a $REPORT
+./audit_logs/js_syntax.txt:(node:26924) Warning: Failed to load the ES module: /data/data/com.termux/files/home/bstm-marketplace-app/js/firebase-auth.js. Make sure to set "type": "module" in the nearest package.json file or use the .mjs extension.
+./audit_logs/js_syntax.txt:/data/data/com.termux/files/home/bstm-marketplace-app/js/firebase-auth.js:7
+./audit_logs/js_syntax.txt:import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+./audit_logs/js_syntax.txt:(node:26931) Warning: Failed to load the ES module: /data/data/com.termux/files/home/bstm-marketplace-app/js/firebase-config.js. Make sure to set "type": "module" in the nearest package.json file or use the .mjs extension.
+./audit_logs/js_syntax.txt:/data/data/com.termux/files/home/bstm-marketplace-app/js/firebase-config.js:7
+./audit_logs/js_syntax.txt:import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+./audit_logs/js_syntax.txt:(node:26938) Warning: Failed to load the ES module: /data/data/com.termux/files/home/bstm-marketplace-app/js/firebase-db.js. Make sure to set "type": "module" in the nearest package.json file or use the .mjs extension.
+./audit_logs/js_syntax.txt:/data/data/com.termux/files/home/bstm-marketplace-app/js/firebase-db.js:5
+./audit_logs/js_syntax.txt:import { db } from './firebase-config.js';
+./audit_logs/js_syntax.txt:(node:26945) Warning: Failed to load the ES module: /data/data/com.termux/files/home/bstm-marketplace-app/js/firebase-storage.js. Make sure to set "type": "module" in the nearest package.json file or use the .mjs extension.
+./audit_logs/js_syntax.txt:/data/data/com.termux/files/home/bstm-marketplace-app/js/firebase-storage.js:5
+./audit_logs/js_syntax.txt:import { storage } from './firebase-config.js';
+./audit_logs/js_syntax.txt:import './js/firebase-auth.js';
+./audit_logs/js_imports.txt:js/firebase-auth.js:7:import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+./audit_logs/js_imports.txt:js/firebase-auth.js:8:import { 
+./audit_logs/js_imports.txt:js/firebase-auth.js:17:import { 
+./audit_logs/js_imports.txt:js/firebase-config.js:7:import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+./audit_logs/js_imports.txt:js/firebase-config.js:8:import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+./audit_logs/js_imports.txt:js/firebase-config.js:9:import { getFirestore, collection, addDoc, getDocs, getDoc, doc, updateDoc, deleteDoc, query, where, orderBy } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+./audit_logs/js_imports.txt:js/firebase-config.js:10:import { getStorage, ref, uploadBytes, getDownloadURL } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js';
+./audit_logs/js_imports.txt:js/firebase-db.js:5:import { db } from './firebase-config.js';
+./audit_logs/js_imports.txt:js/firebase-db.js:6:import { collection, addDoc, getDocs, getDoc, doc, updateDoc, deleteDoc, query, where, orderBy, setDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+./audit_logs/js_imports.txt:js/firebase-storage.js:5:import { storage } from './firebase-config.js';
+./audit_logs/js_imports.txt:js/firebase-storage.js:6:import { ref, uploadBytes, getDownloadURL } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js';
+./audit_logs/js_imports.txt:js/pages/gov-dashboard.js:1:import './js/firebase-auth.js';
+./bstm-audit-20260619-2155.txt:      [0;33m⚡ firebase-admin.js[0m
+./bstm-audit-20260619-2155.txt:      [0;33m⚡ firebase-auth.js[0m
+./bstm-audit-20260619-2155.txt:      [0;33m⚡ firebase-config.js[0m
+./bstm-audit-20260619-2155.txt:      [0;33m⚡ firebase-db.js[0m
+./bstm-audit-20260619-2155.txt:      [0;33m⚡ firebase-storage.js[0m
+./bstm-audit-20260619-2155.txt:  [0;33m⚡ js/firebase-auth.js[0m [2m(303 lines)[0m
+./bstm-audit-20260619-2155.txt:  [0;33m⚡ js/firebase-config.js[0m [2m(29 lines)[0m
+./bstm-audit-20260619-2155.txt:  [0;31mfirebase-auth.js                   [0m  303 ln  [2mFirebase modular auth — LEGACY[0m
+./bstm-audit-20260619-2155.txt:  [0;31mfirebase-config.js                 [0m   29 ln  [2mFirebase config — LEGACY[0m
+./bstm-audit-20260619-2155.txt:  [0;31mfirebase-db.js                     [0m  135 ln  [2mFirestore DB ops — LEGACY[0m
+./bstm-audit-20260619-2155.txt:  [0;31mfirebase-storage.js                [0m   49 ln  [2mFirebase Storage — LEGACY[0m
+./bstm-audit-20260619-2155.txt:  [0;33m⚠️  Exposed credential in ./backend/firebase-admin.js line 13[0m
+./bstm-audit-20260619-2155.txt:  [0;33m⚠️  Exposed credential in ./js/firebase-auth.js line 26[0m
+./bstm-audit-20260619-2155.txt:  [0;33m⚠️  Exposed credential in ./js/firebase-auth.js line 27[0m
+./bstm-audit-20260619-2155.txt:  [0;33m⚠️  Exposed credential in ./js/firebase-config.js line 15[0m
+./bstm-audit-20260619-2155.txt:  [2m   js/firebase-auth.js (legacy — keep but don't load in HTML)[0m
+./bstm-audit-20260619-2155.txt:  [2m   js/firebase-config.js (legacy — keep but don't load in HTML)[0m
+./bstm-audit-20260619-2155.txt:  [2m   js/firebase-db.js (legacy — keep but don't load in HTML)[0m
+./bstm-audit-20260619-2155.txt:  [2m   js/firebase-storage.js (legacy — keep but don't load in HTML)[0m
+./bstm-audit-20260619-2155.txt:  [0;33m  303 lines — ./js/firebase-auth.js[0m
+./bstm-debug-20260619-2159.txt:(node:2335) Warning: Failed to load the ES module: /data/data/com.termux/files/home/bstm-marketplace-app/js/firebase-auth.js. Make sure to set "type": "module" in the nearest package.json file or use the .mjs extension.
+./bstm-debug-20260619-2159.txt:/data/data/com.termux/files/home/bstm-marketplace-app/js/firebase-auth.js:7
+./bstm-debug-20260619-2159.txt:import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+./bstm-debug-20260619-2159.txt:(node:2347) Warning: Failed to load the ES module: /data/data/com.termux/files/home/bstm-marketplace-app/js/firebase-config.js. Make sure to set "type": "module" in the nearest package.json file or use the .mjs extension.
+./bstm-debug-20260619-2159.txt:/data/data/com.termux/files/home/bstm-marketplace-app/js/firebase-config.js:7
+./bstm-debug-20260619-2159.txt:import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+./bstm-debug-20260619-2159.txt:(node:2355) Warning: Failed to load the ES module: /data/data/com.termux/files/home/bstm-marketplace-app/js/firebase-db.js. Make sure to set "type": "module" in the nearest package.json file or use the .mjs extension.
+./bstm-debug-20260619-2159.txt:/data/data/com.termux/files/home/bstm-marketplace-app/js/firebase-db.js:5
+./bstm-debug-20260619-2159.txt:import { db } from './firebase-config.js';
+./bstm-debug-20260619-2159.txt:(node:2379) Warning: Failed to load the ES module: /data/data/com.termux/files/home/bstm-marketplace-app/js/firebase-storage.js. Make sure to set "type": "module" in the nearest package.json file or use the .mjs extension.
+./bstm-debug-20260619-2159.txt:/data/data/com.termux/files/home/bstm-marketplace-app/js/firebase-storage.js:5
+./bstm-debug-20260619-2159.txt:import { storage } from './firebase-config.js';
+./bstm-debug-20260619-2159.txt:import './js/firebase-auth.js';
+./_all_backups/backup_refactor/gov-dashboard.html:    import './js/firebase-auth.js';
+./_all_backups/_legacy/buyer-dashboard.html.backup:    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+./_all_backups/_legacy/buyer-dashboard.html.backup:    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+./_all_backups/_legacy/buyer-dashboard.html.backup:    const firebaseConfig = {
+./_all_backups/_legacy/buyer-dashboard.html.backup:      authDomain: "gen-lang-client-0007945213.firebaseapp.com",
+./_all_backups/_legacy/buyer-dashboard.html.backup:    firebase.initializeApp(firebaseConfig);
+./_all_backups/_legacy/buyer-dashboard.html.backup:    const auth = firebase.auth();
+./_all_backups/_legacy/buyer-dashboard.html.broken:    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+./_all_backups/_legacy/buyer-dashboard.html.broken:    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+./_all_backups/_legacy/buyer-dashboard.html.broken:    const firebaseConfig = {
+./_all_backups/_legacy/buyer-dashboard.html.broken:      authDomain: "gen-lang-client-0007945213.firebaseapp.com",
+./_all_backups/_legacy/buyer-dashboard.html.broken:    firebase.initializeApp(firebaseConfig);
+./_all_backups/_legacy/buyer-dashboard.html.broken:    const auth = firebase.auth();

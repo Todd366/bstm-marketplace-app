@@ -1,0 +1,83 @@
+./404.html:70:<script>if(!localStorage.getItem("bstm_token")){localStorage.setItem("bstm_token","temp");}</script>
+./404.html:71:<script>document.querySelector(".menu-btn")?.addEventListener("click", () => { document.querySelector(".sidebar")?.classList.toggle("open"); });</script>
+./404.html:77:<script>
+./admin-dashboard.html:341:<script>if(!localStorage.getItem("bstm_token")){localStorage.setItem("bstm_token","temp");}</script>
+./admin-dashboard.html:342:<script>
+./admin-dashboard.html:350:<script>document.querySelector(".menu-btn")?.addEventListener("click", () => { document.querySelector(".sidebar")?.classList.toggle("open"); });</script>
+./admin-dashboard.html:356:<script>
+./analytics.html:338:<script>if(!localStorage.getItem("bstm_token")){localStorage.setItem("bstm_token","temp");}</script>
+./analytics.html:339:<script>document.querySelector(".menu-btn")?.addEventListener("click", () => { document.querySelector(".sidebar")?.classList.toggle("open"); });</script>
+./analytics.html:345:<script>
+./buyer-dashboard.html:107:<script>
+./cablink.html:303:    <script>
+./cablink.html:336:<script>if(!localStorage.getItem("bstm_token")){localStorage.setItem("bstm_token","temp");}</script>
+./cablink.html:337:<script>document.querySelector(".menu-btn")?.addEventListener("click", () => { document.querySelector(".sidebar")?.classList.toggle("open"); });</script>
+./cablink.html:342:<script>
+./checkout.html:262:    <script>
+./checkout.html:307:<script>if(!localStorage.getItem("bstm_token")){localStorage.setItem("bstm_token","temp");}</script>
+./checkout.html:308:<script>document.querySelector(".menu-btn")?.addEventListener("click", () => { document.querySelector(".sidebar")?.classList.toggle("open"); });</script>
+./checkout.html:314:<script>
+./ecosystem-hub.html:275:    <script>
+./ecosystem-hub.html:282:<script>if(!localStorage.getItem("bstm_token")){localStorage.setItem("bstm_token","temp");}</script>
+./ecosystem-hub.html:283:<script>document.querySelector(".menu-btn")?.addEventListener("click", () => { document.querySelector(".sidebar")?.classList.toggle("open"); });</script>
+./ecosystem-hub.html:289:<script>
+./frontend/public/index.html:660:    <script>
+./frontend/public/index.html:772:<script>
+./gov-dashboard.html:64:<script>if(!localStorage.getItem("bstm_token")){localStorage.setItem("bstm_token","temp");}</script>
+./gov-dashboard.html:65:<script>
+./gov-dashboard.html:73:<script>document.querySelector(".menu-btn")?.addEventListener("click", () => { document.querySelector(".sidebar")?.classList.toggle("open"); });</script>
+./gov-dashboard.html:79:<script>
+./help.html:307:    <script>
+./help.html:317:<script>if(!localStorage.getItem("bstm_token")){localStorage.setItem("bstm_token","temp");}</script>
+./help.html:318:<script>document.querySelector(".menu-btn")?.addEventListener("click", () => { document.querySelector(".sidebar")?.classList.toggle("open"); });</script>
+./help.html:324:<script>
+./kyc-verification.html:210:    <script>
+./kyc-verification.html:272:<script>if(!localStorage.getItem("bstm_token")){localStorage.setItem("bstm_token","temp");}</script>
+./kyc-verification.html:273:<script>document.querySelector(".menu-btn")?.addEventListener("click", () => { document.querySelector(".sidebar")?.classList.toggle("open"); });</script>
+./kyc-verification.html:278:<script>
+./login.html:65:<script>
+./marketplace.html:86:<script>
+./messages.html:257:<script>if(!localStorage.getItem("bstm_token")){localStorage.setItem("bstm_token","temp");}</script>
+./messages.html:258:<script>document.querySelector(".menu-btn")?.addEventListener("click", () => { document.querySelector(".sidebar")?.classList.toggle("open"); });</script>
+./messages.html:264:<script>
+./monitoring-dashboard.html:89:    <script>
+./monitoring-dashboard.html:100:<script>if(!localStorage.getItem("bstm_token")){localStorage.setItem("bstm_token","temp");}</script>
+./monitoring-dashboard.html:101:<script>document.querySelector(".menu-btn")?.addEventListener("click", () => { document.querySelector(".sidebar")?.classList.toggle("open"); });</script>
+./monitoring-dashboard.html:107:<script>
+./nav-backup.html:42:<script>
+./notifications-all.html:59:    <script>
+./notifications-all.html:210:<script>if(!localStorage.getItem("bstm_token")){localStorage.setItem("bstm_token","temp");}</script>
+./notifications-all.html:211:<script>document.querySelector(".menu-btn")?.addEventListener("click", () => { document.querySelector(".sidebar")?.classList.toggle("open"); });</script>
+./notifications-all.html:216:<script>
+./order-tracking.html:213:<script>if(!localStorage.getItem("bstm_token")){localStorage.setItem("bstm_token","temp");}</script>
+./order-tracking.html:214:<script>document.querySelector(".menu-btn")?.addEventListener("click", () => { document.querySelector(".sidebar")?.classList.toggle("open"); });</script>
+./order-tracking.html:220:<script>
+./product-detail.html:263:    <script>
+./product-detail.html:287:<script>if(!localStorage.getItem("bstm_token")){localStorage.setItem("bstm_token","temp");}</script>
+./product-detail.html:288:<script>document.querySelector(".menu-btn")?.addEventListener("click", () => { document.querySelector(".sidebar")?.classList.toggle("open"); });</script>
+./product-detail.html:296:<script>
+./room22-farm.html:347:    <script>
+./room22-farm.html:378:<script>if(!localStorage.getItem("bstm_token")){localStorage.setItem("bstm_token","temp");}</script>
+./room22-farm.html:379:<script>document.querySelector(".menu-btn")?.addEventListener("click", () => { document.querySelector(".sidebar")?.classList.toggle("open"); });</script>
+./room22-farm.html:384:<script>
+./seller-dashboard.html:86:<script>
+./settings.html:325:<script>if(!localStorage.getItem("bstm_token")){localStorage.setItem("bstm_token","temp");}</script>
+./settings.html:326:<script>
+./settings.html:334:<script>document.querySelector(".menu-btn")?.addEventListener("click", () => { document.querySelector(".sidebar")?.classList.toggle("open"); });</script>
+./settings.html:341:<script>
+./terms.html:263:    <script>
+./terms.html:282:<script>if(!localStorage.getItem("bstm_token")){localStorage.setItem("bstm_token","temp");}</script>
+./terms.html:283:<script>document.querySelector(".menu-btn")?.addEventListener("click", () => { document.querySelector(".sidebar")?.classList.toggle("open"); });</script>
+./terms.html:289:<script>
+./thb-wallet.html:469:    <script>
+./thb-wallet.html:671:<script>if(!localStorage.getItem("bstm_token")){localStorage.setItem("bstm_token","temp");}</script>
+./thb-wallet.html:672:<script>
+./thb-wallet.html:680:<script>document.querySelector(".menu-btn")?.addEventListener("click", () => { document.querySelector(".sidebar")?.classList.toggle("open"); });</script>
+./thb-wallet.html:686:<script>
+./upload-product.html:244:    <script>
+./upload-product.html:338:<script>if(!localStorage.getItem("bstm_token")){localStorage.setItem("bstm_token","temp");}</script>
+./upload-product.html:339:<script>document.querySelector(".menu-btn")?.addEventListener("click", () => { document.querySelector(".sidebar")?.classList.toggle("open"); });</script>
+./upload-product.html:345:<script>
+./verify.html:62:<script>
+./wishlist.html:36:    <script>
+./wishlist.html:65:<script>

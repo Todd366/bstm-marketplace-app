@@ -1,0 +1,34 @@
+./.git/hooks/sendemail-validate.sample:22:# Replace the TODO placeholders with appropriate checks according to your
+./.git/hooks/sendemail-validate.sample:27:	# TODO: Replace with appropriate checks (e.g. spell checking).
+./.git/hooks/sendemail-validate.sample:35:	# TODO: Replace with appropriate checks for this patch
+./.git/hooks/sendemail-validate.sample:41:	# TODO: Replace with appropriate checks for the whole series
+./frontend/public/index.html:500:                <!-- TODO: Load more products dynamically from Supabase -->
+./js/ab-testing.js:45:        // TODO: Send to analytics
+./js/advanced-search.js:43:        // TODO: Replace with Supabase query
+./js/ai-recommendations.js:46:            // TODO: Get product category from database
+./js/ai-recommendations.js:57:        // TODO: Query Supabase for products in top categories
+./js/ai-recommendations.js:77:        // TODO: Query Supabase for most viewed products in last 7 days
+./js/ai-recommendations.js:83:        // TODO: Implement collaborative filtering with Supabase
+./js/ai-recommendations.js:92:        // TODO: Find products that complement current cart
+./js/app.js:62:  // TODO: Replace with Supabase query
+./js/bstm-auth.js:35:      // TODO: Replace with real Supabase auth
+./js/bstm-auth.js:62:      // TODO: Replace with real Supabase registration
+./js/location-services.js:75:        // TODO: Query Supabase for products near user
+./js/paystack.js:56:  // TODO: Save order to Supabase
+./js/paystack.js:85:  // Get user email (TODO: from auth)
+./js/paystack.js:99:    // TODO: Call backend to verify with Paystack secret key
+./js/referral-system.js:49:    // TODO: Replace with Supabase query
+./js/referral-system.js:159:    // TODO: Implement Supabase query for global leaderboard
+./js/thb-display.js:68:    // TODO: Update Supabase
+./js/thb-display.js:105:    // TODO: Update Supabase
+./kyc-verification.html:245:        // TODO: Upload documents to Supabase Storage
+./kyc-verification.html:246:        // TODO: Submit KYC application to database
+./sw.js:84:  // TODO: Implement Supabase sync for offline orders
+./thb-wallet.html:502:        // TODO: Load from Supabase
+./upload-product.html:333:            // TODO: Send to Supabase
+./audit.sh:36:echo "8. TODO/FIXME"
+./audit.sh:37:grep -RInE "TODO|FIXME" .
+./_legacy/bstm-auth.js.bak:32:      // TODO: Replace with real Supabase auth
+./_legacy/bstm-auth.js.bak:59:      // TODO: Replace with real Supabase registration
+./_legacy/referral-system.js.bak:48:    // TODO: Replace with Supabase query
+./_legacy/referral-system.js.bak:158:    // TODO: Implement Supabase query for global leaderboard

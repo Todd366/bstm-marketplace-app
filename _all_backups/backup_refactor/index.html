@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BSTM Digital Mall — Botswana</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap");
+    * { font-family:"Inter",sans-serif; box-sizing:border-box; }
+    @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+    @keyframes shimmer { 0%{background-position:-200% 0} 100%{background-position:200% 0} }
+    .float { animation:float 5s ease-in-out infinite; }
+    .pulse { animation:pulse 2s infinite; }
+    .shimmer { background:linear-gradient(90deg,#C4B5FD,#fff,#C4B5FD); background-size:200%; -webkit-background-clip:text; -webkit-text-fill-color:transparent; animation:shimmer 3s linear infinite; }
+    .room-card { transition:all 0.35s cubic-bezier(0.34,1.56,0.64,1); }
+    .room-card:hover { transform:translateY(-8px); box-shadow:0 20px 40px rgba(124,58,237,0.15); }
+  </style>
+</head>
+<body style="background:#F8F7FF;">
+<div id="bstm-nav"></div>
+
+<!-- HERO -->
+<div style="background:linear-gradient(135deg,#7C3AED 0%,#4F46E5 100%);position:relative;overflow:hidden;padding:80px 24px 120px;text-align:center;">
+  <div style="position:absolute;inset:0;opacity:0.08;"><svg width="100%" height="100%"><defs><pattern id="g" width="50" height="50" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1.5" fill="#fff"/></pattern></defs><rect width="100%" height="100%" fill="url(#g)"/></svg></div>
+  <div style="position:absolute;top:-60px;right:5%;width:300px;height:300px;background:radial-gradient(circle,rgba(255,255,255,0.1),transparent 70%);border-radius:50%;"></div>
+  <div style="position:relative;max-width:700px;margin:0 auto;">
+    <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.25);padding:8px 20px;border-radius:50px;margin-bottom:24px;">
+      <span style="width:8px;height:8px;background:#4ADE80;border-radius:50%;display:inline-block;" class="pulse"></span>
+      <span style="color:#fff;font-size:12px;font-weight:700;letter-spacing:2px;">BSTM DIGITAL MALL • BOTSWANA 🇧🇼</span>
+    </div>
+    <h1 style="font-size:clamp(40px,6vw,68px);font-weight:900;color:#fff;line-height:1.1;letter-spacing:-0.03em;margin-bottom:16px;">
+      Every Business<br><span class="shimmer">Has a Room</span>
+    </h1>
+    <p style="color:rgba(255,255,255,0.75);font-size:18px;line-height:1.7;margin-bottom:36px;max-width:500px;margin-left:auto;margin-right:auto;">
+      One digital mall. Every Botswana business. Shop local, earn THB rewards, support your community.
+    </p>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+      <a href="marketplace.html" style="background:#fff;color:#7C3AED;padding:16px 36px;border-radius:16px;font-weight:800;font-size:16px;text-decoration:none;box-shadow:0 8px 24px rgba(0,0,0,0.15);transition:all 0.2s;">Browse Mall →</a>
+      <a href="seller-dashboard.html" style="background:rgba(255,255,255,0.15);color:#fff;border:1.5px solid rgba(255,255,255,0.4);padding:16px 36px;border-radius:16px;font-weight:700;font-size:16px;text-decoration:none;transition:all 0.2s;">Open Your Room</a>
+    </div>
+  </div>
+</div>
+
+<!-- STATS -->
+<div style="background:#fff;border-bottom:1px solid #EDE9FE;padding:20px;">
+  <div style="max-width:900px;margin:0 auto;display:flex;flex-wrap:wrap;justify-content:center;gap:32px;text-align:center;">
+    <div><div style="font-size:28px;font-weight:900;color:#7C3AED;">63</div><div style="font-size:11px;color:#9CA3AF;font-weight:600;">Planned Rooms</div></div>
+    <div><div style="font-size:28px;font-weight:900;color:#059669;">1</div><div style="font-size:11px;color:#9CA3AF;font-weight:600;">Open Now</div></div>
+    <div><div style="font-size:28px;font-weight:900;color:#D97706;">THB</div><div style="font-size:11px;color:#9CA3AF;font-weight:600;">Earn Rewards</div></div>
+    <div><div style="font-size:28px;font-weight:900;color:#1D4ED8;">🇧🇼</div><div style="font-size:11px;color:#9CA3AF;font-weight:600;">Built in Botswana</div></div>
+  </div>
+</div>
+
+<!-- ONLY OPEN ROOM -->
+<div style="max-width:800px;margin:60px auto;padding:0 24px;text-align:center;">
+  <div style="display:inline-block;background:#EDE9FE;color:#7C3AED;padding:6px 16px;border-radius:20px;font-size:12px;font-weight:700;letter-spacing:1px;margin-bottom:16px;">NOW OPEN</div>
+  <h2 style="font-size:32px;font-weight:900;color:#1E1B4B;margin-bottom:8px;">Room 22 — The Farm</h2>
+  <p style="color:#6B7280;font-size:16px;margin-bottom:32px;">Fresh produce, organic food and local farm goods direct from Botswana farmers.</p>
+  <div class="room-card" style="background:#fff;border-radius:24px;overflow:hidden;border:2px solid #6EE7B7;box-shadow:0 4px 24px rgba(5,150,105,0.1);cursor:pointer;max-width:400px;margin:0 auto;" onclick="window.location.href='room22-farm.html'">
+    <div style="height:160px;background:linear-gradient(135deg,#059669,#34D399);display:flex;align-items:center;justify-content:center;font-size:72px;">🌾</div>
+    <div style="padding:24px;text-align:left;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <span style="font-size:11px;font-weight:700;color:#059669;letter-spacing:1px;">ROOM 22 • FOOD & FARM</span>
+        <span style="background:#DCFCE7;color:#059669;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700;">● OPEN</span>
+      </div>
+      <h3 style="font-size:20px;font-weight:900;color:#1E1B4B;margin-bottom:6px;">The Farm</h3>
+      <p style="color:#9CA3AF;font-size:13px;line-height:1.6;margin-bottom:16px;">Fresh vegetables, organic honey, moringa, herbs and seasonal produce.</p>
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <span style="background:#FEF9C3;color:#92400E;padding:4px 10px;border-radius:8px;font-size:11px;font-weight:700;">⚡ Earn THB</span>
+        <span style="color:#7C3AED;font-weight:800;font-size:14px;">Enter Room →</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- COMING SOON ROOMS PREVIEW -->
+<div style="background:#1E1B4B;padding:60px 24px;text-align:center;">
+  <h2 style="color:#fff;font-size:32px;font-weight:900;margin-bottom:8px;">63 Rooms. Building Now.</h2>
+  <p style="color:#A78BFA;font-size:16px;margin-bottom:40px;">Each room is a business. Every business has a place.</p>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;max-width:800px;margin:0 auto 40px;">
+    <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:16px;text-align:center;">
+      <div style="font-size:28px;margin-bottom:6px;">📱</div>
+      <div style="color:#C4B5FD;font-size:12px;font-weight:600;">Room 9</div>
+      <div style="color:#6B7280;font-size:11px;">TechHub</div>
+    </div>
+    <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:16px;text-align:center;">
+      <div style="font-size:28px;margin-bottom:6px;">👗</div>
+      <div style="color:#C4B5FD;font-size:12px;font-weight:600;">Room 12</div>
+      <div style="color:#6B7280;font-size:11px;">Fashion</div>
+    </div>
+    <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:16px;text-align:center;">
+      <div style="font-size:28px;margin-bottom:6px;">🎨</div>
+      <div style="color:#C4B5FD;font-size:12px;font-weight:600;">Room 18</div>
+      <div style="color:#6B7280;font-size:11px;">Arts Studio</div>
+    </div>
+    <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:16px;text-align:center;">
+      <div style="font-size:28px;margin-bottom:6px;">☀️</div>
+      <div style="color:#C4B5FD;font-size:12px;font-weight:600;">Room 15</div>
+      <div style="color:#6B7280;font-size:11px;">Solar Tech</div>
+    </div>
+    <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:16px;text-align:center;">
+      <div style="font-size:28px;margin-bottom:6px;">💊</div>
+      <div style="color:#C4B5FD;font-size:12px;font-weight:600;">Room 33</div>
+      <div style="color:#6B7280;font-size:11px;">Pharmacy</div>
+    </div>
+    <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:16px;text-align:center;">
+      <div style="font-size:28px;margin-bottom:6px;">📚</div>
+      <div style="color:#C4B5FD;font-size:12px;font-weight:600;">Room 60</div>
+      <div style="color:#6B7280;font-size:11px;">EduHub</div>
+    </div>
+  </div>
+  <a href="marketplace.html" style="display:inline-block;background:linear-gradient(135deg,#7C3AED,#4F46E5);color:#fff;padding:16px 36px;border-radius:16px;font-weight:800;font-size:15px;text-decoration:none;box-shadow:0 8px 24px rgba(124,58,237,0.4);">See All 63 Rooms →</a>
+</div>
+
+<!-- OPEN YOUR ROOM CTA -->
+<div style="background:#fff;padding:60px 24px;text-align:center;">
+  <div style="font-size:48px;margin-bottom:12px;" class="float">🏪</div>
+  <h2 style="font-size:28px;font-weight:900;color:#1E1B4B;margin-bottom:8px;">Got a Business in Botswana?</h2>
+  <p style="color:#6B7280;font-size:15px;max-width:480px;margin:0 auto 24px;">Open your room in the BSTM Digital Mall. Reach thousands of local shoppers and earn THB on every sale.</p>
+  <a href="seller-dashboard.html" style="display:inline-block;background:linear-gradient(135deg,#7C3AED,#4F46E5);color:#fff;padding:14px 32px;border-radius:14px;font-weight:800;font-size:15px;text-decoration:none;box-shadow:0 6px 20px rgba(124,58,237,0.35);">Open My Room →</a>
+</div>
+
+<div id="bstm-footer"></div>
+<script src="components/smart-loader.js"></script>
+<script type="module" src="js/app.js"></script>
+</body>
+</html>
+
+<script type="module" src="js/app.js"></script>
+</body>
+</html>

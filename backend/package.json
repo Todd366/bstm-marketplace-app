@@ -1,0 +1,25 @@
+{
+  "name": "bstm-auth-server",
+  "version": "2.0.0",
+  "description": "BSTM Passwordless Authentication Server",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "keywords": ["auth", "passwordless", "magic-link"],
+  "author": "BSTM",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.21.2",
+    "cors": "^2.8.5",
+    "jsonwebtoken": "^9.0.2",
+    "express-rate-limit": "^7.5.0",
+    "nodemailer": "^6.9.16",
+    "firebase-admin": "^13.0.1",
+    "dotenv": "^16.4.7"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  }
+}

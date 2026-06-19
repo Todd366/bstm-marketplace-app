@@ -1,0 +1,30 @@
+{
+  "name": "bstm-digital-nation",
+  "version": "2.0.0",
+  "description": "Africa's First Digital Nation",
+  "scripts": {
+    "test": "echo \"Tests coming soon\"",
+    "lint": "htmlhint **/*.html",
+    "deploy": "gh-pages -d ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/todd366/bstm-marketplace-app.git"
+  },
+  "author": "Thobo Atlang Mosanako",
+  "license": "MIT",
+  "main": "fix-nav-loader.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "keywords": [],
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/todd366/bstm-marketplace-app/issues"
+  },
+  "homepage": "https://github.com/todd366/bstm-marketplace-app#readme",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.108.2",
+    "jsdom": "^29.1.1"
+  }
+}

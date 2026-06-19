@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BSTM Marketplace</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+        * { font-family: 'Inter', sans-serif; }
+        .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+    </style>
+</head>
+<body class="bg-gray-50">
+
+    <div id="bstm-nav"></div>
+
+    <!-- Hero -->
+    <section class="gradient-bg py-24 text-white">
+        <div class="max-w-7xl mx-auto px-6 text-center">
+            <h1 class="text-6xl font-bold mb-6">BSTM Marketplace</h1>
+            <p class="text-xl text-purple-100 mb-10 max-w-xl mx-auto">Shop from verified local sellers, earn THB rewards, and support Botswana businesses.</p>
+            <a href="marketplace.html" class="inline-block bg-white text-purple-700 px-12 py-5 rounded-2xl font-bold text-lg">Start Shopping</a>
+        </div>
+    </section>
+
+    <!-- Categories -->
+    <section class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-6">
+            <h2 class="text-3xl font-bold text-center mb-12">Explore Categories</h2>
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+                <div onclick="window.location.href='room22-farm.html'" class="bg-white border-2 border-green-500 rounded-3xl shadow p-6 text-center cursor-pointer hover:scale-105 transition">
+                    <div class="text-6xl mb-4">🌿</div>
+                    <h3 class="font-bold">Room 22 Farm</h3>
+                    <p class="text-gray-500">Fresh Produce</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Other Shops in BSTM -->
+    <section class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex justify-between items-end mb-10">
+                <h2 class="text-3xl font-bold">Other Shops in BSTM</h2>
+                <a href="marketplace.html" class="text-purple-600 font-medium hover:underline">View all shops →</a>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <div onclick="window.location.href='marketplace.html'" class="bg-white border border-gray-200 rounded-3xl p-6 cursor-pointer hover:shadow-xl transition">
+                    <div class="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center text-4xl mb-4">🛍️</div>
+                    <h3 class="font-bold">General Store</h3>
+                    <p class="text-sm text-gray-500">Room 12 • 234 items</p>
+                </div>
+                <div onclick="window.location.href='marketplace.html'" class="bg-white border border-gray-200 rounded-3xl p-6 cursor-pointer hover:shadow-xl transition">
+                    <div class="w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center text-4xl mb-4">📱</div>
+                    <h3 class="font-bold">Tech Corner</h3>
+                    <p class="text-sm text-gray-500">Room 27 • 89 items</p>
+                </div>
+                <div onclick="window.location.href='marketplace.html'" class="bg-white border border-gray-200 rounded-3xl p-6 cursor-pointer hover:shadow-xl transition">
+                    <div class="w-16 h-16 bg-amber-100 rounded-2xl flex items-center justify-center text-4xl mb-4">👟</div>
+                    <h3 class="font-bold">Fashion Hub</h3>
+                    <p class="text-sm text-gray-500">Room 9 • 156 items</p>
+                </div>
+                <div onclick="window.location.href='marketplace.html'" class="bg-white border border-gray-200 rounded-3xl p-6 cursor-pointer hover:shadow-xl transition">
+                    <div class="w-16 h-16 bg-rose-100 rounded-2xl flex items-center justify-center text-4xl mb-4">🍯</div>
+                    <h3 class="font-bold">Local Crafts</h3>
+                    <p class="text-sm text-gray-500">Room 41 • 67 items</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div id="bstm-footer"></div>
+
+    <script>
+            document.getElementById("bstm-nav").innerHTML = html;
+        });
+        fetch('components/universal-footer.html').then(r => r.text()).then(html => {
+            document.getElementById("bstm-footer").innerHTML = html;
+        });
+
+        setTimeout(() => {
+            const btn = document.getElementById('menu-btn');
+            const menu = document.getElementById('mobile-menu');
+            if (btn && menu) btn.addEventListener('click', () => menu.classList.toggle('hidden'));
+        }, 800);
+    </script>
+</body>
+</html>
+<script>
+    // Improved hamburger menu for dynamic nav
+    setTimeout(() => {
+        const menuBtn = document.getElementById('menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        if (menuBtn && mobileMenu) {
+            menuBtn.addEventListener('click', (e) => {
+                e.stopImmediatePropagation();
+                mobileMenu.classList.toggle('hidden');
+            });
+        }
+    }, 1200);
+</script>

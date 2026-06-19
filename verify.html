@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verifying — BSTM</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap");
+    * { font-family:"Inter",sans-serif; }
+    @keyframes spin { to { transform:rotate(360deg); } }
+    @keyframes pop { from{opacity:0;transform:scale(0.8)} to{opacity:1;transform:scale(1)} }
+    .spinner { animation:spin 0.8s linear infinite; }
+    .pop { animation:pop 0.4s cubic-bezier(0.34,1.56,0.64,1) both; }
+  </style>
+</head>
+<body style="background:linear-gradient(135deg,#7C3AED 0%,#4F46E5 100%);min-height:100vh;display:flex;flex-direction:column;">
+<div id="bstm-nav"></div>
+<div style="flex:1;display:flex;align-items:center;justify-content:center;padding:40px 20px;">
+  <div style="background:#fff;border-radius:28px;box-shadow:0 24px 80px rgba(0,0,0,0.2);max-width:420px;width:100%;padding:48px 32px;text-align:center;">
+    <div id="state-loading">
+      <div style="width:72px;height:72px;border:4px solid #EDE9FE;border-top-color:#7C3AED;border-radius:50%;margin:0 auto 24px;" class="spinner"></div>
+      <h2 style="font-size:22px;font-weight:900;color:#1E1B4B;margin:0 0 8px;">Verifying your link...</h2>
+      <p style="color:#9CA3AF;font-size:14px;margin:0;">Please wait a moment</p>
+    </div>
+    <div id="state-success" style="display:none;" class="pop">
+      <div style="width:80px;height:80px;background:linear-gradient(135deg,#059669,#34D399);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 24px;font-size:36px;color:#fff;box-shadow:0 8px 24px rgba(5,150,105,0.3);">✓</div>
+      <h2 style="font-size:26px;font-weight:900;color:#1E1B4B;margin:0 0 8px;">You're in!</h2>
+      <p id="welcome-msg" style="color:#6B7280;font-size:15px;margin:0 0 28px;"></p>
+      <p style="color:#C4B5FD;font-size:13px;margin:0 0 16px;">Redirecting in <span id="countdown">3</span>s...</p>
+      <a href="buyer-dashboard.html" style="display:block;background:linear-gradient(135deg,#7C3AED,#4F46E5);color:#fff;padding:14px;border-radius:14px;font-weight:800;font-size:15px;text-decoration:none;">Go to Dashboard →</a>
+    </div>
+    <div id="state-error" style="display:none;" class="pop">
+      <div style="width:80px;height:80px;background:#FEE2E2;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 24px;font-size:36px;">✕</div>
+      <h2 style="font-size:22px;font-weight:900;color:#1E1B4B;margin:0 0 8px;">Link Expired</h2>
+      <p style="color:#9CA3AF;font-size:14px;margin:0 0 28px;">This magic link has expired. Links are valid for 15 minutes.</p>
+      <a href="login.html" style="display:block;background:linear-gradient(135deg,#7C3AED,#4F46E5);color:#fff;padding:14px;border-radius:14px;font-weight:800;font-size:15px;text-decoration:none;margin-bottom:12px;">Get a New Link</a>
+      <a href="index.html" style="color:#9CA3AF;font-size:13px;text-decoration:none;"><i class="fas fa-arrow-left mr-1"></i> Back to Mall</a>
+    </div>
+  </div>
+</div>
+<div id="bstm-footer"></div>
+<script src="components/smart-loader.js"></script>
+<script type="module" src="js/pages/verify.js"></script>
+</body>
+</html>

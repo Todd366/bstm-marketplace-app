@@ -1,0 +1,54 @@
+./admin-dashboard.html:  const token = localStorage.getItem("bstm_token");
+./buyer-dashboard.html:  var token = localStorage.getItem("bstm_token");
+./gov-dashboard.html:  const token = localStorage.getItem("bstm_token");
+./seller-dashboard.html:  var token = localStorage.getItem("bstm_token");
+./settings.html:  const token = localStorage.getItem("bstm_token");
+./thb-wallet.html:  const token = localStorage.getItem("bstm_token");
+./audit_inline_scripts.txt:./404.html:70:<script>if(!localStorage.getItem("bstm_token")){localStorage.setItem("bstm_token","temp");}</script>
+./audit_inline_scripts.txt:./admin-dashboard.html:341:<script>if(!localStorage.getItem("bstm_token")){localStorage.setItem("bstm_token","temp");}</script>
+./audit_inline_scripts.txt:./analytics.html:338:<script>if(!localStorage.getItem("bstm_token")){localStorage.setItem("bstm_token","temp");}</script>
+./audit_inline_scripts.txt:./cablink.html:336:<script>if(!localStorage.getItem("bstm_token")){localStorage.setItem("bstm_token","temp");}</script>
+./audit_inline_scripts.txt:./checkout.html:307:<script>if(!localStorage.getItem("bstm_token")){localStorage.setItem("bstm_token","temp");}</script>
+./audit_inline_scripts.txt:./ecosystem-hub.html:282:<script>if(!localStorage.getItem("bstm_token")){localStorage.setItem("bstm_token","temp");}</script>
+./audit_inline_scripts.txt:./gov-dashboard.html:64:<script>if(!localStorage.getItem("bstm_token")){localStorage.setItem("bstm_token","temp");}</script>
+./audit_inline_scripts.txt:./help.html:317:<script>if(!localStorage.getItem("bstm_token")){localStorage.setItem("bstm_token","temp");}</script>
+./audit_inline_scripts.txt:./kyc-verification.html:272:<script>if(!localStorage.getItem("bstm_token")){localStorage.setItem("bstm_token","temp");}</script>
+./audit_inline_scripts.txt:./messages.html:257:<script>if(!localStorage.getItem("bstm_token")){localStorage.setItem("bstm_token","temp");}</script>
+./audit_inline_scripts.txt:./monitoring-dashboard.html:100:<script>if(!localStorage.getItem("bstm_token")){localStorage.setItem("bstm_token","temp");}</script>
+./audit_inline_scripts.txt:./notifications-all.html:210:<script>if(!localStorage.getItem("bstm_token")){localStorage.setItem("bstm_token","temp");}</script>
+./audit_inline_scripts.txt:./order-tracking.html:213:<script>if(!localStorage.getItem("bstm_token")){localStorage.setItem("bstm_token","temp");}</script>
+./audit_inline_scripts.txt:./product-detail.html:287:<script>if(!localStorage.getItem("bstm_token")){localStorage.setItem("bstm_token","temp");}</script>
+./audit_inline_scripts.txt:./room22-farm.html:378:<script>if(!localStorage.getItem("bstm_token")){localStorage.setItem("bstm_token","temp");}</script>
+./audit_inline_scripts.txt:./settings.html:325:<script>if(!localStorage.getItem("bstm_token")){localStorage.setItem("bstm_token","temp");}</script>
+./audit_inline_scripts.txt:./terms.html:282:<script>if(!localStorage.getItem("bstm_token")){localStorage.setItem("bstm_token","temp");}</script>
+./audit_inline_scripts.txt:./thb-wallet.html:671:<script>if(!localStorage.getItem("bstm_token")){localStorage.setItem("bstm_token","temp");}</script>
+./audit_inline_scripts.txt:./upload-product.html:338:<script>if(!localStorage.getItem("bstm_token")){localStorage.setItem("bstm_token","temp");}</script>
+./_legacy/buyer-dashboard.html.backup:<script>if(!localStorage.getItem("bstm_token")){localStorage.setItem("bstm_token","temp");}</script>
+./_legacy/login.html.backup:<script>localStorage.setItem("bstm_token", localStorage.getItem("bstm_token") || "temp");</script>
+./_legacy/buyer-dashboard.html.broken:<script>if(!localStorage.getItem("bstm_token")){localStorage.setItem("bstm_token","temp");}</script>
+./_legacy/buyer-dashboard.html.broken:<script>localStorage.setItem("bstm_token", localStorage.getItem("bstm_token") || "locked");</script>
+./audit_behavior_patterns.txt:./404.html:70:<script>if(!localStorage.getItem("bstm_token")){localStorage.setItem("bstm_token","temp");}</script>
+./audit_behavior_patterns.txt:./admin-dashboard.html:341:<script>if(!localStorage.getItem("bstm_token")){localStorage.setItem("bstm_token","temp");}</script>
+./audit_behavior_patterns.txt:./admin-dashboard.html:344:  const token = localStorage.getItem("bstm_token");
+./audit_behavior_patterns.txt:./analytics.html:338:<script>if(!localStorage.getItem("bstm_token")){localStorage.setItem("bstm_token","temp");}</script>
+./audit_behavior_patterns.txt:./buyer-dashboard.html:111:  var token = localStorage.getItem("bstm_token");
+./audit_behavior_patterns.txt:./cablink.html:336:<script>if(!localStorage.getItem("bstm_token")){localStorage.setItem("bstm_token","temp");}</script>
+./audit_behavior_patterns.txt:./checkout.html:307:<script>if(!localStorage.getItem("bstm_token")){localStorage.setItem("bstm_token","temp");}</script>
+./audit_behavior_patterns.txt:./ecosystem-hub.html:282:<script>if(!localStorage.getItem("bstm_token")){localStorage.setItem("bstm_token","temp");}</script>
+./audit_behavior_patterns.txt:./gov-dashboard.html:64:<script>if(!localStorage.getItem("bstm_token")){localStorage.setItem("bstm_token","temp");}</script>
+./audit_behavior_patterns.txt:./gov-dashboard.html:67:  const token = localStorage.getItem("bstm_token");
+./audit_behavior_patterns.txt:./help.html:317:<script>if(!localStorage.getItem("bstm_token")){localStorage.setItem("bstm_token","temp");}</script>
+./audit_behavior_patterns.txt:./kyc-verification.html:272:<script>if(!localStorage.getItem("bstm_token")){localStorage.setItem("bstm_token","temp");}</script>
+./audit_behavior_patterns.txt:./messages.html:257:<script>if(!localStorage.getItem("bstm_token")){localStorage.setItem("bstm_token","temp");}</script>
+./audit_behavior_patterns.txt:./monitoring-dashboard.html:100:<script>if(!localStorage.getItem("bstm_token")){localStorage.setItem("bstm_token","temp");}</script>
+./audit_behavior_patterns.txt:./notifications-all.html:210:<script>if(!localStorage.getItem("bstm_token")){localStorage.setItem("bstm_token","temp");}</script>
+./audit_behavior_patterns.txt:./order-tracking.html:213:<script>if(!localStorage.getItem("bstm_token")){localStorage.setItem("bstm_token","temp");}</script>
+./audit_behavior_patterns.txt:./product-detail.html:287:<script>if(!localStorage.getItem("bstm_token")){localStorage.setItem("bstm_token","temp");}</script>
+./audit_behavior_patterns.txt:./room22-farm.html:378:<script>if(!localStorage.getItem("bstm_token")){localStorage.setItem("bstm_token","temp");}</script>
+./audit_behavior_patterns.txt:./seller-dashboard.html:88:  var token = localStorage.getItem("bstm_token");
+./audit_behavior_patterns.txt:./settings.html:325:<script>if(!localStorage.getItem("bstm_token")){localStorage.setItem("bstm_token","temp");}</script>
+./audit_behavior_patterns.txt:./settings.html:328:  const token = localStorage.getItem("bstm_token");
+./audit_behavior_patterns.txt:./terms.html:282:<script>if(!localStorage.getItem("bstm_token")){localStorage.setItem("bstm_token","temp");}</script>
+./audit_behavior_patterns.txt:./thb-wallet.html:671:<script>if(!localStorage.getItem("bstm_token")){localStorage.setItem("bstm_token","temp");}</script>
+./audit_behavior_patterns.txt:./thb-wallet.html:674:  const token = localStorage.getItem("bstm_token");
+./audit_behavior_patterns.txt:./upload-product.html:338:<script>if(!localStorage.getItem("bstm_token")){localStorage.setItem("bstm_token","temp");}</script>

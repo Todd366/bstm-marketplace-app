@@ -1,0 +1,38 @@
+./404.html:73:    <script src="components/smart-loader.js"></script>
+./admin-dashboard.html:352:    <script src="components/smart-loader.js"></script>
+./analytics.html:341:    <script src="components/smart-loader.js"></script>
+./buyer-dashboard.html:106:<script src="components/smart-loader.js"></script>
+./cablink.html:338:<script src="components/smart-loader.js"></script>
+./checkout.html:310:    <script src="components/smart-loader.js"></script>
+./ecosystem-hub.html:9:    <script src="js/bstm-ecosystem-links.js"></script>
+./ecosystem-hub.html:285:    <script src="components/smart-loader.js"></script>
+./frontend/public/index.html:198:                        <img src="/api/placeholder/600/500" alt="BSTM Marketplace" class="rounded-3xl shadow-2xl">
+./frontend/public/index.html:359:                        <img src="/api/placeholder/400/300" alt="Fresh Tomatoes" class="w-full h-64 object-cover">
+./frontend/public/index.html:395:                        <img src="/api/placeholder/400/300" alt="iPhone" class="w-full h-64 object-cover">
+./frontend/public/index.html:431:                        <img src="/api/placeholder/400/300" alt="Sofa" class="w-full h-64 object-cover">
+./frontend/public/index.html:467:                        <img src="/api/placeholder/400/300" alt="Photography" class="w-full h-64 object-cover">
+./gov-dashboard.html:75:    <script src="components/smart-loader.js"></script>
+./help.html:320:    <script src="components/smart-loader.js"></script>
+./index.html:127:<script src="components/smart-loader.js"></script>
+./kyc-verification.html:9:    <script src="js/bstm-auth.js"></script>
+./kyc-verification.html:274:    <script src="components/smart-loader.js"></script>
+./login.html:63:<script src="components/smart-loader.js"></script>
+./marketplace.html:85:<script src="components/smart-loader.js"></script>
+./messages.html:260:    <script src="components/smart-loader.js"></script>
+./monitoring-dashboard.html:103:    <script src="components/smart-loader.js"></script>
+./notifications-all.html:9:    <script src="js/bstm-auth.js"></script>
+./notifications-all.html:212:    <script src="components/smart-loader.js"></script>
+./order-tracking.html:216:    <script src="components/smart-loader.js"></script>
+./product-detail.html:292:    <script src="components/smart-loader.js"></script>
+./room22-farm.html:9:    <script src="js/bstm-auth.js"></script>
+./room22-farm.html:380:<script src="components/smart-loader.js"></script>
+./seller-dashboard.html:85:<script src="components/smart-loader.js"></script>
+./settings.html:337:    <script src="components/smart-loader.js"></script>
+./terms.html:285:    <script src="components/smart-loader.js"></script>
+./thb-wallet.html:9:    <script src="js/bstm-auth.js"></script>
+./thb-wallet.html:10:    <script src="js/thb-display.js"></script>
+./thb-wallet.html:682:<script src="components/smart-loader.js"></script>
+./upload-product.html:289:                    <img src="${img}" class="image-preview rounded-lg border-2 border-gray-300">
+./upload-product.html:341:    <script src="components/smart-loader.js"></script>
+./verify.html:60:<script src="components/smart-loader.js"></script>
+./wishlist.html:61:    <script src="components/smart-loader.js"></script>

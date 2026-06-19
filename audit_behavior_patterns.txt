@@ -1,0 +1,134 @@
+./404.html:70:<script>if(!localStorage.getItem("bstm_token")){localStorage.setItem("bstm_token","temp");}</script>
+./404.html:71:<script>document.querySelector(".menu-btn")?.addEventListener("click", () => { document.querySelector(".sidebar")?.classList.toggle("open"); });</script>
+./404.html:84:            menuBtn.addEventListener("click", (e) => {
+./admin-dashboard.html:341:<script>if(!localStorage.getItem("bstm_token")){localStorage.setItem("bstm_token","temp");}</script>
+./admin-dashboard.html:344:  const token = localStorage.getItem("bstm_token");
+./admin-dashboard.html:350:<script>document.querySelector(".menu-btn")?.addEventListener("click", () => { document.querySelector(".sidebar")?.classList.toggle("open"); });</script>
+./admin-dashboard.html:363:            menuBtn.addEventListener("click", (e) => {
+./analytics.html:338:<script>if(!localStorage.getItem("bstm_token")){localStorage.setItem("bstm_token","temp");}</script>
+./analytics.html:339:<script>document.querySelector(".menu-btn")?.addEventListener("click", () => { document.querySelector(".sidebar")?.classList.toggle("open"); });</script>
+./analytics.html:352:            menuBtn.addEventListener("click", (e) => {
+./buyer-dashboard.html:110:document.addEventListener("DOMContentLoaded", function() {
+./buyer-dashboard.html:111:  var token = localStorage.getItem("bstm_token");
+./buyer-dashboard.html:112:  var userData = localStorage.getItem("bstm_user");
+./buyer-dashboard.html:132:  document.getElementById("stat-wishlist").textContent = (JSON.parse(localStorage.getItem("bstm_wishlist") || "[]")).length;
+./buyer-dashboard.html:139:    localStorage.removeItem("bstm_token");
+./buyer-dashboard.html:140:    localStorage.removeItem("bstm_user");
+./cablink.html:323:        notification.innerHTML = `
+./cablink.html:334:    document.addEventListener('DOMContentLoaded', loadComponents);
+./cablink.html:336:<script>if(!localStorage.getItem("bstm_token")){localStorage.setItem("bstm_token","temp");}</script>
+./cablink.html:337:<script>document.querySelector(".menu-btn")?.addEventListener("click", () => { document.querySelector(".sidebar")?.classList.toggle("open"); });</script>
+./cablink.html:349:            menuBtn.addEventListener("click", (e) => {
+./checkout.html:301:        document.querySelectorAll('button').forEach(btn => {
+./checkout.html:302:            btn.addEventListener('click', () => {
+./checkout.html:307:<script>if(!localStorage.getItem("bstm_token")){localStorage.setItem("bstm_token","temp");}</script>
+./checkout.html:308:<script>document.querySelector(".menu-btn")?.addEventListener("click", () => { document.querySelector(".sidebar")?.classList.toggle("open"); });</script>
+./checkout.html:321:            menuBtn.addEventListener("click", (e) => {
+./ecosystem-hub.html:277:    document.addEventListener('DOMContentLoaded', () => {
+./ecosystem-hub.html:282:<script>if(!localStorage.getItem("bstm_token")){localStorage.setItem("bstm_token","temp");}</script>
+./ecosystem-hub.html:283:<script>document.querySelector(".menu-btn")?.addEventListener("click", () => { document.querySelector(".sidebar")?.classList.toggle("open"); });</script>
+./ecosystem-hub.html:296:            menuBtn.addEventListener("click", (e) => {
+./frontend/public/index.html:679:        window.addEventListener('beforeinstallprompt', (e) => {
+./frontend/public/index.html:687:        document.getElementById('installBtn')?.addEventListener('click', async () => {
+./frontend/public/index.html:696:        document.getElementById('closeInstall')?.addEventListener('click', () => {
+./frontend/public/index.html:700:        document.getElementById('laterBtn')?.addEventListener('click', () => {
+./frontend/public/index.html:705:        document.getElementById('themeToggle')?.addEventListener('click', () => {
+./frontend/public/index.html:713:        document.getElementById('voiceSearch')?.addEventListener('click', () => {
+./frontend/public/index.html:727:        document.getElementById('demoRideBtn')?.addEventListener('click', () => {
+./frontend/public/index.html:734:        document.getElementById('loginBtn')?.addEventListener('click', () => {
+./frontend/public/index.html:738:        document.getElementById('closeModal')?.addEventListener('click', () => {
+./frontend/public/index.html:742:        document.getElementById('loginForm')?.addEventListener('submit', async (e) => {
+./frontend/public/index.html:751:        document.querySelectorAll('button, a').forEach(el => {
+./frontend/public/index.html:752:            el.addEventListener('click', () => {
+./frontend/public/index.html:765:            window.addEventListener('online', checkOnlineStatus);
+./frontend/public/index.html:766:            window.addEventListener('offline', checkOnlineStatus);
+./frontend/public/index.html:779:            menuBtn.addEventListener("click", (e) => {
+./gov-dashboard.html:64:<script>if(!localStorage.getItem("bstm_token")){localStorage.setItem("bstm_token","temp");}</script>
+./gov-dashboard.html:67:  const token = localStorage.getItem("bstm_token");
+./gov-dashboard.html:73:<script>document.querySelector(".menu-btn")?.addEventListener("click", () => { document.querySelector(".sidebar")?.classList.toggle("open"); });</script>
+./gov-dashboard.html:86:            menuBtn.addEventListener("click", (e) => {
+./help.html:310:            const icon = element.querySelector('i');
+./help.html:317:<script>if(!localStorage.getItem("bstm_token")){localStorage.setItem("bstm_token","temp");}</script>
+./help.html:318:<script>document.querySelector(".menu-btn")?.addEventListener("click", () => { document.querySelector(".sidebar")?.classList.toggle("open"); });</script>
+./help.html:331:            menuBtn.addEventListener("click", (e) => {
+./kyc-verification.html:213:        document.querySelectorAll('.step-content').forEach(el => el.classList.add('hidden'));
+./kyc-verification.html:267:    document.addEventListener('DOMContentLoaded', () => {
+./kyc-verification.html:272:<script>if(!localStorage.getItem("bstm_token")){localStorage.setItem("bstm_token","temp");}</script>
+./kyc-verification.html:273:<script>document.querySelector(".menu-btn")?.addEventListener("click", () => { document.querySelector(".sidebar")?.classList.toggle("open"); });</script>
+./kyc-verification.html:285:            menuBtn.addEventListener("click", (e) => {
+./login.html:68:document.getElementById("login-form").addEventListener("submit", async function(e) {
+./login.html:93:    localStorage.setItem("bstm_pending_" + token, JSON.stringify({
+./marketplace.html:116:  if (!filtered.length) { grid.innerHTML=""; noRes.style.display="block"; return; }
+./marketplace.html:118:  grid.innerHTML = filtered.map(function(r, i) {
+./marketplace.html:151:document.getElementById("search-input").addEventListener("input", function() {
+./marketplace.html:155:document.querySelectorAll(".cat-btn").forEach(function(btn) {
+./marketplace.html:156:  btn.addEventListener("click", function() {
+./marketplace.html:157:    document.querySelectorAll(".cat-btn").forEach(function(b) { b.classList.remove("active"); });
+./messages.html:257:<script>if(!localStorage.getItem("bstm_token")){localStorage.setItem("bstm_token","temp");}</script>
+./messages.html:258:<script>document.querySelector(".menu-btn")?.addEventListener("click", () => { document.querySelector(".sidebar")?.classList.toggle("open"); });</script>
+./messages.html:271:            menuBtn.addEventListener("click", (e) => {
+./monitoring-dashboard.html:100:<script>if(!localStorage.getItem("bstm_token")){localStorage.setItem("bstm_token","temp");}</script>
+./monitoring-dashboard.html:101:<script>document.querySelector(".menu-btn")?.addEventListener("click", () => { document.querySelector(".sidebar")?.classList.toggle("open"); });</script>
+./monitoring-dashboard.html:114:            menuBtn.addEventListener("click", (e) => {
+./nav-backup.html:47:            btn.addEventListener('click', () => {
+./notifications-all.html:119:    let notifications = JSON.parse(localStorage.getItem('bstm_notifications') || JSON.stringify(mockNotifications));
+./notifications-all.html:130:            container.innerHTML = `
+./notifications-all.html:139:        container.innerHTML = filtered.map(notif => `
+./notifications-all.html:165:        document.querySelectorAll('.notif-filter').forEach(btn => {
+./notifications-all.html:177:        localStorage.setItem('bstm_notifications', JSON.stringify(notifications));
+./notifications-all.html:204:    document.addEventListener('DOMContentLoaded', () => {
+./notifications-all.html:210:<script>if(!localStorage.getItem("bstm_token")){localStorage.setItem("bstm_token","temp");}</script>
+./notifications-all.html:211:<script>document.querySelector(".menu-btn")?.addEventListener("click", () => { document.querySelector(".sidebar")?.classList.toggle("open"); });</script>
+./notifications-all.html:223:            menuBtn.addEventListener("click", (e) => {
+./order-tracking.html:213:<script>if(!localStorage.getItem("bstm_token")){localStorage.setItem("bstm_token","temp");}</script>
+./order-tracking.html:214:<script>document.querySelector(".menu-btn")?.addEventListener("click", () => { document.querySelector(".sidebar")?.classList.toggle("open"); });</script>
+./order-tracking.html:227:            menuBtn.addEventListener("click", (e) => {
+./product-detail.html:266:            document.querySelectorAll('.thumbnail').forEach(t => t.classList.remove('active'));
+./product-detail.html:287:<script>if(!localStorage.getItem("bstm_token")){localStorage.setItem("bstm_token","temp");}</script>
+./product-detail.html:288:<script>document.querySelector(".menu-btn")?.addEventListener("click", () => { document.querySelector(".sidebar")?.classList.toggle("open"); });</script>
+./product-detail.html:303:            menuBtn.addEventListener("click", (e) => {
+./room22-farm.html:359:        // Get cart from localStorage
+./room22-farm.html:360:        let cart = JSON.parse(localStorage.getItem('bstm_cart') || '[]');
+./room22-farm.html:362:        localStorage.setItem('bstm_cart', JSON.stringify(cart));
+./room22-farm.html:376:    document.addEventListener('DOMContentLoaded', loadComponents);
+./room22-farm.html:378:<script>if(!localStorage.getItem("bstm_token")){localStorage.setItem("bstm_token","temp");}</script>
+./room22-farm.html:379:<script>document.querySelector(".menu-btn")?.addEventListener("click", () => { document.querySelector(".sidebar")?.classList.toggle("open"); });</script>
+./room22-farm.html:391:            menuBtn.addEventListener("click", (e) => {
+./seller-dashboard.html:87:document.addEventListener("DOMContentLoaded", function() {
+./seller-dashboard.html:88:  var token = localStorage.getItem("bstm_token");
+./seller-dashboard.html:89:  var userData = localStorage.getItem("bstm_user");
+./seller-dashboard.html:105:    localStorage.removeItem("bstm_token");
+./seller-dashboard.html:106:    localStorage.removeItem("bstm_user");
+./settings.html:325:<script>if(!localStorage.getItem("bstm_token")){localStorage.setItem("bstm_token","temp");}</script>
+./settings.html:328:  const token = localStorage.getItem("bstm_token");
+./settings.html:334:<script>document.querySelector(".menu-btn")?.addEventListener("click", () => { document.querySelector(".sidebar")?.classList.toggle("open"); });</script>
+./settings.html:348:            menuBtn.addEventListener("click", (e) => {
+./terms.html:282:<script>if(!localStorage.getItem("bstm_token")){localStorage.setItem("bstm_token","temp");}</script>
+./terms.html:283:<script>document.querySelector(".menu-btn")?.addEventListener("click", () => { document.querySelector(".sidebar")?.classList.toggle("open"); });</script>
+./terms.html:296:            menuBtn.addEventListener("click", (e) => {
+./thb-wallet.html:471:    document.addEventListener('DOMContentLoaded', () => {
+./thb-wallet.html:515:            list.innerHTML = '<p class="text-center text-gray-500 py-12">No transactions yet. Start earning THB!</p>';
+./thb-wallet.html:519:        list.innerHTML = transactions.map(tx => `
+./thb-wallet.html:540:        document.querySelectorAll('.wallet-tab').forEach(t => {
+./thb-wallet.html:585:    document.getElementById('withdrawAmount')?.addEventListener('input', (e) => {
+./thb-wallet.html:592:    document.getElementById('stakeAmount')?.addEventListener('input', (e) => {
+./thb-wallet.html:671:<script>if(!localStorage.getItem("bstm_token")){localStorage.setItem("bstm_token","temp");}</script>
+./thb-wallet.html:674:  const token = localStorage.getItem("bstm_token");
+./thb-wallet.html:680:<script>document.querySelector(".menu-btn")?.addEventListener("click", () => { document.querySelector(".sidebar")?.classList.toggle("open"); });</script>
+./thb-wallet.html:693:            menuBtn.addEventListener("click", (e) => {
+./upload-product.html:251:        dropZone.addEventListener('dragover', (e) => {
+./upload-product.html:256:        dropZone.addEventListener('dragleave', () => {
+./upload-product.html:260:        dropZone.addEventListener('drop', (e) => {
+./upload-product.html:266:        imageInput.addEventListener('change', (e) => {
+./upload-product.html:287:            imagePreview.innerHTML = uploadedImages.map((img, index) => `
+./upload-product.html:303:        document.getElementById('price').addEventListener('input', (e) => {
+./upload-product.html:338:<script>if(!localStorage.getItem("bstm_token")){localStorage.setItem("bstm_token","temp");}</script>
+./upload-product.html:339:<script>document.querySelector(".menu-btn")?.addEventListener("click", () => { document.querySelector(".sidebar")?.classList.toggle("open"); });</script>
+./upload-product.html:352:            menuBtn.addEventListener("click", (e) => {
+./verify.html:83:    localStorage.setItem("bstm_user", JSON.stringify(user));
+./verify.html:84:    localStorage.setItem("bstm_token", "tok_" + Date.now());
+./verify.html:94:    var stored = localStorage.getItem("bstm_pending_" + token);
+./verify.html:113:      localStorage.removeItem("bstm_pending_" + token);
+./verify.html:118:    localStorage.removeItem("bstm_pending_" + token);
+./wishlist.html:38:        if (!localStorage.getItem('bstm_user')) {
+./wishlist.html:72:            menuBtn.addEventListener("click", (e) => {

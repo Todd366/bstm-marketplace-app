@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard — BSTM</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap");
+    * { font-family:"Inter",sans-serif; box-sizing:border-box; }
+    .stat-card { background:#fff; border-radius:20px; padding:24px; border:1.5px solid #F3F4F6; transition:all 0.2s; }
+    .stat-card:hover { border-color:#DDD6FE; box-shadow:0 8px 24px rgba(124,58,237,0.08); }
+    .quick-btn { background:#fff; border:1.5px solid #EDE9FE; border-radius:16px; padding:20px; text-align:center; cursor:pointer; transition:all 0.2s; text-decoration:none; display:block; }
+    .quick-btn:hover { border-color:#7C3AED; background:#F5F3FF; transform:translateY(-2px); }
+  </style>
+</head>
+<body style="background:#F8F7FF;">
+<div id="bstm-nav"></div>
+
+<!-- AUTH WALL - shown if not logged in -->
+<div id="auth-wall" style="display:none;min-height:80vh;display:none;align-items:center;justify-content:center;padding:40px 20px;flex-direction:column;text-align:center;">
+  <div style="font-size:56px;margin-bottom:16px;">🔒</div>
+  <h2 style="font-size:24px;font-weight:900;color:#1E1B4B;margin-bottom:8px;">Login Required</h2>
+  <p style="color:#9CA3AF;margin-bottom:24px;">Please log in to access your dashboard</p>
+  <a href="login.html" style="background:linear-gradient(135deg,#7C3AED,#4F46E5);color:#fff;padding:14px 32px;border-radius:14px;font-weight:800;text-decoration:none;">Login →</a>
+</div>
+
+<!-- DASHBOARD CONTENT -->
+<div id="dashboard-content" style="display:none;max-width:1100px;margin:0 auto;padding:32px 20px 60px;">
+
+  <!-- Welcome Header -->
+  <div style="background:linear-gradient(135deg,#7C3AED,#4F46E5);border-radius:24px;padding:32px;color:#fff;margin-bottom:28px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;">
+    <div>
+      <p style="color:rgba(255,255,255,0.7);font-size:13px;font-weight:600;margin:0 0 4px;letter-spacing:0.5px;">BUYER DASHBOARD</p>
+      <h1 style="font-size:28px;font-weight:900;margin:0 0 4px;">Welcome back, <span id="user-name">...</span> 👋</h1>
+      <p style="color:rgba(255,255,255,0.65);font-size:13px;margin:0;" id="user-email"></p>
+    </div>
+    <button onclick="logout()" style="background:rgba(255,255,255,0.15);color:#fff;border:1.5px solid rgba(255,255,255,0.3);padding:10px 20px;border-radius:12px;font-weight:700;cursor:pointer;font-size:13px;">Logout</button>
+  </div>
+
+  <!-- Stats -->
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;margin-bottom:28px;">
+    <div class="stat-card">
+      <div style="width:44px;height:44px;background:#FEF9C3;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:12px;">⚡</div>
+      <div style="font-size:28px;font-weight:900;color:#1E1B4B;" id="stat-thb">0.00</div>
+      <div style="font-size:12px;color:#9CA3AF;font-weight:600;margin-top:2px;">THB Balance</div>
+    </div>
+    <div class="stat-card">
+      <div style="width:44px;height:44px;background:#EDE9FE;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:12px;">🛍️</div>
+      <div style="font-size:28px;font-weight:900;color:#1E1B4B;" id="stat-orders">0</div>
+      <div style="font-size:12px;color:#9CA3AF;font-weight:600;margin-top:2px;">Total Orders</div>
+    </div>
+    <div class="stat-card">
+      <div style="width:44px;height:44px;background:#DCFCE7;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:12px;">❤️</div>
+      <div style="font-size:28px;font-weight:900;color:#1E1B4B;" id="stat-wishlist">0</div>
+      <div style="font-size:12px;color:#9CA3AF;font-weight:600;margin-top:2px;">Wishlist Items</div>
+    </div>
+    <div class="stat-card">
+      <div style="width:44px;height:44px;background:#F0F9FF;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:12px;">🎯</div>
+      <div style="font-size:28px;font-weight:900;color:#1E1B4B;" id="stat-referral">-</div>
+      <div style="font-size:12px;color:#9CA3AF;font-weight:600;margin-top:2px;">Referral Code</div>
+    </div>
+  </div>
+
+  <!-- Quick Actions -->
+  <h2 style="font-size:18px;font-weight:900;color:#1E1B4B;margin:0 0 16px;">Quick Actions</h2>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;margin-bottom:32px;">
+    <a href="marketplace.html" class="quick-btn"><div style="font-size:28px;margin-bottom:8px;">🏬</div><div style="font-size:13px;font-weight:700;color:#1E1B4B;">Browse Mall</div></a>
+    <a href="thb-wallet.html" class="quick-btn"><div style="font-size:28px;margin-bottom:8px;">💰</div><div style="font-size:13px;font-weight:700;color:#1E1B4B;">THB Wallet</div></a>
+    <a href="wishlist.html" class="quick-btn"><div style="font-size:28px;margin-bottom:8px;">❤️</div><div style="font-size:13px;font-weight:700;color:#1E1B4B;">Wishlist</div></a>
+    <a href="order-tracking.html" class="quick-btn"><div style="font-size:28px;margin-bottom:8px;">📦</div><div style="font-size:13px;font-weight:700;color:#1E1B4B;">My Orders</div></a>
+    <a href="messages.html" class="quick-btn"><div style="font-size:28px;margin-bottom:8px;">💬</div><div style="font-size:13px;font-weight:700;color:#1E1B4B;">Messages</div></a>
+    <a href="settings.html" class="quick-btn"><div style="font-size:28px;margin-bottom:8px;">⚙️</div><div style="font-size:13px;font-weight:700;color:#1E1B4B;">Settings</div></a>
+    <a href="kyc-verification.html" class="quick-btn"><div style="font-size:28px;margin-bottom:8px;">✅</div><div style="font-size:13px;font-weight:700;color:#1E1B4B;">Verify ID</div></a>
+    <a href="seller-dashboard.html" class="quick-btn"><div style="font-size:28px;margin-bottom:8px;">🛒</div><div style="font-size:13px;font-weight:700;color:#1E1B4B;">Start Selling</div></a>
+  </div>
+
+  <!-- Active Rooms -->
+  <h2 style="font-size:18px;font-weight:900;color:#1E1B4B;margin:0 0 16px;">Open Rooms</h2>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-bottom:32px;">
+    <a href="room22-farm.html" style="display:flex;align-items:center;gap:12px;background:#fff;border:1.5px solid #D1FAE5;border-radius:16px;padding:16px;text-decoration:none;transition:all 0.2s;" onmouseover="this.style.borderColor='#059669'" onmouseout="this.style.borderColor='#D1FAE5'">
+      <div style="font-size:28px;">🌾</div><div><div style="font-size:13px;font-weight:800;color:#1E1B4B;">Room 22 Farm</div><div style="font-size:11px;color:#059669;font-weight:600;">● Open Now</div></div>
+    </a>
+    <a href="cablink.html" style="display:flex;align-items:center;gap:12px;background:#fff;border:1.5px solid #FEF3C7;border-radius:16px;padding:16px;text-decoration:none;transition:all 0.2s;" onmouseover="this.style.borderColor='#D97706'" onmouseout="this.style.borderColor='#FEF3C7'">
+      <div style="font-size:28px;">🚕</div><div><div style="font-size:13px;font-weight:800;color:#1E1B4B;">CabLink Rides</div><div style="font-size:11px;color:#D97706;font-weight:600;">● Open Now</div></div>
+    </a>
+    <a href="thb-wallet.html" style="display:flex;align-items:center;gap:12px;background:#fff;border:1.5px solid #EDE9FE;border-radius:16px;padding:16px;text-decoration:none;transition:all 0.2s;" onmouseover="this.style.borderColor='#7C3AED'" onmouseout="this.style.borderColor='#EDE9FE'">
+      <div style="font-size:28px;">💰</div><div><div style="font-size:13px;font-weight:800;color:#1E1B4B;">THB Wallet</div><div style="font-size:11px;color:#7C3AED;font-weight:600;">● Active</div></div>
+    </a>
+  </div>
+
+  <!-- Referral -->
+  <div style="background:linear-gradient(135deg,#1E1B4B,#312E81);border-radius:20px;padding:24px;color:#fff;">
+    <h3 style="font-size:16px;font-weight:900;margin:0 0 6px;">Refer a Friend, Earn THB</h3>
+    <p style="color:#A78BFA;font-size:13px;margin:0 0 16px;">Share your referral code and earn 5 THB for every friend who joins.</p>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+      <div style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:10px;padding:10px 16px;font-size:15px;font-weight:800;letter-spacing:1px;" id="ref-code-display">LOADING</div>
+      <button onclick="copyReferral()" style="background:#7C3AED;color:#fff;border:none;padding:10px 20px;border-radius:10px;font-weight:700;cursor:pointer;font-size:13px;">Copy Link</button>
+    </div>
+  </div>
+
+</div>
+
+<div id="bstm-footer"></div>
+<script src="components/smart-loader.js"></script>
+var user = null;
+
+document.addEventListener("DOMContentLoaded", function() {
+  var token = localStorage.getItem("bstm_token");
+  var userData = localStorage.getItem("bstm_user");
+
+  if (!token || !userData) {
+    document.getElementById("auth-wall").style.display = "flex";
+    document.getElementById("dashboard-content").style.display = "none";
+    return;
+  }
+
+  try { user = JSON.parse(userData); } catch(e) {
+    document.getElementById("auth-wall").style.display = "flex";
+    return;
+  }
+
+  document.getElementById("dashboard-content").style.display = "block";
+  document.getElementById("auth-wall").style.display = "none";
+
+  document.getElementById("user-name").textContent = user.name || "Friend";
+  document.getElementById("user-email").textContent = user.email || "";
+  document.getElementById("stat-thb").textContent = (user.thb_balance || 0).toFixed(2) + " THB";
+  document.getElementById("stat-orders").textContent = user.orders || 0;
+  document.getElementById("stat-wishlist").textContent = (JSON.parse(localStorage.getItem("bstm_wishlist") || "[]")).length;
+  document.getElementById("stat-referral").textContent = user.referral_code || "N/A";
+  document.getElementById("ref-code-display").textContent = user.referral_code || "N/A";
+});
+
+function logout() {
+  if (confirm("Are you sure you want to logout?")) {
+    localStorage.removeItem("bstm_token");
+    localStorage.removeItem("bstm_user");
+    window.location.href = "login.html";
+  }
+}
+
+function copyReferral() {
+  if (!user) return;
+  var link = "https://todd366.github.io/bstm-marketplace-app/?ref=" + user.referral_code;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(link).then(function() { alert("✅ Referral link copied!"); });
+  } else {
+    alert("Your referral link: " + link);
+  }
+}
+<script type="module" src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,271 @@
+════════════════════════════════════════════
+  BSTM FULL SYSTEM DEBUG REPORT
+  Fri Jun 19 21:59:42 CAT 2026
+  /data/data/com.termux/files/home/bstm-marketplace-app
+════════════════════════════════════════════
+
+[1] FILE STRUCTURE CHECK
+HTML: 61 | JS: 1232 | CSS: 1
+⚠ node_modules exists (bloat risk)
+
+[2] CORE FILE CHECK
+❌ MISSING: js/bstm-config.js
+❌ MISSING: js/bstm-core.js
+❌ MISSING: css/bstm-styles.css
+❌ MISSING: manifest.json
+
+[3] AUTH SYSTEM CHECK
+Legacy Auth usage:
+Firebase references:
+Supabase references:
+
+[4] HTML VALIDATION CHECK
+❌ Scripts or content after </html> detected
+./404.html:74:</html>
+./admin-dashboard.html:32:</html>
+./analytics.html:342:</html>
+./backend/email.js:88:</html>
+./buyer-dashboard.html:155:</html>
+./cablink.html:337:</html>
+./checkout.html:309:                      </html>
+./ecosystem-hub.html:284:</html>
+./frontend/public/index.html:769:  </html>
+./gov-dashboard.html:64:</html>
+./help.html:319:</html>
+./index.html:130:</html>
+./index.html:134:</html>
+./kyc-verification.html:273:</html>
+./login.html:75:</html>
+./marketplace.html:88:</html>
+./marketplace.html.bak2:103:</html>
+./messages.html:261:</html>
+./monitoring-dashboard.html:102:</html>
+./notifications-all.html:211:</html>
+./order-tracking.html:217:</html>
+./product-detail.html:291:  </html>
+./room22-farm.html:379:</html>
+./seller-dashboard.html:111:</html>
+./settings.html:336:  </html>
+./terms.html:284:</html>
+./thb-wallet.html:679:</html>
+./upload-product.html:340:  </html>
+./verify.html:140:</html>
+./wishlist.html:62:</html>
+./_legacy/buyer-dashboard.html.backup:134:</html>
+./_legacy/login.html.backup:111:</html>
+./_legacy/marketplace.html.backup:90:</html>
+./_legacy/buyer-dashboard.html.broken:135:</html>
+./marketplace.html.bak:167:</html>
+./backup_refactor/404.html:74:</html>
+./backup_refactor/admin-dashboard.html:351:</html>
+./backup_refactor/analytics.html:342:</html>
+./backup_refactor/buyer-dashboard.html:155:</html>
+./backup_refactor/cablink.html:337:</html>
+./backup_refactor/checkout.html:309:                      </html>
+./backup_refactor/ecosystem-hub.html:284:</html>
+./backup_refactor/gov-dashboard.html:74:</html>
+./backup_refactor/help.html:319:</html>
+./backup_refactor/index.html:130:</html>
+./backup_refactor/index.html:134:</html>
+./backup_refactor/kyc-verification.html:273:</html>
+./backup_refactor/login.html:120:</html>
+./backup_refactor/marketplace.html:88:</html>
+./backup_refactor/messages.html:261:</html>
+./backup_refactor/monitoring-dashboard.html:102:</html>
+./backup_refactor/notifications-all.html:211:</html>
+./backup_refactor/order-tracking.html:217:</html>
+./backup_refactor/product-detail.html:291:  </html>
+./backup_refactor/room22-farm.html:379:</html>
+./backup_refactor/seller-dashboard.html:111:</html>
+./backup_refactor/settings.html:336:  </html>
+./backup_refactor/terms.html:284:</html>
+./backup_refactor/thb-wallet.html:679:</html>
+./backup_refactor/upload-product.html:340:  </html>
+./backup_refactor/verify.html:140:</html>
+./backup_refactor/wishlist.html:62:</html>
+./tools/bstm-full-debug.sh:79:  echo "❌ Scripts or content after </html> detected" | tee -a $REPORT
+./bstm-audit-20260619-2155.txt:405:  [0;36m── Scripts outside </html> tag (invalid HTML):[0m
+./bstm-audit-20260619-2155.txt:406:  [0;31m❌ 404.html has 1 script(s) AFTER </html>[0m
+./bstm-audit-20260619-2155.txt:407:  [0;31m❌ admin-dashboard.html has 1 script(s) AFTER </html>[0m
+./bstm-audit-20260619-2155.txt:408:  [0;31m❌ analytics.html has 1 script(s) AFTER </html>[0m
+./bstm-audit-20260619-2155.txt:409:  [0;31m❌ cablink.html has 1 script(s) AFTER </html>[0m
+./bstm-audit-20260619-2155.txt:410:  [0;31m❌ checkout.html has 1 script(s) AFTER </html>[0m
+./bstm-audit-20260619-2155.txt:411:  [0;31m❌ ecosystem-hub.html has 1 script(s) AFTER </html>[0m
+./bstm-audit-20260619-2155.txt:412:  [0;31m❌ gov-dashboard.html has 1 script(s) AFTER </html>[0m
+./bstm-audit-20260619-2155.txt:413:  [0;31m❌ help.html has 1 script(s) AFTER </html>[0m
+./bstm-audit-20260619-2155.txt:414:  [0;31m❌ index.html has 1 script(s) AFTER </html>[0m
+./bstm-audit-20260619-2155.txt:415:  [0;31m❌ kyc-verification.html has 1 script(s) AFTER </html>[0m
+./bstm-audit-20260619-2155.txt:416:  [0;31m❌ marketplace.html has 1 script(s) AFTER </html>[0m
+./bstm-audit-20260619-2155.txt:417:  [0;31m❌ messages.html has 1 script(s) AFTER </html>[0m
+./bstm-audit-20260619-2155.txt:418:  [0;31m❌ monitoring-dashboard.html has 1 script(s) AFTER </html>[0m
+./bstm-audit-20260619-2155.txt:419:  [0;31m❌ notifications-all.html has 1 script(s) AFTER </html>[0m
+./bstm-audit-20260619-2155.txt:420:  [0;31m❌ order-tracking.html has 1 script(s) AFTER </html>[0m
+./bstm-audit-20260619-2155.txt:421:  [0;31m❌ product-detail.html has 1 script(s) AFTER </html>[0m
+./bstm-audit-20260619-2155.txt:422:  [0;31m❌ room22-farm.html has 1 script(s) AFTER </html>[0m
+./bstm-audit-20260619-2155.txt:423:  [0;31m❌ settings.html has 1 script(s) AFTER </html>[0m
+./bstm-audit-20260619-2155.txt:424:  [0;31m❌ terms.html has 1 script(s) AFTER </html>[0m
+./bstm-audit-20260619-2155.txt:425:  [0;31m❌ thb-wallet.html has 1 script(s) AFTER </html>[0m
+./bstm-audit-20260619-2155.txt:426:  [0;31m❌ upload-product.html has 1 script(s) AFTER </html>[0m
+./bstm-audit-20260619-2155.txt:578:  [0;31m🔴 Scripts found after </html> tag[0m
+
+[5] SECURITY SCAN
+✅ No obvious secrets detected
+
+[6] LINK HEALTH CHECK
+Links scanned: 
+
+[7] JS SYNTAX CHECK
+(node:2225) Warning: Failed to load the ES module: /data/data/com.termux/files/home/bstm-marketplace-app/js/app.js. Make sure to set "type": "module" in the nearest package.json file or use the .mjs extension.
+(Use `node --trace-warnings ...` to show where the warning was created)
+/data/data/com.termux/files/home/bstm-marketplace-app/js/app.js:1
+import { initMenu } from "./core/menu.js";
+^^^^^^
+
+SyntaxError: Cannot use import statement outside a module
+    at wrapSafe (node:internal/modules/cjs/loader:1806:18)
+    at checkSyntax (node:internal/main/check_syntax:76:3)
+
+Node.js v26.3.1
+(node:2335) Warning: Failed to load the ES module: /data/data/com.termux/files/home/bstm-marketplace-app/js/firebase-auth.js. Make sure to set "type": "module" in the nearest package.json file or use the .mjs extension.
+(Use `node --trace-warnings ...` to show where the warning was created)
+/data/data/com.termux/files/home/bstm-marketplace-app/js/firebase-auth.js:7
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+^^^^^^
+
+SyntaxError: Cannot use import statement outside a module
+    at wrapSafe (node:internal/modules/cjs/loader:1806:18)
+    at checkSyntax (node:internal/main/check_syntax:76:3)
+
+Node.js v26.3.1
+(node:2347) Warning: Failed to load the ES module: /data/data/com.termux/files/home/bstm-marketplace-app/js/firebase-config.js. Make sure to set "type": "module" in the nearest package.json file or use the .mjs extension.
+(Use `node --trace-warnings ...` to show where the warning was created)
+/data/data/com.termux/files/home/bstm-marketplace-app/js/firebase-config.js:7
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+^^^^^^
+
+SyntaxError: Cannot use import statement outside a module
+    at wrapSafe (node:internal/modules/cjs/loader:1806:18)
+    at checkSyntax (node:internal/main/check_syntax:76:3)
+
+Node.js v26.3.1
+(node:2355) Warning: Failed to load the ES module: /data/data/com.termux/files/home/bstm-marketplace-app/js/firebase-db.js. Make sure to set "type": "module" in the nearest package.json file or use the .mjs extension.
+(Use `node --trace-warnings ...` to show where the warning was created)
+/data/data/com.termux/files/home/bstm-marketplace-app/js/firebase-db.js:5
+import { db } from './firebase-config.js';
+^^^^^^
+
+SyntaxError: Cannot use import statement outside a module
+    at wrapSafe (node:internal/modules/cjs/loader:1806:18)
+    at checkSyntax (node:internal/main/check_syntax:76:3)
+
+Node.js v26.3.1
+(node:2379) Warning: Failed to load the ES module: /data/data/com.termux/files/home/bstm-marketplace-app/js/firebase-storage.js. Make sure to set "type": "module" in the nearest package.json file or use the .mjs extension.
+(Use `node --trace-warnings ...` to show where the warning was created)
+/data/data/com.termux/files/home/bstm-marketplace-app/js/firebase-storage.js:5
+import { storage } from './firebase-config.js';
+^^^^^^
+
+SyntaxError: Cannot use import statement outside a module
+    at wrapSafe (node:internal/modules/cjs/loader:1806:18)
+    at checkSyntax (node:internal/main/check_syntax:76:3)
+
+Node.js v26.3.1
+/data/data/com.termux/files/home/bstm-marketplace-app/js/marketplace.js:34
+    var click = isOpen ? "window.location.href= + ' + "+r.url+" + ' + " : "alert( + Room
+                                                                          ^^^^^^^^^^^^^^
+
+SyntaxError: Invalid or unexpected token
+    at wrapSafe (node:internal/modules/cjs/loader:1806:18)
+    at checkSyntax (node:internal/main/check_syntax:76:3)
+
+Node.js v26.3.1
+/data/data/com.termux/files/home/bstm-marketplace-app/js/pages/admin-dashboard.js:49
+                <div className="min-h-screen bg-gray-50">
+                ^
+
+SyntaxError: Unexpected token '<'
+    at wrapSafe (node:internal/modules/cjs/loader:1806:18)
+    at checkSyntax (node:internal/main/check_syntax:76:3)
+
+Node.js v26.3.1
+(node:2901) Warning: Failed to load the ES module: /data/data/com.termux/files/home/bstm-marketplace-app/js/pages/gov-dashboard.js. Make sure to set "type": "module" in the nearest package.json file or use the .mjs extension.
+(Use `node --trace-warnings ...` to show where the warning was created)
+/data/data/com.termux/files/home/bstm-marketplace-app/js/pages/gov-dashboard.js:1
+import './js/firebase-auth.js';
+^^^^^^
+
+SyntaxError: Cannot use import statement outside a module
+    at wrapSafe (node:internal/modules/cjs/loader:1806:18)
+    at checkSyntax (node:internal/main/check_syntax:76:3)
+
+Node.js v26.3.1
+(node:2924) Warning: Failed to load the ES module: /data/data/com.termux/files/home/bstm-marketplace-app/js/pages/login.js. Make sure to set "type": "module" in the nearest package.json file or use the .mjs extension.
+(Use `node --trace-warnings ...` to show where the warning was created)
+/data/data/com.termux/files/home/bstm-marketplace-app/js/pages/login.js:1
+import { sendMagicLink, showStatus } from "../core/auth-service.js";
+^^^^^^
+
+SyntaxError: Cannot use import statement outside a module
+    at wrapSafe (node:internal/modules/cjs/loader:1806:18)
+    at checkSyntax (node:internal/main/check_syntax:76:3)
+
+Node.js v26.3.1
+(node:3164) Warning: Failed to load the ES module: /data/data/com.termux/files/home/bstm-marketplace-app/js/core/auth.js. Make sure to set "type": "module" in the nearest package.json file or use the .mjs extension.
+(Use `node --trace-warnings ...` to show where the warning was created)
+/data/data/com.termux/files/home/bstm-marketplace-app/js/core/auth.js:1
+export function getToken() {
+^^^^^^
+
+SyntaxError: Unexpected token 'export'
+    at wrapSafe (node:internal/modules/cjs/loader:1806:18)
+    at checkSyntax (node:internal/main/check_syntax:76:3)
+
+Node.js v26.3.1
+(node:3171) Warning: Failed to load the ES module: /data/data/com.termux/files/home/bstm-marketplace-app/js/core/menu.js. Make sure to set "type": "module" in the nearest package.json file or use the .mjs extension.
+(Use `node --trace-warnings ...` to show where the warning was created)
+/data/data/com.termux/files/home/bstm-marketplace-app/js/core/menu.js:1
+export function initMenu() {
+^^^^^^
+
+SyntaxError: Unexpected token 'export'
+    at wrapSafe (node:internal/modules/cjs/loader:1806:18)
+    at checkSyntax (node:internal/main/check_syntax:76:3)
+
+Node.js v26.3.1
+(node:3178) Warning: Failed to load the ES module: /data/data/com.termux/files/home/bstm-marketplace-app/js/core/storage.js. Make sure to set "type": "module" in the nearest package.json file or use the .mjs extension.
+(Use `node --trace-warnings ...` to show where the warning was created)
+/data/data/com.termux/files/home/bstm-marketplace-app/js/core/storage.js:1
+export const storage = {
+^^^^^^
+
+SyntaxError: Unexpected token 'export'
+    at wrapSafe (node:internal/modules/cjs/loader:1806:18)
+    at checkSyntax (node:internal/main/check_syntax:76:3)
+
+Node.js v26.3.1
+(node:3188) Warning: Failed to load the ES module: /data/data/com.termux/files/home/bstm-marketplace-app/js/core/events.js. Make sure to set "type": "module" in the nearest package.json file or use the .mjs extension.
+(Use `node --trace-warnings ...` to show where the warning was created)
+/data/data/com.termux/files/home/bstm-marketplace-app/js/core/events.js:1
+export function on(selector, event, handler) {
+^^^^^^
+
+SyntaxError: Unexpected token 'export'
+    at wrapSafe (node:internal/modules/cjs/loader:1806:18)
+    at checkSyntax (node:internal/main/check_syntax:76:3)
+
+Node.js v26.3.1
+(node:3202) Warning: Failed to load the ES module: /data/data/com.termux/files/home/bstm-marketplace-app/js/core/auth-service.js. Make sure to set "type": "module" in the nearest package.json file or use the .mjs extension.
+(Use `node --trace-warnings ...` to show where the warning was created)
+/data/data/com.termux/files/home/bstm-marketplace-app/js/core/auth-service.js:1
+export async function sendMagicLink(email) {
+^^^^^^
+
+SyntaxError: Unexpected token 'export'
+    at wrapSafe (node:internal/modules/cjs/loader:1806:18)
+    at checkSyntax (node:internal/main/check_syntax:76:3)
+
+Node.js v26.3.1
+
+════════════════════════════════════════════
+REPORT SAVED: bstm-debug-20260619-2159.txt
+════════════════════════════════════════════

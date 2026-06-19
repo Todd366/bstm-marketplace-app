@@ -1,0 +1,622 @@
+
+[0;35m[1m  ██████╗ ███████╗████████╗███╗   ███╗[0m
+[0;35m[1m  ██╔══██╗██╔════╝╚══██╔══╝████╗ ████║[0m
+[0;35m[1m  ██████╔╝███████╗   ██║   ██╔████╔██║[0m
+[0;35m[1m  ██╔══██╗╚════██║   ██║   ██║╚██╔╝██║[0m
+[0;35m[1m  ██████╔╝███████║   ██║   ██║ ╚═╝ ██║[0m
+[0;35m[1m  ╚═════╝ ╚══════╝   ╚═╝   ╚═╝     ╚═╝[0m
+
+[1;37m[1m  BSTM Marketplace — Full App Audit[0m
+  [2m📅 Friday 19 June 2026 — 21:55:08[0m
+  [2m📁 /data/data/com.termux/files/home/bstm-marketplace-app[0m
+  [2m📄 Report saving to: bstm-audit-20260619-2155.txt[0m
+
+[0;35m═══════════════════════════════════════════════════════════[0m
+
+[1;37m[1m[1] PROJECT OVERVIEW[0m
+[2m───────────────────────────────────────────────────────────[0m
+  [0;36mHTML Pages:[0m   27
+  [0;36mJS Files:[0m     92
+  [0;36mCSS Files:[0m    1
+  [0;36mComponents:[0m   7
+  [0;36mProject Size:[0m 514M
+
+  [0;33mBackup/Clutter files: 10[0m
+  [0;33m⚠️  No _backups/ folder — clutter may be in root[0m
+  [0;33m⚠️  node_modules/ present — 27M[0m
+  [0;36m📦 package.json found — Node project present[0m
+  [0;36m🖥️  backend/ folder found[0m
+  [0;36m⚛️  frontend/ folder found[0m
+
+[1;37m[1m[2] DIRECTORY STRUCTURE[0m
+[2m───────────────────────────────────────────────────────────[0m
+  [0;34m📁 ./[0m
+    [2m   .env.example[0m
+    [0;34m📁 .git/[0m
+    [0;34m📁 .github/[0m
+      [0;34m📁 workflows/[0m
+    [2m   .gitignore[0m
+    [2m   .htmlhintrc[0m
+    [0;36m📄 404.html[0m
+    [2m   LICENSE[0m
+    [2m   PRODUCTION_CHECKLIST.md[0m
+    [2m   README.md[0m
+    [2m   _headers[0m
+    [0;34m📁 _legacy/[0m
+      [2m   bstm-auth.js.bak[0m
+      [2m   nav.html.bak[0m
+      [2m   referral-system.js.bak[0m
+      [2m   thb-rewards.js.bak[0m
+    [0;36m📄 admin-dashboard.html[0m
+    [0;36m📄 analytics.html[0m
+    [2m   audit-debug.sh[0m
+    [2m   audit.sh[0m
+    [2m   audit_assets.txt[0m
+    [2m   audit_backups.txt[0m
+    [2m   audit_behavior_patterns.txt[0m
+    [2m   audit_broken_assets.txt[0m
+    [2m   audit_component_scripts.txt[0m
+    [2m   audit_doctype.txt[0m
+    [2m   audit_duplicate_ids.txt[0m
+    [2m   audit_fetch_components.txt[0m
+    [2m   audit_fetch_usage.txt[0m
+    [2m   audit_footer_usage.txt[0m
+    [2m   audit_html_structure.txt[0m
+    [2m   audit_inline_scripts.txt[0m
+    [2m   audit_js_errors.txt[0m
+    [2m   audit_legacy_files.txt[0m
+    [2m   audit_loader_usage.txt[0m
+    [0;34m📁 audit_logs/[0m
+      [2m   auth_usage.txt[0m
+      [2m   html_scripts.txt[0m
+      [2m   js_imports.txt[0m
+      [2m   js_syntax.txt[0m
+      [2m   menu_usage.txt[0m
+    [2m   audit_nav_usage.txt[0m
+    [2m   audit_todo.txt[0m
+    [0;34m📁 backend/[0m
+      [0;33m⚡ auth.js[0m
+      [0;33m⚡ db.js[0m
+      [0;33m⚡ email.js[0m
+      [0;33m⚡ firebase-admin.js[0m
+      [2m   package.json[0m
+      [0;33m⚡ role-detection.js[0m
+      [0;33m⚡ server.js[0m
+      [0;33m⚡ wallet-endpoints.js[0m
+    [2m   backup-script.sh[0m
+    [0;34m📁 backup_refactor/[0m
+      [0;36m📄 404.html[0m
+      [0;36m📄 admin-dashboard.html[0m
+      [0;36m📄 analytics.html[0m
+      [0;36m📄 buyer-dashboard.html[0m
+      [0;36m📄 cablink.html[0m
+      [0;36m📄 checkout.html[0m
+      [0;36m📄 ecosystem-hub.html[0m
+      [0;36m📄 gov-dashboard.html[0m
+      [0;36m📄 help.html[0m
+      [0;36m📄 index.html[0m
+      [0;36m📄 kyc-verification.html[0m
+      [0;36m📄 login.html[0m
+      [0;36m📄 marketplace.html[0m
+      [0;36m📄 messages.html[0m
+      [0;36m📄 monitoring-dashboard.html[0m
+      [0;36m📄 nav-backup.html[0m
+      [0;36m📄 notifications-all.html[0m
+      [0;36m📄 order-tracking.html[0m
+      [0;36m📄 product-detail.html[0m
+      [0;36m📄 room22-farm.html[0m
+      [0;36m📄 seller-dashboard.html[0m
+      [0;36m📄 settings.html[0m
+      [0;36m📄 terms.html[0m
+      [0;36m📄 thb-wallet.html[0m
+      [0;36m📄 upload-product.html[0m
+      [0;36m📄 verify.html[0m
+      [0;36m📄 wishlist.html[0m
+    [2m   bstm-audit-20260619-2155.txt[0m
+    [0;36m📄 buyer-dashboard.html[0m
+    [0;36m📄 cablink.html[0m
+    [0;36m📄 checkout.html[0m
+    [0;34m📁 components/[0m
+      [0;36m📄 global-search.html[0m
+      [0;36m📄 nav.html[0m
+      [0;36m📄 notifications.html[0m
+      [0;36m📄 room-switcher.html[0m
+      [0;33m⚡ smart-loader.js[0m
+      [0;36m📄 universal-footer.html[0m
+      [0;36m📄 universal-nav.html[0m
+    [0;34m📁 database/[0m
+      [0;34m📁 schema/[0m
+      [2m   schema.sql[0m
+    [0;34m📁 docs/[0m
+      [2m   DEPLOYMENT.md[0m
+      [2m   SETUP.md[0m
+    [0;36m📄 ecosystem-hub.html[0m
+    [0;33m⚡ fix-nav-loader.js[0m
+    [0;34m📁 frontend/[0m
+      [2m   package-lock.json[0m
+      [2m   package.json[0m
+      [0;34m📁 public/[0m
+      [0;34m📁 src/[0m
+    [0;36m📄 gov-dashboard.html[0m
+    [0;36m📄 help.html[0m
+    [0;36m📄 index.html[0m
+    [0;34m📁 js/[0m
+      [0;33m⚡ ab-testing.js[0m
+      [0;33m⚡ advanced-search.js[0m
+      [0;33m⚡ ai-recommendations.js[0m
+      [0;33m⚡ analytics-tracking.js[0m
+      [0;33m⚡ app.js[0m
+      [0;33m⚡ auth.js[0m
+      [0;33m⚡ bstm-auth.js[0m
+      [0;33m⚡ bstm-ecosystem-links.js[0m
+      [0;33m⚡ cache-manager.js[0m
+      [0;34m📁 core/[0m
+      [0;33m⚡ dark-mode.js[0m
+      [0;33m⚡ error-logging.js[0m
+      [0;33m⚡ firebase-auth.js[0m
+      [0;33m⚡ firebase-config.js[0m
+      [0;33m⚡ firebase-db.js[0m
+      [0;33m⚡ firebase-storage.js[0m
+      [0;33m⚡ form-validation.js[0m
+      [0;33m⚡ global.js[0m
+      [0;33m⚡ image-lazy-load.js[0m
+      [0;33m⚡ infinite-scroll.js[0m
+      [0;33m⚡ location-services.js[0m
+      [0;33m⚡ marketplace.js[0m
+      [0;33m⚡ mobile-optimization.js[0m
+      [0;33m⚡ multi-language.js[0m
+      [0;33m⚡ offline-queue.js[0m
+      [0;34m📁 pages/[0m
+      [0;33m⚡ paystack.js[0m
+      [0;33m⚡ performance-monitor.js[0m
+      [0;33m⚡ performance-optimizer.js[0m
+      [0;33m⚡ push-notifications.js[0m
+      [0;33m⚡ qr-code-generator.js[0m
+      [0;33m⚡ qr-generator.js[0m
+      [0;33m⚡ referral-system.js[0m
+      [0;33m⚡ role-detection.js[0m
+      [0;33m⚡ security-hardening.js[0m
+      [0;33m⚡ share-api.js[0m
+      [0;33m⚡ supabase-integration.js[0m
+      [0;33m⚡ thb-display.js[0m
+      [0;33m⚡ thb-rewards.js[0m
+      [0;33m⚡ toast-notifications.js[0m
+      [0;33m⚡ voice-search.js[0m
+      [0;33m⚡ websocket-client.js[0m
+    [0;36m📄 kyc-verification.html[0m
+    [0;36m📄 login.html[0m
+    [0;36m📄 marketplace.html[0m
+    [2m   marketplace.html.bak[0m
+    [0;36m📄 messages.html[0m
+    [0;36m📄 monitoring-dashboard.html[0m
+    [0;36m📄 nav-backup.html[0m
+    [0;34m📁 node_modules/[0m
+    [0;36m📄 notifications-all.html[0m
+    [0;36m📄 order-tracking.html[0m
+    [2m   package-lock.json[0m
+    [2m   package.json[0m
+    [0;36m📄 product-detail.html[0m
+    [0;36m📄 room22-farm.html[0m
+    [0;36m📄 seller-dashboard.html[0m
+    [0;36m📄 settings.html[0m
+    [0;33m⚡ sw.js[0m
+    [0;36m📄 terms.html[0m
+    [0;36m📄 thb-wallet.html[0m
+    [0;34m📁 tools/[0m
+      [0;33m⚡ extract-scripts.js[0m
+    [0;36m📄 upload-product.html[0m
+    [0;36m📄 verify.html[0m
+    [0;36m📄 wishlist.html[0m
+
+[1;37m[1m[3] HTML PAGES INVENTORY (27 pages)[0m
+[2m───────────────────────────────────────────────────────────[0m
+  [2mFormat: PAGE | Lines | Nav | Footer | Loader | Auth | Supabase | BG[0m
+
+  [0;36m404.html                        [0m   89 ln | Nav:\033[0;32m✅\033[0m Foot:\033[0;32m✅\033[0m Load:\033[0;32m✅\033[0m Auth:\033[2mnone\033[0m   SB:\033[2m─\033[0m BG:\033[0;33mgray-50\033[0m 
+  [0;36madmin-dashboard.html            [0m   47 ln | Nav:\033[0;32m✅\033[0m Foot:\033[0;32m✅\033[0m Load:\033[0;32m✅\033[0m Auth:\033[2mnone\033[0m   SB:\033[2m─\033[0m BG:\033[0;35mgrad\033[0m 
+  [0;36manalytics.html                  [0m  357 ln | Nav:\033[0;32m✅\033[0m Foot:\033[0;32m✅\033[0m Load:\033[0;32m✅\033[0m Auth:\033[2mnone\033[0m   SB:\033[2m─\033[0m BG:\033[2mdark\033[0m 
+  [0;36mbuyer-dashboard.html            [0m  155 ln | Nav:\033[0;32m✅\033[0m Foot:\033[0;32m✅\033[0m Load:\033[0;32m✅\033[0m Auth:\033[2mnone\033[0m   SB:\033[2m─\033[0m BG:\033[0;32mF8F7FF\033[0m 
+  [0;36mcablink.html                    [0m  352 ln | Nav:\033[0;32m✅\033[0m Foot:\033[0;32m✅\033[0m Load:\033[0;32m✅\033[0m Auth:\033[2mnone\033[0m   SB:\033[2m─\033[0m BG:\033[0;33mgray-50\033[0m 
+  [0;36mcheckout.html                   [0m  324 ln | Nav:\033[0;32m✅\033[0m Foot:\033[0;32m✅\033[0m Load:\033[0;32m✅\033[0m Auth:\033[2mnone\033[0m   SB:\033[2m─\033[0m BG:\033[2mdark\033[0m 
+  [0;36mecosystem-hub.html              [0m  299 ln | Nav:\033[0;32m✅\033[0m Foot:\033[0;32m✅\033[0m Load:\033[0;32m✅\033[0m Auth:\033[2mnone\033[0m   SB:\033[2m─\033[0m BG:\033[2mdark\033[0m 
+  [0;36mgov-dashboard.html              [0m   79 ln | Nav:\033[0;32m✅\033[0m Foot:\033[0;32m✅\033[0m Load:\033[0;32m✅\033[0m Auth:\033[2mnone\033[0m   SB:\033[2m─\033[0m BG:\033[0;33mgray-50\033[0m 
+  [0;36mhelp.html                       [0m  334 ln | Nav:\033[0;32m✅\033[0m Foot:\033[0;32m✅\033[0m Load:\033[0;32m✅\033[0m Auth:\033[2mnone\033[0m   SB:\033[2m─\033[0m BG:\033[2mdark\033[0m 
+  [0;36mindex.html                      [0m  134 ln | Nav:\033[0;32m✅\033[0m Foot:\033[0;32m✅\033[0m Load:\033[0;32m✅\033[0m Auth:\033[2mnone\033[0m   SB:\033[2m─\033[0m BG:\033[0;32mF8F7FF\033[0m 
+  [0;36mkyc-verification.html           [0m  288 ln | Nav:\033[0;32m✅\033[0m Foot:\033[0;32m✅\033[0m Load:\033[0;32m✅\033[0m Auth:\033[0;33mOLD\033[0m  SB:\033[2m─\033[0m BG:\033[0;33mgray-50\033[0m 
+  [0;36mlogin.html                      [0m   75 ln | Nav:\033[0;32m✅\033[0m Foot:\033[0;32m✅\033[0m Load:\033[0;32m✅\033[0m Auth:\033[2mnone\033[0m   SB:\033[2m─\033[0m BG:\033[0;32mF8F7FF\033[0m 
+  [0;36mmarketplace.html                [0m   89 ln | Nav:\033[0;32m✅\033[0m Foot:\033[0;32m✅\033[0m Load:\033[0;32m✅\033[0m Auth:\033[2mnone\033[0m   SB:\033[2m─\033[0m BG:\033[0;32mF8F7FF\033[0m 
+  [0;36mmessages.html                   [0m  276 ln | Nav:\033[0;32m✅\033[0m Foot:\033[0;32m✅\033[0m Load:\033[0;32m✅\033[0m Auth:\033[2mnone\033[0m   SB:\033[2m─\033[0m BG:\033[0;33mgray-50\033[0m 
+  [0;36mmonitoring-dashboard.html       [0m  117 ln | Nav:\033[0;32m✅\033[0m Foot:\033[0;32m✅\033[0m Load:\033[0;32m✅\033[0m Auth:\033[2mnone\033[0m   SB:\033[2m─\033[0m BG:\033[2mdark\033[0m 
+  [0;36mnav-backup.html                 [0m   50 ln | Nav:\033[0;31m✗\033[0m Foot:\033[0;31m✗\033[0m Load:\033[0;31m✗\033[0m Auth:\033[2mnone\033[0m   SB:\033[2m─\033[0m BG:\033[2m?\033[0m 
+  [0;36mnotifications-all.html          [0m  226 ln | Nav:\033[0;32m✅\033[0m Foot:\033[0;32m✅\033[0m Load:\033[0;32m✅\033[0m Auth:\033[0;33mOLD\033[0m  SB:\033[2m─\033[0m BG:\033[0;33mgray-50\033[0m 
+  [0;36morder-tracking.html             [0m  232 ln | Nav:\033[0;32m✅\033[0m Foot:\033[0;32m✅\033[0m Load:\033[0;32m✅\033[0m Auth:\033[2mnone\033[0m   SB:\033[2m─\033[0m BG:\033[2mdark\033[0m 
+  [0;36mproduct-detail.html             [0m  306 ln | Nav:\033[0;32m✅\033[0m Foot:\033[0;32m✅\033[0m Load:\033[0;32m✅\033[0m Auth:\033[2mnone\033[0m   SB:\033[2m─\033[0m BG:\033[2mdark\033[0m 
+  [0;36mroom22-farm.html                [0m  394 ln | Nav:\033[0;32m✅\033[0m Foot:\033[0;32m✅\033[0m Load:\033[0;32m✅\033[0m Auth:\033[0;33mOLD\033[0m  SB:\033[2m─\033[0m BG:\033[0;33mgray-50\033[0m 
+  [0;36mseller-dashboard.html           [0m  111 ln | Nav:\033[0;32m✅\033[0m Foot:\033[0;32m✅\033[0m Load:\033[0;32m✅\033[0m Auth:\033[2mnone\033[0m   SB:\033[2m─\033[0m BG:\033[0;32mF8F7FF\033[0m 
+  [0;36msettings.html                   [0m  351 ln | Nav:\033[0;32m✅\033[0m Foot:\033[0;32m✅\033[0m Load:\033[0;32m✅\033[0m Auth:\033[2mnone\033[0m   SB:\033[2m─\033[0m BG:\033[2mdark\033[0m 
+  [0;36mterms.html                      [0m  299 ln | Nav:\033[0;32m✅\033[0m Foot:\033[0;32m✅\033[0m Load:\033[0;32m✅\033[0m Auth:\033[2mnone\033[0m   SB:\033[2m─\033[0m BG:\033[2mdark\033[0m 
+  [0;36mthb-wallet.html                 [0m  694 ln | Nav:\033[0;32m✅\033[0m Foot:\033[0;32m✅\033[0m Load:\033[0;32m✅\033[0m Auth:\033[0;33mOLD\033[0m  SB:\033[2m─\033[0m BG:\033[0;33mgray-50\033[0m 
+  [0;36mupload-product.html             [0m  355 ln | Nav:\033[0;32m✅\033[0m Foot:\033[0;32m✅\033[0m Load:\033[0;32m✅\033[0m Auth:\033[2mnone\033[0m   SB:\033[2m─\033[0m BG:\033[0;33mgray-50\033[0m 
+  [0;36mverify.html                     [0m  140 ln | Nav:\033[0;32m✅\033[0m Foot:\033[0;32m✅\033[0m Load:\033[0;32m✅\033[0m Auth:\033[2mnone\033[0m   SB:\033[2m─\033[0m BG:\033[0;32mF8F7FF\033[0m 
+  [0;36mwishlist.html                   [0m   76 ln | Nav:\033[0;32m✅\033[0m Foot:\033[0;32m✅\033[0m Load:\033[0;32m✅\033[0m Auth:\033[2mnone\033[0m   SB:\033[2m─\033[0m BG:\033[0;33mgray-50\033[0m 
+
+[1;37m[1m[4] COMPONENT FILES[0m
+[2m───────────────────────────────────────────────────────────[0m
+  [0;32m✅ components/nav.html[0m [2m(105 lines)[0m
+     [0;33m   Static nav (no auth state)[0m
+  [0;32m✅ components/universal-nav.html[0m [2m(81 lines)[0m
+  [0;32m✅ components/universal-footer.html[0m [2m(134 lines)[0m
+  [0;32m✅ components/smart-loader.js[0m [2m(24 lines)[0m
+  [0;31m❌ MISSING: js/bstm-config.js[0m
+  [0;31m❌ MISSING: js/bstm-core.js[0m
+  [0;31m❌ MISSING: css/bstm-styles.css[0m
+  [0;32m✅ sw.js[0m [2m(119 lines)[0m
+  [0;31m❌ MISSING: manifest.json[0m
+
+[1;37m[1m[5] AUTH SYSTEM AUDIT[0m
+[2m───────────────────────────────────────────────────────────[0m
+  [0;36mAuth files found:[0m
+  [0;33m⚡ js/auth.js[0m [2m(60 lines)[0m
+  [0;33m⚡ js/bstm-auth.js[0m [2m(188 lines)[0m
+  [0;33m⚡ js/firebase-auth.js[0m [2m(303 lines)[0m
+  [0;33m⚡ js/firebase-config.js[0m [2m(29 lines)[0m
+
+  [0;36mPages using FIREBASE auth:[0m
+
+  [0;36mPages using OLD bstm-auth.js:[0m
+  \033[0;33m  ⚠️  kyc-verification.html\033[0m
+  \033[0;33m  ⚠️  notifications-all.html\033[0m
+  \033[0;33m  ⚠️  room22-farm.html\033[0m
+  \033[0;33m  ⚠️  thb-wallet.html\033[0m
+
+  [0;36mPages using NEW bstm-core.js (Supabase):[0m
+
+  [0;36mPages with NO auth at all:[0m
+  [2m  ─ 404.html (public page)[0m
+  [2m  ─ admin-dashboard.html (public page)[0m
+  [2m  ─ analytics.html (public page)[0m
+  [2m  ─ buyer-dashboard.html (public page)[0m
+  [2m  ─ cablink.html (public page)[0m
+  [2m  ─ checkout.html (public page)[0m
+  [2m  ─ ecosystem-hub.html (public page)[0m
+  [2m  ─ gov-dashboard.html (public page)[0m
+  [2m  ─ help.html (public page)[0m
+  [2m  ─ index.html (public page)[0m
+  [2m  ─ login.html (public page)[0m
+  [2m  ─ marketplace.html (public page)[0m
+  [2m  ─ messages.html (public page)[0m
+  [2m  ─ monitoring-dashboard.html (public page)[0m
+  [2m  ─ nav-backup.html (public page)[0m
+  [2m  ─ order-tracking.html (public page)[0m
+  [2m  ─ product-detail.html (public page)[0m
+  [2m  ─ seller-dashboard.html (public page)[0m
+  [2m  ─ settings.html (public page)[0m
+  [2m  ─ terms.html (public page)[0m
+  [2m  ─ upload-product.html (public page)[0m
+  [2m  ─ verify.html (public page)[0m
+  [2m  ─ wishlist.html (public page)[0m
+
+[1;37m[1m[6] JS FILES INVENTORY[0m
+[2m───────────────────────────────────────────────────────────[0m
+  [2mFile | Lines | Purpose (detected from name/content)[0m
+
+  [0;36mab-testing.js                      [0m   80 ln  [2mA/B testing framework[0m
+  [0;36madvanced-search.js                 [0m  128 ln  [2mSearch with history[0m
+  [0;36mai-recommendations.js              [0m  110 ln  [2mProduct recommendations (AI)[0m
+  [0;36manalytics-tracking.js              [0m   31 ln  [2mUnknown purpose[0m
+  [0;36mapp.js                             [0m   13 ln  [2mApp state & product data[0m
+  [0;31mauth.js                            [0m   60 ln  [2mFirebase compat auth — LEGACY[0m
+  [0;31mbstm-auth.js                       [0m  188 ln  [2mlocalStorage auth — LEGACY[0m
+  [0;36mbstm-ecosystem-links.js            [0m  247 ln  [2mUnknown purpose[0m
+  [0;36mcache-manager.js                   [0m  125 ln  [2mCaching layer[0m
+  [0;36mdark-mode.js                       [0m  118 ln  [2mTheme switcher[0m
+  [0;36merror-logging.js                   [0m   25 ln  [2mError tracking[0m
+  [0;31mfirebase-auth.js                   [0m  303 ln  [2mFirebase modular auth — LEGACY[0m
+  [0;31mfirebase-config.js                 [0m   29 ln  [2mFirebase config — LEGACY[0m
+  [0;31mfirebase-db.js                     [0m  135 ln  [2mFirestore DB ops — LEGACY[0m
+  [0;31mfirebase-storage.js                [0m   49 ln  [2mFirebase Storage — LEGACY[0m
+  [0;36mform-validation.js                 [0m   13 ln  [2mUnknown purpose[0m
+  [0;36mglobal.js                          [0m   28 ln  [2mUnknown purpose[0m
+  [0;36mimage-lazy-load.js                 [0m   15 ln  [2mUnknown purpose[0m
+  [0;36minfinite-scroll.js                 [0m   19 ln  [2mUnknown purpose[0m
+  [0;36mlocation-services.js               [0m   94 ln  [2mGeolocation services[0m
+  [0;36mmarketplace.js                     [0m   78 ln  [2mUnknown purpose[0m
+  [0;36mmobile-optimization.js             [0m  193 ln  [2mPWA install prompts[0m
+  [0;36mmulti-language.js                  [0m  184 ln  [2mi18n language switching[0m
+  [0;36moffline-queue.js                   [0m   37 ln  [2mOffline action queue[0m
+  [0;36mpaystack.js                        [0m  113 ln  [2mPaystack payment integration[0m
+  [0;36mperformance-monitor.js             [0m    8 ln  [2mPerformance tracking[0m
+  [0;36mperformance-optimizer.js           [0m  112 ln  [2mUnknown purpose[0m
+  [0;36mpush-notifications.js              [0m  122 ln  [2mPush notification handler[0m
+  [0;36mqr-code-generator.js               [0m   62 ln  [2mUnknown purpose[0m
+  [0;36mqr-generator.js                    [0m   17 ln  [2mUnknown purpose[0m
+  [0;36mreferral-system.js                 [0m  192 ln  [2mReferral/affiliate system[0m
+  [0;36mrole-detection.js                  [0m  157 ln  [2mRole-based routing[0m
+  [0;36msecurity-hardening.js              [0m  124 ln  [2mSecurity utilities[0m
+  [0;36mshare-api.js                       [0m   94 ln  [2mNative share API[0m
+  [0;36msupabase-integration.js            [0m    2 ln  [2mUnknown purpose[0m
+  [0;33mthb-display.js                     [0m  178 ln  [2mTHB balance display[0m
+  [0;33mthb-rewards.js                     [0m  280 ln  [2mTHB token reward logic[0m
+  [0;36mtoast-notifications.js             [0m   18 ln  [2mUnknown purpose[0m
+  [0;36mvoice-search.js                    [0m  136 ln  [2mUnknown purpose[0m
+  [0;36mwebsocket-client.js                [0m  126 ln  [2mRealtime websocket client[0m
+
+[1;37m[1m[7] NAVIGATION LINK MAP — Where each page links to[0m
+[2m───────────────────────────────────────────────────────────[0m
+  [0;36m404.html                           [0m → help.html index.html room22-farm.html 
+  [0;36madmin-dashboard.html               [0m → (no internal links)
+  [0;36manalytics.html                     [0m → seller-dashboard.html 
+  [0;36mbuyer-dashboard.html               [0m → cablink.html kyc-verification.html login.html marketplace.html messages.html order-tracking.html room22-farm.html seller-dashboard.html settings.html thb-wallet.html wishlist.html 
+  [0;36mcablink.html                       [0m → (no internal links)
+  [0;36mcheckout.html                      [0m → index.html 
+  [0;36mecosystem-hub.html                 [0m → (no internal links)
+  [0;36mgov-dashboard.html                 [0m → (no internal links)
+  [0;36mhelp.html                          [0m → messages.html 
+  [0;36mindex.html                         [0m → marketplace.html room22-farm.html seller-dashboard.html 
+  [0;36mkyc-verification.html              [0m → terms.html 
+  [0;36mlogin.html                         [0m → index.html 
+  [0;36mmarketplace.html                   [0m → seller-dashboard.html upload-product.html 
+  [0;36mmessages.html                      [0m → buyer-dashboard.html 
+  [0;36mmonitoring-dashboard.html          [0m → (no internal links)
+  [0;36mnav-backup.html                    [0m → buyer-dashboard.html help.html index.html marketplace.html messages.html room22-farm.html seller-dashboard.html settings.html thb-wallet.html upload-product.html wishlist.html 
+  [0;36mnotifications-all.html             [0m → (no internal links)
+  [0;36morder-tracking.html                [0m → buyer-dashboard.html index.html 
+  [0;36mproduct-detail.html                [0m → checkout.html index.html 
+  [0;36mroom22-farm.html                   [0m → (no internal links)
+  [0;36mseller-dashboard.html              [0m → analytics.html kyc-verification.html login.html messages.html order-tracking.html thb-wallet.html upload-product.html 
+  [0;36msettings.html                      [0m → buyer-dashboard.html 
+  [0;36mterms.html                         [0m → index.html 
+  [0;36mthb-wallet.html                    [0m → index.html room22-farm.html 
+  [0;36mupload-product.html                [0m → seller-dashboard.html 
+  [0;36mverify.html                        [0m → buyer-dashboard.html index.html login.html 
+  [0;36mwishlist.html                      [0m → index.html 
+
+[1;37m[1m[8] MISSING FILES (referenced but don't exist)[0m
+[2m───────────────────────────────────────────────────────────[0m
+  [0;31m❌ Missing JS: //cdn.js[0m
+  [0;31m❌ Missing JS: //js.paystack.co/v1/inline.js[0m
+  [0;31m❌ Missing JS: 18/umd/react-dom.production.min.js[0m
+  [0;31m❌ Missing JS: 18/umd/react.production.min.js[0m
+  [0;31m❌ Missing JS: 2.5.0/dist/Recharts.js[0m
+  [0;31m❌ Missing JS: 4/dist/email.min.js[0m
+  [0;31m❌ Missing JS: babel/standalone/babel.min.js[0m
+  [2m(done scanning references)[0m
+
+[1;37m[1m[9] SECURITY SCAN[0m
+[2m───────────────────────────────────────────────────────────[0m
+  [0;36m── Auth Bypasses:[0m
+  [0;32m✅ No auth bypasses found[0m
+
+  [0;36m── Hardcoded Credentials:[0m
+  [0;33m⚠️  Exposed credential in ./backend/db.js line 13[0m
+  [0;33m⚠️  Exposed credential in ./backend/firebase-admin.js line 13[0m
+  [0;33m⚠️  Exposed credential in ./js/firebase-auth.js line 26[0m
+  [0;33m⚠️  Exposed credential in ./js/firebase-auth.js line 27[0m
+  [0;33m⚠️  Exposed credential in ./js/firebase-config.js line 15[0m
+  [0;33m⚠️  Firebase API keys in source files[0m
+
+  [0;36m── XSS Risks (innerHTML with user data):[0m
+  [0;33m⚠️  cablink.html:322 —         notification.innerHTML = `[0m
+  [0;33m⚠️  notifications-all.html:129 —             container.innerHTML = `[0m
+  [0;33m⚠️  notifications-all.html:138 —         container.innerHTML = filtered.map(notif => `[0m
+  [0;33m⚠️  thb-wallet.html:514 —             list.innerHTML = '<p class="text-center text-gray-500 py-12">No transactions yet. Start earning THB!</p>';[0m
+  [0;33m⚠️  thb-wallet.html:518 —         list.innerHTML = transactions.map(tx => `[0m
+
+  [0;36m── Scripts outside </html> tag (invalid HTML):[0m
+  [0;31m❌ 404.html has 1 script(s) AFTER </html>[0m
+  [0;31m❌ admin-dashboard.html has 1 script(s) AFTER </html>[0m
+  [0;31m❌ analytics.html has 1 script(s) AFTER </html>[0m
+  [0;31m❌ cablink.html has 1 script(s) AFTER </html>[0m
+  [0;31m❌ checkout.html has 1 script(s) AFTER </html>[0m
+  [0;31m❌ ecosystem-hub.html has 1 script(s) AFTER </html>[0m
+  [0;31m❌ gov-dashboard.html has 1 script(s) AFTER </html>[0m
+  [0;31m❌ help.html has 1 script(s) AFTER </html>[0m
+  [0;31m❌ index.html has 1 script(s) AFTER </html>[0m
+  [0;31m❌ kyc-verification.html has 1 script(s) AFTER </html>[0m
+  [0;31m❌ marketplace.html has 1 script(s) AFTER </html>[0m
+  [0;31m❌ messages.html has 1 script(s) AFTER </html>[0m
+  [0;31m❌ monitoring-dashboard.html has 1 script(s) AFTER </html>[0m
+  [0;31m❌ notifications-all.html has 1 script(s) AFTER </html>[0m
+  [0;31m❌ order-tracking.html has 1 script(s) AFTER </html>[0m
+  [0;31m❌ product-detail.html has 1 script(s) AFTER </html>[0m
+  [0;31m❌ room22-farm.html has 1 script(s) AFTER </html>[0m
+  [0;31m❌ settings.html has 1 script(s) AFTER </html>[0m
+  [0;31m❌ terms.html has 1 script(s) AFTER </html>[0m
+  [0;31m❌ thb-wallet.html has 1 script(s) AFTER </html>[0m
+  [0;31m❌ upload-product.html has 1 script(s) AFTER </html>[0m
+
+[1;37m[1m[10] SUPABASE CONFIGURATION STATUS[0m
+[2m───────────────────────────────────────────────────────────[0m
+  [0;31m❌ js/bstm-config.js MISSING — Supabase not configured[0m
+
+  [0;36mPages with Supabase CDN:[0m
+  [0;32m  0 pages have Supabase CDN loaded[0m
+
+  [0;36mTables expected in Supabase (from code scan):[0m
+
+[1;37m[1m[11] FEATURE DETECTION[0m
+[2m───────────────────────────────────────────────────────────[0m
+  [0;36m── Core E-commerce:[0m
+  [0;32m✅ Product listing[0m
+  [0;32m✅ Cart system[0m
+  [0;32m✅ Checkout/Payment[0m
+  [0;32m✅ Order tracking[0m
+  [0;32m✅ Wishlist[0m
+  [0;32m✅ Product search[0m
+  [0;32m✅ Product detail page[0m
+  [0;32m✅ Seller dashboard[0m
+  [0;32m✅ Buyer dashboard[0m
+  [0;32m✅ Upload/add product[0m
+
+  [0;36m── Auth & Users:[0m
+  [0;32m✅ Login page[0m
+  [0;32m✅ Sign up/register[0m
+  [0;32m✅ Email auth[0m
+  [0;32m✅ Role-based access[0m
+  [0;31m❌ Auth state in nav (not found)[0m
+
+  [0;36m── BSTM-Specific:[0m
+  [0;32m✅ THB token rewards[0m
+  [0;32m✅ THB wallet[0m
+  [0;32m✅ Room system (63)[0m
+  [0;32m✅ CabLink integration[0m
+
+  [0;36m── Technical Features:[0m
+  [0;32m✅ PWA/Service Worker[0m
+  [0;32m✅ Offline support[0m
+  [0;32m✅ Push notifications[0m
+  [0;32m✅ Referral system[0m
+  [0;32m✅ Dark mode[0m
+  [0;32m✅ Multi-language[0m
+  [0;32m✅ A/B testing[0m
+  [0;32m✅ Analytics/tracking[0m
+  [0;32m✅ AI recommendations[0m
+  [0;31m❌ Websocket/Realtime (not found)[0m
+
+[1;37m[1m[12] EXPECTED USER FLOWS[0m
+[2m───────────────────────────────────────────────────────────[0m
+  [0;36mNew Visitor Flow:[0m
+  [2mindex.html → marketplace.html → product-detail.html → login.html → checkout.html → order-tracking.html[0m
+
+  [0;36mChecking each step exists:[0m
+  [0;32m✅ index.html[0m
+  [0;32m✅ marketplace.html[0m
+  [0;32m✅ product-detail.html[0m
+  [0;32m✅ login.html[0m
+  [0;32m✅ checkout.html[0m
+  [0;32m✅ order-tracking.html[0m
+  [0;31m❌ order-success.html (MISSING)[0m
+
+  [0;36mSeller Flow:[0m
+  [0;32m✅ login.html[0m
+  [0;32m✅ seller-dashboard.html[0m
+  [0;32m✅ upload-product.html[0m
+  [0;32m✅ analytics.html[0m
+
+  [0;36mAdmin Flow:[0m
+  [0;32m✅ gov-dashboard.html[0m
+  [0;32m✅ admin-dashboard.html[0m
+  [0;32m✅ monitoring-dashboard.html[0m
+  [0;32m✅ analytics.html[0m
+
+[1;37m[1m[13] UNFINISHED CODE (TODO/FIXME/HACK)[0m
+[2m───────────────────────────────────────────────────────────[0m
+  [0;33m404.html:64[0m — [2m<strong>6 of 63 rooms</strong> are currently active. More coming soon![0m
+  [0;33manalytics.html:167[0m — [2m<img src=https://via.placeholder.com/60 alt=Product class=w-12 h-12 rounded-lg>[0m
+  [0;33manalytics.html:178[0m — [2m<img src=https://via.placeholder.com/60 alt=Product class=w-12 h-12 rounded-lg>[0m
+  [0;33manalytics.html:189[0m — [2m<img src=https://via.placeholder.com/60 alt=Product class=w-12 h-12 rounded-lg>[0m
+  [0;33mcablink.html:66[0m — [2m<input type=text placeholder=Enter pickup address class=w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:border-blue-600>[0m
+  [0;33mcablink.html:71[0m — [2m<input type=text placeholder=Enter destination class=w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:border-blue-600>[0m
+  [0;33mcheckout.html:71[0m — [2m<input type=text id=fullName required class=w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-purple-600 placeholder=Mpho Kgosi>[0m
+  [0;33mcheckout.html:75[0m — [2m<input type=tel id=phone required class=w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-purple-600 placeholder=+267 XX XXX XXX>[0m
+  [0;33mcheckout.html:81[0m — [2m<input type=email id=email required class=w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-purple-600 placeholder=mpho@example.com>[0m
+  [0;33mcheckout.html:86[0m — [2m<input type=text id=address required class=w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-purple-600 mb-3 placeholder=Street Address>[0m
+  [0;33mcheckout.html:95[0m — [2m<input type=text id=postal placeholder=Postal Code class=px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-purple-600>[0m
+  [0;33mcheckout.html:101[0m — [2m<textarea id=notes rows=3 class=w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-purple-600 placeholder=Any special delivery instructions...></textarea>[0m
+  [0;33mcheckout.html:197[0m — [2m<img src=https://via.placeholder.com/80/4ade80/ffffff?text=Tomatoes alt=Product class=w-16 h-16 rounded-lg>[0m
+  [0;33mglobal-search.html:11[0m — [2mplaceholder=Search products, rooms, help articles...[0m
+  [0;33mroom-switcher.html:21[0m — [2m<input type=text id=roomSearch placeholder=Search rooms... class=w-full pl-12 pr-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:border-purple-600>[0m
+  [0;33mindex.html:57[0m — [2m<span><i class=fas fa-phone-alt mr-2></i>+267 XX XXX XXX</span>[0m
+  [0;33mindex.html:124[0m — [2m<input type=text id=searchInput placeholder=Search products, services, or sellers... class=flex-1 outline-none text-gray-700 px-4 py-2>[0m
+  [0;33mindex.html:198[0m — [2m<img src=/api/placeholder/600/500 alt=BSTM Marketplace class=rounded-3xl shadow-2xl>[0m
+  [0;33mindex.html:359[0m — [2m<img src=/api/placeholder/400/300 alt=Fresh Tomatoes class=w-full h-64 object-cover>[0m
+  [0;33mindex.html:395[0m — [2m<img src=/api/placeholder/400/300 alt=iPhone class=w-full h-64 object-cover>[0m
+  [0;33mindex.html:431[0m — [2m<img src=/api/placeholder/400/300 alt=Sofa class=w-full h-64 object-cover>[0m
+  [0;33mindex.html:467[0m — [2m<img src=/api/placeholder/400/300 alt=Photography class=w-full h-64 object-cover>[0m
+  [0;33mindex.html:500[0m — [2m<!-- TODO: Load more products dynamically from Supabase -->[0m
+  [0;33mindex.html:638[0m — [2m<input type=email id=emailInput class=w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 placeholder=your@email.com>[0m
+  [0;33mindex.html:642[0m — [2m<input type=password id=passwordInput class=w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 placeholder=••••••••>[0m
+
+[1;37m[1m[14] DEAD CODE & CLUTTER[0m
+[2m───────────────────────────────────────────────────────────[0m
+  [0;36m── Backup files (should be in _backups/):[0m
+  [0;33m⚠️  ./marketplace.html.bak2[0m
+  [0;33m⚠️  ./_legacy/buyer-dashboard.html.backup[0m
+  [0;33m⚠️  ./_legacy/login.html.backup[0m
+  [0;33m⚠️  ./_legacy/marketplace.html.backup[0m
+  [0;33m⚠️  ./_legacy/buyer-dashboard.html.broken[0m
+  [0;33m⚠️  ./_legacy/nav.html.bak[0m
+  [0;33m⚠️  ./_legacy/bstm-auth.js.bak[0m
+  [0;33m⚠️  ./_legacy/referral-system.js.bak[0m
+  [0;33m⚠️  ./_legacy/thb-rewards.js.bak[0m
+  [0;33m⚠️  ./marketplace.html.bak[0m
+
+  [0;36m── Duplicate/conflicting nav files:[0m
+  [0;33m⚠️  components/nav.html exists[0m
+  [0;33m⚠️  components/universal-nav.html exists[0m
+  [0;33m⚠️  nav-backup.html exists[0m
+
+  [0;36m── Legacy Firebase JS files (kept but should not load):[0m
+  [2m   js/auth.js (legacy — keep but don't load in HTML)[0m
+  [2m   js/firebase-auth.js (legacy — keep but don't load in HTML)[0m
+  [2m   js/firebase-config.js (legacy — keep but don't load in HTML)[0m
+  [2m   js/firebase-db.js (legacy — keep but don't load in HTML)[0m
+  [2m   js/firebase-storage.js (legacy — keep but don't load in HTML)[0m
+
+  [0;36m── Large files that may bloat load time:[0m
+  [0;33m  11904 lines — total[0m
+  [0;33m  694 lines — ./thb-wallet.html[0m
+  [0;33m  394 lines — ./room22-farm.html[0m
+  [0;33m  357 lines — ./analytics.html[0m
+  [0;33m  355 lines — ./upload-product.html[0m
+  [0;33m  352 lines — ./cablink.html[0m
+  [0;33m  351 lines — ./settings.html[0m
+  [0;33m  334 lines — ./help.html[0m
+  [0;33m  324 lines — ./checkout.html[0m
+  [0;33m  309 lines — ./backend/server.js[0m
+  [0;33m  306 lines — ./product-detail.html[0m
+  [0;33m  303 lines — ./js/firebase-auth.js[0m
+  [0;33m  299 lines — ./terms.html[0m
+  [0;33m  299 lines — ./ecosystem-hub.html[0m
+  [0;33m  288 lines — ./kyc-verification.html[0m
+
+[0;31m[1m[15] CRITICAL ISSUES SUMMARY[0m
+[0;31m═══════════════════════════════════════════════════════════[0m
+  [0;31m🔴 bstm-config.js missing or unconfigured[0m
+  [0;31m🔴 bstm-core.js missing[0m
+  [0;31m🔴 login.html missing Font Awesome[0m
+  [0;31m🔴 Scripts found after </html> tag[0m
+  [0;31m🔴 No products table seed (Supabase)[0m
+  [0;31m🔴 Multiple auth systems active simultaneously[0m
+
+  [0;31m[1mFound 6 critical issue(s) — fix these before launch[0m
+
+[1;37m[1m[16] HOW THE APP IS SUPPOSED TO WORK[0m
+[2m───────────────────────────────────────────────────────────[0m
+[2m
+[0m
+
+[0;32m[1m[17] NEXT STEPS TO MAKE IT FULLY LIVE[0m
+[0;32m═══════════════════════════════════════════════════════════[0m
+
+  [0;31m[1m🔴 DO FIRST (Blocking — app won't work without these):[0m
+  [2m  1. Fill in js/bstm-config.js with real Supabase URL + anon key[0m
+  [2m  2. Paste the SQL schema into Supabase SQL Editor and Run[0m
+  [2m  3. Run Block 8 from launch wizard to wire all 26 pages[0m
+  [2m  4. Go to Supabase → Auth → URL Configuration → add your site URL[0m
+
+  [0;33m[1m🟡 DO NEXT (App works but features are broken without these):[0m
+  [2m  5. Add Paystack public key to js/bstm-config.js[0m
+  [2m  6. Test login → create account → check Supabase Auth dashboard[0m
+  [2m  7. Add 12 seed products (SQL Block 9 includes them)[0m
+  [2m  8. Wire marketplace.html to load products from Supabase[0m
+  [2m  9. Wire buyer-dashboard.html to show real orders/wishlist[0m
+
+  [0;36m[1m🔵 DO LATER (Nice to have for beta):[0m
+  [2m 10. Enable Supabase Realtime for messages.html[0m
+  [2m 11. Set up Supabase Storage bucket for product images[0m
+  [2m 12. Wire THB rewards to fire on successful Paystack webhook[0m
+  [2m 13. Delete or move backup/legacy files out of root[0m
+  [2m 14. Add Google Sign-In via Supabase OAuth[0m
+
+[0;35m═══════════════════════════════════════════════════════════[0m
+
+  [1;37m[1mAUDIT COMPLETE[0m
+  📊 Pages: 27  |  JS Files: 92  |  Issues: 6
+  📄 Full report saved to: [0;36mbstm-audit-20260619-2155.txt[0m
+
+  [2mRun this command to view the report anytime:[0m
+  [0;36mcat bstm-audit-20260619-2155.txt[0m
+
+[0;35m═══════════════════════════════════════════════════════════[0m
+

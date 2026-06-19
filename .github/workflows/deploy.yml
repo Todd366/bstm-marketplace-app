@@ -1,0 +1,48 @@
+name: Deploy BSTM Digital Nation
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+    
+    - name: Install dependencies
+      run: npm install -g htmlhint
+    
+    - name: Validate HTML
+      run: htmlhint **/*.html
+    
+    - name: Check for secrets in code
+      run: |
+        if grep -r "pk_live_" .; then
+          echo "Error: Live API keys found in code!"
+          exit 1
+        fi
+    
+    - name: Deploy to GitHub Pages
+      if: github.ref == 'refs/heads/main'
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./
+        cname: bstm.bw
+    
+    - name: Notify Telegram
+      if: success()
+      run: |
+        curl -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
+        -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }} \
+        -d text="✅ BSTM deployed successfully to production!"

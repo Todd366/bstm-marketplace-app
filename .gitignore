@@ -1,0 +1,44 @@
+# Environment variables
+.env
+.env.local
+.env.production
+.env.*.local
+
+# API Keys & Secrets
+*.key
+*.pem
+secrets/
+config/secrets.json
+
+# Ngrok
+ngrok.yml
+.ngrok2/
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+npm-debug.log*
+
+# Dependencies
+node_modules/
+package-lock.json
+
+# Build outputs
+dist/
+build/
+.cache/
+
+# Database
+*.sqlite
+*.db
+audit_logs/
+audit_logs/

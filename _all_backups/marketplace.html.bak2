@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BSTM Marketplace - Shop Local, Earn THB</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+        * { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-gray-50" id="mainBody">
+
+    <!-- NAV -->
+    <div id="bstm-nav"></div>
+
+    <!-- Digital Nation Banner -->
+    <div class="bg-gradient-to-r from-purple-900 via-purple-800 to-indigo-900 text-white text-center py-3 px-4">
+        <div class="flex items-center justify-center space-x-3">
+            <i class="fas fa-globe-africa text-yellow-300"></i>
+
+    <!-- Top Announcement Bar -->
+    <div class="gradient-bg text-white text-sm py-2">
+        <div class="container mx-auto px-4 flex justify-between items-center">
+            <div class="flex items-center space-x-6">
+                <span><i class="fas fa-phone-alt mr-2"></i>+267 XX XXX XXX</span>
+                <span><i class="fas fa-envelope mr-2"></i>bstm366@gmail.com</span>
+                <span class="flex items-center"><span class="w-2 h-2 bg-green-400 rounded-full mr-2 pulse-animation"></span><span id="liveUserCount">1,247</span> Active Users</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Header -->
+    <header class="glass-morphism sticky top-0 z-50 shadow-xl">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-8">
+                    <a href="index.html" class="flex items-center group">
+                        <div class="w-12 h-12 gradient-bg rounded-xl flex items-center justify-center mr-3">B</div>
+                        <div><span class="text-2xl font-bold gradient-text">BSTM</span><p class="text-xs text-gray-600">Room 18 Marketplace</p></div>
+                    </a>
+                    <nav class="hidden lg:flex items-center space-x-6">
+                        <a href="index.html" class="font-semibold">Home</a>
+                        <a href="marketplace.html" class="font-semibold">Marketplace</a>
+                        <a href="room22-farm.html" class="font-semibold">Room 22 Farm</a>
+                        <a href="thb-wallet.html" class="font-semibold">THB Wallet</a>
+                    </nav>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button onclick="window.location.href='login.html'" class="bg-gray-100 hover:bg-gray-200 text-gray-800 py-2 px-6 rounded-lg font-semibold">Login</button>
+                    <a href="https://todd366.github.io/CabLink-pwa/" target="_blank" class="gradient-bg text-white py-2 px-6 rounded-lg font-semibold">CabLink</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero -->
+    <section class="gradient-bg py-20 text-white">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h1 class="text-5xl md:text-6xl font-bold mb-6 leading-tight">Botswana's Digital <span class="text-yellow-300">Nation</span> Marketplace</h1>
+                    <p class="text-xl mb-8 text-gray-100">Shop from verified sellers, earn THB rewards, and support local businesses.</p>
+                    <div class="flex gap-4">
+                        <button onclick="window.location.href='marketplace.html'" class="bg-white text-purple-600 py-4 px-8 rounded-xl font-bold text-lg">Start Shopping</button>
+                        <a href="room22-farm.html" class="bg-yellow-400 text-gray-900 py-4 px-8 rounded-xl font-bold text-lg">Visit Farm</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories (kept your full 6 cards) -->
+    <section class="py-20 bg-gradient-to-b from-gray-50 to-white" id="categories">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+                <div onclick="window.location.href='room22-farm.html'" class="card-hover bg-white rounded-2xl shadow-lg overflow-hidden cursor-pointer border-2 border-green-500">
+                    <div class="h-40 bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center"><i class="fas fa-leaf text-6xl text-white"></i></div>
+                    <div class="p-4 text-center"><h3 class="font-bold">Room 22 Farm</h3><p class="text-sm text-gray-600">Fresh Produce</p></div>
+                </div>
+                <!-- 5 more cards like your sample would go here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <div id="bstm-footer"></div>
+
+    <script>
+        // Load nav and footer
+        fetch('components/universal-footer.html').then(r => r.text()).then(html => document.getElementById("bstm-footer").innerHTML = html);
+
+        // Hamburger support (in case your nav doesn't have it yet)
+        setTimeout(() => {
+            const btn = document.getElementById('menu-btn');
+            const menu = document.getElementById('mobile-menu');
+            if (btn && menu) btn.addEventListener('click', () => menu.classList.toggle('hidden'));
+        }, 800);
+    </script>
+</body>
+</html>
