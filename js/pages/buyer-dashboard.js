@@ -1,9 +1,6 @@
-import { supabase } from "../core/supabase-client.js";
 import { getProfile } from "../bstm-core.js";
 
-document.addEventListener("DOMContentLoaded", async function() {
-  var { data: { session } } = await supabase.auth.getSession();
-
+async function render(session) {
   if (!session) {
     document.getElementById("auth-wall").style.display = "flex";
     document.getElementById("dashboard-content").style.display = "none";
@@ -27,17 +24,19 @@ document.addEventListener("DOMContentLoaded", async function() {
     if (document.getElementById("ref-code-display"))
       document.getElementById("ref-code-display").textContent = profile.referral_code || "N/A";
   }
-});
+}
 
-window.logout = async function() {
+window.BSTM.ready().then(render);
+window.addEventListener("bstm:logout", () => render(null));
+
+window.logout = function() {
   if (confirm("Are you sure you want to logout?")) {
-    await supabase.auth.signOut();
-    window.location.href = "login.html";
+    window.BSTM.logout();
   }
 };
 
 window.copyReferral = async function() {
-  var { data: { session } } = await supabase.auth.getSession();
+  var session = window.BSTM.getSession();
   if (!session) return;
   var { data: profile } = await getProfile(session.user.id);
   var code = profile?.referral_code || "";

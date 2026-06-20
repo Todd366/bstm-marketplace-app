@@ -1,5 +1,3 @@
-import { supabase } from "../core/supabase-client.js";
-
 function show(state) {
   ["loading","success","error"].forEach(function(s) {
     var el = document.getElementById("state-" + s);
@@ -20,26 +18,24 @@ function startCountdown() {
   }, 1000);
 }
 
-document.addEventListener("DOMContentLoaded", async function() {
-  show("loading");
+function showWelcome(session) {
+  var name = session.user.email.split("@")[0];
+  var msg = document.getElementById("welcome-msg");
+  if (msg) msg.textContent = "Welcome, " + name + "!";
+  show("success");
+  startCountdown();
+}
 
-  const { data: { session }, error } = await supabase.auth.getSession();
+show("loading");
 
+window.BSTM.ready().then(function(session) {
   if (session && session.user) {
-    var name = session.user.email.split("@")[0];
-    var msg = document.getElementById("welcome-msg");
-    if (msg) msg.textContent = "Welcome back, " + name + "!";
-    show("success");
-    startCountdown();
+    showWelcome(session);
   } else {
-    supabase.auth.onAuthStateChange(function(event, session) {
-      if (event === "SIGNED_IN" && session) {
-        var name = session.user.email.split("@")[0];
-        var msg = document.getElementById("welcome-msg");
-        if (msg) msg.textContent = "Welcome, " + name + "!";
-        show("success");
-        startCountdown();
-      }
+    // Supabase magic link confirmation lands here as a SIGNED_IN event
+    // routed through app.js's single listener.
+    window.addEventListener("bstm:login", function(e) {
+      showWelcome(e.detail);
     });
     setTimeout(function() {
       var card = document.getElementById("state-loading");

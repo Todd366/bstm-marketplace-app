@@ -1,9 +1,6 @@
-import { supabase } from "../core/supabase-client.js";
 import { getProfile, getProducts } from "../bstm-core.js";
 
-document.addEventListener("DOMContentLoaded", async function() {
-  var { data: { session } } = await supabase.auth.getSession();
-
+async function render(session) {
   if (!session) {
     document.getElementById("auth-wall").style.display = "flex";
     document.getElementById("seller-content").style.display = "none";
@@ -24,11 +21,13 @@ document.addEventListener("DOMContentLoaded", async function() {
   if (products && document.getElementById("stat-products")) {
     document.getElementById("stat-products").textContent = products.length;
   }
-});
+}
 
-window.logout = async function() {
+window.BSTM.ready().then(render);
+window.addEventListener("bstm:logout", () => render(null));
+
+window.logout = function() {
   if (confirm("Logout?")) {
-    await supabase.auth.signOut();
-    window.location.href = "login.html";
+    window.BSTM.logout();
   }
 };
