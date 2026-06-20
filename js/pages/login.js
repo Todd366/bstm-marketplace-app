@@ -10,11 +10,11 @@ function showStatus(msg, type) {
   el.style.border = "1px solid " + (type === "success" ? "#BBF7D0" : "#FECACA");
 }
 
-document.addEventListener("DOMContentLoaded", function () {
-  supabase.auth.getSession().then(({ data: { session } }) => {
-    if (session) window.location.href = "buyer-dashboard.html";
-  });
+window.BSTM.ready().then(function(session) {
+  if (session) window.location.href = "buyer-dashboard.html";
+});
 
+document.addEventListener("DOMContentLoaded", function () {
   var form = document.getElementById("login-form");
   if (!form) return;
 
