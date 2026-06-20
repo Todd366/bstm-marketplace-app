@@ -1,0 +1,172 @@
+(node:4126) Warning: Failed to load the ES module: /data/data/com.termux/files/home/bstm-marketplace-app/js/app.js. Make sure to set "type": "module" in the nearest package.json file or use the .mjs extension.
+(Use `node --trace-warnings ...` to show where the warning was created)
+/data/data/com.termux/files/home/bstm-marketplace-app/js/app.js:1
+import { supabase } from "./core/supabase-client.js";
+^^^^^^
+
+SyntaxError: Cannot use import statement outside a module
+    at wrapSafe (node:internal/modules/cjs/loader:1806:18)
+    at checkSyntax (node:internal/main/check_syntax:76:3)
+
+Node.js v26.3.1
+/data/data/com.termux/files/home/bstm-marketplace-app/js/marketplace.js:34
+    var click = isOpen ? "window.location.href= + ' + "+r.url+" + ' + " : "alert( + Room
+                                                                          ^^^^^^^^^^^^^^
+
+SyntaxError: Invalid or unexpected token
+    at wrapSafe (node:internal/modules/cjs/loader:1806:18)
+    at checkSyntax (node:internal/main/check_syntax:76:3)
+
+Node.js v26.3.1
+/data/data/com.termux/files/home/bstm-marketplace-app/js/pages/admin-dashboard.js:49
+                <div className="min-h-screen bg-gray-50">
+                ^
+
+SyntaxError: Unexpected token '<'
+    at wrapSafe (node:internal/modules/cjs/loader:1806:18)
+    at checkSyntax (node:internal/main/check_syntax:76:3)
+
+Node.js v26.3.1
+(node:4389) Warning: Failed to load the ES module: /data/data/com.termux/files/home/bstm-marketplace-app/js/pages/buyer-dashboard.js. Make sure to set "type": "module" in the nearest package.json file or use the .mjs extension.
+(Use `node --trace-warnings ...` to show where the warning was created)
+/data/data/com.termux/files/home/bstm-marketplace-app/js/pages/buyer-dashboard.js:1
+import { supabase } from "../core/supabase-client.js";
+^^^^^^
+
+SyntaxError: Cannot use import statement outside a module
+    at wrapSafe (node:internal/modules/cjs/loader:1806:18)
+    at checkSyntax (node:internal/main/check_syntax:76:3)
+
+Node.js v26.3.1
+(node:4476) Warning: Failed to load the ES module: /data/data/com.termux/files/home/bstm-marketplace-app/js/pages/gov-dashboard.js. Make sure to set "type": "module" in the nearest package.json file or use the .mjs extension.
+(Use `node --trace-warnings ...` to show where the warning was created)
+/data/data/com.termux/files/home/bstm-marketplace-app/js/pages/gov-dashboard.js:1
+import './js/firebase-auth.js';
+^^^^^^
+
+SyntaxError: Cannot use import statement outside a module
+    at wrapSafe (node:internal/modules/cjs/loader:1806:18)
+    at checkSyntax (node:internal/main/check_syntax:76:3)
+
+Node.js v26.3.1
+(node:4497) Warning: Failed to load the ES module: /data/data/com.termux/files/home/bstm-marketplace-app/js/pages/login.js. Make sure to set "type": "module" in the nearest package.json file or use the .mjs extension.
+(Use `node --trace-warnings ...` to show where the warning was created)
+/data/data/com.termux/files/home/bstm-marketplace-app/js/pages/login.js:1
+import { supabase } from "../core/supabase-client.js";
+^^^^^^
+
+SyntaxError: Cannot use import statement outside a module
+    at wrapSafe (node:internal/modules/cjs/loader:1806:18)
+    at checkSyntax (node:internal/main/check_syntax:76:3)
+
+Node.js v26.3.1
+(node:4562) Warning: Failed to load the ES module: /data/data/com.termux/files/home/bstm-marketplace-app/js/pages/seller-dashboard.js. Make sure to set "type": "module" in the nearest package.json file or use the .mjs extension.
+(Use `node --trace-warnings ...` to show where the warning was created)
+/data/data/com.termux/files/home/bstm-marketplace-app/js/pages/seller-dashboard.js:1
+import { supabase } from "../core/supabase-client.js";
+^^^^^^
+
+SyntaxError: Cannot use import statement outside a module
+    at wrapSafe (node:internal/modules/cjs/loader:1806:18)
+    at checkSyntax (node:internal/main/check_syntax:76:3)
+
+Node.js v26.3.1
+(node:4597) Warning: Failed to load the ES module: /data/data/com.termux/files/home/bstm-marketplace-app/js/pages/verify.js. Make sure to set "type": "module" in the nearest package.json file or use the .mjs extension.
+(Use `node --trace-warnings ...` to show where the warning was created)
+/data/data/com.termux/files/home/bstm-marketplace-app/js/pages/verify.js:1
+import { supabase } from "../core/supabase-client.js";
+^^^^^^
+
+SyntaxError: Cannot use import statement outside a module
+    at wrapSafe (node:internal/modules/cjs/loader:1806:18)
+    at checkSyntax (node:internal/main/check_syntax:76:3)
+
+Node.js v26.3.1
+(node:4611) Warning: Failed to load the ES module: /data/data/com.termux/files/home/bstm-marketplace-app/js/core/auth.js. Make sure to set "type": "module" in the nearest package.json file or use the .mjs extension.
+(Use `node --trace-warnings ...` to show where the warning was created)
+/data/data/com.termux/files/home/bstm-marketplace-app/js/core/auth.js:1
+import { supabase } from "./supabase-client.js";
+^^^^^^
+
+SyntaxError: Cannot use import statement outside a module
+    at wrapSafe (node:internal/modules/cjs/loader:1806:18)
+    at checkSyntax (node:internal/main/check_syntax:76:3)
+
+Node.js v26.3.1
+(node:4618) Warning: Failed to load the ES module: /data/data/com.termux/files/home/bstm-marketplace-app/js/core/menu.js. Make sure to set "type": "module" in the nearest package.json file or use the .mjs extension.
+(Use `node --trace-warnings ...` to show where the warning was created)
+/data/data/com.termux/files/home/bstm-marketplace-app/js/core/menu.js:1
+export function initMenu() {
+^^^^^^
+
+SyntaxError: Unexpected token 'export'
+    at wrapSafe (node:internal/modules/cjs/loader:1806:18)
+    at checkSyntax (node:internal/main/check_syntax:76:3)
+
+Node.js v26.3.1
+(node:4625) Warning: Failed to load the ES module: /data/data/com.termux/files/home/bstm-marketplace-app/js/core/storage.js. Make sure to set "type": "module" in the nearest package.json file or use the .mjs extension.
+(Use `node --trace-warnings ...` to show where the warning was created)
+/data/data/com.termux/files/home/bstm-marketplace-app/js/core/storage.js:1
+export const storage = {
+^^^^^^
+
+SyntaxError: Unexpected token 'export'
+    at wrapSafe (node:internal/modules/cjs/loader:1806:18)
+    at checkSyntax (node:internal/main/check_syntax:76:3)
+
+Node.js v26.3.1
+(node:4632) Warning: Failed to load the ES module: /data/data/com.termux/files/home/bstm-marketplace-app/js/core/events.js. Make sure to set "type": "module" in the nearest package.json file or use the .mjs extension.
+(Use `node --trace-warnings ...` to show where the warning was created)
+/data/data/com.termux/files/home/bstm-marketplace-app/js/core/events.js:1
+export function on(selector, event, handler) {
+^^^^^^
+
+SyntaxError: Unexpected token 'export'
+    at wrapSafe (node:internal/modules/cjs/loader:1806:18)
+    at checkSyntax (node:internal/main/check_syntax:76:3)
+
+Node.js v26.3.1
+(node:4644) Warning: Failed to load the ES module: /data/data/com.termux/files/home/bstm-marketplace-app/js/core/auth-service.js. Make sure to set "type": "module" in the nearest package.json file or use the .mjs extension.
+(Use `node --trace-warnings ...` to show where the warning was created)
+/data/data/com.termux/files/home/bstm-marketplace-app/js/core/auth-service.js:1
+export async function sendMagicLink(email) {
+^^^^^^
+
+SyntaxError: Unexpected token 'export'
+    at wrapSafe (node:internal/modules/cjs/loader:1806:18)
+    at checkSyntax (node:internal/main/check_syntax:76:3)
+
+Node.js v26.3.1
+(node:4651) Warning: Failed to load the ES module: /data/data/com.termux/files/home/bstm-marketplace-app/js/core/supabase-client.js. Make sure to set "type": "module" in the nearest package.json file or use the .mjs extension.
+(Use `node --trace-warnings ...` to show where the warning was created)
+/data/data/com.termux/files/home/bstm-marketplace-app/js/core/supabase-client.js:1
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+^^^^^^
+
+SyntaxError: Cannot use import statement outside a module
+    at wrapSafe (node:internal/modules/cjs/loader:1806:18)
+    at checkSyntax (node:internal/main/check_syntax:76:3)
+
+Node.js v26.3.1
+(node:4660) Warning: Failed to load the ES module: /data/data/com.termux/files/home/bstm-marketplace-app/js/bstm-config.js. Make sure to set "type": "module" in the nearest package.json file or use the .mjs extension.
+(Use `node --trace-warnings ...` to show where the warning was created)
+/data/data/com.termux/files/home/bstm-marketplace-app/js/bstm-config.js:1
+export const BSTM_CONFIG = {
+^^^^^^
+
+SyntaxError: Unexpected token 'export'
+    at wrapSafe (node:internal/modules/cjs/loader:1806:18)
+    at checkSyntax (node:internal/main/check_syntax:76:3)
+
+Node.js v26.3.1
+(node:4667) Warning: Failed to load the ES module: /data/data/com.termux/files/home/bstm-marketplace-app/js/bstm-core.js. Make sure to set "type": "module" in the nearest package.json file or use the .mjs extension.
+(Use `node --trace-warnings ...` to show where the warning was created)
+/data/data/com.termux/files/home/bstm-marketplace-app/js/bstm-core.js:1
+import { supabase } from "./core/supabase-client.js";
+^^^^^^
+
+SyntaxError: Cannot use import statement outside a module
+    at wrapSafe (node:internal/modules/cjs/loader:1806:18)
+    at checkSyntax (node:internal/main/check_syntax:76:3)
+
+Node.js v26.3.1
