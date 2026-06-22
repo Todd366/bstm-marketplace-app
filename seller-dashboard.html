@@ -85,8 +85,6 @@
 <script src="components/smart-loader.js"></script>
 
 document.addEventListener("DOMContentLoaded", function() {
-  var token = localStorage.getItem("bstm_token");
-  var userData = localStorage.getItem("bstm_user");
   if (!token || !userData) {
     document.getElementById("auth-wall").style.display = "flex";
     return;
@@ -102,8 +100,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
 function logout() {
   if (confirm("Logout?")) {
-    localStorage.removeItem("bstm_token");
-    localStorage.removeItem("bstm_user");
     window.location.href = "login.html";
   }
 }
