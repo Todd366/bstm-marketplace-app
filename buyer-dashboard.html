@@ -105,53 +105,6 @@
 <div id="bstm-footer"></div>
 <script src="components/smart-loader.js"></script>
 
-var user = null;
-
-document.addEventListener("DOMContentLoaded", function() {
-  var token = localStorage.getItem("bstm_token");
-  var userData = localStorage.getItem("bstm_user");
-
-  if (!token || !userData) {
-    document.getElementById("auth-wall").style.display = "flex";
-    document.getElementById("dashboard-content").style.display = "none";
-    return;
-  }
-
-  try { user = JSON.parse(userData); } catch(e) {
-    document.getElementById("auth-wall").style.display = "flex";
-    return;
-  }
-
-  document.getElementById("dashboard-content").style.display = "block";
-  document.getElementById("auth-wall").style.display = "none";
-
-  document.getElementById("user-name").textContent = user.name || "Friend";
-  document.getElementById("user-email").textContent = user.email || "";
-  document.getElementById("stat-thb").textContent = (user.thb_balance || 0).toFixed(2) + " THB";
-  document.getElementById("stat-orders").textContent = user.orders || 0;
-  document.getElementById("stat-wishlist").textContent = (JSON.parse(localStorage.getItem("bstm_wishlist") || "[]")).length;
-  document.getElementById("stat-referral").textContent = user.referral_code || "N/A";
-  document.getElementById("ref-code-display").textContent = user.referral_code || "N/A";
-});
-
-function logout() {
-  if (confirm("Are you sure you want to logout?")) {
-    localStorage.removeItem("bstm_token");
-    localStorage.removeItem("bstm_user");
-    window.location.href = "login.html";
-  }
-}
-
-function copyReferral() {
-  if (!user) return;
-  var link = "https://todd366.github.io/bstm-marketplace-app/?ref=" + user.referral_code;
-  if (navigator.clipboard) {
-    navigator.clipboard.writeText(link).then(function() { alert("✅ Referral link copied!"); });
-  } else {
-    alert("Your referral link: " + link);
-  }
-}
-
 <script type="module" src="js/app.js"></script>
 <script type="module" src="js/pages/buyer-dashboard.js"></script>
 </body>
