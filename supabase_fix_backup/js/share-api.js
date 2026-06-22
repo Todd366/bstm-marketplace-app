@@ -55,7 +55,7 @@ const ShareAPI = {
     
     fallbackShare(data) {
         // Fallback: Copy to clipboard
-        const text = `${data.name}\n\n${data.text}\n\n${data.url}`;
+        const text = `${data.title}\n\n${data.text}\n\n${data.url}`;
         
         navigator.clipboard.writeText(text).then(() => {
             alert('Link copied to clipboard!');

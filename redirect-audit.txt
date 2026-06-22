@@ -1,0 +1,48 @@
+========== BSTM REDIRECT AUDIT ==========
+
+1. Searching for localhost...
+./backend/server.js:77:    const magicUrl = `http://localhost:3000/verify.html?token=${token}`;
+./backend/server.js:293:  console.log(`📍 Server: http://localhost:${PORT}`);
+./backend/server.js:300:  console.log('🔗 Login: http://localhost:3000/login.html');
+./backend/server.js:301:  console.log('🔗 Dashboard: http://localhost:3000/buyer-dashboard.html');
+./backend/server.js:302:  console.log('🔗 Wallet: http://localhost:3000/thb-wallet.html');
+./backend/server.js:305:  htmlFiles.forEach(f => console.log(`   - http://localhost:3000/${f}`));
+./auth_audit.txt:953:./_all_backups/_legacy/login.html.backup:                const res = await fetch("http://localhost:3000/auth/send-link",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({email})})
+
+2. Searching for emailRedirectTo...
+js/pages/login.js:37:        emailRedirectTo: "https://todd366.github.io/bstm-marketplace-app/verify.html"
+
+3. Searching for GitHub Pages URL...
+./buyer-dashboard.html:147:  var link = "https://todd366.github.io/bstm-marketplace-app/?ref=" + user.referral_code;
+./components/universal-footer.html:72:          <li><a href="https://todd366.github.io/bstm-ecosystem-network/" target="_blank" class="text-gray-400 hover:text-white transition-colors">Network Map</a></li>
+./components/universal-footer.html:128:          <a href="https://todd366.github.io/bstm-ecosystem-network/" class="hover:text-white">Network Map</a>
+./components/universal-nav.html:31:        <a href="https://todd366.github.io/CabLink-pwa/" target="_blank" class="hover:text-yellow-300">🚗 CabLink</a>
+./ecosystem-hub.html:57:                <a href="https://todd366.github.io/bstm-marketplace-app/" target="_blank" 
+./ecosystem-hub.html:71:                <a href="https://todd366.github.io/CabLink-pwa/" target="_blank" 
+./ecosystem-hub.html:140:                <a href="https://todd366.github.io/bstm-ecosystem-network/" target="_blank" 
+./ecosystem-hub.html:150:                <a href="https://todd366.github.io/bstm-system-map/" target="_blank" 
+./ecosystem-hub.html:204:                <a href="https://todd366.github.io/" target="_blank" 
+./ecosystem-hub.html:249:                <a href="https://todd366.github.io/bstm-marketplace-app/" 
+./ecosystem-hub.html:253:                <a href="https://todd366.github.io/CabLink-pwa/" 
+./frontend/public/index.html:47:            <a href="https://todd366.github.io/bstm-ecosystem-network/" class="text-yellow-300 hover:text-yellow-100 text-sm underline ml-2">
+./frontend/public/index.html:92:                        <a href="https://todd366.github.io/bstm-ecosystem-network/" target="_blank" class="text-gray-700 hover:text-purple-600 font-semibold transition-colors">
+./frontend/public/index.html:114:                    <a href="https://todd366.github.io/bstm-ecosystem-network/" target="_blank" class="gradient-bg text-white py-2 px-6 rounded-lg font-semibold btn-glow hidden md:block">
+./frontend/public/index.html:236:                <a href="https://todd366.github.io/bstm-ecosystem-network/" target="_blank" class="flex items-center justify-center space-x-3">
+./frontend/public/index.html:558:                        <li><a href="https://todd366.github.io/bstm-ecosystem-network/" target="_blank" class="text-gray-400 hover:text-white">Network Map</a></li>
+./js/bstm-ecosystem-links.js:13:            url: 'https://todd366.github.io/bstm-marketplace-app/',
+./js/bstm-ecosystem-links.js:22:            url: 'https://todd366.github.io/CabLink-pwa/',
+./js/bstm-ecosystem-links.js:61:            url: 'https://todd366.github.io/bstm-ecosystem-network/',
+./js/bstm-ecosystem-links.js:70:            url: 'https://todd366.github.io/bstm-system-map/',
+./js/bstm-ecosystem-links.js:80:            url: 'https://todd366.github.io/',
+./js/pages/buyer-dashboard.js:43:  var link = "https://todd366.github.io/bstm-marketplace-app/?ref=" + code;
+./js/pages/login.js:37:        emailRedirectTo: "https://todd366.github.io/bstm-marketplace-app/verify.html"
+./js/core/auth-service.js:7:    "https://todd366.github.io/bstm-marketplace-app/verify.html?token=" +
+./nav-backup.html:37:        <a href="https://todd366.github.io/CabLink-pwa/" target="_blank" class="block py-4 text-lg font-medium flex items-center gap-3">🚕 CabLink</a>
+./redirect-audit.txt:13:js/pages/login.js:37:        emailRedirectTo: "https://todd366.github.io/bstm-marketplace-app/verify.html"
+
+4. Supabase project URL...
+js/supabase-integration.js:1:const SUPABASE_URL = 'https://your-project-ref.supabase.co';
+js/core/supabase-client.js:3:const SUPABASE_URL = "https://tvtfxkavjqvurdezhyvu.supabase.co";
+js/bstm-config.js:2:  supabaseUrl: "https://tvtfxkavjqvurdezhyvu.supabase.co",
+
+========== AUDIT COMPLETE ==========

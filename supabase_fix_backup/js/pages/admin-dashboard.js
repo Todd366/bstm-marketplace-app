@@ -213,7 +213,7 @@ const { useState } = React;
                                     <tbody className="bg-white divide-y divide-gray-200">
                                         {pendingProducts.map((product) => (
                                             <tr key={product.id} className="hover:bg-gray-50">
-                                                <td className="px-6 py-4 text-sm font-medium text-gray-900">{product.name}</td>
+                                                <td className="px-6 py-4 text-sm font-medium text-gray-900">{product.title}</td>
                                                 <td className="px-6 py-4 text-sm text-gray-900">{product.seller}</td>
                                                 <td className="px-6 py-4 text-sm text-gray-900">{product.category}</td>
                                                 <td className="px-6 py-4 text-sm font-bold text-gray-900">P{product.price}</td>

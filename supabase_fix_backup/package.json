@@ -18,7 +18,7 @@
     "doc": "docs"
   },
   "keywords": [],
-  "type": "module",
+  "type": "commonjs",
   "bugs": {
     "url": "https://github.com/todd366/bstm-marketplace-app/issues"
   },

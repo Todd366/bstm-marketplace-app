@@ -1,33 +1,53 @@
-import { getProfile } from "../bstm-core.js";
+import { getProfile, getOrders } from "../bstm-core.js";
 
 async function render(session) {
   if (!session) {
-    document.getElementById("auth-wall").style.display = "flex";
-    document.getElementById("dashboard-content").style.display = "none";
+    var wall = document.getElementById("auth-wall");
+    var content = document.getElementById("dashboard-content");
+    if (wall) wall.style.display = "flex";
+    if (content) content.style.display = "none";
     return;
   }
 
   var user = session.user;
-  document.getElementById("dashboard-content").style.display = "block";
-  document.getElementById("auth-wall").style.display = "none";
-  document.getElementById("user-name").textContent = user.email.split("@")[0];
-  document.getElementById("user-email").textContent = user.email;
+  var wall = document.getElementById("auth-wall");
+  var content = document.getElementById("dashboard-content");
+  if (wall) wall.style.display = "none";
+  if (content) content.style.display = "block";
 
-  var { data: profile } = await getProfile(user.id);
+  // Live profile columns: id, email, role, thb_balance
+  var nameEl = document.getElementById("user-name");
+  var emailEl = document.getElementById("user-email");
+  if (nameEl) nameEl.textContent = user.email.split("@")[0];
+  if (emailEl) emailEl.textContent = user.email;
+
+  var { data: profile, error: profileError } = await getProfile(user.id);
+
   if (profile) {
-    if (document.getElementById("stat-thb"))
-      document.getElementById("stat-thb").textContent = (profile.thb_balance || 0).toFixed(2) + " THB";
-    if (document.getElementById("stat-orders"))
-      document.getElementById("stat-orders").textContent = profile.total_orders || 0;
-    if (document.getElementById("stat-referral"))
-      document.getElementById("stat-referral").textContent = profile.referral_code || "N/A";
-    if (document.getElementById("ref-code-display"))
-      document.getElementById("ref-code-display").textContent = profile.referral_code || "N/A";
+    var thbEl = document.getElementById("stat-thb");
+    var roleEl = document.getElementById("stat-role");
+    if (thbEl) thbEl.textContent = (profile.thb_balance || 0).toFixed(2) + " THB";
+    if (roleEl) roleEl.textContent = profile.role || "buyer";
+
+    // These columns don't exist in live DB — show safe fallbacks
+    var ordersEl = document.getElementById("stat-orders");
+    var refEl = document.getElementById("stat-referral");
+    var refCodeEl = document.getElementById("ref-code-display");
+    if (ordersEl) ordersEl.textContent = "—";
+    if (refEl) refEl.textContent = "Coming soon";
+    if (refCodeEl) refCodeEl.textContent = "Coming soon";
+  }
+
+  // Load real order count from orders table
+  var { data: orders } = await getOrders(user.id);
+  if (orders) {
+    var ordersEl = document.getElementById("stat-orders");
+    if (ordersEl) ordersEl.textContent = orders.length;
   }
 }
 
 window.BSTM.ready().then(render);
-window.addEventListener("bstm:logout", () => render(null));
+window.addEventListener("bstm:logout", function() { render(null); });
 
 window.logout = function() {
   if (confirm("Are you sure you want to logout?")) {
@@ -35,15 +55,7 @@ window.logout = function() {
   }
 };
 
-window.copyReferral = async function() {
-  var session = window.BSTM.getSession();
-  if (!session) return;
-  var { data: profile } = await getProfile(session.user.id);
-  var code = profile?.referral_code || "";
-  var link = "https://todd366.github.io/bstm-marketplace-app/?ref=" + code;
-  if (navigator.clipboard) {
-    navigator.clipboard.writeText(link).then(function() { alert("✅ Referral link copied!"); });
-  } else {
-    alert("Your referral link: " + link);
-  }
+window.copyReferral = function() {
+  // referral_code not in live DB yet — show info message
+  alert("Referral system coming soon. Stay tuned!");
 };

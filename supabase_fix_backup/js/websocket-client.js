@@ -86,7 +86,7 @@ const WebSocketClient = {
         }
         
         // Show push notification
-        PushNotifications.showNotification(notification.name, {
+        PushNotifications.showNotification(notification.title, {
             body: notification.message,
             data: { url: notification.link }
         });
