@@ -1,10 +1,5 @@
 import { supabase } from "../core/supabase-client.js";
 
-// ============================================
-// PRODUCTION REDIRECT — never use relative URLs
-// or window.location.origin here (would break
-// if someone opens the page locally by accident)
-// ============================================
 var VERIFY_URL = "https://todd366.github.io/bstm-marketplace-app/verify.html";
 
 function showStatus(msg, type) {
@@ -15,6 +10,21 @@ function showStatus(msg, type) {
   el.style.background = type === "success" ? "#DCFCE7" : "#FEE2E2";
   el.style.color = type === "success" ? "#166534" : "#991B1B";
   el.style.border = "1px solid " + (type === "success" ? "#BBF7D0" : "#FECACA");
+}
+
+function friendlyError(message) {
+  if (!message) return "Something went wrong. Please try again.";
+  var m = message.toLowerCase();
+  if (m.includes("rate limit") || m.includes("too many")) {
+    return "⏳ Too many requests. Please wait a few minutes before trying again.";
+  }
+  if (m.includes("invalid email") || m.includes("unable to validate")) {
+    return "Please enter a valid email address.";
+  }
+  if (m.includes("network") || m.includes("fetch")) {
+    return "Network error. Check your connection and try again.";
+  }
+  return "Failed to send link: " + message;
 }
 
 window.BSTM.ready().then(function(session) {
@@ -40,18 +50,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
     var { error } = await supabase.auth.signInWithOtp({
       email: email,
-      options: {
-        emailRedirectTo: VERIFY_URL
-      }
+      options: { emailRedirectTo: VERIFY_URL }
     });
 
     if (error) {
-      showStatus("❌ Failed: " + error.message, "error");
+      showStatus(friendlyError(error.message), "error");
       btn.disabled = false;
       btn.textContent = "✨ Send Magic Link";
     } else {
-      showStatus("✅ Magic link sent to " + email + " — check your inbox!", "success");
+      showStatus("✅ Magic link sent to " + email + " — check your inbox (and spam folder)!", "success");
       btn.textContent = "✅ Link Sent!";
+      btn.disabled = true;
     }
   });
 });
