@@ -1,5 +1,12 @@
 import { supabase } from "../core/supabase-client.js";
 
+// ============================================
+// PRODUCTION REDIRECT — never use relative URLs
+// or window.location.origin here (would break
+// if someone opens the page locally by accident)
+// ============================================
+var VERIFY_URL = "https://todd366.github.io/bstm-marketplace-app/verify.html";
+
 function showStatus(msg, type) {
   var el = document.getElementById("status");
   if (!el) return;
@@ -34,16 +41,16 @@ document.addEventListener("DOMContentLoaded", function () {
     var { error } = await supabase.auth.signInWithOtp({
       email: email,
       options: {
-        emailRedirectTo: "https://todd366.github.io/bstm-marketplace-app/verify.html"
+        emailRedirectTo: VERIFY_URL
       }
     });
 
     if (error) {
-      showStatus("Failed: " + error.message, "error");
+      showStatus("❌ Failed: " + error.message, "error");
       btn.disabled = false;
       btn.textContent = "✨ Send Magic Link";
     } else {
-      showStatus("✅ Magic link sent to " + email + ". Check your inbox!", "success");
+      showStatus("✅ Magic link sent to " + email + " — check your inbox!", "success");
       btn.textContent = "✅ Link Sent!";
     }
   });

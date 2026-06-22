@@ -1,5 +1,11 @@
+// Supabase magic links deliver the session via URL hash fragment:
+// #access_token=...&refresh_token=...&type=magiclink
+// app.js's onAuthStateChange fires SIGNED_IN automatically when
+// the Supabase client detects this hash on page load.
+// This file just handles the UI states.
+
 function show(state) {
-  ["loading","success","error"].forEach(function(s) {
+  ["loading", "success", "error"].forEach(function(s) {
     var el = document.getElementById("state-" + s);
     if (el) el.style.display = s === state ? "block" : "none";
   });
@@ -26,20 +32,29 @@ function showWelcome(session) {
   startCountdown();
 }
 
+// Start in loading state
 show("loading");
 
+// Case 1: User already had a valid session (e.g. came back to verify.html)
 window.BSTM.ready().then(function(session) {
   if (session && session.user) {
     showWelcome(session);
-  } else {
-    // Supabase magic link confirmation lands here as a SIGNED_IN event
-    // routed through app.js's single listener.
-    window.addEventListener("bstm:login", function(e) {
-      showWelcome(e.detail);
-    });
-    setTimeout(function() {
-      var card = document.getElementById("state-loading");
-      if (card && card.style.display !== "none") show("error");
-    }, 5000);
+    return;
   }
+
+  // Case 2: Magic link just clicked — Supabase puts tokens in hash.
+  // app.js fires bstm:login when onAuthStateChange fires SIGNED_IN.
+  window.addEventListener("bstm:login", function(e) {
+    if (e.detail && e.detail.user) {
+      showWelcome(e.detail);
+    }
+  });
+
+  // Case 3: Timeout — if nothing happens in 8s, show error
+  setTimeout(function() {
+    var loading = document.getElementById("state-loading");
+    if (loading && loading.style.display !== "none") {
+      show("error");
+    }
+  }, 8000);
 });
