@@ -1,157 +1,134 @@
-<style>
-  #bstm-nav-bar {
-    background:#fff;
-    border-bottom:1px solid #EDE9FE;
-    position:sticky;
-    top:0;
-    z-index:1000;
-    box-shadow:0 1px 12px rgba(124,58,237,0.08);
-    font-family: Inter, sans-serif;
-  }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BSTM Digital Mall — Botswana</title>
 
-  .nav-link {
-    color:#374151;
-    font-weight:600;
-    font-size:13px;
-    padding:6px 10px;
-    border-radius:10px;
-    text-decoration:none;
-    display:inline-block;
-  }
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 
-  .nav-link:hover {
-    background:#F5F3FF;
-    color:#7C3AED;
-  }
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap");
 
-  #desktop-nav {
-    display:flex;
-    flex-wrap:wrap;
-    gap:6px;
-  }
+    * {
+      font-family: "Inter", sans-serif;
+      box-sizing: border-box;
+    }
 
-  #menu-btn {
-    background:none;
-    border:none;
-    cursor:pointer;
-    display:flex;
-    flex-direction:column;
-    gap:5px;
-  }
+    body {
+      background: #F8F7FF;
+      margin: 0;
+    }
 
-  #menu-btn span {
-    width:22px;
-    height:2px;
-    background:#374151;
-    border-radius:2px;
-    display:block;
-  }
+    .shimmer {
+      background: linear-gradient(90deg,#C4B5FD,#fff,#C4B5FD);
+      background-size: 200%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: shimmer 3s linear infinite;
+    }
 
-  #mobile-menu {
-    display:none;
-    background:#fff;
-    border-top:1px solid #EDE9FE;
-    padding:12px 16px 20px;
-  }
+    @keyframes shimmer {
+      from { background-position: 200% 0; }
+      to { background-position: -200% 0; }
+    }
 
-  #mobile-menu a {
-    display:flex;
-    align-items:center;
-    gap:10px;
-    padding:12px 14px;
-    border-radius:12px;
-    font-weight:600;
-    color:#374151;
-    text-decoration:none;
-  }
+    .room-card {
+      transition: all .3s ease;
+    }
 
-  #mobile-menu a:hover {
-    background:#F5F3FF;
-    color:#7C3AED;
-  }
+    .room-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px rgba(124,58,237,.15);
+    }
+  </style>
+</head>
 
-  #notif-panel {
-    position:fixed;
-    top:68px;
-    right:16px;
-    width:340px;
-    max-width:calc(100vw - 32px);
-    background:#fff;
-    border-radius:20px;
-    box-shadow:0 20px 60px rgba(124,58,237,0.18);
-    border:1px solid #EDE9FE;
-    z-index:9999;
-    display:none;
-  }
-</style>
+<body>
 
-<div id="bstm-nav-bar">
+  <!-- FIX: NAV MUST LOAD FIRST (NOT RACE-CONDITIONAL) -->
+  <div id="bstm-nav"></div>
 
-  <div style="max-width:1280px;margin:auto;padding:0 20px;">
-    <div style="display:flex;align-items:center;justify-content:space-between;height:64px;">
+  <!-- HERO -->
+  <section style="background:linear-gradient(135deg,#7C3AED,#4F46E5);padding:80px 24px 120px;text-align:center;">
+    <div style="max-width:700px;margin:auto;">
 
-      <div style="display:flex;align-items:center;gap:18px;">
-        <a href="index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
-          <div style="width:38px;height:38px;background:linear-gradient(135deg,#7C3AED,#4F46E5);border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:900;color:#fff;font-size:20px;">
-            B
-          </div>
-          <div>
-            <div style="font-weight:900;font-size:18px;color:#1E1B4B;">BSTM</div>
-            <div style="font-size:9px;color:#A78BFA;font-weight:700;">DIGITAL MALL</div>
-          </div>
+      <h1 style="font-size:clamp(40px,6vw,68px);font-weight:900;color:#fff;">
+        Every Business<br>
+        <span class="shimmer">Has a Room</span>
+      </h1>
+
+      <p style="color:rgba(255,255,255,.8);font-size:18px;margin:20px 0 36px;">
+        One digital mall. Every Botswana business.
+      </p>
+
+      <div style="display:flex;justify-content:center;gap:12px;flex-wrap:wrap;">
+
+        <a href="marketplace.html"
+           style="background:#fff;color:#7C3AED;padding:16px 36px;border-radius:16px;font-weight:700;text-decoration:none;">
+          Browse Mall →
         </a>
 
-        <nav id="desktop-nav">
-          <a class="nav-link" href="index.html">Home</a>
-          <a class="nav-link" href="marketplace.html">Mall</a>
-          <a class="nav-link" href="room22-farm.html">Farm</a>
-          <a class="nav-link" href="cablink.html">CabLink</a>
-          <a class="nav-link" href="thb-wallet.html">Wallet</a>
-          <a class="nav-link" href="buyer-dashboard.html">Buyer</a>
-          <a class="nav-link" href="seller-dashboard.html">Seller</a>
-          <a class="nav-link" href="messages.html">Messages</a>
-        </nav>
-      </div>
-
-      <div style="display:flex;align-items:center;gap:12px;">
-        <button id="notif-btn">🔔</button>
-
-        <a href="login.html" style="background:#7C3AED;color:#fff;padding:8px 14px;border-radius:10px;font-weight:700;text-decoration:none;">
-          Login
+        <a href="seller-dashboard.html"
+           style="background:rgba(255,255,255,.15);border:1px solid #fff;color:#fff;padding:16px 36px;border-radius:16px;text-decoration:none;">
+          Open Your Room
         </a>
 
-        <button id="menu-btn">
-          <span></span>
-          <span></span>
-          <span></span>
-        </button>
       </div>
 
     </div>
-  </div>
+  </section>
 
-  <div id="mobile-menu">
-    <a href="index.html">🏠 Home</a>
-    <a href="marketplace.html">🏬 Mall</a>
-    <a href="room22-farm.html">🌾 Farm</a>
-    <a href="cablink.html">🚕 CabLink</a>
-    <a href="thb-wallet.html">💰 Wallet</a>
-    <a href="buyer-dashboard.html">👤 Buyer</a>
-    <a href="seller-dashboard.html">🛒 Seller</a>
-    <a href="messages.html">💬 Messages</a>
-    <a href="notifications-all.html">🔔 Notifications</a>
-    <a href="settings.html">⚙️ Settings</a>
-  </div>
+  <!-- STATS -->
+  <section style="background:#fff;padding:24px;">
+    <div style="display:flex;justify-content:center;gap:40px;flex-wrap:wrap;text-align:center;">
+      <div><strong>63</strong><br>Rooms</div>
+      <div><strong>1</strong><br>Open</div>
+      <div><strong>THB</strong><br>Rewards</div>
+      <div><strong>🇧🇼</strong><br>Botswana</div>
+    </div>
+  </section>
 
-</div>
+  <!-- FEATURED ROOM -->
+  <section style="max-width:900px;margin:60px auto;padding:0 24px;text-align:center;">
 
-<div id="notif-panel">
-  <div style="background:#7C3AED;color:#fff;padding:12px;font-weight:800;">
-    Notifications
-  </div>
-  <div style="padding:10px;">
-    <div>🌾 Room 22 is open</div>
-    <div>⚡ THB updated</div>
-    <div>🏬 New activity</div>
-  </div>
-</div>
+    <h2 style="font-size:32px;font-weight:900;margin-bottom:24px;">
+      Room 22 — The Farm
+    </h2>
+
+    <div class="room-card"
+         onclick="location.href='room22-farm.html'"
+         style="background:#fff;border-radius:24px;border:2px solid #6EE7B7;overflow:hidden;max-width:420px;margin:auto;cursor:pointer;">
+
+      <div style="height:180px;background:linear-gradient(135deg,#059669,#34D399);display:flex;align-items:center;justify-content:center;font-size:70px;">
+        🌾
+      </div>
+
+      <div style="padding:24px;text-align:left;">
+        <h3 style="margin:0;font-size:22px;">The Farm</h3>
+
+        <p style="margin:12px 0;color:#666;">
+          Fresh produce and organic goods.
+        </p>
+
+        <span style="font-weight:700;color:#7C3AED;">
+          Enter Room →
+        </span>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- FIX: FOOTER MUST LOAD AFTER NAV SLOT EXISTS -->
+  <div id="bstm-footer"></div>
+
+  <!-- FIX: SINGLE SOURCE OF TRUTH LOADER -->
+  <script src="components/smart-loader.js"></script>
+
+  <script type="module" src="js/app.js"></script>
+
+</body>
+        </html>
