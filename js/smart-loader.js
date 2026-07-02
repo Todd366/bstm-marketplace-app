@@ -1,7 +1,7 @@
 (function () {
 
   // ============================================
-  // COMPONENT LOADER
+  // COMPONENT LOADER (SAFE)
   // ============================================
   function loadComponent(id, file, callback) {
     const el = document.getElementById(id);
@@ -15,7 +15,10 @@
       .then(html => {
         el.innerHTML = html;
 
-        if (callback) callback();
+        // wait 1 tick so DOM is fully painted
+        requestAnimationFrame(() => {
+          if (callback) callback();
+        });
       })
       .catch(err => {
         console.warn("Component load failed:", file, err);
@@ -23,49 +26,51 @@
   }
 
   // ============================================
-  // NAV BINDING (SAFE + NO DUPLICATES)
+  // NAV BINDING (HAMBURGER + NOTIFICATIONS)
   // ============================================
   function bindNav() {
 
     const btn = document.getElementById("menu-btn");
     const menu = document.getElementById("mobile-menu");
 
-    // 🔥 HAMBURGER TOGGLE
+    const notifBtn = document.getElementById("notif-btn");
+    const notifPanel = document.getElementById("notif-panel");
+
+    // Prevent double-binding even across reloads
     if (btn && menu && !btn.dataset.bound) {
       btn.dataset.bound = "1";
 
-      btn.addEventListener("click", (e) => {
+      btn.addEventListener("click", function (e) {
         e.preventDefault();
         e.stopPropagation();
 
-        menu.style.display =
-          menu.style.display === "block" ? "none" : "block";
+        const isOpen = menu.style.display === "block";
+        menu.style.display = isOpen ? "none" : "block";
       });
 
-      // close when clicking outside
-      document.addEventListener("click", (e) => {
-        if (menu.style.display === "block" && !menu.contains(e.target)) {
+      document.addEventListener("click", function (e) {
+        if (
+          menu.style.display === "block" &&
+          !menu.contains(e.target) &&
+          e.target !== btn
+        ) {
           menu.style.display = "none";
         }
       });
     }
 
-    // 🔔 NOTIFICATIONS TOGGLE
-    const notifBtn = document.getElementById("notif-btn");
-    const notifPanel = document.getElementById("notif-panel");
-
     if (notifBtn && notifPanel && !notifBtn.dataset.bound) {
       notifBtn.dataset.bound = "1";
 
-      notifBtn.addEventListener("click", (e) => {
+      notifBtn.addEventListener("click", function (e) {
         e.preventDefault();
         e.stopPropagation();
 
-        notifPanel.style.display =
-          notifPanel.style.display === "block" ? "none" : "block";
+        const isOpen = notifPanel.style.display === "block";
+        notifPanel.style.display = isOpen ? "none" : "block";
       });
 
-      document.addEventListener("click", (e) => {
+      document.addEventListener("click", function (e) {
         if (
           notifPanel &&
           notifPanel.style.display === "block" &&
@@ -83,19 +88,22 @@
   // ============================================
   document.addEventListener("DOMContentLoaded", function () {
 
-    // NAV
     loadComponent("bstm-nav", "components/nav.html", function () {
+
       bindNav();
 
-      // signal app is ready
+      // global event so other scripts can hook in safely
       window.dispatchEvent(
         new CustomEvent("bstm:ready", {
-          detail: { source: "smart-loader" }
+          detail: {
+            source: "smart-loader",
+            nav: true
+          }
         })
       );
+
     });
 
-    // FOOTER
     loadComponent("bstm-footer", "components/universal-footer.html");
 
   });
