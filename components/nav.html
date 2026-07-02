@@ -16,11 +16,18 @@
     padding:6px 10px;
     border-radius:10px;
     text-decoration:none;
+    display:inline-block;
   }
 
   .nav-link:hover {
     background:#F5F3FF;
     color:#7C3AED;
+  }
+
+  #desktop-nav {
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
   }
 
   #mobile-menu {
@@ -46,6 +53,20 @@
     color:#7C3AED;
   }
 
+  #notif-panel {
+    position:fixed;
+    top:68px;
+    right:16px;
+    width:340px;
+    max-width:calc(100vw - 32px);
+    background:#fff;
+    border-radius:20px;
+    box-shadow:0 20px 60px rgba(124,58,237,0.18);
+    border:1px solid #EDE9FE;
+    z-index:9999;
+    display:none;
+  }
+
   #menu-btn {
     background:none;
     border:none;
@@ -59,27 +80,30 @@
     width:22px;
     height:2px;
     background:#374151;
+    display:block;
+    border-radius:2px;
   }
 </style>
 
 <div id="bstm-nav-bar">
 
-  <div style="max-width:1280px;margin:auto;padding:0 20px;">
-    <div style="display:flex;justify-content:space-between;align-items:center;height:64px;">
+  <div style="max-width:1280px;margin:0 auto;padding:0 20px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;height:64px;">
 
       <!-- LEFT -->
       <div style="display:flex;align-items:center;gap:18px;">
 
         <a href="index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
-          <div style="width:38px;height:38px;background:linear-gradient(135deg,#7C3AED,#4F46E5);border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;">
+          <div style="width:38px;height:38px;background:linear-gradient(135deg,#7C3AED,#4F46E5);border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:900;color:#fff;font-size:20px;">
             B
           </div>
           <div>
-            <div style="font-weight:900;">BSTM</div>
-            <div style="font-size:9px;color:#A78BFA;">DIGITAL MALL</div>
+            <div style="font-weight:900;font-size:18px;color:#1E1B4B;">BSTM</div>
+            <div style="font-size:9px;color:#A78BFA;font-weight:700;">DIGITAL MALL</div>
           </div>
         </a>
 
+        <!-- DESKTOP NAV (ALL REAL PAGES) -->
         <nav id="desktop-nav">
 
           <a class="nav-link" href="index.html">Home</a>
@@ -88,27 +112,36 @@
 
           <a class="nav-link" href="cablink.html">CabLink</a>
           <a class="nav-link" href="thb-wallet.html">Wallet</a>
+          <a class="nav-link" href="transactions.html">Transactions</a>
+          <a class="nav-link" href="earnings.html">Earnings</a>
 
           <a class="nav-link" href="buyer-dashboard.html">Buyer</a>
           <a class="nav-link" href="seller-dashboard.html">Seller</a>
 
           <a class="nav-link" href="upload-product.html">Upload</a>
+          <a class="nav-link" href="product-detail.html">Product</a>
+          <a class="nav-link" href="checkout.html">Checkout</a>
+          <a class="nav-link" href="order-success.html">Success</a>
           <a class="nav-link" href="order-tracking.html">Tracking</a>
 
           <a class="nav-link" href="messages.html">Messages</a>
+          <a class="nav-link" href="notifications-all.html">Notifications</a>
           <a class="nav-link" href="wishlist.html">Wishlist</a>
-          <a class="nav-link" href="notifications-all.html">Alerts</a>
 
-          <!-- FIXED MAPPINGS -->
           <a class="nav-link" href="analytics.html">Analytics</a>
           <a class="nav-link" href="monitoring-dashboard.html">Monitoring</a>
 
+          <a class="nav-link" href="admin-dashboard.html">Admin</a>
+          <a class="nav-link" href="gov-dashboard.html">Government</a>
+
           <a class="nav-link" href="kyc-verification.html">KYC</a>
+          <a class="nav-link" href="verify.html">Verify</a>
+
+          <a class="nav-link" href="help.html">Help</a>
+          <a class="nav-link" href="terms.html">Terms</a>
 
           <a class="nav-link" href="settings.html">Settings</a>
           <a class="nav-link" href="profile.html">Profile</a>
-
-          <a class="nav-link" href="help.html">Help</a>
           <a class="nav-link" href="login.html">Login</a>
 
         </nav>
@@ -116,25 +149,26 @@
       </div>
 
       <!-- RIGHT -->
-      <div style="display:flex;gap:12px;align-items:center;">
+      <div style="display:flex;align-items:center;gap:12px;">
 
         <button id="notif-btn">🔔</button>
 
-        <a href="login.html" id="nav-login-btn"
-           style="background:#7C3AED;color:#fff;padding:8px 14px;border-radius:10px;">
+        <a id="nav-login-btn" href="login.html"
+           style="background:#7C3AED;color:#fff;padding:8px 14px;border-radius:10px;text-decoration:none;">
           Login
         </a>
 
         <button id="menu-btn">
-          <span></span><span></span><span></span>
+          <span></span>
+          <span></span>
+          <span></span>
         </button>
 
       </div>
-
     </div>
   </div>
 
-  <!-- MOBILE MENU (SAFE + 28 ITEMS WITHOUT BROKEN LINKS) -->
+  <!-- MOBILE MENU (FULL 28 LINKS SAFE) -->
   <div id="mobile-menu">
 
     <a href="index.html">🏠 Home</a>
@@ -143,6 +177,8 @@
 
     <a href="cablink.html">🚕 CabLink</a>
     <a href="thb-wallet.html">💰 Wallet</a>
+    <a href="transactions.html">📊 Transactions</a>
+    <a href="earnings.html">💸 Earnings</a>
 
     <a href="buyer-dashboard.html">👤 Buyer</a>
     <a href="seller-dashboard.html">🛒 Seller</a>
@@ -154,20 +190,36 @@
     <a href="order-tracking.html">📍 Tracking</a>
 
     <a href="messages.html">💬 Messages</a>
-    <a href="notifications-all.html">🔔 Alerts</a>
+    <a href="notifications-all.html">🔔 Notifications</a>
     <a href="wishlist.html">❤️ Wishlist</a>
 
     <a href="analytics.html">📊 Analytics</a>
     <a href="monitoring-dashboard.html">📡 Monitoring</a>
 
+    <a href="admin-dashboard.html">🧠 Admin</a>
+    <a href="gov-dashboard.html">🏛 Government</a>
+
     <a href="kyc-verification.html">🪪 KYC</a>
+    <a href="verify.html">✔️ Verify</a>
+
+    <a href="help.html">❓ Help</a>
+    <a href="terms.html">📘 Terms</a>
 
     <a href="settings.html">⚙️ Settings</a>
     <a href="profile.html">👤 Profile</a>
-
-    <a href="help.html">❓ Help</a>
     <a href="login.html">🔐 Login</a>
 
   </div>
 
+</div>
+
+<div id="notif-panel">
+  <div style="background:#7C3AED;color:#fff;padding:12px;font-weight:800;">
+    Notifications
+  </div>
+  <div style="padding:10px;">
+    <div>🌾 Room 22 is open</div>
+    <div>⚡ You earned THB</div>
+    <div>🏬 New rooms coming</div>
+  </div>
   </div>
