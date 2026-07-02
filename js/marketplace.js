@@ -21,10 +21,12 @@ var currentSearch = "";
 // SAFE ROOM NAVIGATION
 // ===============================
 function openRoom(room) {
+  if (!room) return;
+
   if (room.status === "open") {
     window.location.href = room.url;
   } else {
-    alert("Room " + room.id + " — " + room.name + " is coming soon 🚀");
+    alert("Room " + room.room + " — " + room.name + " is coming soon 🚀");
   }
 }
 
@@ -75,9 +77,8 @@ function renderRooms() {
           overflow:hidden;
           border:1.5px solid ${isOpen ? "#DDD6FE" : "#F3F4F6"};
           cursor:pointer;
-          animation-delay:${Math.min(i * 0.05, 0.4)}s
         "
-        onclick='(${openRoom.toString()})(${JSON.stringify(r)})'>
+        data-room='${JSON.stringify(r)}'>
 
         <div style="
           height:120px;
@@ -141,6 +142,14 @@ function renderRooms() {
       </div>
     `;
   }).join("");
+
+  // attach click events safely
+  document.querySelectorAll(".room-card").forEach(function (card) {
+    card.addEventListener("click", function () {
+      var room = JSON.parse(this.getAttribute("data-room"));
+      openRoom(room);
+    });
+  });
 }
 
 // ===============================
