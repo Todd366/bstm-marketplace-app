@@ -17,7 +17,6 @@
     border-radius:10px;
     text-decoration:none;
     display:inline-block;
-    white-space:nowrap;
   }
 
   .nav-link:hover {
@@ -25,22 +24,6 @@
     color:#7C3AED;
   }
 
-  /* LAYOUT SAFETY */
-  .nav-left {
-    display:flex;
-    align-items:center;
-    gap:18px;
-    min-width:0;
-  }
-
-  #desktop-nav {
-    display:flex;
-    flex-wrap:wrap;
-    gap:6px;
-    max-width:100%;
-  }
-
-  /* MOBILE MENU */
   #mobile-menu {
     display:none;
     background:#fff;
@@ -64,7 +47,6 @@
     color:#7C3AED;
   }
 
-  /* NOTIFICATIONS */
   #notif-panel {
     position:fixed;
     top:68px;
@@ -79,39 +61,21 @@
     display:none;
   }
 
-  /* HAMBURGER DEFAULT HIDDEN ON DESKTOP */
+  /* hamburger */
   #menu-btn {
-    display:none;
-    flex-direction:column;
-    gap:5px;
     background:none;
     border:none;
     cursor:pointer;
-    flex-shrink:0;
+    display:flex;
+    flex-direction:column;
+    gap:5px;
   }
 
   #menu-btn span {
     width:22px;
-    height:2.5px;
+    height:2px;
     background:#374151;
     display:block;
-    border-radius:2px;
-  }
-
-  /* 🔥 RESPONSIVE FIX */
-  @media (max-width: 900px) {
-
-    #desktop-nav {
-      display:none !important;
-    }
-
-    #menu-btn {
-      display:flex !important;
-    }
-
-    .nav-left {
-      gap:12px;
-    }
   }
 </style>
 
@@ -121,7 +85,7 @@
     <div style="display:flex;align-items:center;justify-content:space-between;height:64px;">
 
       <!-- LEFT -->
-      <div class="nav-left">
+      <div style="display:flex;align-items:center;gap:18px;">
 
         <a href="index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
           <div style="width:38px;height:38px;background:linear-gradient(135deg,#7C3AED,#4F46E5);border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:900;color:#fff;font-size:20px;">
@@ -133,7 +97,7 @@
           </div>
         </a>
 
-        <!-- 25+ NAV -->
+        <!-- DESKTOP NAV (SAFE) -->
         <nav id="desktop-nav">
 
           <a class="nav-link" href="index.html">Home</a>
@@ -145,7 +109,6 @@
           <a class="nav-link" href="earnings.html">Earnings</a>
 
           <a class="nav-link" href="cablink.html">CabLink</a>
-          <a class="nav-link" href="rides-history.html">Rides</a>
 
           <a class="nav-link" href="seller-dashboard.html">Seller</a>
           <a class="nav-link" href="buyer-dashboard.html">Buyer</a>
@@ -170,22 +133,16 @@
       </div>
 
       <!-- RIGHT -->
-      <div style="display:flex;align-items:center;gap:12px;flex-shrink:0;">
+      <div style="display:flex;align-items:center;gap:12px;">
 
-        <button id="notif-btn" style="position:relative;background:none;border:none;">
-          🔔
-          <span id="notif-count"
-            style="position:absolute;top:-4px;right:-4px;background:red;color:#fff;border-radius:50%;padding:2px 6px;font-size:10px;">
-            3
-          </span>
-        </button>
+        <button id="notif-btn">🔔</button>
 
         <a id="nav-login-btn" href="login.html"
-           style="background:linear-gradient(135deg,#7C3AED,#4F46E5);color:#fff;padding:9px 18px;border-radius:12px;font-weight:700;">
+           style="background:#7C3AED;color:#fff;padding:8px 14px;border-radius:10px;text-decoration:none;">
           Login
         </a>
 
-        <!-- HAMBURGER ALWAYS SAFE -->
+        <!-- HAMBURGER (FIXED ALWAYS WORKS) -->
         <button id="menu-btn">
           <span></span>
           <span></span>
@@ -193,11 +150,10 @@
         </button>
 
       </div>
-
     </div>
   </div>
 
-  <!-- MOBILE MENU -->
+  <!-- MOBILE MENU (FULL 25+) -->
   <div id="mobile-menu">
 
     <a href="index.html">🏠 Home</a>
@@ -209,7 +165,6 @@
     <a href="earnings.html">💸 Earnings</a>
 
     <a href="cablink.html">🚕 CabLink</a>
-    <a href="rides-history.html">🧾 Rides</a>
 
     <a href="seller-dashboard.html">🛒 Seller</a>
     <a href="buyer-dashboard.html">👤 Buyer</a>
@@ -234,7 +189,7 @@
 
 <!-- NOTIFICATIONS -->
 <div id="notif-panel">
-  <div style="background:linear-gradient(135deg,#7C3AED,#4F46E5);padding:16px;color:#fff;font-weight:800;">
+  <div style="background:#7C3AED;color:#fff;padding:12px;font-weight:800;">
     Notifications
   </div>
   <div style="padding:10px;">
@@ -242,4 +197,4 @@
     <div>⚡ You earned THB</div>
     <div>🏬 New rooms coming</div>
   </div>
-          </div>
+  </div>
