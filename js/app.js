@@ -13,25 +13,25 @@ const readyPromise = new Promise((resolve) => {
 });
 
 // ===============================
-// NAV UI SYNC
+// NAV UI SYNC (SAFE DOM VERSION)
 // ===============================
 function updateNav(session) {
   const user = session?.user || null;
 
-  // multiple possible nav layouts (desktop + mobile)
   const navLoginBtns = document.querySelectorAll("#nav-login-btn");
   const navUserNames = document.querySelectorAll("#nav-user-name");
 
   navLoginBtns.forEach((el) => {
     if (!el) return;
-    el.style.display = user ? "none" : "block";
+    el.style.display = user ? "none" : "inline-block";
   });
 
   navUserNames.forEach((el) => {
     if (!el) return;
+
     if (user) {
       el.textContent = user.email ? user.email.split("@")[0] : "User";
-      el.style.display = "block";
+      el.style.display = "inline-block";
     } else {
       el.style.display = "none";
     }
@@ -54,21 +54,22 @@ async function bootstrap() {
 
     currentSession = data?.session || null;
 
-    updateNav(currentSession);
+    // IMPORTANT: only update nav AFTER DOM is ready
+    requestAnimationFrame(() => updateNav(currentSession));
 
     readyResolve(currentSession);
 
     window.dispatchEvent(
       new CustomEvent("bstm:ready", {
-        detail: currentSession
+        detail: currentSession,
       })
     );
 
-    // AUTH STATE LISTENER (single instance)
+    // AUTH LISTENER (single source)
     supabase.auth.onAuthStateChange((event, session) => {
       currentSession = session;
 
-      updateNav(session);
+      requestAnimationFrame(() => updateNav(session));
 
       if (event === "SIGNED_IN") {
         window.dispatchEvent(
@@ -80,7 +81,6 @@ async function bootstrap() {
         window.dispatchEvent(new CustomEvent("bstm:logout"));
       }
     });
-
   } catch (err) {
     console.error("[BSTM] Bootstrap failed:", err);
     readyResolve(null);
@@ -96,8 +96,8 @@ document.addEventListener("DOMContentLoaded", bootstrap);
 // HANDLE DYNAMIC NAV INJECTION
 // ===============================
 window.addEventListener("bstm:ready", () => {
-  // re-run UI sync after nav.html is injected
-  updateNav(currentSession);
+  // re-sync AFTER navbar is injected
+  requestAnimationFrame(() => updateNav(currentSession));
 });
 
 // ===============================
@@ -118,5 +118,5 @@ window.BSTM = {
 
     currentSession = null;
     window.location.href = "login.html";
-  }
+  },
 };
