@@ -1,7 +1,7 @@
 (function () {
 
   // ============================================
-  // COMPONENT LOADER (SAFE)
+  // COMPONENT LOADER
   // ============================================
   function loadComponent(id, file, callback) {
     const el = document.getElementById(id);
@@ -15,64 +15,70 @@
       .then(html => {
         el.innerHTML = html;
 
-        // wait 1 tick so DOM is fully painted
+        // ensure DOM is ready after injection
         requestAnimationFrame(() => {
-          if (callback) callback();
+          if (typeof callback === "function") callback();
         });
       })
       .catch(err => {
-        console.warn("Component load failed:", file, err);
+        console.error("[BSTM] Failed loading:", file, err);
       });
   }
 
   // ============================================
-  // NAV BINDING (HAMBURGER + NOTIFICATIONS)
+  // NAV BEHAVIOR (HAMBURGER + NOTIFICATIONS)
   // ============================================
   function bindNav() {
 
-    const btn = document.getElementById("menu-btn");
-    const menu = document.getElementById("mobile-menu");
+    const menuBtn = document.getElementById("menu-btn");
+    const mobileMenu = document.getElementById("mobile-menu");
 
     const notifBtn = document.getElementById("notif-btn");
     const notifPanel = document.getElementById("notif-panel");
 
-    // Prevent double-binding even across reloads
-    if (btn && menu && !btn.dataset.bound) {
-      btn.dataset.bound = "1";
+    // ----------------------------
+    // HAMBURGER MENU
+    // ----------------------------
+    if (menuBtn && mobileMenu && !menuBtn.dataset.bound) {
 
-      btn.addEventListener("click", function (e) {
+      menuBtn.dataset.bound = "1";
+
+      menuBtn.addEventListener("click", function (e) {
         e.preventDefault();
         e.stopPropagation();
 
-        const isOpen = menu.style.display === "block";
-        menu.style.display = isOpen ? "none" : "block";
+        mobileMenu.style.display =
+          mobileMenu.style.display === "block" ? "none" : "block";
       });
 
       document.addEventListener("click", function (e) {
         if (
-          menu.style.display === "block" &&
-          !menu.contains(e.target) &&
-          e.target !== btn
+          mobileMenu.style.display === "block" &&
+          !mobileMenu.contains(e.target) &&
+          e.target !== menuBtn
         ) {
-          menu.style.display = "none";
+          mobileMenu.style.display = "none";
         }
       });
     }
 
-    if (notifBtn && notifPanel && !notifBtn.dataset.bound) {
-      notifBtn.dataset.bound = "1";
+    // ----------------------------
+    // NOTIFICATIONS PANEL
+    // ----------------------------
+    if (notifBtn && notifPanel && !notifBtn.dataset.boundNotif) {
+
+      notifBtn.dataset.boundNotif = "1";
 
       notifBtn.addEventListener("click", function (e) {
         e.preventDefault();
         e.stopPropagation();
 
-        const isOpen = notifPanel.style.display === "block";
-        notifPanel.style.display = isOpen ? "none" : "block";
+        notifPanel.style.display =
+          notifPanel.style.display === "block" ? "none" : "block";
       });
 
       document.addEventListener("click", function (e) {
         if (
-          notifPanel &&
           notifPanel.style.display === "block" &&
           !notifPanel.contains(e.target) &&
           e.target !== notifBtn
@@ -88,23 +94,15 @@
   // ============================================
   document.addEventListener("DOMContentLoaded", function () {
 
-    loadComponent("bstm-nav", "components/nav.html", function () {
-
-      bindNav();
-
-      // global event so other scripts can hook in safely
-      window.dispatchEvent(
-        new CustomEvent("bstm:ready", {
-          detail: {
-            source: "smart-loader",
-            nav: true
-          }
-        })
-      );
-
-    });
+    loadComponent("bstm-nav", "components/nav.html", bindNav);
 
     loadComponent("bstm-footer", "components/universal-footer.html");
+
+    window.dispatchEvent(
+      new CustomEvent("bstm:ready", {
+        detail: { source: "smart-loader" }
+      })
+    );
 
   });
 
