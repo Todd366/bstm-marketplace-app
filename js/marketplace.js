@@ -11,68 +11,168 @@ var ROOMS = [
   {id:41, name:"Maun Leather", room:"Room 41", desc:"Handcrafted premium leather goods made in Botswana.", emoji:"👜", cat:"art", status:"coming", url:"#", color:"#92400E"},
   {id:44, name:"Bots Auto Parts", room:"Room 44", desc:"Vehicle spare parts, accessories and mechanics.", emoji:"🔧", cat:"services", status:"coming", url:"#", color:"#374151"},
   {id:55, name:"Safari Gear", room:"Room 55", desc:"Outdoor, camping and safari equipment for Botswana adventures.", emoji:"🏕️", cat:"fashion", status:"coming", url:"#", color:"#065F46"},
-  {id:60, name:"EduHub", room:"Room 60", desc:"Online courses, tutoring and skills training for Batswana.", emoji:"📚", cat:"services", status:"coming", url:"#", color:"#1E40AF"},
+  {id:60, name:"EduHub", room:"Room 60", desc:"Online courses, tutoring and skills training for Batswana.", emoji:"📚", cat:"services", status:"coming", url:"#", color:"#1E40AF"}
 ];
 
 var currentCat = "all";
 var currentSearch = "";
 
+// ===============================
+// SAFE ROOM NAVIGATION
+// ===============================
+function openRoom(room) {
+  if (room.status === "open") {
+    window.location.href = room.url;
+  } else {
+    alert("Room " + room.id + " — " + room.name + " is coming soon 🚀");
+  }
+}
+
+// ===============================
+// RENDER ROOMS
+// ===============================
 function renderRooms() {
   var grid = document.getElementById("rooms-grid");
   var noRes = document.getElementById("no-results");
   var count = document.getElementById("room-count");
-  var filtered = ROOMS.filter(function(r) {
-    var mc = currentCat==="all" || r.cat===currentCat || (currentCat==="open" && r.status==="open") || (currentCat==="coming" && r.status==="coming");
-    var ms = !currentSearch || r.name.toLowerCase().includes(currentSearch) || r.desc.toLowerCase().includes(currentSearch) || r.room.toLowerCase().includes(currentSearch);
-    return mc && ms;
+
+  if (!grid) return;
+
+  var filtered = ROOMS.filter(function (r) {
+    var matchCat =
+      currentCat === "all" ||
+      r.cat === currentCat ||
+      (currentCat === "open" && r.status === "open") ||
+      (currentCat === "coming" && r.status === "coming");
+
+    var matchSearch =
+      !currentSearch ||
+      r.name.toLowerCase().includes(currentSearch) ||
+      r.desc.toLowerCase().includes(currentSearch) ||
+      r.room.toLowerCase().includes(currentSearch);
+
+    return matchCat && matchSearch;
   });
-  count.textContent = filtered.length + " rooms";
-  if (!filtered.length) { grid.innerHTML=""; noRes.style.display="block"; return; }
-  noRes.style.display = "none";
-  grid.innerHTML = filtered.map(function(r, i) {
+
+  if (count) count.textContent = filtered.length + " rooms";
+
+  if (!filtered.length) {
+    grid.innerHTML = "";
+    if (noRes) noRes.style.display = "block";
+    return;
+  }
+
+  if (noRes) noRes.style.display = "none";
+
+  grid.innerHTML = filtered.map(function (r, i) {
     var isOpen = r.status === "open";
-    var click = isOpen ? "window.location.href= + ' + "+r.url+" + ' + " : "alert( + Room
-+r.id+
-—
-+r.name+
-is
-coming
-soon!
-🚀 + )";
-    return "<div class='room-card' style='background:#fff;border-radius:22px;overflow:hidden;border:1.5px solid "+(isOpen?"#DDD6FE":"#F3F4F6")+";animation-delay:"+(Math.min(i*0.05,0.4))+"s' onclick='"+click+"'>" +
-      "<div style='height:120px;display:flex;align-items:center;justify-content:center;font-size:56px;position:relative;background:linear-gradient(135deg,"+r.color+"22,"+r.color+"44)'>" +
-        r.emoji +
-        "<span style='position:absolute;top:10px;left:10px;background:rgba(255,255,255,0.9);color:"+r.color+";font-size:9px;font-weight:800;padding:3px 8px;border-radius:8px;letter-spacing:0.5px'>"+r.room+"</span>" +
-        (isOpen ? "<span style='position:absolute;top:10px;right:10px;background:#059669;color:#fff;font-size:9px;font-weight:700;padding:3px 10px;border-radius:20px'>● OPEN</span>" : "<span style='position:absolute;top:10px;right:10px;background:#6B7280;color:#fff;font-size:9px;font-weight:700;padding:3px 10px;border-radius:20px'>SOON</span>") +
-      "</div>" +
-      "<div style='padding:16px'>" +
-        "<div style='font-weight:900;color:#1E1B4B;font-size:16px;margin-bottom:4px'>"+r.name+"</div>" +
-        "<div style='color:#9CA3AF;font-size:12px;line-height:1.5;height:36px;overflow:hidden;margin-bottom:12px'>"+r.desc+"</div>" +
-        "<div style='display:flex;justify-content:space-between;align-items:center'>" +
-          "<span style='background:#F5F3FF;color:#7C3AED;font-size:10px;font-weight:700;padding:4px 10px;border-radius:8px'>⚡ THB</span>" +
-          "<span style='color:"+(isOpen?"#7C3AED":"#9CA3AF")+";font-weight:800;font-size:12px'>"+(isOpen?"Enter →":"Notify Me")+"</span>" +
-        "</div>" +
-      "</div>" +
-    "</div>";
+
+    return `
+      <div class="room-card"
+        style="
+          background:#fff;
+          border-radius:22px;
+          overflow:hidden;
+          border:1.5px solid ${isOpen ? "#DDD6FE" : "#F3F4F6"};
+          cursor:pointer;
+          animation-delay:${Math.min(i * 0.05, 0.4)}s
+        "
+        onclick='(${openRoom.toString()})(${JSON.stringify(r)})'>
+
+        <div style="
+          height:120px;
+          display:flex;
+          align-items:center;
+          justify-content:center;
+          font-size:56px;
+          position:relative;
+          background:linear-gradient(135deg,${r.color}22,${r.color}44)
+        ">
+          ${r.emoji}
+
+          <span style="
+            position:absolute;
+            top:10px;
+            left:10px;
+            background:rgba(255,255,255,0.9);
+            color:${r.color};
+            font-size:9px;
+            font-weight:800;
+            padding:3px 8px;
+            border-radius:8px;
+          ">
+            ${r.room}
+          </span>
+
+          <span style="
+            position:absolute;
+            top:10px;
+            right:10px;
+            background:${isOpen ? "#059669" : "#6B7280"};
+            color:#fff;
+            font-size:9px;
+            font-weight:700;
+            padding:3px 10px;
+            border-radius:20px;
+          ">
+            ${isOpen ? "● OPEN" : "SOON"}
+          </span>
+        </div>
+
+        <div style="padding:16px">
+          <div style="font-weight:900;color:#1E1B4B;font-size:16px;margin-bottom:4px">
+            ${r.name}
+          </div>
+
+          <div style="color:#9CA3AF;font-size:12px;line-height:1.5;height:36px;overflow:hidden;margin-bottom:12px">
+            ${r.desc}
+          </div>
+
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <span style="background:#F5F3FF;color:#7C3AED;font-size:10px;font-weight:700;padding:4px 10px;border-radius:8px">
+              ⚡ THB
+            </span>
+
+            <span style="color:${isOpen ? "#7C3AED" : "#9CA3AF"};font-weight:800;font-size:12px">
+              ${isOpen ? "Enter →" : "Notify Me"}
+            </span>
+          </div>
+        </div>
+      </div>
+    `;
   }).join("");
 }
 
+// ===============================
+// SEARCH + FILTER
+// ===============================
 function doSearch() {
-  currentSearch = document.getElementById("search-input").value.toLowerCase();
+  var input = document.getElementById("search-input");
+  currentSearch = input ? input.value.toLowerCase() : "";
   renderRooms();
 }
 
-document.getElementById("search-input").addEventListener("input", function() {
-  currentSearch = this.value.toLowerCase(); renderRooms();
-});
+// ===============================
+// INIT EVENTS
+// ===============================
+document.addEventListener("DOMContentLoaded", function () {
 
-document.querySelectorAll(".cat-btn").forEach(function(btn) {
-  btn.addEventListener("click", function() {
-    document.querySelectorAll(".cat-btn").forEach(function(b) { b.classList.remove("active"); });
-    this.classList.add("active");
-    currentCat = this.dataset.cat;
-    renderRooms();
+  var searchInput = document.getElementById("search-input");
+  if (searchInput) {
+    searchInput.addEventListener("input", function () {
+      currentSearch = this.value.toLowerCase();
+      renderRooms();
+    });
+  }
+
+  document.querySelectorAll(".cat-btn").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      document.querySelectorAll(".cat-btn").forEach(b => b.classList.remove("active"));
+      this.classList.add("active");
+      currentCat = this.dataset.cat;
+      renderRooms();
+    });
   });
-});
 
-renderRooms();
+  renderRooms();
+});
