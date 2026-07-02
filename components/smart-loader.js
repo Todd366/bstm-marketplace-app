@@ -22,7 +22,8 @@
 
       btn.addEventListener("click", (e) => {
         e.stopPropagation();
-        menu.style.display = menu.style.display === "block" ? "none" : "block";
+        menu.style.display =
+          menu.style.display === "block" ? "none" : "block";
       });
 
       document.addEventListener("click", (e) => {
@@ -48,6 +49,7 @@
 
   document.addEventListener("DOMContentLoaded", () => {
     loadComponent("bstm-nav", "components/nav.html", bindNav);
+    loadComponent("bstm-footer", "components/universal-footer.html");
   });
 
 })();
