@@ -1,7 +1,3 @@
-// ===============================
-// BSTM SMART LOADER (FINAL CLEAN VERSION)
-// ===============================
-
 (function () {
 
   function loadComponent(id, file, callback) {
@@ -9,20 +5,14 @@
     if (!el) return;
 
     fetch(file + "?v=" + Date.now())
-      .then(r => {
-        if (!r.ok) throw new Error("Failed to load: " + file);
-        return r.text();
-      })
+      .then(r => r.text())
       .then(html => {
         el.innerHTML = html;
-
-        requestAnimationFrame(() => {
-          if (typeof callback === "function") callback();
-        });
+        if (typeof callback === "function") {
+          requestAnimationFrame(callback);
+        }
       })
-      .catch(err => {
-        console.error("[BSTM LOADER ERROR]", err);
-      });
+      .catch(err => console.error("[smart-loader] error:", err));
   }
 
   function bindNav() {
@@ -39,7 +29,7 @@
       });
 
       document.addEventListener("click", (e) => {
-        if (menu && menu.style.display === "block" && !menu.contains(e.target)) {
+        if (menu.style.display === "block" && !menu.contains(e.target)) {
           menu.style.display = "none";
         }
       });
@@ -60,13 +50,10 @@
     }
   }
 
-  function init() {
+  document.addEventListener("DOMContentLoaded", function () {
     loadComponent("bstm-nav", "components/nav.html", bindNav);
     loadComponent("bstm-footer", "components/universal-footer.html");
-
     window.dispatchEvent(new Event("bstm:ready"));
-  }
-
-  document.addEventListener("DOMContentLoaded", init);
+  });
 
 })();
