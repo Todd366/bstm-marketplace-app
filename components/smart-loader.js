@@ -8,51 +8,50 @@
     if (!el) return;
 
     fetch(file)
-      .then(response => {
-        if (!response.ok) {
-          throw new Error("Failed to load " + file);
-        }
-        return response.text();
+      .then(r => {
+        if (!r.ok) throw new Error("Failed to load " + file);
+        return r.text();
       })
       .then(html => {
         el.innerHTML = html;
 
-        // Wait one frame so the inserted HTML exists
+        // ensure DOM is ready after injection
         requestAnimationFrame(() => {
-          if (typeof callback === "function") {
-            callback();
-          }
+          if (typeof callback === "function") callback();
         });
       })
-      .catch(error => {
-        console.error("[BSTM] Component load failed:", file, error);
+      .catch(err => {
+        console.error("[BSTM] Failed loading:", file, err);
       });
   }
 
   // ============================================
-  // NAVIGATION
+  // NAV BEHAVIOR (HAMBURGER + NOTIFICATIONS)
   // ============================================
   function bindNav() {
 
     const menuBtn = document.getElementById("menu-btn");
     const mobileMenu = document.getElementById("mobile-menu");
 
+    const notifBtn = document.getElementById("notif-btn");
+    const notifPanel = document.getElementById("notif-panel");
+
+    // ----------------------------
+    // HAMBURGER MENU
+    // ----------------------------
     if (menuBtn && mobileMenu && !menuBtn.dataset.bound) {
 
-      menuBtn.dataset.bound = "true";
+      menuBtn.dataset.bound = "1";
 
       menuBtn.addEventListener("click", function (e) {
         e.preventDefault();
         e.stopPropagation();
 
         mobileMenu.style.display =
-          mobileMenu.style.display === "block"
-            ? "none"
-            : "block";
+          mobileMenu.style.display === "block" ? "none" : "block";
       });
 
       document.addEventListener("click", function (e) {
-
         if (
           mobileMenu.style.display === "block" &&
           !mobileMenu.contains(e.target) &&
@@ -60,34 +59,25 @@
         ) {
           mobileMenu.style.display = "none";
         }
-
       });
-
     }
 
-    // ============================================
-    // NOTIFICATIONS
-    // ============================================
+    // ----------------------------
+    // NOTIFICATIONS PANEL
+    // ----------------------------
+    if (notifBtn && notifPanel && !notifBtn.dataset.boundNotif) {
 
-    const notifBtn = document.getElementById("notif-btn");
-    const notifPanel = document.getElementById("notif-panel");
-
-    if (notifBtn && notifPanel && !notifBtn.dataset.bound) {
-
-      notifBtn.dataset.bound = "true";
+      notifBtn.dataset.boundNotif = "1";
 
       notifBtn.addEventListener("click", function (e) {
         e.preventDefault();
         e.stopPropagation();
 
         notifPanel.style.display =
-          notifPanel.style.display === "block"
-            ? "none"
-            : "block";
+          notifPanel.style.display === "block" ? "none" : "block";
       });
 
       document.addEventListener("click", function (e) {
-
         if (
           notifPanel.style.display === "block" &&
           !notifPanel.contains(e.target) &&
@@ -95,39 +85,23 @@
         ) {
           notifPanel.style.display = "none";
         }
-
       });
-
     }
-
   }
 
   // ============================================
-  // INITIALIZE
+  // INIT
   // ============================================
   document.addEventListener("DOMContentLoaded", function () {
 
-    loadComponent(
-      "bstm-nav",
-      "components/nav.html",
-      function () {
+    loadComponent("bstm-nav", "components/nav.html", bindNav);
 
-        bindNav();
+    loadComponent("bstm-footer", "components/universal-footer.html");
 
-        window.dispatchEvent(
-          new CustomEvent("bstm:ready", {
-            detail: {
-              source: "smart-loader"
-            }
-          })
-        );
-
-      }
-    );
-
-    loadComponent(
-      "bstm-footer",
-      "components/universal-footer.html"
+    window.dispatchEvent(
+      new CustomEvent("bstm:ready", {
+        detail: { source: "smart-loader" }
+      })
     );
 
   });
