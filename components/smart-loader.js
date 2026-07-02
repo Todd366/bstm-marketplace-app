@@ -1,30 +1,21 @@
 (function () {
 
-  // ============================================
-  // COMPONENT LOADER
-  // ============================================
   function loadComponent(id, file, callback) {
-    var el = document.getElementById(id);
+    const el = document.getElementById(id);
     if (!el) return;
 
     fetch(file)
-      .then(function (r) {
-        if (!r.ok) throw new Error("Failed to load " + file);
-        return r.text();
-      })
-      .then(function (html) {
+      .then(r => r.text())
+      .then(html => {
         el.innerHTML = html;
 
-        if (callback) callback();
-      })
-      .catch(function (e) {
-        console.warn("Component load failed:", file, e);
+        // wait for DOM injection
+        setTimeout(() => {
+          if (callback) callback();
+        }, 0);
       });
   }
 
-  // ============================================
-  // NAV BINDING (SAFE + NO DUPLICATES)
-  // ============================================
   function bindNav() {
 
     const btn = document.getElementById("menu-btn");
@@ -33,20 +24,13 @@
     if (btn && menu && !btn.dataset.bound) {
       btn.dataset.bound = "1";
 
-      btn.addEventListener("click", function (e) {
-        e.preventDefault();
+      btn.addEventListener("click", (e) => {
         e.stopPropagation();
-
-        menu.style.display =
-          menu.style.display === "block" ? "none" : "block";
+        menu.style.display = menu.style.display === "block" ? "none" : "block";
       });
 
-      document.addEventListener("click", function (e) {
-        if (
-          menu.style.display === "block" &&
-          !menu.contains(e.target) &&
-          e.target !== btn
-        ) {
+      document.addEventListener("click", (e) => {
+        if (menu.style.display === "block" && !menu.contains(e.target)) {
           menu.style.display = "none";
         }
       });
@@ -58,47 +42,28 @@
     if (notifBtn && notifPanel && !notifBtn.dataset.bound) {
       notifBtn.dataset.bound = "1";
 
-      notifBtn.addEventListener("click", function (e) {
-        e.preventDefault();
+      notifBtn.addEventListener("click", (e) => {
         e.stopPropagation();
-
         notifPanel.style.display =
           notifPanel.style.display === "block" ? "none" : "block";
       });
 
-      document.addEventListener("click", function (e) {
-        if (
-          notifPanel &&
-          notifPanel.style.display === "block" &&
-          !notifPanel.contains(e.target) &&
-          e.target !== notifBtn
-        ) {
+      document.addEventListener("click", (e) => {
+        if (notifPanel.style.display === "block" && !notifPanel.contains(e.target)) {
           notifPanel.style.display = "none";
         }
       });
     }
   }
 
-  // ============================================
-  // INIT SYSTEM
-  // ============================================
-  function init() {
+  document.addEventListener("DOMContentLoaded", () => {
 
-    loadComponent("bstm-nav", "components/nav.html", function () {
+    loadComponent("bstm-nav", "components/nav.html", () => {
       bindNav();
-
-      // Let app know nav is fully ready
-      window.dispatchEvent(
-        new CustomEvent("bstm:nav-ready", {
-          detail: { source: "smart-loader" }
-        })
-      );
+      window.dispatchEvent(new CustomEvent("bstm:ready"));
     });
 
     loadComponent("bstm-footer", "components/universal-footer.html");
-  }
-
-  // DOM READY
-  document.addEventListener("DOMContentLoaded", init);
+  });
 
 })();
