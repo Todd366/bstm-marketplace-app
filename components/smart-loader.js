@@ -9,11 +9,12 @@
       .then(html => {
         el.innerHTML = html;
 
-        // wait for DOM injection
+        // HARD DELAY ensures DOM is fully ready on live hosting
         setTimeout(() => {
           if (callback) callback();
-        }, 0);
-      });
+        }, 50);
+      })
+      .catch(err => console.warn("Component load failed:", file, err));
   }
 
   function bindNav() {
@@ -21,13 +22,14 @@
     const btn = document.getElementById("menu-btn");
     const menu = document.getElementById("mobile-menu");
 
-    if (btn && menu && !btn.dataset.bound) {
-      btn.dataset.bound = "1";
+    if (btn && menu) {
 
-      btn.addEventListener("click", (e) => {
+      btn.onclick = (e) => {
+        e.preventDefault();
         e.stopPropagation();
-        menu.style.display = menu.style.display === "block" ? "none" : "block";
-      });
+
+        menu.style.display = (menu.style.display === "block") ? "none" : "block";
+      };
 
       document.addEventListener("click", (e) => {
         if (menu.style.display === "block" && !menu.contains(e.target)) {
@@ -39,14 +41,15 @@
     const notifBtn = document.getElementById("notif-btn");
     const notifPanel = document.getElementById("notif-panel");
 
-    if (notifBtn && notifPanel && !notifBtn.dataset.bound) {
-      notifBtn.dataset.bound = "1";
+    if (notifBtn && notifPanel) {
 
-      notifBtn.addEventListener("click", (e) => {
+      notifBtn.onclick = (e) => {
+        e.preventDefault();
         e.stopPropagation();
+
         notifPanel.style.display =
           notifPanel.style.display === "block" ? "none" : "block";
-      });
+      };
 
       document.addEventListener("click", (e) => {
         if (notifPanel.style.display === "block" && !notifPanel.contains(e.target)) {
@@ -60,10 +63,10 @@
 
     loadComponent("bstm-nav", "components/nav.html", () => {
       bindNav();
-      window.dispatchEvent(new CustomEvent("bstm:ready"));
     });
 
     loadComponent("bstm-footer", "components/universal-footer.html");
+
   });
 
 })();
