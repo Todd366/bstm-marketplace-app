@@ -16,22 +16,26 @@ const readyPromise = new Promise((resolve) => {
 // NAV UI SYNC
 // ===============================
 function updateNav(session) {
-  const navLogin = document.getElementById("nav-login-btn");
-  const navUser = document.getElementById("nav-user-name");
-
   const user = session?.user || null;
 
-  if (user) {
-    if (navLogin) navLogin.style.display = "none";
+  // multiple possible nav layouts (desktop + mobile)
+  const navLoginBtns = document.querySelectorAll("#nav-login-btn");
+  const navUserNames = document.querySelectorAll("#nav-user-name");
 
-    if (navUser) {
-      navUser.textContent = user.email ? user.email.split("@")[0] : "User";
-      navUser.style.display = "block";
+  navLoginBtns.forEach((el) => {
+    if (!el) return;
+    el.style.display = user ? "none" : "block";
+  });
+
+  navUserNames.forEach((el) => {
+    if (!el) return;
+    if (user) {
+      el.textContent = user.email ? user.email.split("@")[0] : "User";
+      el.style.display = "block";
+    } else {
+      el.style.display = "none";
     }
-  } else {
-    if (navLogin) navLogin.style.display = "block";
-    if (navUser) navUser.style.display = "none";
-  }
+  });
 }
 
 // ===============================
@@ -45,7 +49,7 @@ async function bootstrap() {
     const { data, error } = await supabase.auth.getSession();
 
     if (error) {
-      console.warn("Supabase session error:", error.message);
+      console.warn("[BSTM] Session error:", error.message);
     }
 
     currentSession = data?.session || null;
@@ -60,7 +64,7 @@ async function bootstrap() {
       })
     );
 
-    // SINGLE GLOBAL AUTH LISTENER
+    // AUTH STATE LISTENER (single instance)
     supabase.auth.onAuthStateChange((event, session) => {
       currentSession = session;
 
@@ -78,7 +82,7 @@ async function bootstrap() {
     });
 
   } catch (err) {
-    console.error("Bootstrap failed:", err);
+    console.error("[BSTM] Bootstrap failed:", err);
     readyResolve(null);
   }
 }
@@ -89,22 +93,27 @@ async function bootstrap() {
 document.addEventListener("DOMContentLoaded", bootstrap);
 
 // ===============================
+// HANDLE DYNAMIC NAV INJECTION
+// ===============================
+window.addEventListener("bstm:ready", () => {
+  // re-run UI sync after nav.html is injected
+  updateNav(currentSession);
+});
+
+// ===============================
 // GLOBAL API
 // ===============================
 window.BSTM = {
   ready: () => readyPromise,
-
   getSession: () => currentSession,
-
   getUser: () => currentSession?.user || null,
-
   isLoggedIn: () => !!currentSession,
 
   logout: async () => {
     try {
       await supabase.auth.signOut();
     } catch (e) {
-      console.warn("Logout error:", e);
+      console.warn("[BSTM] Logout error:", e);
     }
 
     currentSession = null;
