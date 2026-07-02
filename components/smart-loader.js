@@ -8,13 +8,8 @@
       .then(r => r.text())
       .then(html => {
         el.innerHTML = html;
-
-        // HARD DELAY ensures DOM is fully ready on live hosting
-        setTimeout(() => {
-          if (callback) callback();
-        }, 50);
-      })
-      .catch(err => console.warn("Component load failed:", file, err));
+        if (callback) callback();
+      });
   }
 
   function bindNav() {
@@ -22,14 +17,13 @@
     const btn = document.getElementById("menu-btn");
     const menu = document.getElementById("mobile-menu");
 
-    if (btn && menu) {
+    if (btn && menu && !btn.dataset.bound) {
+      btn.dataset.bound = "1";
 
-      btn.onclick = (e) => {
-        e.preventDefault();
+      btn.addEventListener("click", (e) => {
         e.stopPropagation();
-
-        menu.style.display = (menu.style.display === "block") ? "none" : "block";
-      };
+        menu.style.display = menu.style.display === "block" ? "none" : "block";
+      });
 
       document.addEventListener("click", (e) => {
         if (menu.style.display === "block" && !menu.contains(e.target)) {
@@ -41,20 +35,13 @@
     const notifBtn = document.getElementById("notif-btn");
     const notifPanel = document.getElementById("notif-panel");
 
-    if (notifBtn && notifPanel) {
+    if (notifBtn && notifPanel && !notifBtn.dataset.bound) {
+      notifBtn.dataset.bound = "1";
 
-      notifBtn.onclick = (e) => {
-        e.preventDefault();
+      notifBtn.addEventListener("click", (e) => {
         e.stopPropagation();
-
         notifPanel.style.display =
           notifPanel.style.display === "block" ? "none" : "block";
-      };
-
-      document.addEventListener("click", (e) => {
-        if (notifPanel.style.display === "block" && !notifPanel.contains(e.target)) {
-          notifPanel.style.display = "none";
-        }
       });
     }
   }
