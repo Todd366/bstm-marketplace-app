@@ -47,13 +47,7 @@
   }
 
   document.addEventListener("DOMContentLoaded", () => {
-
-    loadComponent("bstm-nav", "components/nav.html", () => {
-      bindNav();
-    });
-
-    loadComponent("bstm-footer", "components/universal-footer.html");
-
+    loadComponent("bstm-nav", "components/nav.html", bindNav);
   });
 
 })();
