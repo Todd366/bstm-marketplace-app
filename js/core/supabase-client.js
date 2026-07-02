@@ -1,28 +1,47 @@
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
 // ============================================
-// SUPABASE CLIENT (SINGLE SOURCE)
+// SUPABASE CLIENT (SINGLE SOURCE OF TRUTH)
 // ============================================
 
-// Allow environment overrides OR fallback values
+// Safe environment access helper
+function getEnv(key) {
+  try {
+    return typeof import.meta !== "undefined" &&
+      import.meta.env &&
+      import.meta.env[key];
+  } catch (e) {
+    return undefined;
+  }
+}
+
+// ============================================
+// CONFIG
+// ============================================
+
 const SUPABASE_URL =
-  (typeof import.meta !== "undefined" && import.meta.env?.VITE_SUPABASE_URL) ||
-  window.BSTM_CONFIG?.SUPABASE_URL ||
+  getEnv("VITE_SUPABASE_URL") ||
+  window?.BSTM_CONFIG?.SUPABASE_URL ||
   "https://tvtfxkavjqvurdezhyvu.supabase.co";
 
 const SUPABASE_ANON_KEY =
-  (typeof import.meta !== "undefined" && import.meta.env?.VITE_SUPABASE_ANON_KEY) ||
-  window.BSTM_CONFIG?.SUPABASE_ANON_KEY ||
+  getEnv("VITE_SUPABASE_ANON_KEY") ||
+  window?.BSTM_CONFIG?.SUPABASE_ANON_KEY ||
   "sb_publishable_xlZ3YKF6h5XBMhARWkE9_g_PVudo5r8";
 
-// Create Supabase client
+// ============================================
+// CLIENT
+// ============================================
+
 export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-// Debug (safe guard)
-if (
-  typeof import.meta !== "undefined" &&
-  import.meta.env?.MODE === "development"
-) {
+// ============================================
+// DEBUG (DEV ONLY)
+// ============================================
+
+const MODE = getEnv("MODE");
+
+if (MODE === "development") {
   console.log(
     "🔹 Supabase initialized:",
     SUPABASE_URL.split(".")[0] + "..."
