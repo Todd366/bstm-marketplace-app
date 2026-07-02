@@ -9,6 +9,7 @@
     <style>
         .gradient-bg { background: linear-gradient(135deg, #7C3AED 0%, #4F46E5 100%); }
         .cablink-gradient { background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%); }
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
     </style>
 </head>
 <body class="bg-gray-50">
@@ -31,10 +32,10 @@
                     </p>
                     
                     <div class="flex flex-col sm:flex-row gap-4">
-                        <a href="https://cablink.bstm.bw" target="_blank" class="bg-white text-blue-600 hover:bg-blue-50 px-8 py-4 rounded-xl font-bold text-lg text-center shadow-xl">
+                        <a href="https://cablink.bstm.bw" target="_blank" class="bg-white text-blue-600 hover:bg-blue-50 px-8 py-4 rounded-xl font-bold text-lg text-center shadow-xl transition-all transform hover:scale-105">
                             <i class="fas fa-external-link-alt mr-2"></i>Open CabLink PWA
                         </a>
-                        <button onclick="showDemoRide()" class="bg-yellow-400 hover:bg-yellow-500 text-gray-900 px-8 py-4 rounded-xl font-bold text-lg">
+                        <button onclick="showDemoRide()" class="bg-yellow-400 hover:bg-yellow-500 text-gray-900 px-8 py-4 rounded-xl font-bold text-lg transition-all transform hover:scale-105">
                             <i class="fas fa-play mr-2"></i>Demo Ride
                         </button>
                     </div>
@@ -63,23 +64,23 @@
                         <div class="space-y-4 mb-6">
                             <div>
                                 <label class="block text-gray-700 font-semibold mb-2">Pickup Location</label>
-                                <input type="text" placeholder="Enter pickup address" class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:border-blue-600">
+                                <input type="text" id="pickupInput" placeholder="Enter pickup address" class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:border-blue-600" value="Gaborone CBD">
                             </div>
                             
                             <div>
                                 <label class="block text-gray-700 font-semibold mb-2">Drop-off Location</label>
-                                <input type="text" placeholder="Enter destination" class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:border-blue-600">
+                                <input type="text" id="dropoffInput" placeholder="Enter destination" class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:border-blue-600" value="Mmopane">
                             </div>
                         </div>
 
-                        <button class="w-full cablink-gradient text-white py-4 rounded-xl font-bold text-lg">
+                        <button onclick="calculateFare()" class="w-full cablink-gradient text-white py-4 rounded-xl font-bold text-lg hover:shadow-lg transition-all">
                             Calculate Fare
                         </button>
 
-                        <div class="mt-6 bg-yellow-50 border-2 border-yellow-300 rounded-xl p-4">
+                        <div id="fareResult" style="display:none;" class="mt-6 bg-yellow-50 border-2 border-yellow-300 rounded-xl p-4">
                             <p class="text-sm text-gray-700">
                                 <i class="fas fa-coins text-yellow-600 mr-2"></i>
-                                You'll earn <strong>0.8 THB</strong> on this ride!
+                                Estimated fare: <strong id="fareAmount">P80</strong> · You'll earn <strong id="earnAmount">0.8 THB</strong>!
                             </p>
                         </div>
                     </div>
@@ -252,7 +253,7 @@
             <p class="text-2xl text-blue-100 mb-12">
                 Download the CabLink PWA and start earning THB today
             </p>
-            <a href="https://cablink.bstm.bw" target="_blank" class="inline-block bg-white text-blue-600 hover:bg-blue-50 px-12 py-5 rounded-2xl font-bold text-2xl shadow-2xl">
+            <a href="https://cablink.bstm.bw" target="_blank" class="inline-block bg-white text-blue-600 hover:bg-blue-50 px-12 py-5 rounded-2xl font-bold text-2xl shadow-2xl transition-all transform hover:scale-105">
                 <i class="fas fa-rocket mr-3"></i>Launch CabLink
             </a>
         </div>
@@ -291,47 +292,54 @@
                 </div>
             </div>
 
-            <button onclick="completeDemoRide()" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-xl font-bold text-lg mb-3">
+            <button onclick="completeDemoRide()" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-xl font-bold text-lg mb-3 transition-all">
                 Complete Ride
             </button>
-            <button onclick="closeDemoModal()" class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 py-4 rounded-xl font-bold">
+            <button onclick="closeDemoModal()" class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 py-4 rounded-xl font-bold transition-all">
                 Cancel
             </button>
         </div>
     </div>
 
-    function showDemoRide() {
-        document.getElementById('demoModal').classList.remove('hidden');
-    }
-
-    function closeDemoModal() {
-        document.getElementById('demoModal').classList.add('hidden');
-    }
-
-    function completeDemoRide() {
-        // Award THB
-        if (typeof THBRewards !== 'undefined') {
-            THBRewards.rewardCabLinkRide('DEMO-' + Date.now(), 80);
+    <script src="components/smart-loader.js"></script>
+    <script type="module" src="js/app.js"></script>
+    <script>
+        function calculateFare() {
+            const distance = 8; // km (simulated)
+            const baseRate = 5;
+            const perKm = 8;
+            const fare = baseRate + (distance * perKm);
+            const thb = (fare / 100).toFixed(2);
+            
+            document.getElementById('fareAmount').textContent = 'P' + fare;
+            document.getElementById('earnAmount').textContent = thb + ' THB';
+            document.getElementById('fareResult').style.display = 'block';
         }
 
-        closeDemoModal();
-        
-        // Show success notification
-        const notification = document.createElement('div');
-        notification.className = 'fixed top-20 right-4 bg-green-500 text-white px-6 py-4 rounded-xl shadow-2xl z-50';
-        notification.innerHTML = `
-            <p class="font-bold">🎉 Ride Completed!</p>
-            <p class="text-sm">You earned 0.8 THB</p>
-        `;
-        document.body.appendChild(notification);
+        function showDemoRide() {
+            document.getElementById('demoModal').classList.remove('hidden');
+        }
 
-        setTimeout(() => notification.remove(), 3000);
-    }
+        function closeDemoModal() {
+            document.getElementById('demoModal').classList.add('hidden');
+        }
 
-    // Load components
+        function completeDemoRide() {
+            closeDemoModal();
+            
+            // Show success notification
+            const notification = document.createElement('div');
+            notification.className = 'fixed top-20 right-4 bg-green-500 text-white px-6 py-4 rounded-xl shadow-2xl z-50';
+            notification.innerHTML = `
+                <p class="font-bold">🎉 Ride Completed!</p>
+                <p class="text-sm">You earned 0.8 THB</p>
+            `;
+            document.body.appendChild(notification);
 
-    document.addEventListener('DOMContentLoaded', loadComponents);
-<script src="components/smart-loader.js"></script>
-<script type="module" src="js/app.js"></script>
+            setTimeout(() => notification.remove(), 3000);
+        }
+
+        document.addEventListener('DOMContentLoaded', loadComponents);
+    </script>
 </body>
 </html>
