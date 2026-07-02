@@ -17,9 +17,9 @@
         requestAnimationFrame(() => {
           if (callback) callback();
 
-          // safe single dispatch (no duplicates spam)
-          window.dispatchEvent(new CustomEvent("bstm:ready", {
-            detail: { source: file }
+          // Dispatch once per successful load (lightweight signal only)
+          window.dispatchEvent(new CustomEvent("bstm:componentLoaded", {
+            detail: { source: file, target: id }
           }));
         });
       })
@@ -38,13 +38,14 @@
         e.preventDefault();
         e.stopPropagation();
 
-        menu.style.display =
-          menu.style.display === "block" ? "none" : "block";
+        menu.classList.toggle("open");
       });
 
       document.addEventListener("click", (e) => {
-        if (menu.style.display === "block" && !menu.contains(e.target) && e.target !== btn) {
-          menu.style.display = "none";
+        if (menu.classList.contains("open") &&
+            !menu.contains(e.target) &&
+            e.target !== btn) {
+          menu.classList.remove("open");
         }
       });
     }
@@ -57,13 +58,13 @@
         e.preventDefault();
         e.stopPropagation();
 
-        notifPanel.style.display =
-          notifPanel.style.display === "block" ? "none" : "block";
+        notifPanel.classList.toggle("open");
       });
 
       document.addEventListener("click", (e) => {
-        if (notifPanel.style.display === "block" && !notifPanel.contains(e.target)) {
-          notifPanel.style.display = "none";
+        if (notifPanel.classList.contains("open") &&
+            !notifPanel.contains(e.target)) {
+          notifPanel.classList.remove("open");
         }
       });
     }
@@ -71,10 +72,10 @@
 
   document.addEventListener("DOMContentLoaded", function () {
     loadComponent("bstm-nav", "components/nav.html", bindNav);
-    loadComponent("bstm-footer", "components/universal-footer.html", null);
+    loadComponent("bstm-footer", "components/universal-footer.html");
   });
 
-  // re-bind after any re-render / SPA injection
-  window.addEventListener("bstm:ready", bindNav);
+  // Safe rebind (only once)
+  window.addEventListener("bstm:componentLoaded", bindNav);
 
 })();
