@@ -17,7 +17,6 @@
         requestAnimationFrame(() => {
           if (callback) callback();
 
-          // Dispatch once per successful load (lightweight signal only)
           window.dispatchEvent(new CustomEvent("bstm:componentLoaded", {
             detail: { source: file, target: id }
           }));
@@ -37,7 +36,6 @@
       btn.addEventListener("click", (e) => {
         e.preventDefault();
         e.stopPropagation();
-
         menu.classList.toggle("open");
       });
 
@@ -57,7 +55,6 @@
       notifBtn.addEventListener("click", (e) => {
         e.preventDefault();
         e.stopPropagation();
-
         notifPanel.classList.toggle("open");
       });
 
@@ -75,7 +72,6 @@
     loadComponent("bstm-footer", "components/universal-footer.html");
   });
 
-  // Safe rebind (only once)
   window.addEventListener("bstm:componentLoaded", bindNav);
 
 })();
