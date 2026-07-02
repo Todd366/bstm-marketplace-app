@@ -1,5 +1,8 @@
 (function () {
 
+  // ============================================
+  // COMPONENT LOADER
+  // ============================================
   function loadComponent(id, file, callback) {
     var el = document.getElementById(id);
     if (!el) return;
@@ -11,6 +14,7 @@
       })
       .then(function (html) {
         el.innerHTML = html;
+
         if (callback) callback();
       })
       .catch(function (e) {
@@ -18,6 +22,9 @@
       });
   }
 
+  // ============================================
+  // SAFE EVENT BINDING (NO DUPLICATES EVER)
+  // ============================================
   function bindNav() {
 
     const btn = document.getElementById("menu-btn");
@@ -29,7 +36,9 @@
       btn.addEventListener("click", function (e) {
         e.preventDefault();
         e.stopPropagation();
-        menu.style.display = menu.style.display === "block" ? "none" : "block";
+
+        const isOpen = menu.style.display === "block";
+        menu.style.display = isOpen ? "none" : "block";
       });
 
       document.addEventListener("click", function (e) {
@@ -51,8 +60,8 @@
         e.preventDefault();
         e.stopPropagation();
 
-        notifPanel.style.display =
-          notifPanel.style.display === "block" ? "none" : "block";
+        const isOpen = notifPanel.style.display === "block";
+        notifPanel.style.display = isOpen ? "none" : "block";
       });
 
       document.addEventListener("click", function (e) {
@@ -68,19 +77,26 @@
     }
   }
 
+  // ============================================
+  // INIT
+  // ============================================
   document.addEventListener("DOMContentLoaded", function () {
 
-    // NAV
     loadComponent("bstm-nav", "components/nav.html", function () {
 
       bindNav();
 
-      // 🔥 CRITICAL: tell app.js everything is ready
-      window.dispatchEvent(new CustomEvent("bstm:ready"));
+      // IMPORTANT: delay ready event slightly so DOM is stable
+      setTimeout(() => {
+        window.dispatchEvent(
+          new CustomEvent("bstm:ready", {
+            detail: { source: "smart-loader" }
+          })
+        );
+      }, 0);
 
     });
 
-    // FOOTER
     loadComponent("bstm-footer", "components/universal-footer.html");
 
   });
