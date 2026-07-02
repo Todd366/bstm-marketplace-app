@@ -1,177 +1,79 @@
-<style>
-  #bstm-nav-bar {
-    position: sticky;
-    top: 0;
-    z-index: 9999;
-    background: linear-gradient(135deg,#667eea,#764ba2);
-    font-family: Inter, sans-serif;
-    box-shadow: 0 8px 24px rgba(0,0,0,.15);
-    color: #fff;
+(function () {
+
+  let navBound = false;
+
+  function loadComponent(id, file, callback) {
+    const el = document.getElementById(id);
+    if (!el) return;
+
+    fetch(file + "?v=" + Date.now())
+      .then(r => {
+        if (!r.ok) throw new Error("Failed: " + file);
+        return r.text();
+      })
+      .then(html => {
+        el.innerHTML = html;
+
+        requestAnimationFrame(() => {
+          if (callback) callback();
+
+          window.dispatchEvent(new CustomEvent("bstm:componentLoaded", {
+            detail: { source: file, target: id }
+          }));
+        });
+      })
+      .catch(err => console.error("[BSTM] Loader error:", err));
   }
 
-  .nav-link {
-    color: #fff;
-    text-decoration: none;
-    font-weight: 600;
-    padding: 8px 10px;
-    border-radius: 10px;
-    display: inline-block;
-  }
+  function bindNav() {
+    if (navBound) return;
+    navBound = true;
 
-  .nav-link:hover {
-    background: rgba(255,255,255,.15);
-  }
+    const btn = document.getElementById("menu-btn");
+    const menu = document.getElementById("mobile-menu");
 
-  #desktop-nav {
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-  }
+    if (btn && menu) {
+      btn.addEventListener("click", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
 
-  #menu-btn {
-    background: none;
-    border: none;
-    color: #fff;
-    font-size: 26px;
-    cursor: pointer;
-    display: none;
-  }
+        menu.classList.toggle("open");
+      });
 
-  #notif-btn {
-    background: none;
-    border: none;
-    color: #fff;
-    font-size: 20px;
-    cursor: pointer;
-  }
-
-  #mobile-menu {
-    display: none;
-    background: #fff;
-    color: #111827;
-  }
-
-  #mobile-menu.open {
-    display: block;
-  }
-
-  #mobile-menu a {
-    display: block;
-    padding: 14px 18px;
-    text-decoration: none;
-    color: #374151;
-    font-weight: 600;
-    border-bottom: 1px solid #f1f5f9;
-  }
-
-  #mobile-menu a:hover {
-    background: #f5f3ff;
-    color: #7C3AED;
-  }
-
-  #notif-panel {
-    display: none;
-    position: fixed;
-    top: 70px;
-    right: 20px;
-    width: 320px;
-    background: #fff;
-    color: #111827;
-    border-radius: 18px;
-    box-shadow: 0 20px 60px rgba(0,0,0,.18);
-    z-index: 10000;
-  }
-
-  #notif-panel.open {
-    display: block;
-  }
-
-  @media (max-width: 900px) {
-    #desktop-nav {
-      display: none;
+      document.addEventListener("click", (e) => {
+        if (menu.classList.contains("open") &&
+            !menu.contains(e.target) &&
+            e.target !== btn) {
+          menu.classList.remove("open");
+        }
+      });
     }
 
-    #menu-btn {
-      display: block;
+    const notifBtn = document.getElementById("notif-btn");
+    const notifPanel = document.getElementById("notif-panel");
+
+    if (notifBtn && notifPanel) {
+      notifBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        notifPanel.classList.toggle("open");
+      });
+
+      document.addEventListener("click", (e) => {
+        if (notifPanel.classList.contains("open") &&
+            !notifPanel.contains(e.target)) {
+          notifPanel.classList.remove("open");
+        }
+      });
     }
   }
-</style>
 
-<div id="bstm-nav-bar">
+  document.addEventListener("DOMContentLoaded", function () {
+    loadComponent("bstm-nav", "components/nav.html", bindNav);
+    loadComponent("bstm-footer", "components/universal-footer.html");
+  });
 
-  <div style="max-width:1300px;margin:auto;padding:14px 20px;display:flex;justify-content:space-between;align-items:center;">
+  window.addEventListener("bstm:componentLoaded", bindNav);
 
-    <!-- LEFT -->
-    <div style="display:flex;align-items:center;gap:20px;">
-
-      <a href="index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:white;">
-
-        <div style="width:42px;height:42px;border-radius:12px;background:#FACC15;color:#4C1D95;font-weight:900;display:flex;align-items:center;justify-content:center;">
-          B
-        </div>
-
-        <div>
-          <div style="font-weight:900;font-size:18px;">BSTM</div>
-          <div style="font-size:11px;color:#E9D5FF;">DIGITAL MALL</div>
-        </div>
-
-      </a>
-
-      <nav id="desktop-nav">
-
-        <a class="nav-link" href="index.html">Home</a>
-        <a class="nav-link" href="marketplace.html">Mall</a>
-        <a class="nav-link" href="room22-farm.html">Farm</a>
-        <a class="nav-link" href="thb-wallet.html">Wallet</a>
-        <a class="nav-link" href="cablink.html">CabLink</a>
-        <a class="nav-link" href="seller-dashboard.html">Seller</a>
-        <a class="nav-link" href="buyer-dashboard.html">Buyer</a>
-        <a class="nav-link" href="messages.html">Messages</a>
-
-      </nav>
-
-    </div>
-
-    <!-- RIGHT -->
-    <div style="display:flex;align-items:center;gap:12px;">
-
-      <button id="notif-btn">🔔</button>
-
-      <a href="login.html"
-         style="background:#FACC15;color:#4C1D95;padding:8px 14px;border-radius:10px;font-weight:700;text-decoration:none;">
-        Login
-      </a>
-
-      <button id="menu-btn">☰</button>
-
-    </div>
-
-  </div>
-
-  <!-- MOBILE MENU -->
-  <div id="mobile-menu">
-
-    <a href="index.html">Home</a>
-    <a href="marketplace.html">Mall</a>
-    <a href="room22-farm.html">Farm</a>
-    <a href="thb-wallet.html">Wallet</a>
-    <a href="cablink.html">CabLink</a>
-    <a href="seller-dashboard.html">Seller</a>
-    <a href="buyer-dashboard.html">Buyer</a>
-    <a href="messages.html">Messages</a>
-
-  </div>
-
-</div>
-
-<!-- NOTIFICATIONS -->
-<div id="notif-panel">
-  <div style="background:#7C3AED;color:#fff;padding:12px;font-weight:700;">
-    Notifications
-  </div>
-  <div style="padding:12px;">
-    <div>🌾 Room 22 is open</div>
-    <div>💰 THB rewards updated</div>
-    <div>🏪 New rooms coming</div>
-  </div>
-</div>
+})();
