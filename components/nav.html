@@ -6,20 +6,15 @@
     top:0;
     z-index:100;
     box-shadow:0 1px 12px rgba(124,58,237,0.08);
-  }
-
-  #bstm-nav-bar a,
-  #bstm-nav-bar button {
-    font-family: "Inter", sans-serif;
+    font-family: Inter, sans-serif;
   }
 
   .nav-link {
     color:#374151;
     font-weight:600;
-    font-size:14px;
-    padding:8px 12px;
+    font-size:13px;
+    padding:6px 10px;
     border-radius:10px;
-    transition:all 0.2s;
     text-decoration:none;
     display:inline-block;
   }
@@ -32,8 +27,8 @@
   #mobile-menu a {
     display:flex;
     align-items:center;
-    gap:12px;
-    padding:14px 16px;
+    gap:10px;
+    padding:12px 14px;
     border-radius:12px;
     font-weight:600;
     color:#374151;
@@ -57,139 +52,154 @@
     border:1px solid #EDE9FE;
     z-index:9999;
     display:none;
-    animation: notifSlide 0.2s ease;
   }
 
-  @keyframes notifSlide {
-    from { opacity:0; transform:translateY(-8px); }
-    to { opacity:1; transform:translateY(0); }
-  }
-
-  .notif-item {
-    padding:14px 16px;
-    border-radius:12px;
-    cursor:pointer;
-  }
-
-  .notif-item:hover {
-    background:#F5F3FF;
+  .nav-group {
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
   }
 </style>
 
 <div id="bstm-nav-bar">
 
+  <!-- TOP -->
   <div style="max-width:1280px;margin:0 auto;padding:0 20px;">
     <div style="display:flex;align-items:center;justify-content:space-between;height:64px;">
 
       <!-- LEFT -->
-      <div style="display:flex;align-items:center;gap:32px;">
+      <div style="display:flex;align-items:center;gap:24px;">
 
-        <!-- LOGO -->
         <a href="index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
           <div style="width:38px;height:38px;background:linear-gradient(135deg,#7C3AED,#4F46E5);border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:900;color:#fff;font-size:20px;">
             B
           </div>
           <div>
             <div style="font-weight:900;font-size:18px;color:#1E1B4B;">BSTM</div>
-            <div style="font-size:9px;color:#A78BFA;letter-spacing:2px;font-weight:700;">
-              DIGITAL MALL
-            </div>
+            <div style="font-size:9px;color:#A78BFA;font-weight:700;">DIGITAL MALL</div>
           </div>
         </a>
 
-        <!-- DESKTOP NAV -->
-        <nav id="desktop-nav">
-          <a href="index.html" class="nav-link">Home</a>
-          <a href="marketplace.html" class="nav-link">Mall</a>
-          <a href="room22-farm.html" class="nav-link">🌾 Farm</a>
-          <a href="thb-wallet.html" class="nav-link">💰 Wallet</a>
-          <a href="cablink.html" class="nav-link">🚕 CabLink</a>
-          <a href="buyer-dashboard.html" class="nav-link">Dashboard</a>
-        </nav>
+        <!-- FULL NAV (25+ PAGES GROUPED) -->
+        <div class="nav-group">
+
+          <!-- CORE -->
+          <a class="nav-link" href="index.html">Home</a>
+          <a class="nav-link" href="marketplace.html">Mall</a>
+          <a class="nav-link" href="room22-farm.html">Farm</a>
+
+          <!-- ECONOMY -->
+          <a class="nav-link" href="thb-wallet.html">Wallet</a>
+          <a class="nav-link" href="transactions.html">Transactions</a>
+          <a class="nav-link" href="earnings.html">Earnings</a>
+
+          <!-- TRANSPORT -->
+          <a class="nav-link" href="cablink.html">CabLink</a>
+          <a class="nav-link" href="rides-history.html">Rides</a>
+
+          <!-- MARKET -->
+          <a class="nav-link" href="seller-dashboard.html">Seller</a>
+          <a class="nav-link" href="buyer-dashboard.html">Buyer</a>
+          <a class="nav-link" href="upload-product.html">Upload</a>
+          <a class="nav-link" href="orders.html">Orders</a>
+          <a class="nav-link" href="order-tracking.html">Tracking</a>
+
+          <!-- SOCIAL -->
+          <a class="nav-link" href="messages.html">Messages</a>
+          <a class="nav-link" href="notifications-all.html">Alerts</a>
+          <a class="nav-link" href="wishlist.html">Wishlist</a>
+
+          <!-- SUPPORT -->
+          <a class="nav-link" href="help.html">Help</a>
+          <a class="nav-link" href="support.html">Support</a>
+          <a class="nav-link" href="faq.html">FAQ</a>
+
+          <!-- ADMIN / SYSTEM -->
+          <a class="nav-link" href="admin-dashboard.html">Admin</a>
+          <a class="nav-link" href="analytics.html">Analytics</a>
+          <a class="nav-link" href="settings.html">Settings</a>
+          <a class="nav-link" href="profile.html">Profile</a>
+          <a class="nav-link" href="login.html">Login</a>
+
+        </div>
 
       </div>
 
       <!-- RIGHT -->
-      <div style="display:flex;align-items:center;gap:16px;">
+      <div style="display:flex;align-items:center;gap:12px;">
 
-        <!-- NOTIFICATIONS -->
-        <button id="notif-btn"
-          style="position:relative;background:none;border:none;cursor:pointer;padding:8px;">
+        <button id="notif-btn" style="background:none;border:none;cursor:pointer;position:relative;">
           🔔
           <span id="notif-count"
-            style="position:absolute;top:-2px;right:-2px;background:#EF4444;color:#fff;border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;">
+            style="position:absolute;top:-4px;right:-4px;background:red;color:#fff;border-radius:50%;padding:2px 6px;font-size:10px;">
             3
           </span>
         </button>
 
-        <!-- LOGIN -->
-        <a id="nav-login-btn"
-           href="login.html"
-           style="background:linear-gradient(135deg,#7C3AED,#4F46E5);color:#fff;padding:9px 20px;border-radius:12px;font-weight:700;font-size:13px;text-decoration:none;">
+        <a id="nav-login-btn" href="login.html"
+           style="background:linear-gradient(135deg,#7C3AED,#4F46E5);color:#fff;padding:9px 18px;border-radius:12px;font-weight:700;text-decoration:none;">
           Login
         </a>
 
-        <!-- USER (hidden until login) -->
-        <div id="nav-user-name"
-             style="display:none;font-weight:700;color:#1E1B4B;"></div>
-
-        <!-- HAMBURGER -->
         <button id="menu-btn"
-          style="background:none;border:none;cursor:pointer;padding:8px;display:flex;flex-direction:column;gap:5px;">
-          <span style="width:22px;height:2.5px;background:#374151;"></span>
-          <span style="width:22px;height:2.5px;background:#374151;"></span>
-          <span style="width:22px;height:2.5px;background:#374151;"></span>
+          style="background:none;border:none;cursor:pointer;display:flex;flex-direction:column;gap:5px;">
+          <span style="width:22px;height:2px;background:#374151;"></span>
+          <span style="width:22px;height:2px;background:#374151;"></span>
+          <span style="width:22px;height:2px;background:#374151;"></span>
         </button>
 
       </div>
-
     </div>
   </div>
 
-  <!-- MOBILE MENU -->
-  <div id="mobile-menu"
-    style="display:none;background:#fff;border-top:1px solid #EDE9FE;padding:12px 16px 20px;">
+  <!-- MOBILE (FULL LIST) -->
+  <div id="mobile-menu" style="display:none;background:#fff;border-top:1px solid #EDE9FE;padding:12px 16px 20px;">
 
     <a href="index.html">🏠 Home</a>
-    <a href="marketplace.html">🏬 Digital Mall</a>
-    <a href="room22-farm.html">🌾 Room 22 Farm</a>
-    <a href="thb-wallet.html">💰 THB Wallet</a>
-    <a href="cablink.html">🚕 CabLink Rides</a>
-    <a href="buyer-dashboard.html">👤 My Dashboard</a>
-    <a href="seller-dashboard.html">🛒 Sell on BSTM</a>
-    <a href="upload-product.html">📤 Upload Product</a>
-    <a href="wishlist.html">❤️ Wishlist</a>
-    <a href="messages.html">💬 Messages</a>
-    <a href="order-tracking.html">📦 Track Orders</a>
-    <a href="help.html">❓ Help</a>
+    <a href="marketplace.html">🏬 Mall</a>
+    <a href="room22-farm.html">🌾 Farm</a>
 
-    <div style="margin-top:16px;padding-top:16px;border-top:1px solid #EDE9FE;">
-      <a href="login.html"
-         style="display:block;text-align:center;background:linear-gradient(135deg,#7C3AED,#4F46E5);color:#fff;padding:14px;border-radius:14px;font-weight:700;">
-        Login / Sign Up
-      </a>
-    </div>
+    <a href="thb-wallet.html">💰 Wallet</a>
+    <a href="transactions.html">📊 Transactions</a>
+    <a href="earnings.html">💸 Earnings</a>
+
+    <a href="cablink.html">🚕 CabLink</a>
+    <a href="rides-history.html">🧾 Ride History</a>
+
+    <a href="seller-dashboard.html">🛒 Seller</a>
+    <a href="buyer-dashboard.html">👤 Buyer</a>
+    <a href="upload-product.html">📤 Upload</a>
+    <a href="orders.html">📦 Orders</a>
+    <a href="order-tracking.html">📍 Tracking</a>
+
+    <a href="messages.html">💬 Messages</a>
+    <a href="notifications-all.html">🔔 Alerts</a>
+    <a href="wishlist.html">❤️ Wishlist</a>
+
+    <a href="help.html">❓ Help</a>
+    <a href="support.html">🛠 Support</a>
+    <a href="faq.html">📘 FAQ</a>
+
+    <a href="admin-dashboard.html">🧠 Admin</a>
+    <a href="analytics.html">📈 Analytics</a>
+    <a href="settings.html">⚙️ Settings</a>
+    <a href="profile.html">👤 Profile</a>
+
+    <a href="login.html">🔐 Login</a>
 
   </div>
 
 </div>
 
-<!-- NOTIFICATION PANEL -->
+<!-- NOTIFICATIONS -->
 <div id="notif-panel">
   <div style="background:linear-gradient(135deg,#7C3AED,#4F46E5);padding:16px;color:#fff;font-weight:800;">
     Notifications
   </div>
 
-  <div style="padding:8px;">
-    <div class="notif-item">🌾 Room 22 Farm is open!</div>
-    <div class="notif-item">⚡ You earned 2.5 THB</div>
-    <div class="notif-item">🏬 New room opening soon</div>
+  <div style="padding:10px;">
+    <div>🌾 Room 22 is open</div>
+    <div>⚡ You earned THB</div>
+    <div>🏬 New rooms coming</div>
   </div>
-
-  <div style="padding:12px;border-top:1px solid #F3F4F6;">
-    <a href="notifications-all.html"
-       style="display:block;text-align:center;color:#7C3AED;font-weight:700;text-decoration:none;">
-      View All →
-    </a>
-  </div>
-</div>
+    </div>
