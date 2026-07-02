@@ -1,13 +1,14 @@
 (function () {
 
   // ============================================
-  // COMPONENT LOADER
+  // COMPONENT LOADER (CACHE SAFE)
   // ============================================
   function loadComponent(id, file, callback) {
     const el = document.getElementById(id);
     if (!el) return;
 
-    fetch(file)
+    // 🔥 cache-bust to force fresh load
+    fetch(file + "?v=" + Date.now())
       .then(r => {
         if (!r.ok) throw new Error("Failed to load " + file);
         return r.text();
@@ -15,18 +16,21 @@
       .then(html => {
         el.innerHTML = html;
 
-        // ensure DOM is ready after injection
+        // wait for DOM injection
         requestAnimationFrame(() => {
-          if (typeof callback === "function") callback();
+          if (typeof callback === "function") {
+            callback();
+          }
         });
       })
       .catch(err => {
-        console.error("[BSTM] Failed loading:", file, err);
+        console.error("[BSTM] Component load failed:", file, err);
       });
   }
 
+
   // ============================================
-  // NAV BEHAVIOR (HAMBURGER + NOTIFICATIONS)
+  // NAV BINDING (HAMBURGER + NOTIFICATIONS)
   // ============================================
   function bindNav() {
 
@@ -62,12 +66,13 @@
       });
     }
 
+
     // ----------------------------
     // NOTIFICATIONS PANEL
     // ----------------------------
-    if (notifBtn && notifPanel && !notifBtn.dataset.boundNotif) {
+    if (notifBtn && notifPanel && !notifBtn.dataset.notifBound) {
 
-      notifBtn.dataset.boundNotif = "1";
+      notifBtn.dataset.notifBound = "1";
 
       notifBtn.addEventListener("click", function (e) {
         e.preventDefault();
@@ -89,15 +94,19 @@
     }
   }
 
+
   // ============================================
   // INIT
   // ============================================
   document.addEventListener("DOMContentLoaded", function () {
 
+    // NAV
     loadComponent("bstm-nav", "components/nav.html", bindNav);
 
+    // FOOTER
     loadComponent("bstm-footer", "components/universal-footer.html");
 
+    // READY EVENT (safe)
     window.dispatchEvent(
       new CustomEvent("bstm:ready", {
         detail: { source: "smart-loader" }
