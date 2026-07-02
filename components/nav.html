@@ -1,3 +1,4 @@
+<!-- NAV STYLE -->
 <style>
   #bstm-nav-bar {
     background:#fff;
@@ -33,7 +34,6 @@
     font-weight:600;
     color:#374151;
     text-decoration:none;
-    transition:background 0.2s;
   }
 
   #mobile-menu a:hover {
@@ -56,6 +56,7 @@
   }
 </style>
 
+<!-- NAV BAR -->
 <div id="bstm-nav-bar">
 
   <div style="max-width:1280px;margin:0 auto;padding:0 20px;">
@@ -70,12 +71,14 @@
           </div>
           <div>
             <div style="font-weight:900;font-size:18px;color:#1E1B4B;">BSTM</div>
-            <div style="font-size:9px;color:#A78BFA;letter-spacing:2px;font-weight:700;">DIGITAL MALL</div>
+            <div style="font-size:9px;color:#A78BFA;letter-spacing:2px;font-weight:700;">
+              DIGITAL MALL
+            </div>
           </div>
         </a>
 
-        <!-- Desktop Nav -->
-        <nav id="desktop-nav" style="display:none;">
+        <!-- DESKTOP NAV -->
+        <nav id="desktop-nav">
           <a href="index.html" class="nav-link">Home</a>
           <a href="marketplace.html" class="nav-link">Mall</a>
           <a href="room22-farm.html" class="nav-link">🌾 Farm</a>
@@ -89,7 +92,9 @@
       <!-- RIGHT -->
       <div style="display:flex;align-items:center;gap:16px;">
 
-        <button id="notif-btn" style="background:none;border:none;cursor:pointer;padding:8px;position:relative;">
+        <!-- NOTIFICATIONS -->
+        <button id="notif-btn"
+          style="background:none;border:none;cursor:pointer;padding:8px;position:relative;">
           🔔
           <span id="notif-count"
             style="position:absolute;top:-2px;right:-2px;background:red;color:#fff;border-radius:50%;padding:2px 6px;font-size:10px;">
@@ -97,11 +102,20 @@
           </span>
         </button>
 
-        <a id="nav-login-btn" href="login.html"
-           style="background:linear-gradient(135deg,#7C3AED,#4F46E5);color:#fff;padding:9px 20px;border-radius:12px;font-weight:700;font-size:13px;text-decoration:none;">
+        <!-- LOGIN -->
+        <a id="nav-login-btn"
+           href="login.html"
+           style="background:linear-gradient(135deg,#7C3AED,#4F46E5);
+                  color:#fff;
+                  padding:9px 20px;
+                  border-radius:12px;
+                  font-weight:700;
+                  font-size:13px;
+                  text-decoration:none;">
           Login
         </a>
 
+        <!-- HAMBURGER -->
         <button id="menu-btn"
           style="background:none;border:none;cursor:pointer;padding:8px;display:flex;flex-direction:column;gap:5px;">
           <span style="width:22px;height:2.5px;background:#374151;"></span>
@@ -130,9 +144,10 @@
     <a href="order-tracking.html">📦 Track Orders</a>
     <a href="help.html">❓ Help</a>
   </div>
+
 </div>
 
-<!-- NOTIFICATIONS -->
+<!-- NOTIFICATIONS PANEL -->
 <div id="notif-panel">
   <div style="background:linear-gradient(135deg,#7C3AED,#4F46E5);padding:16px;color:#fff;font-weight:800;">
     Notifications
@@ -143,4 +158,4 @@
     <div>⚡ You earned THB</div>
     <div>🏬 New rooms coming</div>
   </div>
-  </div>
+    </div>
