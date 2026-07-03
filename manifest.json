@@ -1,27 +1,16 @@
 {
   "name": "BSTM Digital Mall",
   "short_name": "BSTM Mall",
-  "description": "Botswana's Digital Marketplace — Every Business Has a Room",
+  "description": "Botswana's Digital Marketplace",
   "start_url": "./index.html",
-  "scope": "./",
   "display": "standalone",
   "background_color": "#F8F7FF",
   "theme_color": "#7C3AED",
-  "orientation": "portrait-primary",
   "icons": [
     {
-      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='24' fill='%237C3AED'/%3E%3Ctext x='96' y='135' font-size='110' text-anchor='middle' fill='white' font-family='Arial' font-weight='900'%3EB%3C/text%3E%3C/svg%3E",
+      "src": "data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 192 192%27%3E%3Crect width=%27192%27 height=%27192%27 rx=%2724%27 fill=%27%237C3AED%27/%3E%3Ctext x=%2796%27 y=%27135%27 font-size=%27110%27 text-anchor=%27middle%27 fill=%27white%27 font-family=%27Arial%27 font-weight=%27900%27%3EB%3C/text%3E%3C/svg%3E",
       "sizes": "192x192",
-      "type": "image/svg+xml",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='64' fill='%237C3AED'/%3E%3Ctext x='256' y='355' font-size='290' text-anchor='middle' fill='white' font-family='Arial' font-weight='900'%3EB%3C/text%3E%3C/svg%3E",
-      "sizes": "512x512",
-      "type": "image/svg+xml",
-      "purpose": "any maskable"
+      "type": "image/svg+xml"
     }
-  ],
-  "categories": ["shopping","business"],
-  "lang": "en"
+  ]
 }
