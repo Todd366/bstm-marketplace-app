@@ -1,5 +1,4 @@
-// notifications-all.js — logic lives inline in notifications-all.html
-// This module only handles auth guard
-window.BSTM.ready().then(function() {
+// notifications-all.js — loadNotifications() and filterNotifications() defined inline
+document.addEventListener("DOMContentLoaded", function() {
   if (typeof loadNotifications === "function") loadNotifications();
 });

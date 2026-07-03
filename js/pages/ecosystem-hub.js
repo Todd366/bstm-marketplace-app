@@ -1,5 +1,5 @@
-// ecosystem-hub.js — auto-filled stub
-// Logic for ecosystem-hub.html
+// ecosystem-hub.js
 document.addEventListener("DOMContentLoaded", function() {
-  // Page init — extend this with real logic
+  var countEl = document.getElementById("platformCount");
+  if (countEl) countEl.textContent = "15";
 });
