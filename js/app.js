@@ -120,3 +120,12 @@ window.BSTM = {
     window.location.href = "login.html";
   },
 };
+
+// Register service worker for offline support
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('./sw.js', { scope: './' })
+      .then(function(r) { console.log('SW registered'); })
+      .catch(function(e) { console.warn('SW failed:', e); });
+  });
+}
