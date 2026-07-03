@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/todd366/bstm-marketplace-app#readme",
   "dependencies": {
-    "@supabase/supabase-js": "^2.108.2",
+    "@supabase/supabase-js": "^2.110.0",
     "jsdom": "^29.1.1"
   }
 }

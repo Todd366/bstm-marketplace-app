@@ -1,49 +1,30 @@
-import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
-
 // ============================================
-// SUPABASE CLIENT (SINGLE SOURCE OF TRUTH)
+// BSTM SUPABASE CLIENT (LOCAL + BROWSER SAFE)
 // ============================================
 
-// Safe environment access helper
-function getEnv(key) {
-  try {
-    return typeof import.meta !== "undefined" &&
-      import.meta.env &&
-      import.meta.env[key];
-  } catch (e) {
-    return undefined;
-  }
-}
+import { createClient } from '@supabase/supabase-js';
+import { loadConfig } from './config.js';
 
-// ============================================
-// CONFIG
-// ============================================
+// Load config
+const config = loadConfig();
 
 const SUPABASE_URL =
-  getEnv("VITE_SUPABASE_URL") ||
-  window?.BSTM_CONFIG?.SUPABASE_URL ||
-  "https://tvtfxkavjqvurdezhyvu.supabase.co";
+  config.API.SUPABASE_URL ||
+  'https://tvtfxkavjqvurdezhyvu.supabase.co';
 
 const SUPABASE_ANON_KEY =
-  getEnv("VITE_SUPABASE_ANON_KEY") ||
-  window?.BSTM_CONFIG?.SUPABASE_ANON_KEY ||
-  "sb_publishable_xlZ3YKF6h5XBMhARWkE9_g_PVudo5r8";
+  config.API.SUPABASE_KEY ||
+  'sb_publishable_xxx';
 
-// ============================================
-// CLIENT
-// ============================================
-
+// Create client (single instance)
 export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-// ============================================
-// DEBUG (DEV ONLY)
-// ============================================
+// Attach globally for legacy scripts (VERY IMPORTANT)
+if (typeof window !== 'undefined') {
+  window.supabase = supabase;
+}
 
-const MODE = getEnv("MODE");
-
-if (MODE === "development") {
-  console.log(
-    "🔹 Supabase initialized:",
-    SUPABASE_URL.split(".")[0] + "..."
-  );
+// Debug safe
+if (config.APP?.ENVIRONMENT === 'development') {
+  console.log('[BSTM] Supabase ready:', SUPABASE_URL);
 }

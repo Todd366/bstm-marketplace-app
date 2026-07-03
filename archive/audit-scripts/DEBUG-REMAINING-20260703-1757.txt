@@ -1,0 +1,8 @@
+✅ RAW JS / Leaked Code Check (All pages):
+⚠️  *.html — missing smart-loader
+
+🔐 Login/Auth: Supabase magic link detected in login flow
+📋 KYC pages: 
+
+🎉 ALL PAGES CURRENTLY REPORT CLEAN!
+Full report saved: DEBUG-REMAINING-20260703-1757.txt
