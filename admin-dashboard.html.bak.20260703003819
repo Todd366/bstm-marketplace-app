@@ -22,10 +22,10 @@
     
 
     <div id="bstm-footer"></div>
-
+</script>
     <script src="components/smart-loader.js"></script>
 <script type="module" src="js/app.js"></script>
 <script type="module" src="js/pages/admin-dashboard.js"></script>
-
+</script>
 </body>
 </html>

@@ -45,7 +45,8 @@
     <!-- Images -->
     <div class="bg-white rounded-2xl shadow-lg p-8">
       <h2 class="text-2xl font-bold text-gray-800 mb-6"><i class="fas fa-images text-purple-600 mr-3"></i>Product Images</h2>
-      <div class="drop-zone p-8 text-center mb-6" id="dropZone" onclick="document.getElementById('imageInput').click()">
+      <div class="drop-zone p-8 text-center mb-6" id="dropZone" onclick="<script>
+document.getElementById('imageInput').click()">
         <i class="fas fa-cloud-upload-alt text-6xl text-gray-400 mb-4 block"></i>
         <p class="text-gray-600 mb-2">Drag & drop images here or tap to browse</p>
         <p class="text-sm text-gray-500">Up to 5 images · JPG, PNG · Max 5MB each</p>
@@ -212,6 +213,7 @@ document.getElementById('productForm').addEventListener('submit', function(e) {
   window._pendingProduct = data;
   document.dispatchEvent(new CustomEvent('bstm:submitProduct', {detail: data}));
 });
+
 </script>
 </body>
             </html>

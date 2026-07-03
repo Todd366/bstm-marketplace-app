@@ -48,7 +48,8 @@
 
     <div style="background:#FEF9C3;border-radius:14px;padding:14px;margin-bottom:20px;text-align:center;">
       <div style="font-size:14px;font-weight:700;color:#92400E;">⚡ You earned THB rewards!</div>
-      <div style="font-size:12px;color:#92400E;margin-top:2px;">Check your wallet for your balance</div>
+      <div style="font-size:12px;color:#92400E;margin-top:2px;">Check your wal<script>
+let for your balance</div>
     </div>
 
     <div style="display:flex;gap:10px;flex-wrap:wrap;">
@@ -70,6 +71,7 @@
 var params = new URLSearchParams(window.location.search);
 var orderId = params.get('order') || ('BSTM-' + Math.random().toString(36).substr(2,9).toUpperCase());
 document.getElementById('order-number').textContent = '#' + orderId;
+
 </script>
 </body>
 </html>

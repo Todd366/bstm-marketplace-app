@@ -65,6 +65,7 @@
 <script type="module">
 import { getOrders } from './js/bstm-core.js';
 
+<script>
 window.BSTM.ready().then(async function(session) {
   if (!session) {
     document.getElementById('auth-wall').style.display = 'block';
@@ -98,6 +99,7 @@ window.BSTM.ready().then(async function(session) {
       + '</div>';
   }).join('');
 });
+
 </script>
 </body>
 </html>
