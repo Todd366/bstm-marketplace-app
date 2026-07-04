@@ -1,0 +1,44 @@
+/* GLOBAL MOBILE FIX — HARD OVERRIDE */
+
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+.container, .row, .grid {
+    width: 100% !important;
+    max-width: 100% !important;
+    flex-wrap: wrap !important;
+}
+
+img, video, canvas {
+    max-width: 100%;
+    height: auto;
+}
+
+nav, .navbar {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+footer {
+    width: 100%;
+    display: block;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+
+    nav {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}

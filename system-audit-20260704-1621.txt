@@ -1,0 +1,189 @@
+════════════════════════════════════════════════════════════════════════════════════════
+  BSTM SYSTEM ARCHITECTURE AUDIT v3.0 — MERGED / HARDENED
+  Generated : 2026-07-04 16:21
+  Root      : /data/data/com.termux/files/home/bstm-marketplace-app
+  HTML pages: 40    JS modules: 40    Mode: STANDARD
+════════════════════════════════════════════════════════════════════════════════════════
+────────────────────────────────────────────────────────────────────────────────────────
+  PHASE 0 — BASENAME COLLISION CHECK
+────────────────────────────────────────────────────────────────────────────────────────
+
+  ℹ️  1 cosmetic collision(s) — same filename, different
+  folders, but nested-path resolution keeps their modules distinct:
+    - index.html: frontend/public/index.html, index.html
+────────────────────────────────────────────────────────────────────────────────────────
+  PHASE 1 — FULL FILE SYSTEM ANALYSIS (EXCLUDES components/ (UI_LAYER)* from scoring)
+────────────────────────────────────────────────────────────────────────────────────────
+
+  FILE                                   STATUS             SCORE  ISSUES
+  ----------------------------------------------------------------------------------------------------
+  ⚠️  404.html                             PARTIALLY BROKEN   1      OK (loader optional, non-blocking)
+  ⚠️  admin-dashboard.html                 PARTIALLY BROKEN   1      OK (loader optional, non-blocking)
+  ⚠️  analytics.html                       PARTIALLY BROKEN   1      OK (loader optional, non-blocking)
+  ⚠️  buyer-dashboard.html                 PARTIALLY BROKEN   1      OK (loader optional, non-blocking)
+  ⚠️  cablink.html                         PARTIALLY BROKEN   1      OK (loader optional, non-blocking)
+  ⚠️  checkout.html                        PARTIALLY BROKEN   1      OK (loader optional, non-blocking)
+  ⚠️  components/app-shell.html            PARTIALLY BROKEN   1      OK (loader optional, non-blocking)
+  ⚠️  components/global-search.html        PARTIALLY BROKEN   1      OK (loader optional, non-blocking)
+  ⚠️  components/nav.html                  PARTIALLY BROKEN   1      OK (loader optional, non-blocking)
+  ⚠️  components/notifications.html        PARTIALLY BROKEN   1      OK (loader optional, non-blocking)
+  ⚠️  components/room-switcher.html        PARTIALLY BROKEN   1      OK (loader optional, non-blocking)
+  ⚠️  components/universal-footer.html     PARTIALLY BROKEN   1      OK (loader optional, non-blocking)
+  ⚠️  components/universal-nav.html        PARTIALLY BROKEN   1      OK (loader optional, non-blocking)
+  ⚠️  earnings.html                        PARTIALLY BROKEN   1      OK (loader optional, non-blocking)
+  ⚠️  ecosystem-hub.html                   PARTIALLY BROKEN   1      OK (loader optional, non-blocking)
+  ⚠️  frontend/public/components/navbar.html PARTIALLY BROKEN   1      OK (loader optional, non-blocking)
+  ⚠️  frontend/public/index.html           PARTIALLY BROKEN   1      OK (loader optional, non-blocking)
+  ⚠️  gov-dashboard.html                   PARTIALLY BROKEN   1      OK (loader optional, non-blocking)
+  ⚠️  help.html                            PARTIALLY BROKEN   1      OK (loader optional, non-blocking)
+  ⚠️  index.html                           PARTIALLY BROKEN   1      OK (loader optional, non-blocking)
+  ⚠️  kyc-verification.html                PARTIALLY BROKEN   1      OK (loader optional, non-blocking)
+  ⚠️  login.html                           PARTIALLY BROKEN   1      OK (loader optional, non-blocking)
+  ⚠️  marketplace.html                     PARTIALLY BROKEN   1      OK (loader optional, non-blocking)
+  ⚠️  messages.html                        PARTIALLY BROKEN   1      OK (loader optional, non-blocking)
+  ⚠️  monitoring-dashboard.html            PARTIALLY BROKEN   1      OK (loader optional, non-blocking)
+  ⚠️  nav-backup.html                      PARTIALLY BROKEN   1      OK (loader optional, non-blocking)
+  ⚠️  notifications-all.html               PARTIALLY BROKEN   1      OK (loader optional, non-blocking)
+  ⚠️  order-success.html                   PARTIALLY BROKEN   1      OK (loader optional, non-blocking)
+  ⚠️  order-tracking.html                  PARTIALLY BROKEN   1      OK (loader optional, non-blocking)
+  ⚠️  product-detail.html                  PARTIALLY BROKEN   1      OK (loader optional, non-blocking)
+  ⚠️  profile.html                         PARTIALLY BROKEN   1      OK (loader optional, non-blocking)
+  ⚠️  room22-farm.html                     PARTIALLY BROKEN   1      OK (loader optional, non-blocking)
+  ⚠️  seller-dashboard.html                PARTIALLY BROKEN   1      OK (loader optional, non-blocking)
+  ⚠️  settings.html                        PARTIALLY BROKEN   1      OK (loader optional, non-blocking)
+  ⚠️  terms.html                           PARTIALLY BROKEN   1      OK (loader optional, non-blocking)
+  ⚠️  thb-wallet.html                      PARTIALLY BROKEN   1      OK (loader optional, non-blocking)
+  ⚠️  transactions.html                    PARTIALLY BROKEN   1      OK (loader optional, non-blocking)
+  ⚠️  upload-product.html                  PARTIALLY BROKEN   1      OK (loader optional, non-blocking)
+  ⚠️  verify.html                          PARTIALLY BROKEN   1      OK (loader optional, non-blocking)
+  ⚠️  wishlist.html                        PARTIALLY BROKEN   1      OK (loader optional, non-blocking)
+
+  TOTALS: 0 CLEAN  |  40 PARTIALLY BROKEN  |  0 HEAVILY BROKEN  |  0 READ ERRORS
+────────────────────────────────────────────────────────────────────────────────────────
+  PHASE 2 — INLINE JS EXTRACTION MAP
+────────────────────────────────────────────────────────────────────────────────────────
+────────────────────────────────────────────────────────────────────────────────────────
+  PHASE 3 — MODULE MAPPING (path-aware, collision-safe)
+────────────────────────────────────────────────────────────────────────────────────────
+
+  MISSING MODULES (0) — HTML page exists, JS module does not:
+
+  PRESENT MODULES (40):
+  ✅  404.html                               → js/pages/404.js
+  ✅  admin-dashboard.html                   → js/pages/admin-dashboard.js
+  ✅  analytics.html                         → js/pages/analytics.js
+  ✅  buyer-dashboard.html                   → js/pages/buyer-dashboard.js
+  ✅  cablink.html                           → js/pages/cablink.js
+  ✅  checkout.html                          → js/pages/checkout.js
+  ✅  components/app-shell.html              → js/pages/components/app-shell.js
+  ✅  components/global-search.html          → js/pages/global-search.js
+  ✅  components/nav.html                    → js/pages/nav.js
+  ✅  components/notifications.html          → js/pages/notifications.js
+  ✅  components/room-switcher.html          → js/pages/room-switcher.js
+  ✅  components/universal-footer.html       → js/pages/universal-footer.js
+  ✅  components/universal-nav.html          → js/pages/universal-nav.js
+  ✅  earnings.html                          → js/pages/earnings.js
+  ✅  ecosystem-hub.html                     → js/pages/ecosystem-hub.js
+  ✅  frontend/public/components/navbar.html → js/pages/frontend/public/components/navbar.js
+  ✅  frontend/public/index.html             → js/pages/index.js
+  ✅  gov-dashboard.html                     → js/pages/gov-dashboard.js
+  ✅  help.html                              → js/pages/help.js
+  ✅  index.html                             → js/pages/index.js
+  ✅  kyc-verification.html                  → js/pages/kyc-verification.js
+  ✅  login.html                             → js/pages/login.js
+  ✅  marketplace.html                       → js/pages/marketplace.js
+  ✅  messages.html                          → js/pages/messages.js
+  ✅  monitoring-dashboard.html              → js/pages/monitoring-dashboard.js
+  ✅  nav-backup.html                        → js/pages/nav-backup.js
+  ✅  notifications-all.html                 → js/pages/notifications-all.js
+  ✅  order-success.html                     → js/pages/order-success.js
+  ✅  order-tracking.html                    → js/pages/order-tracking.js
+  ✅  product-detail.html                    → js/pages/product-detail.js
+  ✅  profile.html                           → js/pages/profile.js
+  ✅  room22-farm.html                       → js/pages/room22-farm.js
+  ✅  seller-dashboard.html                  → js/pages/seller-dashboard.js
+  ✅  settings.html                          → js/pages/settings.js
+  ✅  terms.html                             → js/pages/terms.js
+  ✅  thb-wallet.html                        → js/pages/thb-wallet.js
+  ✅  transactions.html                      → js/pages/transactions.js
+  ✅  upload-product.html                    → js/pages/upload-product.js
+  ✅  verify.html                            → js/pages/verify.js
+  ✅  wishlist.html                          → js/pages/wishlist.js
+
+  OPTIONAL MODULES (non-scored inventory) (non-entry, ignored for score) (9) — js/pages/*.js not referenced in any HTML:
+  ⚠️   js/pages/components/app-shell.js
+  ⚠️   js/pages/ecosystem-hub.js
+  ⚠️   js/pages/frontend/public/components/navbar.js
+  ⚠️   js/pages/kyc-verification.js
+  ⚠️   js/pages/monitoring-dashboard.js
+  ⚠️   js/pages/nav-backup.js
+  ⚠️   js/pages/notifications-all.js
+  ⚠️   js/pages/product-detail.js
+  ⚠️   js/pages/terms.js
+────────────────────────────────────────────────────────────────────────────────────────
+  PHASE 4 — LIVE CONNECTIVITY SIMULATION
+────────────────────────────────────────────────────────────────────────────────────────
+
+  PAGE                                   LOADED?    BROKEN DEPENDENCIES
+  ----------------------------------------------------------------------------------------------------
+  404.html                               ✅ YES      UI_LOADER_OK
+  admin-dashboard.html                   ✅ YES      UI_LOADER_OK
+  analytics.html                         ✅ YES      UI_LOADER_OK
+  buyer-dashboard.html                   ✅ YES      UI_LOADER_OK
+  cablink.html                           ✅ YES      UI_LOADER_OK
+  checkout.html                          ✅ YES      UI_LOADER_OK
+  components/app-shell.html              ❌ NO       UI_LOADER_OK | js/pages/components/app-shell.js exists but is not <script src> loaded and no loader present
+  components/global-search.html          ❌ NO       UI_LOADER_OK | js/pages/global-search.js exists but is not <script src> loaded and no loader present
+  components/nav.html                    ❌ NO       UI_LOADER_OK | js/pages/nav.js exists but is not <script src> loaded and no loader present
+  components/notifications.html          ❌ NO       UI_LOADER_OK | js/pages/notifications.js exists but is not <script src> loaded and no loader present
+  components/room-switcher.html          ❌ NO       UI_LOADER_OK | js/pages/room-switcher.js exists but is not <script src> loaded and no loader present
+  components/universal-footer.html       ❌ NO       UI_LOADER_OK | js/pages/universal-footer.js exists but is not <script src> loaded and no loader present
+  components/universal-nav.html          ❌ NO       UI_LOADER_OK | js/pages/universal-nav.js exists but is not <script src> loaded and no loader present
+  earnings.html                          ✅ YES      UI_LOADER_OK
+  ecosystem-hub.html                     ❌ NO       UI_LOADER_OK | js/pages/ecosystem-hub.js exists but is not <script src> loaded and no loader present
+  frontend/public/components/navbar.html ❌ NO       UI_LOADER_OK | js/pages/frontend/public/components/navbar.js exists but is not <script src> loaded and no loader present
+  frontend/public/index.html             ❌ NO       UI_LOADER_OK | js/pages/index.js exists but is not <script src> loaded and no loader present
+  gov-dashboard.html                     ✅ YES      UI_LOADER_OK
+  help.html                              ✅ YES      UI_LOADER_OK
+  index.html                             ✅ YES      UI_LOADER_OK
+  kyc-verification.html                  ❌ NO       UI_LOADER_OK | js/pages/kyc-verification.js exists but is not <script src> loaded and no loader present
+  login.html                             ✅ YES      UI_LOADER_OK
+  marketplace.html                       ✅ YES      UI_LOADER_OK
+  messages.html                          ✅ YES      UI_LOADER_OK
+  monitoring-dashboard.html              ❌ NO       UI_LOADER_OK | js/pages/monitoring-dashboard.js exists but is not <script src> loaded and no loader present
+  nav-backup.html                        ❌ NO       UI_LOADER_OK | js/pages/nav-backup.js exists but is not <script src> loaded and no loader present
+  notifications-all.html                 ❌ NO       UI_LOADER_OK | js/pages/notifications-all.js exists but is not <script src> loaded and no loader present
+  order-success.html                     ✅ YES      UI_LOADER_OK
+  order-tracking.html                    ✅ YES      UI_LOADER_OK
+  product-detail.html                    ❌ NO       UI_LOADER_OK | js/pages/product-detail.js exists but is not <script src> loaded and no loader present
+  profile.html                           ✅ YES      UI_LOADER_OK
+  room22-farm.html                       ✅ YES      UI_LOADER_OK
+  seller-dashboard.html                  ✅ YES      UI_LOADER_OK
+  settings.html                          ✅ YES      UI_LOADER_OK
+  terms.html                             ❌ NO       UI_LOADER_OK | js/pages/terms.js exists but is not <script src> loaded and no loader present
+  thb-wallet.html                        ✅ YES      UI_LOADER_OK
+  transactions.html                      ✅ YES      UI_LOADER_OK
+  upload-product.html                    ✅ YES      UI_LOADER_OK
+  verify.html                            ✅ YES      UI_LOADER_OK
+  wishlist.html                          ✅ YES      UI_LOADER_OK
+════════════════════════════════════════════════════════════════════════════════════════
+  FINAL SYSTEM REPORT
+════════════════════════════════════════════════════════════════════════════════════════
+
+  SYSTEM HEALTH SCORE
+  ─────────────────────────────────────────
+  Clean Pages:            0/40  (0%)
+  Partially Broken:       40/40  (100%)
+  Heavily Broken:         0/40  (0%)
+  Basename Collisions:    0 real, 1 cosmetic
+  Missing Modules:        0
+  Unused Modules:         9
+  Fully Connected Pages:  24/40  (60%)
+
+  PRODUCTION READINESS: ❌ NOT READY  (standard gate)
+
+  CRITICAL FIX LIST (PRIORITY ORDER)
+  ─────────────────────────────────────────
+  1. [LOW]   1 cosmetic filename collision(s) exist but are not currently ambiguous
+  2. [MED]   Clean inline JS from 40 partially broken page(s)
+  3. [LOW]   Audit/remove 9 unused module file(s)

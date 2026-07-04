@@ -1,0 +1,189 @@
+════════════════════════════════════════════════════════════════════════════════════════
+  BSTM SYSTEM ARCHITECTURE AUDIT v3.0 — MERGED / HARDENED
+  Generated : 2026-07-04 16:31
+  Root      : /data/data/com.termux/files/home/bstm-marketplace-app
+  HTML pages: 40    JS modules: 40    Mode: STANDARD
+════════════════════════════════════════════════════════════════════════════════════════
+────────────────────────────────────────────────────────────────────────────────────────
+  PHASE 0 — BASENAME COLLISION CHECK
+────────────────────────────────────────────────────────────────────────────────────────
+
+  ℹ️  1 cosmetic collision(s) — same filename, different
+  folders, but nested-path resolution keeps their modules distinct:
+    - index.html: frontend/public/index.html, index.html
+────────────────────────────────────────────────────────────────────────────────────────
+  PHASE 1 — FULL FILE SYSTEM ANALYSIS
+────────────────────────────────────────────────────────────────────────────────────────
+
+  FILE                                   STATUS             SCORE  ISSUES
+  ----------------------------------------------------------------------------------------------------
+  ⚠️  404.html                             PARTIALLY BROKEN   1      NO smart-loader.js
+  ⚠️  admin-dashboard.html                 PARTIALLY BROKEN   1      NO smart-loader.js
+  ⚠️  analytics.html                       PARTIALLY BROKEN   1      NO smart-loader.js
+  ⚠️  buyer-dashboard.html                 PARTIALLY BROKEN   1      NO smart-loader.js
+  ⚠️  cablink.html                         PARTIALLY BROKEN   1      NO smart-loader.js
+  ⚠️  checkout.html                        PARTIALLY BROKEN   1      NO smart-loader.js
+  ⚠️  components/app-shell.html            PARTIALLY BROKEN   1      NO smart-loader.js
+  ⚠️  components/global-search.html        PARTIALLY BROKEN   1      NO smart-loader.js
+  ⚠️  components/nav.html                  PARTIALLY BROKEN   1      NO smart-loader.js
+  ⚠️  components/notifications.html        PARTIALLY BROKEN   1      NO smart-loader.js
+  ⚠️  components/room-switcher.html        PARTIALLY BROKEN   1      NO smart-loader.js
+  ⚠️  components/universal-footer.html     PARTIALLY BROKEN   1      NO smart-loader.js
+  ⚠️  components/universal-nav.html        PARTIALLY BROKEN   1      NO smart-loader.js
+  ⚠️  earnings.html                        PARTIALLY BROKEN   1      NO smart-loader.js
+  ⚠️  ecosystem-hub.html                   PARTIALLY BROKEN   1      NO smart-loader.js
+  ⚠️  frontend/public/components/navbar.html PARTIALLY BROKEN   1      NO smart-loader.js
+  ⚠️  frontend/public/index.html           PARTIALLY BROKEN   1      NO smart-loader.js
+  ⚠️  gov-dashboard.html                   PARTIALLY BROKEN   1      NO smart-loader.js
+  ⚠️  help.html                            PARTIALLY BROKEN   1      NO smart-loader.js
+  ⚠️  index.html                           PARTIALLY BROKEN   1      NO smart-loader.js
+  ⚠️  kyc-verification.html                PARTIALLY BROKEN   1      NO smart-loader.js
+  ⚠️  login.html                           PARTIALLY BROKEN   1      NO smart-loader.js
+  ⚠️  marketplace.html                     PARTIALLY BROKEN   1      NO smart-loader.js
+  ⚠️  messages.html                        PARTIALLY BROKEN   1      NO smart-loader.js
+  ⚠️  monitoring-dashboard.html            PARTIALLY BROKEN   1      NO smart-loader.js
+  ⚠️  nav-backup.html                      PARTIALLY BROKEN   1      NO smart-loader.js
+  ⚠️  notifications-all.html               PARTIALLY BROKEN   1      NO smart-loader.js
+  ⚠️  order-success.html                   PARTIALLY BROKEN   1      NO smart-loader.js
+  ⚠️  order-tracking.html                  PARTIALLY BROKEN   1      NO smart-loader.js
+  ⚠️  product-detail.html                  PARTIALLY BROKEN   1      NO smart-loader.js
+  ⚠️  profile.html                         PARTIALLY BROKEN   1      NO smart-loader.js
+  ⚠️  room22-farm.html                     PARTIALLY BROKEN   1      NO smart-loader.js
+  ⚠️  seller-dashboard.html                PARTIALLY BROKEN   1      NO smart-loader.js
+  ⚠️  settings.html                        PARTIALLY BROKEN   1      NO smart-loader.js
+  ⚠️  terms.html                           PARTIALLY BROKEN   1      NO smart-loader.js
+  ⚠️  thb-wallet.html                      PARTIALLY BROKEN   1      NO smart-loader.js
+  ⚠️  transactions.html                    PARTIALLY BROKEN   1      NO smart-loader.js
+  ⚠️  upload-product.html                  PARTIALLY BROKEN   1      NO smart-loader.js
+  ⚠️  verify.html                          PARTIALLY BROKEN   1      NO smart-loader.js
+  ⚠️  wishlist.html                        PARTIALLY BROKEN   1      NO smart-loader.js
+
+  TOTALS: 0 CLEAN  |  40 PARTIALLY BROKEN  |  0 HEAVILY BROKEN  |  0 READ ERRORS
+────────────────────────────────────────────────────────────────────────────────────────
+  PHASE 2 — INLINE JS EXTRACTION MAP
+────────────────────────────────────────────────────────────────────────────────────────
+────────────────────────────────────────────────────────────────────────────────────────
+  PHASE 3 — MODULE MAPPING (path-aware, collision-safe)
+────────────────────────────────────────────────────────────────────────────────────────
+
+  MISSING MODULES (0) — HTML page exists, JS module does not:
+
+  PRESENT MODULES (40):
+  ✅  404.html                               → js/pages/404.js
+  ✅  admin-dashboard.html                   → js/pages/admin-dashboard.js
+  ✅  analytics.html                         → js/pages/analytics.js
+  ✅  buyer-dashboard.html                   → js/pages/buyer-dashboard.js
+  ✅  cablink.html                           → js/pages/cablink.js
+  ✅  checkout.html                          → js/pages/checkout.js
+  ✅  components/app-shell.html              → js/pages/components/app-shell.js
+  ✅  components/global-search.html          → js/pages/global-search.js
+  ✅  components/nav.html                    → js/pages/nav.js
+  ✅  components/notifications.html          → js/pages/notifications.js
+  ✅  components/room-switcher.html          → js/pages/room-switcher.js
+  ✅  components/universal-footer.html       → js/pages/universal-footer.js
+  ✅  components/universal-nav.html          → js/pages/universal-nav.js
+  ✅  earnings.html                          → js/pages/earnings.js
+  ✅  ecosystem-hub.html                     → js/pages/ecosystem-hub.js
+  ✅  frontend/public/components/navbar.html → js/pages/frontend/public/components/navbar.js
+  ✅  frontend/public/index.html             → js/pages/index.js
+  ✅  gov-dashboard.html                     → js/pages/gov-dashboard.js
+  ✅  help.html                              → js/pages/help.js
+  ✅  index.html                             → js/pages/index.js
+  ✅  kyc-verification.html                  → js/pages/kyc-verification.js
+  ✅  login.html                             → js/pages/login.js
+  ✅  marketplace.html                       → js/pages/marketplace.js
+  ✅  messages.html                          → js/pages/messages.js
+  ✅  monitoring-dashboard.html              → js/pages/monitoring-dashboard.js
+  ✅  nav-backup.html                        → js/pages/nav-backup.js
+  ✅  notifications-all.html                 → js/pages/notifications-all.js
+  ✅  order-success.html                     → js/pages/order-success.js
+  ✅  order-tracking.html                    → js/pages/order-tracking.js
+  ✅  product-detail.html                    → js/pages/product-detail.js
+  ✅  profile.html                           → js/pages/profile.js
+  ✅  room22-farm.html                       → js/pages/room22-farm.js
+  ✅  seller-dashboard.html                  → js/pages/seller-dashboard.js
+  ✅  settings.html                          → js/pages/settings.js
+  ✅  terms.html                             → js/pages/terms.js
+  ✅  thb-wallet.html                        → js/pages/thb-wallet.js
+  ✅  transactions.html                      → js/pages/transactions.js
+  ✅  upload-product.html                    → js/pages/upload-product.js
+  ✅  verify.html                            → js/pages/verify.js
+  ✅  wishlist.html                          → js/pages/wishlist.js
+
+  UNUSED MODULES (9) — js/pages/*.js not referenced in any HTML:
+  ⚠️   js/pages/components/app-shell.js
+  ⚠️   js/pages/ecosystem-hub.js
+  ⚠️   js/pages/frontend/public/components/navbar.js
+  ⚠️   js/pages/kyc-verification.js
+  ⚠️   js/pages/monitoring-dashboard.js
+  ⚠️   js/pages/nav-backup.js
+  ⚠️   js/pages/notifications-all.js
+  ⚠️   js/pages/product-detail.js
+  ⚠️   js/pages/terms.js
+────────────────────────────────────────────────────────────────────────────────────────
+  PHASE 4 — LIVE CONNECTIVITY SIMULATION
+────────────────────────────────────────────────────────────────────────────────────────
+
+  PAGE                                   LOADED?    BROKEN DEPENDENCIES
+  ----------------------------------------------------------------------------------------------------
+  404.html                               ✅ YES      smart-loader.js not present
+  admin-dashboard.html                   ✅ YES      smart-loader.js not present
+  analytics.html                         ✅ YES      smart-loader.js not present
+  buyer-dashboard.html                   ✅ YES      smart-loader.js not present
+  cablink.html                           ✅ YES      smart-loader.js not present
+  checkout.html                          ✅ YES      smart-loader.js not present
+  components/app-shell.html              ❌ NO       smart-loader.js not present | js/pages/components/app-shell.js exists but is not <script src> loaded and no loader present
+  components/global-search.html          ❌ NO       smart-loader.js not present | js/pages/global-search.js exists but is not <script src> loaded and no loader present
+  components/nav.html                    ❌ NO       smart-loader.js not present | js/pages/nav.js exists but is not <script src> loaded and no loader present
+  components/notifications.html          ❌ NO       smart-loader.js not present | js/pages/notifications.js exists but is not <script src> loaded and no loader present
+  components/room-switcher.html          ❌ NO       smart-loader.js not present | js/pages/room-switcher.js exists but is not <script src> loaded and no loader present
+  components/universal-footer.html       ❌ NO       smart-loader.js not present | js/pages/universal-footer.js exists but is not <script src> loaded and no loader present
+  components/universal-nav.html          ❌ NO       smart-loader.js not present | js/pages/universal-nav.js exists but is not <script src> loaded and no loader present
+  earnings.html                          ✅ YES      smart-loader.js not present
+  ecosystem-hub.html                     ❌ NO       smart-loader.js not present | js/pages/ecosystem-hub.js exists but is not <script src> loaded and no loader present
+  frontend/public/components/navbar.html ❌ NO       smart-loader.js not present | js/pages/frontend/public/components/navbar.js exists but is not <script src> loaded and no loader present
+  frontend/public/index.html             ❌ NO       smart-loader.js not present | js/pages/index.js exists but is not <script src> loaded and no loader present
+  gov-dashboard.html                     ✅ YES      smart-loader.js not present
+  help.html                              ✅ YES      smart-loader.js not present
+  index.html                             ✅ YES      smart-loader.js not present
+  kyc-verification.html                  ❌ NO       smart-loader.js not present | js/pages/kyc-verification.js exists but is not <script src> loaded and no loader present
+  login.html                             ✅ YES      smart-loader.js not present
+  marketplace.html                       ✅ YES      smart-loader.js not present
+  messages.html                          ✅ YES      smart-loader.js not present
+  monitoring-dashboard.html              ❌ NO       smart-loader.js not present | js/pages/monitoring-dashboard.js exists but is not <script src> loaded and no loader present
+  nav-backup.html                        ❌ NO       smart-loader.js not present | js/pages/nav-backup.js exists but is not <script src> loaded and no loader present
+  notifications-all.html                 ❌ NO       smart-loader.js not present | js/pages/notifications-all.js exists but is not <script src> loaded and no loader present
+  order-success.html                     ✅ YES      smart-loader.js not present
+  order-tracking.html                    ✅ YES      smart-loader.js not present
+  product-detail.html                    ❌ NO       smart-loader.js not present | js/pages/product-detail.js exists but is not <script src> loaded and no loader present
+  profile.html                           ✅ YES      smart-loader.js not present
+  room22-farm.html                       ✅ YES      smart-loader.js not present
+  seller-dashboard.html                  ✅ YES      smart-loader.js not present
+  settings.html                          ✅ YES      smart-loader.js not present
+  terms.html                             ❌ NO       smart-loader.js not present | js/pages/terms.js exists but is not <script src> loaded and no loader present
+  thb-wallet.html                        ✅ YES      smart-loader.js not present
+  transactions.html                      ✅ YES      smart-loader.js not present
+  upload-product.html                    ✅ YES      smart-loader.js not present
+  verify.html                            ✅ YES      smart-loader.js not present
+  wishlist.html                          ✅ YES      smart-loader.js not present
+════════════════════════════════════════════════════════════════════════════════════════
+  FINAL SYSTEM REPORT
+════════════════════════════════════════════════════════════════════════════════════════
+
+  SYSTEM HEALTH SCORE
+  ─────────────────────────────────────────
+  Clean Pages:            0/40  (0%)
+  Partially Broken:       40/40  (100%)
+  Heavily Broken:         0/40  (0%)
+  Basename Collisions:    0 real, 1 cosmetic
+  Missing Modules:        0
+  Unused Modules:         9
+  Fully Connected Pages:  24/40  (60%)
+
+  PRODUCTION READINESS: ❌ NOT READY  (standard gate)
+
+  CRITICAL FIX LIST (PRIORITY ORDER)
+  ─────────────────────────────────────────
+  1. [LOW]   1 cosmetic filename collision(s) exist but are not currently ambiguous
+  2. [MED]   Clean inline JS from 40 partially broken page(s)
+  3. [LOW]   Audit/remove 9 unused module file(s)
