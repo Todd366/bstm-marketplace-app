@@ -1,0 +1,482 @@
+[0;35m[1m
+  ╔══════════════════════════════════════════════════╗
+  ║        BSTM FULL AUDIT — 2026-08-02 10:20        ║
+  ╚══════════════════════════════════════════════════╝[0m
+  Root: /data/data/com.termux/files/home/bstm-marketplace-app
+  Report: /data/data/com.termux/files/home/bstm-marketplace-app/AUDIT-20260802-1020.txt
+
+[0;35m[1m══════════════════════════════════════════════════[0m
+  [1;37m[1m[1] FILE INVENTORY[0m
+[0;35m──────────────────────────────────────────────────[0m
+  Total files (excl .git): 311
+  HTML pages (root):       30
+  JS root files:           86
+  JS page modules:         38
+  JS core modules:         9
+  Component files:         9
+  Backup files (.bak*):    5
+
+  [0;36mRoot HTML pages:[0m
+  [2m404.html                                 [0;36m180 lines[0m
+  [2madmin-dashboard.html                     [0;36m135 lines[0m
+  [2manalytics.html                           [0;36m448 lines[0m
+  [2mbuyer-dashboard.html                     [0;36m216 lines[0m
+  [2mcablink.html                             [0;36m331 lines[0m
+  [2mcheckout.html                            [0;36m419 lines[0m
+  [2mearnings.html                            [0;36m204 lines[0m
+  [2mecosystem-hub.html                       [0;36m392 lines[0m
+  [2mgov-dashboard.html                       [0;36m167 lines[0m
+  [2mhelp.html                                [0;36m373 lines[0m
+  [2mindex.html                               [0;36m239 lines[0m
+  [2mkyc-verification.html                    [0;36m379 lines[0m
+  [2mlogin.html                               [0;36m77 lines[0m
+  [2mmarketplace.html                         [0;36m194 lines[0m
+  [2mmessages.html                            [0;36m367 lines[0m
+  [2mmonitoring-dashboard.html                [0;36m211 lines[0m
+  [2mnotifications-all.html                   [0;36m319 lines[0m
+  [2morder-success.html                       [0;36m78 lines[0m
+  [2morder-tracking.html                      [0;36m323 lines[0m
+  [2mproduct-detail.html                      [0;36m400 lines[0m
+  [2mprofile.html                             [0;36m268 lines[0m
+  [2mroom22-farm.html                         [0;36m485 lines[0m
+  [2mseller-dashboard.html                    [0;36m196 lines[0m
+  [2msettings.html                            [0;36m439 lines[0m
+  [2mterms.html                               [0;36m393 lines[0m
+  [2mthb-wallet.html                          [0;36m779 lines[0m
+  [2mtransactions.html                        [0;36m211 lines[0m
+  [2mupload-product.html                      [0;36m325 lines[0m
+  [2mverify.html                              [0;36m54 lines[0m
+  [2mwishlist.html                            [0;36m156 lines[0m
+
+[0;35m[1m══════════════════════════════════════════════════[0m
+  [1;37m[1m[2] HTML STRUCTURAL INTEGRITY[0m
+[0;35m──────────────────────────────────────────────────[0m
+  [0;32m✅ 404.html — balanced (5 scripts)[0m
+  [0;32m✅ admin-dashboard.html — balanced (10 scripts)[0m
+  [0;32m✅ analytics.html — balanced (5 scripts)[0m
+  [0;32m✅ buyer-dashboard.html — balanced (5 scripts)[0m
+  [0;31m❌ cablink.html — scripts=7/6[0m
+  [0;31m❌ checkout.html — scripts=8/9[0m
+  [0;31m❌ earnings.html — scripts=7/6[0m
+  [0;32m✅ ecosystem-hub.html — balanced (7 scripts)[0m
+  [0;32m✅ gov-dashboard.html — balanced (6 scripts)[0m
+  [0;32m✅ help.html — balanced (7 scripts)[0m
+  [0;32m✅ index.html — balanced (5 scripts)[0m
+  [0;32m✅ kyc-verification.html — balanced (6 scripts)[0m
+  [0;32m✅ login.html — balanced (3 scripts)[0m
+  [0;32m✅ marketplace.html — balanced (5 scripts)[0m
+  [0;32m✅ messages.html — balanced (5 scripts)[0m
+  [0;32m✅ monitoring-dashboard.html — balanced (6 scripts)[0m
+  [0;32m✅ notifications-all.html — balanced (6 scripts)[0m
+  [0;32m✅ order-success.html — balanced (4 scripts)[0m
+  [0;32m✅ order-tracking.html — balanced (5 scripts)[0m
+  [0;32m✅ product-detail.html — balanced (6 scripts)[0m
+  [0;32m✅ profile.html — balanced (7 scripts)[0m
+  [0;31m❌ room22-farm.html — scripts=7/8[0m
+  [0;32m✅ seller-dashboard.html — balanced (5 scripts)[0m
+  [0;32m✅ settings.html — balanced (6 scripts)[0m
+  [0;32m✅ terms.html — balanced (6 scripts)[0m
+  [0;31m❌ thb-wallet.html — scripts=8/9[0m
+  [0;31m❌ transactions.html — scripts=7/6[0m
+  [0;32m✅ upload-product.html — balanced (7 scripts)[0m
+  [0;32m✅ verify.html — balanced (3 scripts)[0m
+  [0;32m✅ wishlist.html — balanced (5 scripts)[0m
+  [0;31m6 pages have structural issues[0m
+
+[0;35m[1m══════════════════════════════════════════════════[0m
+  [1;37m[1m[3] JS LEAKING OUTSIDE <script> TAGS[0m
+[0;35m──────────────────────────────────────────────────[0m
+  [0;31m❌ 404.html — 70 lines of JS leaking before smart-loader[0m
+  [0;31m❌ analytics.html — 338 lines of JS leaking before smart-loader[0m
+  [0;31m❌ buyer-dashboard.html — 105 lines of JS leaking before smart-loader[0m
+  [0;31m❌ cablink.html — 183 lines of JS leaking before smart-loader[0m
+  [0;31m❌ earnings.html — 71 lines of JS leaking before smart-loader[0m
+  [0;31m❌ ecosystem-hub.html — 272 lines of JS leaking before smart-loader[0m
+  [0;31m❌ gov-dashboard.html — 55 lines of JS leaking before smart-loader[0m
+  [0;31m❌ index.html — 128 lines of JS leaking before smart-loader[0m
+  [0;31m❌ kyc-verification.html — 267 lines of JS leaking before smart-loader[0m
+  [0;31m❌ login.html — 54 lines of JS leaking before smart-loader[0m
+  [0;31m❌ marketplace.html — 84 lines of JS leaking before smart-loader[0m
+  [0;31m❌ messages.html — 257 lines of JS leaking before smart-loader[0m
+  [0;31m❌ monitoring-dashboard.html — 99 lines of JS leaking before smart-loader[0m
+  [0;31m❌ notifications-all.html — 207 lines of JS leaking before smart-loader[0m
+  [0;31m❌ order-tracking.html — 213 lines of JS leaking before smart-loader[0m
+  [0;31m❌ product-detail.html — 288 lines of JS leaking before smart-loader[0m
+  [0;31m❌ seller-dashboard.html — 86 lines of JS leaking before smart-loader[0m
+  [0;31m❌ settings.html — 327 lines of JS leaking before smart-loader[0m
+  [0;31m❌ terms.html — 281 lines of JS leaking before smart-loader[0m
+  [0;31m❌ transactions.html — 62 lines of JS leaking before smart-loader[0m
+  [0;31m❌ verify.html — 43 lines of JS leaking before smart-loader[0m
+  [0;31m❌ wishlist.html — 45 lines of JS leaking before smart-loader[0m
+
+[0;35m[1m══════════════════════════════════════════════════[0m
+  [1;37m[1m[4] HEAD CORRUPTION CHECK[0m
+[0;35m──────────────────────────────────────────────────[0m
+  [0;32m✅ Zero head corruptions found[0m
+
+[0;35m[1m══════════════════════════════════════════════════[0m
+  [1;37m[1m[5] DUPLICATE IDs PER PAGE[0m
+[0;35m──────────────────────────────────────────────────[0m
+  [0;32m✅ No duplicate IDs on any page[0m
+
+[0;35m[1m══════════════════════════════════════════════════[0m
+  [1;37m[1m[6] JS SYNTAX VALIDATION (all .js files)[0m
+[0;35m──────────────────────────────────────────────────[0m
+  [0;31m❌ SYNTAX: ./backend/auth.js — [0m
+  [0;31m❌ SYNTAX: ./backend/db.js — [0m
+  [0;31m❌ SYNTAX: ./backend/email.js — [0m
+  [0;31m❌ SYNTAX: ./backend/firebase-admin.js — [0m
+  [0;31m❌ SYNTAX: ./backend/role-detection.js — [0m
+  [0;31m❌ SYNTAX: ./backend/server.js — [0m
+  [0;31m❌ SYNTAX: ./backend/wallet-endpoints.js — [0m
+  [0;31m❌ SYNTAX: ./components/smart-loader.js — [0m
+  [0;31m❌ SYNTAX: ./js/ab-testing.js — [0m
+  [0;31m❌ SYNTAX: ./js/advanced-search.js — [0m
+  [0;31m❌ SYNTAX: ./js/ai-recommendations.js — [0m
+  [0;31m❌ SYNTAX: ./js/bstm-auth.js — [0m
+  [0;31m❌ SYNTAX: ./js/bstm-core.js — [0m
+  [0;31m❌ SYNTAX: ./js/bstm-ecosystem-links.js — [0m
+  [0;31m❌ SYNTAX: ./js/cache-manager.js — [0m
+  [0;31m❌ SYNTAX: ./js/core/auth.js — [0m
+  [0;31m❌ SYNTAX: ./js/core/supabase-client.js — [0m
+  [0;31m❌ SYNTAX: ./js/core/smart-loader.js — [0m
+  [0;31m❌ SYNTAX: ./js/core/bstm-config.js — [0m
+  [0;31m❌ SYNTAX: ./js/dark-mode.js — [0m
+  [0;31m❌ SYNTAX: ./js/error-logging.js — [0m
+  [0;31m❌ SYNTAX: ./js/fix-nav-loader.js — [0m
+  [0;31m❌ SYNTAX: ./js/form-validation.js — [0m
+  [0;31m❌ SYNTAX: ./js/global.js — [0m
+  [0;31m❌ SYNTAX: ./js/image-lazy-load.js — [0m
+  [0;31m❌ SYNTAX: ./js/location-services.js — [0m
+  [0;31m❌ SYNTAX: ./js/marketplace.js — [0m
+  [0;31m❌ SYNTAX: ./js/mobile-optimization.js — [0m
+  [0;31m❌ SYNTAX: ./js/multi-language.js — [0m
+  [0;31m❌ SYNTAX: ./js/offline-queue.js — [0m
+  [0;31m❌ SYNTAX: ./js/pages/admin-dashboard.js — [0m
+  [0;31m❌ SYNTAX: ./js/pages/analytics.js — [0m
+  [0;31m❌ SYNTAX: ./js/pages/buyer-dashboard.js — [0m
+  [0;31m❌ SYNTAX: ./js/pages/cablink.js — [0m
+  [0;31m❌ SYNTAX: ./js/pages/checkout.js — [0m
+  [0;31m❌ SYNTAX: ./js/pages/ecosystem-hub.js — [0m
+  [0;31m❌ SYNTAX: ./js/pages/help.js — [0m
+  [0;31m❌ SYNTAX: ./js/pages/gov-dashboard.js — [0m
+  [0;31m❌ SYNTAX: ./js/pages/index.js — [0m
+  [0;31m❌ SYNTAX: ./js/pages/kyc-verification.js — [0m
+  [0;31m❌ SYNTAX: ./js/pages/room22-farm.js — [0m
+  [0;31m❌ SYNTAX: ./js/pages/login.js — [0m
+  [0;31m❌ SYNTAX: ./js/pages/marketplace.js — [0m
+  [0;31m❌ SYNTAX: ./js/pages/messages.js — [0m
+  [0;31m❌ SYNTAX: ./js/pages/monitoring-dashboard.js — [0m
+  [0;31m❌ SYNTAX: ./js/pages/notifications-all.js — [0m
+  [0;31m❌ SYNTAX: ./js/pages/product-detail.js — [0m
+  [0;31m❌ SYNTAX: ./js/pages/thb-wallet.js — [0m
+  [0;31m❌ SYNTAX: ./js/pages/order-tracking.js — [0m
+  [0;31m❌ SYNTAX: ./js/pages/terms.js — [0m
+  [0;31m❌ SYNTAX: ./js/pages/upload-product.js — [0m
+  [0;31m❌ SYNTAX: ./js/pages/earnings.js — [0m
+  [0;31m❌ SYNTAX: ./js/pages/seller-dashboard.js — [0m
+  [0;31m❌ SYNTAX: ./js/pages/settings.js — [0m
+  [0;31m❌ SYNTAX: ./js/pages/transactions.js — [0m
+  [0;31m❌ SYNTAX: ./js/pages/profile.js — [0m
+  [0;31m❌ SYNTAX: ./js/pages/universal-footer.js — [0m
+  [0;31m❌ SYNTAX: ./js/pages/order-success.js — [0m
+  [0;31m❌ SYNTAX: ./js/pages/notifications.js — [0m
+  [0;31m❌ SYNTAX: ./js/pages/verify.js — [0m
+  [0;31m❌ SYNTAX: ./js/pages/wishlist.js — [0m
+  [0;31m❌ SYNTAX: ./js/pages/global-search.js — [0m
+  [0;31m❌ SYNTAX: ./js/pages/room-switcher.js — [0m
+  [0;31m❌ SYNTAX: ./js/pages/nav.js — [0m
+  [0;31m❌ SYNTAX: ./js/pages/universal-nav.js — [0m
+  [0;31m❌ SYNTAX: ./js/pages/nav-backup.js — [0m
+  [0;31m❌ SYNTAX: ./js/paystack.js — [0m
+  [0;31m❌ SYNTAX: ./js/performance-monitor.js — [0m
+  [0;31m❌ SYNTAX: ./js/performance-optimizer.js — [0m
+  [0;31m❌ SYNTAX: ./js/push-notifications.js — [0m
+  [0;31m❌ SYNTAX: ./js/qr-code-generator.js — [0m
+  [0;31m❌ SYNTAX: ./js/referral-system.js — [0m
+  [0;31m❌ SYNTAX: ./js/role-detection.js — [0m
+  [0;31m❌ SYNTAX: ./js/security-hardening.js — [0m
+  [0;31m❌ SYNTAX: ./js/share-api.js — [0m
+  [0;31m❌ SYNTAX: ./js/thb-display.js — [0m
+  [0;31m❌ SYNTAX: ./js/thb-rewards.js — [0m
+  [0;31m❌ SYNTAX: ./js/toast-notifications.js — [0m
+  [0;31m❌ SYNTAX: ./js/voice-search.js — [0m
+  [0;31m❌ SYNTAX: ./js/websocket-client.js — [0m
+  [0;31m❌ SYNTAX: ./js/app.js — [0m
+  [0;31m❌ SYNTAX: ./js/app-start.js — [0m
+  [0;31m❌ SYNTAX: ./fix-nav-loader.js — [0m
+  [0;31m❌ SYNTAX: ./sw.js — [0m
+  [0;31m❌ SYNTAX: ./tools/extract-scripts.js — [0m
+  [0;31m❌ SYNTAX: ./archive/dead-modules/nav.js — [0m
+  [0;31m❌ SYNTAX: ./archive/dead-modules/nav-backup.js — [0m
+  [0;31m❌ SYNTAX: ./archive/dead-modules/global-search.js — [0m
+  [0;31m❌ SYNTAX: ./archive/dead-modules/notifications.js — [0m
+  [0;31m❌ SYNTAX: ./archive/dead-modules/room-switcher.js — [0m
+  [0;31m❌ SYNTAX: ./archive/dead-modules/universal-nav.js — [0m
+  JS files: 13 passed, 91 failed
+  [0;31m❌ 91 JS files have syntax errors[0m
+
+[0;35m[1m══════════════════════════════════════════════════[0m
+  [1;37m[1m[7] ES MODULE IMPORT CHAIN[0m
+[0;35m──────────────────────────────────────────────────[0m
+  [0;31m❌ js/pages/earnings.js: import './js/bstm-core.js' → MISSING[0m
+  [0;31m❌ js/pages/transactions.js: import './js/bstm-core.js' → MISSING[0m
+  [0;31m❌ js/pages/profile.js: import './js/bstm-core.js' → MISSING[0m
+
+[0;35m[1m══════════════════════════════════════════════════[0m
+  [1;37m[1m[8] LOCAL ASSET 404s (scripts, CSS, images)[0m
+[0;35m──────────────────────────────────────────────────[0m
+  [0;32m✅ All local script/CSS references resolve[0m
+
+[0;35m[1m══════════════════════════════════════════════════[0m
+  [1;37m[1m[9] INTERNAL PAGE LINKS[0m
+[0;35m──────────────────────────────────────────────────[0m
+  [0;32m✅ All internal HTML links point to existing pages[0m
+
+[0;35m[1m══════════════════════════════════════════════════[0m
+  [1;37m[1m[10] ONCLICK HANDLER RESOLUTION[0m
+[0;35m──────────────────────────────────────────────────[0m
+  [0;32m✅ All onclick/onsubmit handlers resolve to defined functions[0m
+
+[0;35m[1m══════════════════════════════════════════════════[0m
+  [1;37m[1m[11] NAVIGATION SYSTEM AUDIT[0m
+[0;35m──────────────────────────────────────────────────[0m
+  smart-loader.js:        30 / 30 pages
+  universal-nav-loader:   0 pages (should be 0)
+  #bstm-nav placeholder:  30 / 30 pages
+  #bstm-footer placeholder: 30 / 30 pages
+  [0;32m✅ Zero pages loading legacy universal-nav-loader[0m
+  [0;32m✅ All pages load smart-loader.js[0m
+
+  [0;36mPages missing #bstm-nav:[0m
+
+  [0;36mPages missing #bstm-footer:[0m
+
+[0;35m[1m══════════════════════════════════════════════════[0m
+  [1;37m[1m[12] SCRIPT LOAD ORDER[0m
+[0;35m──────────────────────────────────────────────────[0m
+  [0;32m✅ Script load order correct on all pages[0m
+
+[0;35m[1m══════════════════════════════════════════════════[0m
+  [1;37m[1m[13] AUTH SYSTEM — placeholder code detection[0m
+[0;35m──────────────────────────────────────────────────[0m
+  [0;32m✅ No placeholder auth code found[0m
+
+[0;35m[1m══════════════════════════════════════════════════[0m
+  [1;37m[1m[14] DASHBOARD AUTH PROTECTION[0m
+[0;35m──────────────────────────────────────────────────[0m
+  [0;32m✅ buyer-dashboard.html — auth-protected[0m
+  [0;32m✅ seller-dashboard.html — auth-protected[0m
+  [0;32m✅ settings.html — auth via js/pages/settings.js[0m
+  [0;32m✅ thb-wallet.html — auth via js/pages/thb-wallet.js[0m
+  [0;32m✅ wishlist.html — auth-protected[0m
+  [0;32m✅ admin-dashboard.html — auth via js/pages/admin-dashboard.js[0m
+  [0;32m✅ gov-dashboard.html — auth via js/pages/gov-dashboard.js[0m
+  [0;32m✅ kyc-verification.html — auth via js/pages/kyc-verification.js[0m
+  [0;32m✅ profile.html — auth-protected[0m
+  [0;32m✅ earnings.html — auth-protected[0m
+  [0;32m✅ transactions.html — auth-protected[0m
+
+[0;35m[1m══════════════════════════════════════════════════[0m
+  [1;37m[1m[15] PAGE MODULE COVERAGE[0m
+[0;35m──────────────────────────────────────────────────[0m
+  [0;36mChecking every root HTML page has a js/pages/ module:[0m
+  [0;32m✅ 404.html → js/pages/404.js (loaded)[0m
+  [0;32m✅ admin-dashboard.html → js/pages/admin-dashboard.js (loaded)[0m
+  [0;32m✅ analytics.html → js/pages/analytics.js (loaded)[0m
+  [0;32m✅ buyer-dashboard.html → js/pages/buyer-dashboard.js (loaded)[0m
+  [0;32m✅ cablink.html → js/pages/cablink.js (loaded)[0m
+  [0;32m✅ checkout.html → js/pages/checkout.js (loaded)[0m
+  [0;32m✅ earnings.html → js/pages/earnings.js (loaded)[0m
+  [0;32m✅ ecosystem-hub.html → js/pages/ecosystem-hub.js (loaded)[0m
+  [0;32m✅ gov-dashboard.html → js/pages/gov-dashboard.js (loaded)[0m
+  [0;32m✅ help.html → js/pages/help.js (loaded)[0m
+  [0;32m✅ index.html → js/pages/index.js (loaded)[0m
+  [0;32m✅ kyc-verification.html → js/pages/kyc-verification.js (loaded)[0m
+  [0;32m✅ login.html → js/pages/login.js (loaded)[0m
+  [0;32m✅ marketplace.html → js/pages/marketplace.js (loaded)[0m
+  [0;32m✅ messages.html → js/pages/messages.js (loaded)[0m
+  [0;32m✅ monitoring-dashboard.html → js/pages/monitoring-dashboard.js (loaded)[0m
+  [0;32m✅ notifications-all.html → js/pages/notifications-all.js (loaded)[0m
+  [0;33m⚠️  order-success.html — js/pages/order-success.js exists but NOT LOADED in HTML[0m
+  [0;32m✅ order-tracking.html → js/pages/order-tracking.js (loaded)[0m
+  [0;32m✅ product-detail.html → js/pages/product-detail.js (loaded)[0m
+  [0;32m✅ profile.html → js/pages/profile.js (loaded)[0m
+  [0;32m✅ room22-farm.html → js/pages/room22-farm.js (loaded)[0m
+  [0;32m✅ seller-dashboard.html → js/pages/seller-dashboard.js (loaded)[0m
+  [0;32m✅ settings.html → js/pages/settings.js (loaded)[0m
+  [0;32m✅ terms.html → js/pages/terms.js (loaded)[0m
+  [0;32m✅ thb-wallet.html → js/pages/thb-wallet.js (loaded)[0m
+  [0;32m✅ transactions.html → js/pages/transactions.js (loaded)[0m
+  [0;32m✅ upload-product.html → js/pages/upload-product.js (loaded)[0m
+  [0;32m✅ verify.html → js/pages/verify.js (loaded)[0m
+  [0;32m✅ wishlist.html → js/pages/wishlist.js (loaded)[0m
+
+[0;35m[1m══════════════════════════════════════════════════[0m
+  [1;37m[1m[16] SUPABASE CONNECTION[0m
+[0;35m──────────────────────────────────────────────────[0m
+  [0;31m❌ Supabase URL missing[0m
+  [0;31m❌ Supabase key missing[0m
+  [0;36mℹ  Total Supabase DB calls across all modules: 18[0m
+
+[0;35m[1m══════════════════════════════════════════════════[0m
+  [1;37m[1m[17] MANIFEST + SERVICE WORKER[0m
+[0;35m──────────────────────────────────────────────────[0m
+  [0;32m✅ manifest.json — valid JSON[0m
+  Pages linking to manifest: 7 / 30
+  [0;32m✅ sw.js — valid syntax[0m
+  [0;32m✅ Service worker registered in app.js[0m
+
+[0;35m[1m══════════════════════════════════════════════════[0m
+  [1;37m[1m[18] PRODUCTION READINESS — console/alert leaks[0m
+[0;35m──────────────────────────────────────────────────[0m
+  [0;36mconsole.log calls in production JS:[0m
+  [0;33m⚠️  app.js — 5 console call(s)5
+  [0;33m⚠️  bstm-core.js — 11 console call(s)11
+  [0;33m⚠️  smart-loader.js — 1 console call(s)1
+  [0;33m⚠️  analytics.js — 1 console call(s)1
+  [0;33m⚠️  cablink.js — 2 console call(s)2
+  [0;33m⚠️  index.js — 2 console call(s)2
+  [0;33m⚠️  messages.js — 1 console call(s)1
+  [0;33m⚠️  nav-backup.js — 1 console call(s)1
+  [0;33m⚠️  order-tracking.js — 1 console call(s)1
+  [0;33m⚠️  thb-wallet.js — 1 console call(s)1
+  [0;33m⚠️  universal-footer.js — 1 console call(s)1
+  [0;33m⚠️  upload-product.js — 2 console call(s)2
+  [0;33m⚠️  wishlist.js — 1 console call(s)1
+  [0;36mℹ  Total: 30 console calls (review before production)1
+
+  [0;36malert() calls (replace with toast UI):1
+  [0;33m⚠️  checkout.html — 2 alert()2
+  [0;33m⚠️  kyc-verification.html — 2 alert()2
+  [0;33m⚠️  product-detail.html — 1 alert()1
+  [0;33m⚠️  room22-farm.html — 1 alert()1
+  [0;33m⚠️  thb-wallet.html — 7 alert()7
+  [0;33m⚠️  buyer-dashboard.js — 1 alert()1
+  [0;33m⚠️  wishlist.js — 1 alert()1
+  [0;36mℹ  Total: 15 alert() calls1
+
+[0;35m[1m══════════════════════════════════════════════════1
+  [1;37m[1m[19] PLACEHOLDER / INCOMPLETE CONTENT1
+[0;35m──────────────────────────────────────────────────1
+  [0;36mPlaceholder images:1
+  [0;33m⚠️  28 placeholder images found (replace before launch)1
+
+  [0;36mHardcoded test data:1
+  [0;33m⚠️  8 hardcoded test values found1
+
+  [0;36mTODO / FIXME in production code:1
+  [0;32m✅ No TODO/FIXME in core production files1
+
+[0;35m[1m══════════════════════════════════════════════════1
+  [1;37m[1m[20] CSS CONSISTENCY1
+[0;35m──────────────────────────────────────────────────1
+  [0;36mPages missing Tailwind CSS:1
+  [0;32m✅ All pages load Tailwind CSS1
+
+  [0;36mPages missing Inter font:1
+  [0;33m⚠️  404.html — no Inter font1
+  [0;33m⚠️  admin-dashboard.html — no Inter font1
+  [0;33m⚠️  analytics.html — no Inter font1
+  [0;33m⚠️  checkout.html — no Inter font1
+  [0;33m⚠️  gov-dashboard.html — no Inter font1
+  [0;33m⚠️  kyc-verification.html — no Inter font1
+  [0;33m⚠️  messages.html — no Inter font1
+  [0;33m⚠️  notifications-all.html — no Inter font1
+  [0;33m⚠️  order-tracking.html — no Inter font1
+  [0;33m⚠️  product-detail.html — no Inter font1
+  [0;33m⚠️  room22-farm.html — no Inter font1
+  [0;33m⚠️  settings.html — no Inter font1
+  [0;33m⚠️  thb-wallet.html — no Inter font1
+
+[0;35m[1m══════════════════════════════════════════════════1
+  [1;37m[1m[21] LIVE-READINESS CHECK1
+[0;35m──────────────────────────────────────────────────1
+  [0;36mSimulating what the browser console would show at runtime:1
+  [0;31m9 pages have live-readiness issues:[0m
+
+  [0;33mcheckout.html:[0m
+    [0;31m• Paystack key is placeholder — payments WILL FAIL[0m
+
+  [0;33mecosystem-hub.html:[0m
+    [0;31m• JS leaking as visible text (~13922 chars)[0m
+
+  [0;33mkyc-verification.html:[0m
+    [0;31m• JS leaking as visible text (~14730 chars)[0m
+
+  [0;33mmonitoring-dashboard.html:[0m
+    [0;31m• JS leaking as visible text (~4479 chars)[0m
+
+  [0;33mnotifications-all.html:[0m
+    [0;31m• JS leaking as visible text (~7993 chars)[0m
+
+  [0;33morder-success.html:[0m
+    [0;31m• Page module exists (js/pages/order-success.js) but not loaded in HTML[0m
+
+  [0;33mproduct-detail.html:[0m
+    [0;31m• JS leaking as visible text (~15721 chars)[0m
+
+  [0;33msettings.html:[0m
+    [0;31m• JS leaking as visible text (~18429 chars)[0m
+
+  [0;33mterms.html:[0m
+    [0;31m• JS leaking as visible text (~16674 chars)[0m
+
+[0;35m[1m══════════════════════════════════════════════════1
+  [1;37m[1m[22] GIT STATE1
+[0;35m──────────────────────────────────────────────────1
+  [0;36mLast 5 commits:1
+  [0;36mℹ  82f0760 Wire missing module script tags to 17 pages, remove ChatGPT leftovers, archive nav-backup1
+  [0;36mℹ  c82b062 Clean Supabase migration + remove legacy integration1
+  [0;36mℹ  0cbdfc3 🔧 Final fixes: script tags, auth placeholders, manifest + SW - July 3 20261
+  [0;36mℹ  86c2707 🔧 Fix script mismatches, remove placeholder auth, add manifest + SW1
+  [0;36mℹ  6e871aa Fill 7 stub modules with real logic, archive 6 dead orphan files1
+
+  [0;33m⚠️  226 uncommitted changes1
+  [2mM 404.html1
+  [2mD 404.html.onclick.bak1
+  [2mD 404.html.wire.bak1
+  [2mD AUDIT-20260703-1014.txt1
+  [2mD AUDIT-20260703-1651.txt1
+  [2mD AUDIT-20260704-1327.txt1
+  [2mM admin-dashboard.html1
+  [2mD admin-dashboard.html.inline-clean.bak1
+  [2mD allfiles.txt1
+  [2mM analytics.html1
+  [2mD analytics.html.wire.bak1
+  [2mD audit_assets.txt1
+  [2mD audit_backups.txt1
+  [2mD audit_behavior_patterns.txt1
+  [2mD audit_broken_assets.txt1
+  [2mD audit_component_scripts.txt1
+  [2mD audit_doctype.txt1
+  [2mD audit_duplicate_ids.txt1
+  [2mD audit_fetch_components.txt1
+  [2mD audit_fetch_usage.txt1
+
+[0;35m[1m══════════════════════════════════════════════════1
+  [1;37m[1m[23] BACKUP FILE CLEANUP1
+[0;35m──────────────────────────────────────────────────1
+  [0;33m⚠️  3 backup files found (safe to delete once app is confirmed working):1
+  [2m./login.html.emergencyfix.bak1
+  [2m./login.html.pre-cleanfallback.bak1
+  [2m./verify.html.fallback.bak1
+
+  [0;36mTo delete all backups, run:1
+  [0;33mfind . -maxdepth 3 -name '*.bak*' -not -path './.git/*' -delete1
+
+[0;35m[1m══════════════════════════════════════════════════1
+  [1;37m[1m[FINAL] SCORECARD1
+[0;35m──────────────────────────────────────────────────1
+
+  [0;32m✅ Passed:   711
+  [0;31m❌ Failed:   1001
+  [0;33m⚠️  Warnings: 381
+  [0;36m   Total:   2091
+
+  [1;37m[1mHealth: 33% — [0;31mCRITICAL — not functional11
+
+[0;35m[1m══════════════════════════════════════════════════1
+  [1;37mFull report saved: [0;36m/data/data/com.termux/files/home/bstm-marketplace-app/AUDIT-20260802-1020.txt1
+[0;35m[1m══════════════════════════════════════════════════1
+

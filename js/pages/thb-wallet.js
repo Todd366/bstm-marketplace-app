@@ -1,7 +1,9 @@
 // thb-wallet.js
 import { supabase } from "../core/supabase-client.js";
 
-window.BSTM.ready().then(async function(session) {
+// Use event to avoid race condition with app.js module loading
+window.addEventListener('bstm:ready', async function(e) {
+  var session = e.detail;
   var wall    = document.getElementById("auth-wall");
   var content = document.getElementById("wallet-content");
 

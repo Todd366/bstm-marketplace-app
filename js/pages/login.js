@@ -27,14 +27,15 @@ function friendlyError(message) {
   return "Failed to send link: " + message;
 }
 
-window.BSTM.ready().then(function(session) {
-  if (session) window.location.href = "buyer-dashboard.html";
+// Wait for BSTM to be ready before checking session
+// Uses event instead of direct call to avoid race condition
+window.addEventListener('bstm:ready', function(e) {
+  if (e.detail) window.location.href = "buyer-dashboard.html";
 });
 
-document.addEventListener("DOMContentLoaded", function () {
-  var form = document.getElementById("login-form");
-  if (!form) return;
-
+// Module is already deferred — DOM is ready, no DOMContentLoaded needed
+var form = document.getElementById("login-form");
+if (form) {
   form.addEventListener("submit", async function (e) {
     e.preventDefault();
     var btn = document.getElementById("submit-btn");
@@ -63,4 +64,4 @@ document.addEventListener("DOMContentLoaded", function () {
       btn.disabled = true;
     }
   });
-});
+}

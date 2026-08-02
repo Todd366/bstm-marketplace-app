@@ -1,0 +1,125 @@
+=== SCRIPT TAG BALANCE — ALL ROOT HTML PAGES ===
+MISMATCH: cablink.html — open:7 close:6
+MISMATCH: checkout.html — open:8 close:9
+MISMATCH: earnings.html — open:7 close:6
+MISMATCH: room22-farm.html — open:7 close:8
+MISMATCH: thb-wallet.html — open:8 close:9
+MISMATCH: transactions.html — open:7 close:6
+(pages not listed above are balanced)
+
+=== SAME CORRUPTION PATTERN CHECK: stray <script> mid-tag or mid-word ===
+404.html:74  prev-line-ends-with: []
+404.html:92  prev-line-ends-with: []
+admin-dashboard.html:13  prev-line-ends-with: [charts.js"></script>]
+admin-dashboard.html:29  prev-line-ends-with: []
+admin-dashboard.html:47  prev-line-ends-with: []
+analytics.html:342  prev-line-ends-with: []
+analytics.html:360  prev-line-ends-with: []
+buyer-dashboard.html:110  prev-line-ends-with: []
+buyer-dashboard.html:128  prev-line-ends-with: []
+cablink.html:187  prev-line-ends-with: [js/app.js"></script>]
+cablink.html:188  prev-line-ends-with: []
+cablink.html:226  prev-line-ends-with: []
+cablink.html:244  prev-line-ends-with: []
+checkout.html:10  prev-line-ends-with: [inline.js"></script>]
+checkout.html:263  prev-line-ends-with: []
+checkout.html:313  prev-line-ends-with: []
+checkout.html:331  prev-line-ends-with: []
+earnings.html:77  prev-line-ends-with: []
+earnings.html:98  prev-line-ends-with: []
+earnings.html:116  prev-line-ends-with: []
+ecosystem-hub.html:276  prev-line-ends-with: [  // Count platforms]
+ecosystem-hub.html:286  prev-line-ends-with: []
+ecosystem-hub.html:304  prev-line-ends-with: []
+gov-dashboard.html:54  prev-line-ends-with: []
+gov-dashboard.html:59  prev-line-ends-with: []
+gov-dashboard.html:79  prev-line-ends-with: []
+help.html:99  prev-line-ends-with: [nd Mobile Money</li>]
+help.html:241  prev-line-ends-with: []
+help.html:258  prev-line-ends-with: [s/help.js"></script>]
+help.html:285  prev-line-ends-with: []
+index.html:133  prev-line-ends-with: []
+index.html:151  prev-line-ends-with: []
+kyc-verification.html:104  prev-line-ends-with: [iple class="hidden">]
+kyc-verification.html:273  prev-line-ends-with: []
+kyc-verification.html:291  prev-line-ends-with: []
+marketplace.html:88  prev-line-ends-with: []
+marketplace.html:106  prev-line-ends-with: []
+messages.html:261  prev-line-ends-with: []
+messages.html:279  prev-line-ends-with: []
+monitoring-dashboard.html:90  prev-line-ends-with: [real-time monitoring]
+monitoring-dashboard.html:105  prev-line-ends-with: []
+monitoring-dashboard.html:123  prev-line-ends-with: []
+notifications-all.html:59  prev-line-ends-with: []
+notifications-all.html:213  prev-line-ends-with: []
+notifications-all.html:231  prev-line-ends-with: []
+order-success.html:68  prev-line-ends-with: [js/app.js"></script>]
+order-tracking.html:217  prev-line-ends-with: []
+order-tracking.html:235  prev-line-ends-with: []
+product-detail.html:263  prev-line-ends-with: []
+product-detail.html:294  prev-line-ends-with: []
+product-detail.html:312  prev-line-ends-with: []
+profile.html:160  prev-line-ends-with: []
+profile.html:178  prev-line-ends-with: []
+room22-farm.html:346  prev-line-ends-with: ["bstm-modals"></div>]
+room22-farm.html:347  prev-line-ends-with: []
+room22-farm.html:379  prev-line-ends-with: []
+room22-farm.html:397  prev-line-ends-with: []
+seller-dashboard.html:90  prev-line-ends-with: []
+seller-dashboard.html:108  prev-line-ends-with: []
+settings.html:135  prev-line-ends-with: []
+settings.html:331  prev-line-ends-with: []
+settings.html:351  prev-line-ends-with: []
+terms.html:263  prev-line-ends-with: []
+terms.html:287  prev-line-ends-with: []
+terms.html:305  prev-line-ends-with: []
+thb-wallet.html:6  prev-line-ends-with: [ initial-scale=1.0">]
+thb-wallet.html:12  prev-line-ends-with: [isplay.js"></script>]
+thb-wallet.html:671  prev-line-ends-with: []
+thb-wallet.html:691  prev-line-ends-with: []
+transactions.html:68  prev-line-ends-with: []
+transactions.html:105  prev-line-ends-with: []
+transactions.html:123  prev-line-ends-with: []
+upload-product.html:48  prev-line-ends-with: [>Product Images</h2>]
+upload-product.html:158  prev-line-ends-with: []
+upload-product.html:175  prev-line-ends-with: [roduct.js"></script>]
+upload-product.html:237  prev-line-ends-with: []
+wishlist.html:50  prev-line-ends-with: []
+wishlist.html:68  prev-line-ends-with: []
+
+=== REMOVED_DEMO_DATA / INLINE EXTRACTED markers still present anywhere ===
+./js/pages/order-success.js
+
+=== RE-CHECK: 6 pages flagged imbalanced in ORIGINAL audit ===
+cablink.html — open:7 close:6 STILL-MISMATCH
+checkout.html — open:8 close:9 STILL-MISMATCH
+earnings.html — open:7 close:6 STILL-MISMATCH
+room22-farm.html — open:7 close:8 STILL-MISMATCH
+thb-wallet.html — open:8 close:9 STILL-MISMATCH
+transactions.html — open:7 close:6 STILL-MISMATCH
+
+=== DUPLICATE FILES (content hash, fixed version) ===
+learn-app-2.sh: line 41: /tmp/bstmscan/allhashes.txt: No such file or directory
+learn-app-2.sh: line 42: /tmp/bstmscan/duphashes.txt: No such file or directory
+awk: fatal: cannot open file `/tmp/bstmscan/allhashes.txt' for reading: No such file or directory
+No exact-duplicate files found
+
+=== JUNK AT ROOT (audits, .bak, backup dirs) — for archival ===
+find: warning: you have specified the global option -maxdepth after the argument -iname, but global options are not positional, i.e., -maxdepth affects tests specified before it as well as those specified after it.  Please specify global options before other arguments.
+find: warning: you have specified the global option -maxdepth after the argument -iname, but global options are not positional, i.e., -maxdepth affects tests specified before it as well as those specified after it.  Please specify global options before other arguments.
+./login.html.pre-cleanfallback.bak
+./audit-debug.sh
+./audit.sh
+./login.html.emergencyfix.bak
+./verify.html.fallback.bak
+./AUDIT-20260802-1020.txt
+./.fix-backup-20260802-1041
+./bstm-audit-20260619-2155.txt
+./bstm-full-audit.sh
+./audit_logs
+./supabase_fix_backup
+./bstm-mega-audit-20260620-0245.txt
+./bstm-architecture-audit-4phase.py
+./bstm-architecture-audit-v3.py
+./bstm-system-audit-v4.py
+./system-audit-v4-20260704-1827.txt

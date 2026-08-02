@@ -1,0 +1,458 @@
+=== earnings.html — all <script> blocks (inline, no src) ===
+<script>
+window.BSTM.ready().then(async function(session) {
+  if (!session) {
+    document.getElementById('auth-wall').style.display = 'block';
+    return;
+  }
+  document.getElementById('earnings-content').style.display = 'block';
+
+  var { data: profile } = await getProfile(session.user.id);
+  if (profile) {
+    var thb = parseFloat(profile.thb_balance || 0);
+    document.getElementById('thb-balance').textContent = thb.toFixed(2) + ' THB';
+    // Estimate BWP earnings from THB (1 THB = 10 BWP / 0.01 rate = 100x)
+    var estEarnings = thb * 10 * 0.95;
+    document.getElementById('total-earnings').textContent = estEarnings.toFixed(2);
+    document.getElementById('commission-paid').textContent = 'P' + (estEarnings * 0.05 / 0.95).toFixed(2);
+  }
+});
+
+</script>
+<script>
+/**
+ * BSTM SAFE RUNTIME BRIDGE
+ * prevents onclick breakage without modifying architecture
+ */
+window.__BSTM_BRIDGE_INSTALLED__ = true;
+
+window.__bstm_safe_bind = function(fnName, fallback) {
+    if (typeof window[fnName] !== 'function') {
+        window[fnName] = fallback || function() {
+            console.warn('[BSTM] Missing function:', fnName);
+        };
+    }
+};
+</script>
+<script>
+
+if (typeof window.calculateFare !== 'function') {
+    window.calculateFare = function() {
+        console.warn('[BSTM SAFE FALLBACK] calculateFare not implemented yet');
+    };
+}
+
+if (typeof window.showDemoRide !== 'function') {
+    window.showDemoRide = function() {
+        console.warn('[BSTM SAFE FALLBACK] showDemoRide not implemented yet');
+    };
+}
+
+if (typeof window.closeDemoModal !== 'function') {
+    window.closeDemoModal = function() {
+        console.warn('[BSTM SAFE FALLBACK] closeDemoModal not implemented yet');
+    };
+}
+
+if (typeof window.completeDemoRide !== 'function') {
+    window.completeDemoRide = function() {
+        console.warn('[BSTM SAFE FALLBACK] completeDemoRide not implemented yet');
+    };
+}
+
+if (typeof window.proceedToPayment !== 'function') {
+    window.proceedToPayment = function() {
+        console.warn('[BSTM SAFE FALLBACK] proceedToPayment not implemented yet');
+    };
+}
+
+if (typeof window.toggleFaq !== 'function') {
+    window.toggleFaq = function() {
+        console.warn('[BSTM SAFE FALLBACK] toggleFaq not implemented yet');
+    };
+}
+
+if (typeof window.nextStep !== 'function') {
+    window.nextStep = function() {
+        console.warn('[BSTM SAFE FALLBACK] nextStep not implemented yet');
+    };
+}
+
+if (typeof window.submitKYC !== 'function') {
+    window.submitKYC = function() {
+        console.warn('[BSTM SAFE FALLBACK] submitKYC not implemented yet');
+    };
+}
+
+if (typeof window.addToCart !== 'function') {
+    window.addToCart = function() {
+        console.warn('[BSTM SAFE FALLBACK] addToCart not implemented yet');
+    };
+}
+
+if (typeof window.changeImage !== 'function') {
+    window.changeImage = function() {
+        console.warn('[BSTM SAFE FALLBACK] changeImage not implemented yet');
+    };
+}
+
+if (typeof window.increaseQty !== 'function') {
+    window.increaseQty = function() {
+        console.warn('[BSTM SAFE FALLBACK] increaseQty not implemented yet');
+    };
+}
+
+if (typeof window.decreaseQty !== 'function') {
+    window.decreaseQty = function() {
+        console.warn('[BSTM SAFE FALLBACK] decreaseQty not implemented yet');
+    };
+}
+
+if (typeof window.copyReferral !== 'function') {
+    window.copyReferral = function() {
+        console.warn('[BSTM SAFE FALLBACK] copyReferral not implemented yet');
+    };
+}
+
+if (typeof window.logout !== 'function') {
+    window.logout = function() {
+        console.warn('[BSTM SAFE FALLBACK] logout not implemented yet');
+    };
+}
+
+</script>
+
+=== earnings.html — all <script src=...> tags ===
+72:<script src="components/smart-loader.js"></script>
+------------------------------------------
+=== transactions.html — all <script> blocks (inline, no src) ===
+<script>
+window.BSTM.ready().then(async function(session) {
+  if (!session) {
+    document.getElementById('auth-wall').style.display = 'block';
+    return;
+  }
+  document.getElementById('tx-content').style.display = 'block';
+
+  var { data: orders } = await getOrders(session.user.id);
+  if (!orders || orders.length === 0) return;
+
+  document.getElementById('total-orders').textContent = orders.length;
+
+  var totalSpent = orders.reduce(function(sum, o) { return sum + (Number(o.total_amount) || 0); }, 0);
+  document.getElementById('total-spent').textContent = 'P' + totalSpent.toFixed(2);
+
+  var thbEarned = totalSpent * 0.01;
+  document.getElementById('thb-earned').textContent = thbEarned.toFixed(2) + ' THB';
+
+  document.getElementById('tx-list').innerHTML = orders.map(function(o) {
+    var date = new Date(o.created_at).toLocaleDateString('en-BW', {day:'numeric',month:'short',year:'numeric'});
+    var statusColor = o.status === 'delivered' ? '#059669' : o.status === 'pending' ? '#D97706' : '#7C3AED';
+    return '<div style="display:flex;justify-content:space-between;align-items:center;padding:16px 0;border-bottom:1px solid #F9FAFB;">'
+      + '<div>'
+      + '<div style="font-weight:700;color:#1E1B4B;font-size:14px;">Order #' + String(o.id).slice(-8).toUpperCase() + '</div>'
+      + '<div style="font-size:12px;color:#9CA3AF;margin-top:2px;">' + date + '</div>'
+      + '</div>'
+      + '<div style="text-align:right;">'
+      + '<div style="font-weight:900;color:#1E1B4B;">P' + Number(o.total_amount || 0).toFixed(2) + '</div>'
+      + '<div style="font-size:11px;font-weight:700;color:' + statusColor + ';margin-top:2px;">' + (o.status || 'pending').toUpperCase() + '</div>'
+      + '</div>'
+      + '</div>';
+  }).join('');
+});
+
+</script>
+<script>
+/**
+ * BSTM SAFE RUNTIME BRIDGE
+ * prevents onclick breakage without modifying architecture
+ */
+window.__BSTM_BRIDGE_INSTALLED__ = true;
+
+window.__bstm_safe_bind = function(fnName, fallback) {
+    if (typeof window[fnName] !== 'function') {
+        window[fnName] = fallback || function() {
+            console.warn('[BSTM] Missing function:', fnName);
+        };
+    }
+};
+</script>
+<script>
+
+if (typeof window.calculateFare !== 'function') {
+    window.calculateFare = function() {
+        console.warn('[BSTM SAFE FALLBACK] calculateFare not implemented yet');
+    };
+}
+
+if (typeof window.showDemoRide !== 'function') {
+    window.showDemoRide = function() {
+        console.warn('[BSTM SAFE FALLBACK] showDemoRide not implemented yet');
+    };
+}
+
+if (typeof window.closeDemoModal !== 'function') {
+    window.closeDemoModal = function() {
+        console.warn('[BSTM SAFE FALLBACK] closeDemoModal not implemented yet');
+    };
+}
+
+if (typeof window.completeDemoRide !== 'function') {
+    window.completeDemoRide = function() {
+        console.warn('[BSTM SAFE FALLBACK] completeDemoRide not implemented yet');
+    };
+}
+
+if (typeof window.proceedToPayment !== 'function') {
+    window.proceedToPayment = function() {
+        console.warn('[BSTM SAFE FALLBACK] proceedToPayment not implemented yet');
+    };
+}
+
+if (typeof window.toggleFaq !== 'function') {
+    window.toggleFaq = function() {
+        console.warn('[BSTM SAFE FALLBACK] toggleFaq not implemented yet');
+    };
+}
+
+if (typeof window.nextStep !== 'function') {
+    window.nextStep = function() {
+        console.warn('[BSTM SAFE FALLBACK] nextStep not implemented yet');
+    };
+}
+
+if (typeof window.submitKYC !== 'function') {
+    window.submitKYC = function() {
+        console.warn('[BSTM SAFE FALLBACK] submitKYC not implemented yet');
+    };
+}
+
+if (typeof window.addToCart !== 'function') {
+    window.addToCart = function() {
+        console.warn('[BSTM SAFE FALLBACK] addToCart not implemented yet');
+    };
+}
+
+if (typeof window.changeImage !== 'function') {
+    window.changeImage = function() {
+        console.warn('[BSTM SAFE FALLBACK] changeImage not implemented yet');
+    };
+}
+
+if (typeof window.increaseQty !== 'function') {
+    window.increaseQty = function() {
+        console.warn('[BSTM SAFE FALLBACK] increaseQty not implemented yet');
+    };
+}
+
+if (typeof window.decreaseQty !== 'function') {
+    window.decreaseQty = function() {
+        console.warn('[BSTM SAFE FALLBACK] decreaseQty not implemented yet');
+    };
+}
+
+if (typeof window.copyReferral !== 'function') {
+    window.copyReferral = function() {
+        console.warn('[BSTM SAFE FALLBACK] copyReferral not implemented yet');
+    };
+}
+
+if (typeof window.logout !== 'function') {
+    window.logout = function() {
+        console.warn('[BSTM SAFE FALLBACK] logout not implemented yet');
+    };
+}
+
+</script>
+
+=== transactions.html — all <script src=...> tags ===
+63:<script src="components/smart-loader.js"></script>
+------------------------------------------
+=== profile.html — all <script> blocks (inline, no src) ===
+      <a href="thb-wallet.html" style="background:#F5F3FF;color:#7C3AED;padding:10px 18px;border-radius:12px;font-weight:700;text-decoration:none;font-size:13px;">View Wal<script>
+let →</a>
+    </div>
+
+    <!-- Edit profile form -->
+    <div style="background:#fff;border-radius:20px;padding:24px;border:1px solid #EDE9FE;margin-bottom:16px;">
+      <h2 style="font-size:16px;font-weight:900;color:#1E1B4B;margin-bottom:16px;">Edit Profile</h2>
+      <div id="save-status" style="display:none;padding:12px;border-radius:10px;font-weight:600;font-size:13px;margin-bottom:16px;"></div>
+      <form id="profile-form">
+        <div class="field">
+          <label>Full Name</label>
+          <input type="text" id="edit-name" placeholder="Your full name">
+        </div>
+        <div class="field">
+          <label>Email (cannot change)</label>
+          <input type="email" id="edit-email" disabled style="background:#F9FAFB;color:#9CA3AF;">
+        </div>
+        <div class="field">
+          <label>Phone Number</label>
+          <input type="tel" id="edit-phone" placeholder="+267 XX XXX XXX">
+        </div>
+        <div class="field">
+          <label>Location</label>
+          <select id="edit-location">
+            <option value="">Select City</option>
+            <option value="Gaborone">Gaborone</option>
+            <option value="Francistown">Francistown</option>
+            <option value="Maun">Maun</option>
+            <option value="Molepolole">Molepolole</option>
+            <option value="Kasane">Kasane</option>
+            <option value="Palapye">Palapye</option>
+          </select>
+        </div>
+        <button type="submit" style="width:100%;background:linear-gradient(135deg,#7C3AED,#4F46E5);color:#fff;border:none;padding:14px;border-radius:12px;font-weight:800;cursor:pointer;font-size:15px;">Save Changes</button>
+      </form>
+    </div>
+
+    <!-- Quick links -->
+    <div style="background:#fff;border-radius:20px;padding:20px;border:1px solid #EDE9FE;">
+      <h2 style="font-size:14px;font-weight:900;color:#1E1B4B;margin-bottom:14px;">Quick Links</h2>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <a href="buyer-dashboard.html" style="background:#F5F3FF;color:#7C3AED;padding:12px;border-radius:12px;font-weight:700;text-decoration:none;font-size:13px;text-align:center;">🏠 Dashboard</a>
+        <a href="settings.html" style="background:#F5F3FF;color:#7C3AED;padding:12px;border-radius:12px;font-weight:700;text-decoration:none;font-size:13px;text-align:center;">⚙️ Settings</a>
+        <a href="kyc-verification.html" style="background:#F0FDF4;color:#166534;padding:12px;border-radius:12px;font-weight:700;text-decoration:none;font-size:13px;text-align:center;">✅ KYC Verify</a>
+        <a href="order-tracking.html" style="background:#EFF6FF;color:#1D4ED8;padding:12px;border-radius:12px;font-weight:700;text-decoration:none;font-size:13px;text-align:center;">📦 Orders</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="bstm-footer"></div>
+</script>
+<script>
+/**
+ * BSTM SAFE RUNTIME BRIDGE
+ * prevents onclick breakage without modifying architecture
+ */
+window.__BSTM_BRIDGE_INSTALLED__ = true;
+
+window.__bstm_safe_bind = function(fnName, fallback) {
+    if (typeof window[fnName] !== 'function') {
+        window[fnName] = fallback || function() {
+            console.warn('[BSTM] Missing function:', fnName);
+        };
+    }
+};
+</script>
+<script>
+
+if (typeof window.calculateFare !== 'function') {
+    window.calculateFare = function() {
+        console.warn('[BSTM SAFE FALLBACK] calculateFare not implemented yet');
+    };
+}
+
+if (typeof window.showDemoRide !== 'function') {
+    window.showDemoRide = function() {
+        console.warn('[BSTM SAFE FALLBACK] showDemoRide not implemented yet');
+    };
+}
+
+if (typeof window.closeDemoModal !== 'function') {
+    window.closeDemoModal = function() {
+        console.warn('[BSTM SAFE FALLBACK] closeDemoModal not implemented yet');
+    };
+}
+
+if (typeof window.completeDemoRide !== 'function') {
+    window.completeDemoRide = function() {
+        console.warn('[BSTM SAFE FALLBACK] completeDemoRide not implemented yet');
+    };
+}
+
+if (typeof window.proceedToPayment !== 'function') {
+    window.proceedToPayment = function() {
+        console.warn('[BSTM SAFE FALLBACK] proceedToPayment not implemented yet');
+    };
+}
+
+if (typeof window.toggleFaq !== 'function') {
+    window.toggleFaq = function() {
+        console.warn('[BSTM SAFE FALLBACK] toggleFaq not implemented yet');
+    };
+}
+
+if (typeof window.nextStep !== 'function') {
+    window.nextStep = function() {
+        console.warn('[BSTM SAFE FALLBACK] nextStep not implemented yet');
+    };
+}
+
+if (typeof window.submitKYC !== 'function') {
+    window.submitKYC = function() {
+        console.warn('[BSTM SAFE FALLBACK] submitKYC not implemented yet');
+    };
+}
+
+if (typeof window.addToCart !== 'function') {
+    window.addToCart = function() {
+        console.warn('[BSTM SAFE FALLBACK] addToCart not implemented yet');
+    };
+}
+
+if (typeof window.changeImage !== 'function') {
+    window.changeImage = function() {
+        console.warn('[BSTM SAFE FALLBACK] changeImage not implemented yet');
+    };
+}
+
+if (typeof window.increaseQty !== 'function') {
+    window.increaseQty = function() {
+        console.warn('[BSTM SAFE FALLBACK] increaseQty not implemented yet');
+    };
+}
+
+if (typeof window.decreaseQty !== 'function') {
+    window.decreaseQty = function() {
+        console.warn('[BSTM SAFE FALLBACK] decreaseQty not implemented yet');
+    };
+}
+
+if (typeof window.copyReferral !== 'function') {
+    window.copyReferral = function() {
+        console.warn('[BSTM SAFE FALLBACK] copyReferral not implemented yet');
+    };
+}
+
+if (typeof window.logout !== 'function') {
+    window.logout = function() {
+        console.warn('[BSTM SAFE FALLBACK] logout not implemented yet');
+    };
+}
+
+</script>
+
+=== profile.html — all <script src=...> tags ===
+102:<script src="components/smart-loader.js"></script>
+------------------------------------------
+=== order-success.html — all <script> blocks (inline, no src) ===
+      <div style="font-size:12px;color:#92400E;margin-top:2px;">Check your wal<script>
+let for your balance</div>
+    </div>
+
+    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+      <a href="order-tracking.html" style="flex:1;background:linear-gradient(135deg,#7C3AED,#4F46E5);color:#fff;padding:14px;border-radius:14px;font-weight:800;text-decoration:none;text-align:center;min-width:120px;">📦 Track Order</a>
+      <a href="marketplace.html" style="flex:1;background:#F5F3FF;color:#7C3AED;padding:14px;border-radius:14px;font-weight:700;text-decoration:none;text-align:center;min-width:120px;">🏬 Keep Shopping</a>
+    </div>
+  </div>
+
+  <div style="text-align:center;">
+    <a href="buyer-dashboard.html" style="color:#9CA3AF;font-size:13px;text-decoration:none;">← Back to Dashboard</a>
+  </div>
+</div>
+
+<div id="bstm-footer"></div>
+</script>
+<script>
+// Get order ID from URL params if available
+var params = new URLSearchParams(window.location.search);
+var orderId = params.get('order') || ('BSTM-' + Math.random().toString(36).substr(2,9).toUpperCase());
+document.getElementById('order-number').textContent = '#' + orderId;
+
+</script>
+
+=== order-success.html — all <script src=...> tags ===
+68:<script src="components/smart-loader.js"></script>
+------------------------------------------

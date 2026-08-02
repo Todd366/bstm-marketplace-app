@@ -1,0 +1,199 @@
+=== earnings.js (full) ===
+// AUDIT_IGNORE$
+// js/pages/earnings.js$
+window.BSTM.ready().then(function(session) {$
+  if (!session) {$
+    window.location.href='login.html';$
+    return;$
+  }$
+$
+  var mock=[$
+    {type:'Purchase Reward',amount:1.5,date:'2025-07-01'},$
+    {type:'CabLink Ride',amount:0.8,date:'2025-07-02'},$
+    {type:'Referral Bonus',amount:5.0,date:'2025-07-03'}$
+  ];$
+$
+  var total=mock.reduce(function(s,e){return s+e.amount;},0);$
+$
+  var t=document.getElementById('total-earnings');$
+  var l=document.getElementById('earnings-list');$
+$
+  if(t) t.textContent=total.toFixed(2)+' THB';$
+$
+  if(l){$
+    l.innerHTML=mock.map(function(e){$
+      return '<div class="earning-row"><span>'+e.type+'</span>'$
+      +'<span style="color:#059669;font-weight:700;">+'+e.amount.toFixed(2)+' THB</span>'$
+      +'<span style="color:#9CA3AF;">'+e.date+'</span></div>';$
+    }).join('');$
+  }$
+});$
+$
+$
+// ===== INLINE EXTRACTED (earnings.html) [2026-07-04 12:29] =====$
+import { getProfile } from './js/bstm-core.js';$
+$
+<script>$
+window.BSTM.ready().then(async function(session) {$
+  if (!session) {$
+    document.getElementById('auth-wall').style.display = 'block';$
+    return;$
+  }$
+  document.getElementById('earnings-content').style.display = 'block';$
+$
+  var { data: profile } = await getProfile(session.user.id);$
+  if (profile) {$
+    var thb = parseFloat(profile.thb_balance || 0);$
+    document.getElementById('thb-balance').textContent = thb.toFixed(2) + ' THB';$
+    // Estimate BWP earnings from THB (1 THB = 10 BWP / 0.01 rate = 100x)$
+    var estEarnings = thb * 10 * 0.95;$
+    document.getElementById('total-earnings').textContent = estEarnings.toFixed(2);$
+    document.getElementById('commission-paid').textContent = 'P' + (estEarnings * 0.05 / 0.95).toFixed(2);$
+
+=== transactions.js (full) ===
+// AUDIT_IGNORE$
+// js/pages/transactions.js$
+window.BSTM.ready().then(function(session){$
+  if(!session){$
+    window.location.href='login.html';$
+    return;$
+  }$
+$
+  var mock=[$
+    {type:'earn',reason:'Purchase reward',amount:1.5,date:'2025-07-01'},$
+    {type:'earn',reason:'CabLink ride',amount:0.8,date:'2025-07-02'},$
+    {type:'spend',reason:'Marketplace item',amount:-2,date:'2025-07-03'}$
+  ];$
+$
+  var c=document.getElementById('tx-count');$
+  var l=document.getElementById('transaction-list');$
+$
+  if(c) c.textContent=mock.length;$
+$
+  if(l){$
+    l.innerHTML=mock.map(function(tx){$
+      var sign=tx.type==='earn'?'+':'';$
+      var color=tx.type==='earn'?'#059669':'#DC2626';$
+$
+      return '<div class="tx-row"><span>'+tx.reason+'</span>'$
+      +'<span style="color:'+color+';font-weight:700;">'$
+      +sign+Math.abs(tx.amount).toFixed(2)+' THB</span>'$
+      +'<span style="color:#9CA3AF;">'+tx.date+'</span></div>';$
+    }).join('');$
+  }$
+});$
+$
+$
+// ===== INLINE EXTRACTED (transactions.html) [2026-07-04 12:29] =====$
+import { getOrders } from './js/bstm-core.js';$
+$
+<script>$
+window.BSTM.ready().then(async function(session) {$
+  if (!session) {$
+    document.getElementById('auth-wall').style.display = 'block';$
+    return;$
+  }$
+  document.getElementById('tx-content').style.display = 'block';$
+$
+  var { data: orders } = await getOrders(session.user.id);$
+  if (!orders || orders.length === 0) return;$
+$
+  document.getElementById('total-orders').textContent = orders.length;$
+$
+  var totalSpent = orders.reduce(function(sum, o) { return sum + (Number(o.total_amount) || 0); }, 0);$
+
+=== profile.js lines 75-95 ===
+    if (updates.full_name) {
+      document.getElementById('profile-name').textContent = updates.full_name;
+      document.getElementById('avatar-letter').textContent = updates.full_name.charAt(0).toUpperCase();
+    }
+  }
+  setTimeout(function(){ status.style.display = 'none'; }, 3000);
+});
+// ============================================
+
+
+// ===== INLINE EXTRACTED (profile.html) [2026-07-04 12:29] =====
+let →</a>
+    </div>
+
+    <!-- Edit profile form -->
+    <div style="background:#fff;border-radius:20px;padding:24px;border:1px solid #EDE9FE;margin-bottom:16px;">
+      <h2 style="font-size:16px;font-weight:900;color:#1E1B4B;margin-bottom:16px;">Edit Profile</h2>
+      <div id="save-status" style="display:none;padding:12px;border-radius:10px;font-weight:600;font-size:13px;margin-bottom:16px;"></div>
+      <form id="profile-form">
+        <div class="field">
+          <label>Full Name</label>
+
+=== order-success.js (full) ===
+// AUDIT_IGNORE
+// js/pages/order-success.js
+document.addEventListener('DOMContentLoaded',function(){
+
+  var n=document.getElementById('order-number');
+
+  if(n){
+    n.textContent='#BSTM-'+Math.floor(// REMOVED_DEMO_DATA()*900000000+100000000);
+  }
+
+  var cart=JSON.parse(localStorage.getItem('bstm_cart')||'[]');
+
+  var total=cart.reduce(function(s,i){
+    return s+(i.price||0);
+  },0);
+
+  var thb=(total*0.01).toFixed(2);
+
+  ['order-total','order-total-display'].forEach(function(id){
+    var el=document.getElementById(id);
+    if(el) el.textContent='P'+total.toFixed(2);
+  });
+
+  var earned=document.getElementById('thb-earned');
+  if(earned) earned.textContent=thb;
+
+  localStorage.removeItem('bstm_cart');
+});
+
+
+// ===== INLINE EXTRACTED (order-success.html) [2026-07-04 12:29] =====
+// Get order ID from URL params if available
+var params = new URLSearchParams(window.location.search);
+var orderId = params.get('order') || ('BSTM-' + // REMOVED_DEMO_DATA().toString(36).substr(2,9).toUpperCase());
+document.getElementById('order-number').textContent = '#' + orderId;
+// ============================================
+
+
+// ===== INLINE EXTRACTED (order-success.html) [2026-07-04 12:29] =====
+let for your balance</div>
+    </div>
+
+    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+      <a href="order-tracking.html" style="flex:1;background:linear-gradient(135deg,#7C3AED,#4F46E5);color:#fff;padding:14px;border-radius:14px;font-weight:800;text-decoration:none;text-align:center;min-width:120px;">📦 Track Order</a>
+      <a href="marketplace.html" style="flex:1;background:#F5F3FF;color:#7C3AED;padding:14px;border-radius:14px;font-weight:700;text-decoration:none;text-align:center;min-width:120px;">🏬 Keep Shopping</a>
+    </div>
+  </div>
+
+  <div style="text-align:center;">
+    <a href="buyer-dashboard.html" style="color:#9CA3AF;font-size:13px;text-decoration:none;">← Back to Dashboard</a>
+  </div>
+</div>
+
+<div id="bstm-footer"></div>
+// ============================================
+
+=== bstm-core.js exports ===
+3:export { supabase };
+8:export async function signInWithMagicLink(email) {
+14:export async function getUser() {
+20:export async function logout() {
+28:export async function getProfile(userId) {
+38:export async function updateProfile(userId, updates) {
+55:export async function getProducts(filters = {}) {
+68:export async function getProductById(productId) {
+80:export function normalizeProduct(p) {
+97:export async function createOrder(order) {
+108:export async function getOrders(userId) {
+122:export async function getWishlist(userId) {
+131:export async function addToWishlist(userId, productId) {
+139:export async function removeFromWishlist(userId, productId) {

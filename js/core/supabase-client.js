@@ -8,13 +8,9 @@ import { loadConfig } from './config.js';
 // Load config
 const config = loadConfig();
 
-const SUPABASE_URL =
-  config.API.SUPABASE_URL ||
-  'https://tvtfxkavjqvurdezhyvu.supabase.co';
+const SUPABASE_URL = config.API.SUPABASE_URL;
 
-const SUPABASE_ANON_KEY =
-  config.API.SUPABASE_KEY ||
-  'sb_publishable_xxx';
+const SUPABASE_ANON_KEY = config.API.SUPABASE_KEY;
 
 // Create client (single instance)
 export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);

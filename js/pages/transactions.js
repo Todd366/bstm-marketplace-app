@@ -1,40 +1,6 @@
-// AUDIT_IGNORE
 // js/pages/transactions.js
-window.BSTM.ready().then(function(session){
-  if(!session){
-    window.location.href='login.html';
-    return;
-  }
+import { getOrders } from '../bstm-core.js';
 
-  var mock=[
-    {type:'earn',reason:'Purchase reward',amount:1.5,date:'2025-07-01'},
-    {type:'earn',reason:'CabLink ride',amount:0.8,date:'2025-07-02'},
-    {type:'spend',reason:'Marketplace item',amount:-2,date:'2025-07-03'}
-  ];
-
-  var c=document.getElementById('tx-count');
-  var l=document.getElementById('transaction-list');
-
-  if(c) c.textContent=mock.length;
-
-  if(l){
-    l.innerHTML=mock.map(function(tx){
-      var sign=tx.type==='earn'?'+':'';
-      var color=tx.type==='earn'?'#059669':'#DC2626';
-
-      return '<div class="tx-row"><span>'+tx.reason+'</span>'
-      +'<span style="color:'+color+';font-weight:700;">'
-      +sign+Math.abs(tx.amount).toFixed(2)+' THB</span>'
-      +'<span style="color:#9CA3AF;">'+tx.date+'</span></div>';
-    }).join('');
-  }
-});
-
-
-// ===== INLINE EXTRACTED (transactions.html) [2026-07-04 12:29] =====
-import { getOrders } from './js/bstm-core.js';
-
-<script>
 window.BSTM.ready().then(async function(session) {
   if (!session) {
     document.getElementById('auth-wall').style.display = 'block';
@@ -68,4 +34,3 @@ window.BSTM.ready().then(async function(session) {
       + '</div>';
   }).join('');
 });
-// ============================================
