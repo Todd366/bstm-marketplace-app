@@ -1,48 +1,92 @@
-// analytics.js
+// js/pages/analytics.js
 import { supabase } from "../core/supabase-client.js";
 
-window.BSTM.ready().then(async function(session) {
-  var wall    = document.getElementById("auth-wall");
-  var content = document.getElementById("analytics-content");
+window.BSTM.ready().then(async function (session) {
+  const wall = document.getElementById("auth-wall");
+  const content = document.getElementById("analytics-content");
 
   if (!session) {
-    if (wall)    { wall.style.display = "flex"; }
-    if (content) { content.style.display = "none"; }
+    if (wall) wall.style.display = "flex";
+    if (content) content.style.display = "none";
     return;
   }
 
-  if (wall)    { wall.style.display = "none"; }
-  if (content) { content.style.display = "block"; }
+  if (wall) wall.style.display = "none";
+  if (content) content.style.display = "block";
 
-  var userEl = document.getElementById("analytics-user");
+  const userEl = document.getElementById("analytics-user");
   if (userEl) userEl.textContent = session.user.email;
 
-  // Load stats
-  try {
-    var [ordersRes, productsRes] = await Promise.all([
-      supabase.from("orders").select("id, total_amount"),
-      supabase.from("products").select("id")
-    ]);
+  const userId = session.user.id;
 
-    var orders   = ordersRes.data  || [];
-    var products = productsRes.data || [];
+  const { data: myProducts } = await supabase
+    .from("products")
+    .select("id, name")
+    .eq("seller_id", userId);
 
-    var el = function(id) { return document.getElementById(id); };
-    if (el("stat-orders"))   el("stat-orders").textContent   = orders.length;
-    if (el("stat-visitors")) el("stat-visitors").textContent = Math.floor(orders.length * 12.4);
-    if (el("stat-thb"))      el("stat-thb").textContent      = (orders.length * 1.5).toFixed(1);
-    if (el("stat-rooms"))    el("stat-rooms").textContent     = "1";
+  const products = myProducts || [];
+  const productIds = products.map((p) => p.id);
 
-    // Top products placeholder
-    var topEl = document.getElementById("top-products");
-    if (topEl) {
-      topEl.innerHTML = products.length === 0
-        ? '<p style="color:#9CA3AF;font-size:14px;text-align:center;padding:20px;">No products yet</p>'
-        : '<p style="color:#9CA3AF;font-size:13px;">Showing ' + products.length + ' product(s)</p>';
-    }
-  } catch(e) {
-    console.error("Analytics load error:", e);
+  document.getElementById("stat-products").textContent = products.length;
+
+  if (productIds.length === 0) {
+    document.getElementById("stat-orders").textContent = "0";
+    document.getElementById("stat-revenue").textContent = "P0.00";
+    document.getElementById("stat-aov").textContent = "P0.00";
+    document.getElementById("top-products").innerHTML =
+      '<p class="text-gray-400 text-sm">List a product to start seeing analytics.</p>';
+    return;
+  }
+
+  const { data: items } = await supabase
+    .from("order_items")
+    .select("order_id, product_id, quantity, unit_price")
+    .in("product_id", productIds);
+
+  const rows = items || [];
+  const orderIds = new Set(rows.map((r) => r.order_id));
+  const revenue = rows.reduce((sum, r) => sum + r.quantity * r.unit_price, 0);
+  const aov = orderIds.size > 0 ? revenue / orderIds.size : 0;
+
+  document.getElementById("stat-orders").textContent = orderIds.size;
+  document.getElementById("stat-revenue").textContent = `P${revenue.toFixed(2)}`;
+  document.getElementById("stat-aov").textContent = `P${aov.toFixed(2)}`;
+
+  // Real top products by revenue
+  const byProduct = {};
+  rows.forEach((r) => {
+    if (!byProduct[r.product_id]) byProduct[r.product_id] = { revenue: 0, units: 0 };
+    byProduct[r.product_id].revenue += r.quantity * r.unit_price;
+    byProduct[r.product_id].units += r.quantity;
+  });
+
+  const ranked = Object.entries(byProduct)
+    .map(([id, stats]) => ({
+      name: products.find((p) => p.id === id)?.name || "Unknown product",
+      ...stats,
+    }))
+    .sort((a, b) => b.revenue - a.revenue)
+    .slice(0, 5);
+
+  const topEl = document.getElementById("top-products");
+  if (ranked.length === 0) {
+    topEl.innerHTML = '<p class="text-gray-400 text-sm">No sales yet.</p>';
+  } else {
+    topEl.innerHTML = ranked
+      .map(
+        (p) => `
+      <div class="flex items-center justify-between p-4 border-2 border-gray-200 rounded-lg">
+        <div>
+          <h4 class="font-semibold text-gray-800">${p.name}</h4>
+          <p class="text-sm text-gray-600">${p.units} sold</p>
+        </div>
+        <span class="text-green-600 font-bold">P${p.revenue.toFixed(2)}</span>
+      </div>`
+      )
+      .join("");
   }
 });
 
-window.logout = function() { if (confirm("Logout?")) window.BSTM.logout(); };
+window.logout = function () {
+  if (confirm("Logout?")) window.BSTM.logout();
+};

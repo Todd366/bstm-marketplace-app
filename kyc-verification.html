@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KYC Verification - BSTM</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="css/tailwind.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     
 </head>
@@ -49,33 +49,33 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label class="block text-gray-700 font-semibold mb-2">Full Legal Name *</label>
-                            <input type="text" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:border-purple-600" placeholder="John Doe">
+                            <input type="text" id="kycFullName" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:border-purple-600" placeholder="John Doe">
                         </div>
                         <div>
                             <label class="block text-gray-700 font-semibold mb-2">Date of Birth *</label>
-                            <input type="date" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:border-purple-600">
+                            <input type="date" id="kycDob" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:border-purple-600">
                         </div>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label class="block text-gray-700 font-semibold mb-2">Omang Number *</label>
-                            <input type="text" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:border-purple-600" placeholder="123456789">
+                            <input type="text" id="kycOmang" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:border-purple-600" placeholder="123456789">
                         </div>
                         <div>
                             <label class="block text-gray-700 font-semibold mb-2">Phone Number *</label>
-                            <input type="tel" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:border-purple-600" placeholder="+267 71234567">
+                            <input type="tel" id="kycPhone" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:border-purple-600" placeholder="+267 71234567">
                         </div>
                     </div>
 
                     <div>
                         <label class="block text-gray-700 font-semibold mb-2">Physical Address *</label>
-                        <textarea required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:border-purple-600" rows="3" placeholder="Plot 1234, Block 5, Gaborone"></textarea>
+                        <textarea id="kycAddress" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:border-purple-600" rows="3" placeholder="Plot 1234, Block 5, Gaborone"></textarea>
                     </div>
 
                     <div>
                         <label class="block text-gray-700 font-semibold mb-2">Business Type *</label>
-                        <select required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:border-purple-600">
+                        <select id="kycBusinessType" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:border-purple-600">
                             <option value="">Select type...</option>
                             <option value="individual">Individual Seller</option>
                             <option value="registered">Registered Business</option>
@@ -101,8 +101,7 @@
                         <h3 class="font-bold text-gray-800 mb-2">Omang (National ID)</h3>
                         <p class="text-sm text-gray-600 mb-4">Upload clear photo of front and back</p>
                         <input type="file" id="omangUpload" accept="image/*" multiple class="hidden">
-                        <button onclick="<script>
-document.getElementById('omangUpload').click()" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-semibold">
+                        <button onclick="document.getElementById('omangUpload').click()" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-semibold">
                             <i class="fas fa-upload mr-2"></i>Upload Omang
                         </button>
                     </div>
@@ -150,23 +149,23 @@ document.getElementById('omangUpload').click()" class="bg-purple-600 hover:bg-pu
                     <div class="space-y-3 text-sm">
                         <div class="flex justify-between">
                             <span class="text-gray-600">Full Name:</span>
-                            <span class="font-semibold text-gray-800">John Doe</span>
+                            <span class="font-semibold text-gray-800" id="reviewName">—</span>
                         </div>
                         <div class="flex justify-between">
                             <span class="text-gray-600">Omang Number:</span>
-                            <span class="font-semibold text-gray-800">123456789</span>
+                            <span class="font-semibold text-gray-800" id="reviewOmang">—</span>
                         </div>
                         <div class="flex justify-between">
                             <span class="text-gray-600">Phone:</span>
-                            <span class="font-semibold text-gray-800">+267 71234567</span>
+                            <span class="font-semibold text-gray-800" id="reviewPhone">—</span>
                         </div>
                         <div class="flex justify-between">
                             <span class="text-gray-600">Business Type:</span>
-                            <span class="font-semibold text-gray-800">Individual Seller</span>
+                            <span class="font-semibold text-gray-800" id="reviewBusinessType">—</span>
                         </div>
                         <div class="flex justify-between">
                             <span class="text-gray-600">Documents Uploaded:</span>
-                            <span class="font-semibold text-green-600">3 files</span>
+                            <span class="font-semibold text-green-600" id="reviewDocCount">0 files</span>
                         </div>
                     </div>
                 </div>
@@ -197,7 +196,7 @@ document.getElementById('omangUpload').click()" class="bg-purple-600 hover:bg-pu
                     <button onclick="nextStep(2)" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-800 py-4 rounded-xl font-bold">
                         <i class="fas fa-arrow-left mr-2"></i>Back
                     </button>
-                    <button onclick="submitKYC()" class="flex-1 bg-green-600 hover:bg-green-700 text-white py-4 rounded-xl font-bold">
+                    <button id="kycSubmitBtn" onclick="submitKYC()" class="flex-1 bg-green-600 hover:bg-green-700 text-white py-4 rounded-xl font-bold">
                         <i class="fas fa-check mr-2"></i>Submit Application
                     </button>
                 </div>
@@ -208,13 +207,25 @@ document.getElementById('omangUpload').click()" class="bg-purple-600 hover:bg-pu
 
     <div id="bstm-footer"></div>
 
+<script>
     function nextStep(step) {
         // Hide all steps
         document.querySelectorAll('.step-content').forEach(el => el.classList.add('hidden'));
-        
+
         // Show target step
         document.getElementById('stepContent' + step).classList.remove('hidden');
-        
+
+        // Populate review step from real form data
+        if (step === 3) {
+            document.getElementById('reviewName').textContent = document.getElementById('kycFullName').value || '—';
+            document.getElementById('reviewOmang').textContent = document.getElementById('kycOmang').value || '—';
+            document.getElementById('reviewPhone').textContent = document.getElementById('kycPhone').value || '—';
+            const btSelect = document.getElementById('kycBusinessType');
+            document.getElementById('reviewBusinessType').textContent = btSelect.options[btSelect.selectedIndex]?.text || '—';
+            const docCount = window.__bstm_kycFiles ? Object.values(window.__bstm_kycFiles).filter(Boolean).length : 0;
+            document.getElementById('reviewDocCount').textContent = docCount + ' file' + (docCount === 1 ? '' : 's');
+        }
+
         // Update progress indicators
         for (let i = 1; i <= 3; i++) {
             const stepEl = document.getElementById('step' + i);
@@ -234,41 +245,18 @@ document.getElementById('omangUpload').click()" class="bg-purple-600 hover:bg-pu
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    function submitKYC() {
-        const agreed = document.getElementById('termsAgree').checked;
-        
-        if (!agreed) {
-            alert('Please agree to the Terms & Conditions');
-            return;
-        }
+    // Track selected files by slot; kyc-verification.js reads this on submit
+    window.__bstm_kycFiles = { omang: null, proof: null, business: null };
+    document.getElementById('omangUpload').addEventListener('change', e => window.__bstm_kycFiles.omang = e.target.files[0] || null);
+    document.getElementById('proofUpload').addEventListener('change', e => window.__bstm_kycFiles.proof = e.target.files[0] || null);
+    document.getElementById('businessUpload').addEventListener('change', e => window.__bstm_kycFiles.business = e.target.files[0] || null);
 
-        // TODO: Upload documents to Supabase Storage
-        // TODO: Submit KYC application to database
-        
-        // For demo: simulate submission
-        alert('KYC Application Submitted!\n\nYour application is under review. You\'ll receive an email within 24-48 hours.');
-        
-        // Update user role
-        if (user) {
-                kyc_status: 'pending',
-                kyc_submitted_at: new Date().toISOString()
-            });
-        }
-        
-        // Redirect to dashboard
-        setTimeout(() => {
-        }, 2000);
-    }
-
-    // Load components
-
-    document.addEventListener('DOMContentLoaded', () => {
-        loadComponents();
-    });
-    <script src="components/smart-loader.js"></script>
-<script type="module" src="js/app.js"></script>
-
+    // Real submission (document upload + database insert) is registered as
+    // window.submitKYC by js/pages/kyc-verification.js once the session is ready.
 </script>
+
+<script src="components/smart-loader.js"></script>
+<script type="module" src="js/app.js"></script>
 
 <script>
 /**

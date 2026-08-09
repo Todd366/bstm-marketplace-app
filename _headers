@@ -1,3 +1,10 @@
+# NOTE: This _headers file format only works on Netlify or Cloudflare Pages.
+# GitHub Pages (the current deploy target, via `gh-pages -d .`) does NOT
+# support custom response headers at all — this file is silently ignored
+# there. vercel.json in the repo root has the equivalent config for Vercel.
+# If staying on GitHub Pages long-term, security headers need to come from
+# a CDN in front of it (e.g. Cloudflare) since GH Pages has no server config.
+
 /*
   X-Frame-Options: DENY
   X-Content-Type-Options: nosniff

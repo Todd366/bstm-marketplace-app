@@ -108,7 +108,7 @@ export async function createOrder(order) {
 export async function getOrders(userId) {
   const result = await supabase
     .from("orders")
-    .select("id, buyer_id, status, created_at")
+    .select("id, buyer_id, status, total_amount, created_at")
     .eq("buyer_id", userId)
     .order("created_at", { ascending: false });
   if (result.error) console.error("getOrders error:", result.error);

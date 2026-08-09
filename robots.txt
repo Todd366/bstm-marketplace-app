@@ -1,0 +1,12 @@
+User-agent: *
+Allow: /
+Disallow: /admin-dashboard.html
+Disallow: /gov-dashboard.html
+Disallow: /monitoring-dashboard.html
+Disallow: /kyc-verification.html
+Disallow: /checkout.html
+Disallow: /order-tracking.html
+Disallow: /messages.html
+Disallow: /thb-wallet.html
+
+Sitemap: https://todd366.github.io/bstm-marketplace-app/sitemap.xml

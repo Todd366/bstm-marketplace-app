@@ -1,70 +1,156 @@
-// order-tracking.js
+// js/pages/order-tracking.js
 import { supabase } from "../core/supabase-client.js";
 
-window.BSTM.ready().then(async function(session) {
-  var wall    = document.getElementById("auth-wall");
-  var content = document.getElementById("tracking-content");
+const STATUS_STEPS = [
+  { key: "pending", label: "Order Placed", icon: "fa-check", desc: "Your order has been received." },
+  { key: "confirmed", label: "Order Confirmed", icon: "fa-box", desc: "The seller is preparing your order." },
+  { key: "shipped", label: "Out for Delivery", icon: "fa-truck", desc: "Your order is on its way." },
+  { key: "delivered", label: "Delivered", icon: "fa-home", desc: "Delivered to your doorstep." },
+];
 
-  if (!session) {
-    if (wall)    { wall.style.display = "flex"; }
-    if (content) { content.style.display = "none"; }
+function statusIndex(status) {
+  const i = STATUS_STEPS.findIndex((s) => s.key === status);
+  return i === -1 ? 0 : i;
+}
+
+function renderTimeline(status) {
+  const activeIndex = statusIndex(status);
+  const container = document.getElementById("order-timeline");
+  if (!container) return;
+
+  if (status === "cancelled") {
+    container.innerHTML = `
+      <div class="flex items-start">
+        <div class="status-dot bg-red-500 rounded-full flex items-center justify-center mr-6 flex-shrink-0">
+          <i class="fas fa-times text-white text-xl"></i>
+        </div>
+        <div>
+          <h3 class="text-lg font-bold text-gray-800">Order Cancelled</h3>
+          <p class="text-sm text-gray-600 mt-2">This order was cancelled.</p>
+        </div>
+      </div>`;
     return;
   }
 
-  if (wall)    { wall.style.display = "none"; }
-  if (content) { content.style.display = "block"; }
+  container.innerHTML = STATUS_STEPS.map((step, i) => {
+    const isActive = i <= activeIndex;
+    return `
+      <div class="timeline-step ${isActive ? "active" : ""} flex items-start">
+        <div class="status-dot ${isActive ? "active" : "bg-gray-300"} rounded-full flex items-center justify-center mr-6 flex-shrink-0">
+          <i class="fas ${step.icon} ${isActive ? "text-white" : "text-gray-600"} text-xl"></i>
+        </div>
+        <div>
+          <h3 class="text-lg font-bold ${isActive ? "text-gray-800" : "text-gray-400"}">${step.label}</h3>
+          <p class="text-sm ${isActive ? "text-gray-500" : "text-gray-500"}">${isActive ? "" : "Pending"}</p>
+          <p class="text-sm text-gray-700 mt-2">${step.desc}</p>
+        </div>
+      </div>`;
+  }).join("");
+}
 
-  var userEl = document.getElementById("tracking-user");
-  if (userEl) userEl.textContent = session.user.email;
-
-  var container = document.getElementById("orders-list");
+function renderItems(items) {
+  const container = document.getElementById("order-items-list");
   if (!container) return;
 
-  try {
-    var { data: orders, error } = await supabase
-      .from("orders")
-      .select("*")
-      .eq("user_id", session.user.id)
-      .order("created_at", { ascending: false });
+  container.innerHTML = items
+    .map(
+      (item) => `
+      <div class="flex items-center space-x-4 p-4 border-2 border-gray-200 rounded-xl">
+        <div class="flex-1">
+          <h3 class="font-bold text-gray-800">${item.product_name}</h3>
+          <span class="text-sm text-gray-600">Qty: ${item.quantity}</span>
+        </div>
+        <div class="text-right">
+          <p class="text-xl font-bold text-gray-800">P${(item.unit_price * item.quantity).toFixed(2)}</p>
+        </div>
+      </div>`
+    )
+    .join("");
+}
 
-    if (error || !orders || orders.length === 0) {
-      container.innerHTML = '<div style="text-align:center;padding:60px 20px;">'
-        + '<div style="font-size:48px;margin-bottom:12px;">📦</div>'
-        + '<p style="color:#9CA3AF;font-size:14px;margin-bottom:20px;">No orders yet.</p>'
-        + '<a href="marketplace.html" style="background:linear-gradient(135deg,#7C3AED,#4F46E5);color:#fff;'
-        + 'padding:12px 28px;border-radius:12px;font-weight:800;text-decoration:none;">Browse Mall →</a>'
-        + '</div>';
-      return;
-    }
+async function loadOrder(orderId, session) {
+  const { data: order, error } = await supabase
+    .from("orders")
+    .select("*")
+    .eq("id", orderId)
+    .eq("buyer_id", session.user.id)
+    .single();
 
-    var STATUS_COLORS = {
-      pending:    { bg: "#FEF9C3", color: "#92400E" },
-      confirmed:  { bg: "#DCFCE7", color: "#166534" },
-      processing: { bg: "#DBEAFE", color: "#1E40AF" },
-      shipped:    { bg: "#EDE9FE", color: "#5B21B6" },
-      delivered:  { bg: "#D1FAE5", color: "#065F46" },
-      cancelled:  { bg: "#FEE2E2", color: "#991B1B" }
-    };
-
-    container.innerHTML = orders.map(function(o) {
-      var s = (o.status || "pending").toLowerCase();
-      var sc = STATUS_COLORS[s] || STATUS_COLORS.pending;
-      var date = new Date(o.created_at).toLocaleDateString("en-BW", { day:"numeric", month:"short", year:"numeric" });
-      return '<div style="background:#fff;border-radius:16px;padding:20px;margin-bottom:12px;border:1px solid #EDE9FE;">'
-        + '<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;">'
-        + '<div><div style="font-weight:900;color:#1E1B4B;font-size:15px;">Order #' + String(o.id).slice(-8).toUpperCase() + '</div>'
-        + '<div style="font-size:12px;color:#9CA3AF;">' + date + '</div></div>'
-        + '<span style="background:' + sc.bg + ';color:' + sc.color + ';padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;">'
-        + s.toUpperCase() + '</span></div>'
-        + '<div style="display:flex;justify-content:space-between;align-items:center;">'
-        + '<div style="font-size:22px;font-weight:900;color:#7C3AED;">P' + Number(o.total_amount || 0).toFixed(2) + '</div>'
-        + '<div style="font-size:12px;color:#059669;font-weight:700;">+' + (Number(o.total_amount||0)*0.015).toFixed(3) + ' THB</div>'
-        + '</div></div>';
-    }).join("");
-  } catch(e) {
-    console.error("Order tracking error:", e);
-    if (container) container.innerHTML = '<p style="color:#9CA3AF;text-align:center;padding:40px;">Error loading orders.</p>';
+  if (error || !order) {
+    document.getElementById("order-not-found").classList.remove("hidden");
+    return;
   }
+
+  const { data: items } = await supabase
+    .from("order_items")
+    .select("*")
+    .eq("order_id", order.id);
+
+  document.getElementById("order-content").classList.remove("hidden");
+
+  document.getElementById("order-number").textContent =
+    "BSTM-" + order.id.split("-")[0].toUpperCase();
+
+  document.getElementById("order-date").textContent = new Date(
+    order.created_at
+  ).toLocaleString("en-BW", {
+    dateStyle: "medium",
+    timeStyle: "short",
+  });
+
+  document.getElementById("delivery-method").innerHTML =
+    `<i class="fas fa-car text-purple-600 mr-2"></i>${
+      order.delivery_method === "cablink" ? "CabLink Express" : order.delivery_method || "—"
+    }`;
+
+  document.getElementById("payment-method").textContent =
+    order.payment_method === "paystack" ? "Paystack" : order.payment_method || "—";
+
+  document.getElementById("total-amount").textContent = order.total_amount
+    ? `P${Number(order.total_amount).toFixed(2)}`
+    : "—";
+
+  const addrEl = document.getElementById("delivery-address");
+  if (order.delivery_name || order.delivery_address) {
+    addrEl.innerHTML = `
+      <p class="text-gray-700">${order.delivery_name || ""}</p>
+      <p class="text-gray-700">${order.delivery_address || ""}</p>
+      <p class="text-gray-700">${order.delivery_city || ""}, Botswana</p>
+      <p class="text-gray-700">${order.delivery_phone || ""}</p>`;
+  }
+
+  // THB reward is logged in wallet_ledger against this order
+  const { data: reward } = await supabase
+    .from("wallet_ledger")
+    .select("amount_thb")
+    .eq("reference_id", order.id)
+    .eq("reference_type", "order")
+    .maybeSingle();
+  document.getElementById("thb-earned").textContent = reward
+    ? reward.amount_thb.toFixed(1)
+    : "0.0";
+
+  renderTimeline(order.status);
+  if (items) renderItems(items);
+}
+
+window.BSTM.ready().then(async function (session) {
+  if (!session) {
+    window.location.href = "login.html?redirect=order-tracking.html";
+    return;
+  }
+
+  const params = new URLSearchParams(window.location.search);
+  const orderId = params.get("order");
+
+  if (!orderId) {
+    document.getElementById("order-not-found").classList.remove("hidden");
+    return;
+  }
+
+  await loadOrder(orderId, session);
 });
 
-window.logout = function() { if (confirm("Logout?")) window.BSTM.logout(); };
+window.logout = function () {
+  if (confirm("Logout?")) window.BSTM.logout();
+};

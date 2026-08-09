@@ -1,83 +1,129 @@
+// js/pages/upload-product.js
 import { supabase } from "../core/supabase-client.js";
 
-window.BSTM.ready().then(async function(session) {
-  if (!session) {
-    window.location.href = "login.html";
-    return;
-  }
-
-  var user = session.user;
-
-  // Show seller name wherever it appears
-  document.querySelectorAll(".seller-name, #seller-name").forEach(function(el) {
-    el.textContent = user.email.split("@")[0];
-  });
-
-  var form = document.getElementById("upload-form")
-          || document.getElementById("product-form")
-          || document.querySelector("form");
-
-  if (!form) {
-    console.warn("No product form found on this page");
-    return;
-  }
-
-  form.addEventListener("submit", async function(e) {
-    e.preventDefault();
-
-    var btn = form.querySelector("button[type=submit]") || form.querySelector("button");
-    if (btn) { btn.disabled = true; btn.textContent = "Uploading..."; }
-
-    // Read form fields — match IDs used in upload-product.html
-    var name  = (document.getElementById("product-name")  || document.getElementById("title"))?.value?.trim();
-    var price = parseFloat((document.getElementById("product-price") || document.getElementById("price"))?.value || 0);
-    var image = (document.getElementById("product-image") || document.getElementById("image"))?.value?.trim() || null;
-
-    if (!name || !price || price <= 0) {
-      showMsg("Please fill in product name and a valid price.", "error");
-      if (btn) { btn.disabled = false; btn.textContent = "Upload Product"; }
-      return;
-    }
-
-    // Insert only columns that exist in the live DB
-    var { data, error } = await supabase
-      .from("products")
-      .insert([{
-        name: name,
-        price: price,
-        image: image,
-        seller_id: user.id
-      }])
-      .select();
-
-    if (error) {
-      console.error("Upload error:", error);
-      showMsg("Failed to upload: " + error.message, "error");
-      if (btn) { btn.disabled = false; btn.textContent = "Upload Product"; }
-      return;
-    }
-
-    showMsg("✅ Product listed successfully!", "success");
-    form.reset();
-    if (btn) { btn.textContent = "✅ Listed!"; }
-
-    // Redirect to seller dashboard after 2s
-    setTimeout(function() {
-      window.location.href = "seller-dashboard.html";
-    }, 2000);
-  });
-});
-
 function showMsg(msg, type) {
-  var el = document.getElementById("upload-status") || document.getElementById("status");
-  if (!el) {
-    el = document.createElement("div");
-    el.id = "upload-status";
-    document.querySelector("form")?.prepend(el);
-  }
+  var el = document.getElementById("upload-status");
+  if (!el) return;
   el.textContent = msg;
-  el.style.cssText = "padding:12px 16px;border-radius:12px;font-weight:600;font-size:14px;margin-bottom:16px;display:block;" +
+  el.style.display = "block";
+  el.style.cssText +=
+    ";padding:14px;border-radius:12px;font-weight:600;font-size:14px;margin-bottom:16px;" +
     (type === "success"
       ? "background:#DCFCE7;color:#166534;border:1px solid #BBF7D0;"
       : "background:#FEE2E2;color:#991B1B;border:1px solid #FECACA;");
 }
+
+async function uploadImages(files, userId) {
+  const urls = [];
+  for (const file of files) {
+    const path = `${userId}/${Date.now()}-${file.name}`;
+    const { error } = await supabase.storage
+      .from("product-images")
+      .upload(path, file, { upsert: false });
+
+    if (error) {
+      console.error("[BSTM Upload] Image upload failed:", error);
+      continue; // skip this image, don't fail the whole listing over one photo
+    }
+
+    const { data } = supabase.storage.from("product-images").getPublicUrl(path);
+    urls.push(data.publicUrl);
+  }
+  return urls;
+}
+
+window.BSTM.ready().then(async function (session) {
+  if (!session) {
+    window.location.href = "login.html?redirect=upload-product.html";
+    return;
+  }
+
+  const user = session.user;
+  document.querySelectorAll(".seller-name, #seller-name").forEach((el) => {
+    el.textContent = user.email.split("@")[0];
+  });
+
+  const form = document.getElementById("productForm");
+  if (!form) {
+    console.warn("[BSTM Upload] #productForm not found on this page");
+    return;
+  }
+
+  form.addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+    const btn = document.getElementById("submit-btn");
+    const name = document.getElementById("title").value.trim();
+    const description = document.getElementById("description").value.trim();
+    const category = document.getElementById("category").value;
+    const condition = document.getElementById("condition").value;
+    const price = parseFloat(document.getElementById("price").value);
+    const quantity = parseInt(document.getElementById("quantity").value, 10);
+    const location = document.getElementById("location").value.trim();
+    const files = window.__bstm_uploadedFiles || [];
+
+    if (!name || !price || price <= 0 || !category || !condition || !quantity) {
+      showMsg("Please fill in all required fields.", "error");
+      return;
+    }
+
+    if (btn) {
+      btn.disabled = true;
+      btn.textContent = "Publishing…";
+    }
+
+    let imageUrls = [];
+    if (files.length > 0) {
+      imageUrls = await uploadImages(files, user.id);
+    }
+
+    const { data, error } = await supabase
+      .from("products")
+      .insert({
+        name,
+        description,
+        category,
+        condition,
+        price,
+        quantity,
+        location,
+        image: imageUrls[0] || null,
+        seller_id: user.id,
+        status: "active",
+      })
+      .select()
+      .single();
+
+    if (error) {
+      console.error("[BSTM Upload] Insert failed:", error);
+      showMsg("Failed to list product: " + error.message, "error");
+      if (btn) {
+        btn.disabled = false;
+        btn.textContent = "Publish Product";
+      }
+      return;
+    }
+
+    // Extra photos beyond the first go into product_images
+    if (imageUrls.length > 1 && data) {
+      const extra = imageUrls.slice(1).map((url) => ({
+        product_id: data.id,
+        seller_id: user.id,
+        storage_path: url,
+      }));
+      await supabase.from("product_images").insert(extra);
+    }
+
+    showMsg("✅ Product listed successfully!", "success");
+    form.reset();
+    if (btn) btn.textContent = "✅ Listed!";
+
+    setTimeout(function () {
+      window.location.href = "seller-dashboard.html";
+    }, 1500);
+  });
+});
+
+window.logout = function () {
+  if (confirm("Logout?")) window.BSTM.logout();
+};

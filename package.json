@@ -5,7 +5,8 @@
   "scripts": {
     "test": "echo \"Tests coming soon\"",
     "lint": "htmlhint **/*.html",
-    "deploy": "gh-pages -d ."
+    "build:css": "tailwindcss -i ./css/tailwind-input.css -o ./css/tailwind.css --minify",
+    "deploy": "npm run build:css && gh-pages -d ."
   },
   "repository": {
     "type": "git",
@@ -13,7 +14,7 @@
   },
   "author": "Thobo Atlang Mosanako",
   "license": "MIT",
-  "main": "fix-nav-loader.js",
+  "main": "index.html",
   "directories": {
     "doc": "docs"
   },
@@ -26,5 +27,8 @@
   "dependencies": {
     "@supabase/supabase-js": "^2.110.0",
     "jsdom": "^29.1.1"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.0"
   }
 }

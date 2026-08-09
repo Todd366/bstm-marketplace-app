@@ -3,14 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>THB Wal<script>
-let - BSTM Digital Nation</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <title>THB Wallet - BSTM Digital Nation</title>
+    <link href="css/tailwind.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-    
-    <script src="js/thb-display.js"></script>
-<script>
-<style>
+
+    <style>
         .gradient-bg { background: linear-gradient(135deg, #7C3AED 0%, #4F46E5 100%); }
         .thb-gradient { background: linear-gradient(135deg, #ffd700 0%, #ff8c00 100%); }
         .wallet-card { 
@@ -312,7 +309,7 @@ let - BSTM Digital Nation</title>
                     <i class="fas fa-chevron-right text-gray-400"></i>
                 </a>
 
-                <a href="https://cablink.bstm.bw" class="flex items-center justify-between p-4 bg-blue-50 rounded-xl hover:bg-blue-100 transition-all">
+                <a href="https://cab-link-pwa.vercel.app" class="flex items-center justify-between p-4 bg-blue-50 rounded-xl hover:bg-blue-100 transition-all">
                     <div class="flex items-center space-x-4">
                         <div class="w-14 h-14 bg-blue-500 rounded-full flex items-center justify-center">
                             <i class="fas fa-car text-white text-xl"></i>
@@ -366,8 +363,8 @@ let - BSTM Digital Nation</title>
 
             <form id="sendTHBForm" onsubmit="sendTHB(event)">
                 <div class="mb-6">
-                    <label class="block text-gray-700 font-semibold mb-2">Recipient Address</label>
-                    <input type="text" id="recipientAddress" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:border-purple-600" placeholder="0x...">
+                    <label class="block text-gray-700 font-semibold mb-2">Recipient's Email</label>
+                    <input type="email" id="recipientAddress" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:border-purple-600" placeholder="friend@example.com">
                 </div>
 
                 <div class="mb-6">
@@ -410,11 +407,9 @@ let - BSTM Digital Nation</title>
                 </div>
 
                 <div class="mb-6">
-                    <label class="block text-gray-700 font-semibold mb-2">Bank Account</label>
-                    <select class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:border-purple-600">
-                        <option>FNB - ****1234</option>
-                        <option>+ Add New Account</option>
-                    </select>
+                    <label class="block text-gray-700 font-semibold mb-2">Payout Details</label>
+                    <input type="text" id="withdrawDetails" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:border-purple-600" placeholder="Mobile money number or bank account">
+                    <p class="text-xs text-gray-500 mt-2">No account linked yet — BSTM will contact you to confirm payout details.</p>
                 </div>
 
                 <button type="submit" class="w-full bg-purple-600 hover:bg-purple-700 text-white py-4 rounded-xl font-bold text-lg">
@@ -469,70 +464,9 @@ let - BSTM Digital Nation</title>
     </div>
 
 <script>
-    // Load wallet data
-    document.addEventListener('DOMContentLoaded', () => {
-        loadWalletData();
-    });
-
-    function loadWalletData() {
-        if (!user) {
-            return;
-        }
-
-        // Load balance
-        const balance = user.thb_balance || 0;
-        document.getElementById('walletTHBBalance').textContent = balance.toFixed(1);
-        document.getElementById('walletBWPEquivalent').textContent = (balance * 10).toFixed(2);
-        document.getElementById('availableTHB').textContent = balance.toFixed(1);
-
-        // Load wallet address
-        const address = user.wallet_address || '0x' + Math.random().toString(16).substr(2, 40);
-        document.getElementById('walletAddress').textContent = address.substr(0, 6) + '...' + address.substr(-4);
-
-        // Load referral code
-        const refCode = user.referral_code || 'BSTM-' + user.id.substr(-4).toUpperCase();
-        document.getElementById('referralCode').textContent = refCode;
-
-        // Load stats
-        loadWalletStats();
-        loadTransactions();
-    }
-
-    function loadWalletStats() {
-        // TODO: Load from Supabase
-        document.getElementById('monthlyEarned').textContent = '12.5';
-        document.getElementById('monthlySpent').textContent = '8.2';
-        document.getElementById('lifetimeEarned').textContent = '156.8';
-        document.getElementById('totalReferrals').textContent = '3';
-        document.getElementById('referralEarnings').textContent = '150';
-    }
-
-    function loadTransactions() {
-        const transactions = THBDisplay.getTransactionHistory();
-        const list = document.getElementById('transactionsList');
-
-        if (transactions.length === 0) {
-            list.innerHTML = '<p class="text-center text-gray-500 py-12">No transactions yet. Start earning THB!</p>';
-            return;
-        }
-
-        list.innerHTML = transactions.map(tx => `
-            <div class="flex items-center justify-between p-4 ${tx.type === 'earn' ? 'bg-green-50' : 'bg-red-50'} rounded-xl">
-                <div class="flex items-center space-x-4">
-                    <div class="w-12 h-12 bg-${tx.type === 'earn' ? 'green' : 'red'}-500 rounded-full flex items-center justify-center">
-                        <i class="fas fa-${tx.type === 'earn' ? 'arrow-down' : 'arrow-up'} text-white"></i>
-                    </div>
-                    <div>
-                        <p class="font-semibold text-gray-800">${tx.reason}</p>
-                        <p class="text-xs text-gray-500">${new Date(tx.timestamp).toLocaleString()}</p>
-                    </div>
-                </div>
-                <span class="text-${tx.type === 'earn' ? 'green' : 'red'}-600 font-bold text-xl">
-                    ${tx.type === 'earn' ? '+' : '-'}${tx.amount.toFixed(1)} THB
-                </span>
-            </div>
-        `).join('');
-    }
+    // Real wallet data loading happens in js/pages/thb-wallet.js once the
+    // authenticated session is ready. This script only handles pure UI:
+    // tab switching, modal open/close, and live input calculators.
 
     // Tab switching
     function switchWalletTab(tab) {
@@ -595,47 +529,9 @@ let - BSTM Digital Nation</title>
         document.getElementById('stakeEarnings').textContent = earnings.toFixed(2);
     });
 
-    // Send THB
-    function sendTHB(e) {
-        e.preventDefault();
-        const amount = parseFloat(document.getElementById('sendAmount').value);
-        const recipient = document.getElementById('recipientAddress').value;
-
-        if (THBDisplay.spendTHB(amount, `Sent to ${recipient.substr(0, 8)}...`)) {
-            alert('THB sent successfully!');
-            closeSendModal();
-            loadWalletData();
-        }
-    }
-
-    // Withdraw THB
-    function withdrawTHB(e) {
-        e.preventDefault();
-        const amount = parseFloat(document.getElementById('withdrawAmount').value);
-
-        if (THBDisplay.spendTHB(amount, 'Withdrawal to bank')) {
-            alert(`Withdrawal request submitted!\nYou'll receive P${(amount * 10).toFixed(2)} BWP in 1-2 business days.`);
-            closeWithdrawModal();
-            loadWalletData();
-        }
-    }
-
-    // Stake THB
-    function stakeTHB(e) {
-        e.preventDefault();
-        const amount = parseFloat(document.getElementById('stakeAmount').value);
-
-        if (amount < 10) {
-            alert('Minimum stake is 10 THB');
-            return;
-        }
-
-        if (THBDisplay.spendTHB(amount, 'Staked for 30 days')) {
-            alert(`${amount} THB staked successfully!\nUnlock date: ${new Date(Date.now() + 30*24*60*60*1000).toLocaleDateString()}`);
-            closeStakeModal();
-            loadWalletData();
-        }
-    }
+    // Send/Withdraw/Stake are implemented in js/pages/thb-wallet.js
+    // (registered as window.sendTHB / window.withdrawTHB / window.stakeTHB
+    // once the real wallet data has loaded), so no local definitions here.
 
     // Copy functions
     function copyWalletAddress() {
@@ -665,7 +561,6 @@ let - BSTM Digital Nation</title>
         }
     }
 </script>
-</script>
 <script src="components/smart-loader.js"></script>
 <script type="module" src="js/app.js"></script>
 
@@ -686,8 +581,6 @@ window.__bstm_safe_bind = function(fnName, fallback) {
 </script>
 
 <script type="module" src="js/pages/thb-wallet.js"></script>
-
-</script>
 
 <script>
 

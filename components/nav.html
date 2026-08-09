@@ -123,12 +123,12 @@
         <!-- DESKTOP NAV (FULL RESTORED LIST) -->
         <nav id="desktop-nav">
 
-          <a class="nav-link" href="index.html">Home</a>
-          <a class="nav-link" href="marketplace.html">Mall</a>
-          <a class="nav-link" href="room22-farm.html">Farm</a>
+          <a class="nav-link" href="index.html" data-i18n="nav.home">Home</a>
+          <a class="nav-link" href="marketplace.html" data-i18n="nav.marketplace">Mall</a>
+          <a class="nav-link" href="room22-farm.html" data-i18n="nav.farm">Farm</a>
 
-          <a class="nav-link" href="cablink.html">CabLink</a>
-          <a class="nav-link" href="thb-wallet.html">Wallet</a>
+          <a class="nav-link" href="cablink.html" data-i18n="nav.cablink">CabLink</a>
+          <a class="nav-link" href="thb-wallet.html" data-i18n="nav.wallet">Wallet</a>
           <a class="nav-link" href="transactions.html">Transactions</a>
           <a class="nav-link" href="earnings.html">Earnings</a>
 
@@ -168,9 +168,12 @@
       <!-- RIGHT -->
       <div style="display:flex;align-items:center;gap:12px;">
 
+        <button id="lang-en-btn" onclick="MultiLanguage.setLanguage('en')" style="padding:4px 8px;border-radius:6px;font-size:11px;font-weight:700;">EN</button>
+        <button id="lang-tn-btn" onclick="MultiLanguage.setLanguage('tn')" style="padding:4px 8px;border-radius:6px;font-size:11px;font-weight:700;">TN</button>
+
         <button id="notif-btn">🔔</button>
 
-        <a id="nav-login-btn" href="login.html"
+        <a id="nav-login-btn" href="login.html" data-i18n="common.login"
            style="background:#7C3AED;color:#fff;padding:8px 14px;border-radius:10px;text-decoration:none;">
           Login
         </a>

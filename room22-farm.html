@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Room 22 Farm - Fresh Organic Produce</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="css/tailwind.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     
     <style>
@@ -55,7 +55,7 @@
                         <a href="#products" class="bg-white text-green-600 hover:bg-green-50 px-8 py-4 rounded-xl font-bold text-lg shadow-xl">
                             <i class="fas fa-shopping-basket mr-2"></i>Shop Now
                         </a>
-                        <a href="https://cablink.bstm.bw" target="_blank" class="bg-green-700 hover:bg-green-800 px-8 py-4 rounded-xl font-bold text-lg">
+                        <a href="https://cab-link-pwa.vercel.app" target="_blank" class="bg-green-700 hover:bg-green-800 px-8 py-4 rounded-xl font-bold text-lg">
                             <i class="fas fa-car mr-2"></i>Book Delivery
                         </a>
                     </div>
@@ -137,7 +137,7 @@
                                 <span class="text-sm text-green-600 ml-2">or 0.5 THB</span>
                             </div>
                         </div>
-                        <button onclick="addToCart('tomatoes')" class="w-full farm-gradient text-white py-3 rounded-lg font-semibold hover:shadow-lg">
+                        <button onclick="addToCart({id:'2c2610ed-7171-4c8d-b56c-8365dbfd13e6',name:'Fresh Tomatoes (5kg)',price:50})" class="w-full farm-gradient text-white py-3 rounded-lg font-semibold hover:shadow-lg">
                             <i class="fas fa-shopping-basket mr-2"></i>Add to Basket
                         </button>
                     </div>
@@ -163,7 +163,7 @@
                                 <span class="text-sm text-green-600 ml-2">or 0.3 THB</span>
                             </div>
                         </div>
-                        <button onclick="addToCart('onions')" class="w-full farm-gradient text-white py-3 rounded-lg font-semibold hover:shadow-lg">
+                        <button onclick="addToCart({id:'e15dc55e-fc1e-49d3-a1a0-ba7488264b95',name:'Fresh Onions (3kg)',price:30})" class="w-full farm-gradient text-white py-3 rounded-lg font-semibold hover:shadow-lg">
                             <i class="fas fa-shopping-basket mr-2"></i>Add to Basket
                         </button>
                     </div>
@@ -192,7 +192,7 @@
                                 <span class="text-sm text-green-600 ml-2">or 0.35 THB</span>
                             </div>
                         </div>
-                        <button onclick="addToCart('spinach')" class="w-full farm-gradient text-white py-3 rounded-lg font-semibold hover:shadow-lg">
+                        <button onclick="addToCart({id:'f6b5f81a-9c1d-423d-9bf4-fdb91d2018d8',name:'Fresh Spinach (2kg)',price:35})" class="w-full farm-gradient text-white py-3 rounded-lg font-semibold hover:shadow-lg">
                             <i class="fas fa-shopping-basket mr-2"></i>Add to Basket
                         </button>
                     </div>
@@ -218,7 +218,7 @@
                                 <span class="text-sm text-green-600 ml-2">or 0.45 THB</span>
                             </div>
                         </div>
-                        <button onclick="addToCart('carrots')" class="w-full farm-gradient text-white py-3 rounded-lg font-semibold hover:shadow-lg">
+                        <button onclick="addToCart({id:'5d6ce54f-b776-4d56-8dbf-efcc5ccf2564',name:'Carrots (4kg)',price:45})" class="w-full farm-gradient text-white py-3 rounded-lg font-semibold hover:shadow-lg">
                             <i class="fas fa-shopping-basket mr-2"></i>Add to Basket
                         </button>
                     </div>
@@ -285,7 +285,7 @@
                             </div>
                         </div>
                         
-                        <a href="https://cablink.bstm.bw" target="_blank" class="inline-block bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-xl font-bold text-lg">
+                        <a href="https://cab-link-pwa.vercel.app" target="_blank" class="inline-block bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-xl font-bold text-lg">
                             <i class="fas fa-external-link-alt mr-2"></i>Open CabLink
                         </a>
                     </div>
@@ -343,32 +343,6 @@
 
     <!-- Modals -->
     <div id="bstm-modals"></div>
-<script>
-function addToCart(product) {
-        // Add to cart logic
-        const products = {
-            tomatoes: { name: 'Fresh Tomatoes (5kg)', price: 50, thb: 0.5, room: 22 },
-            onions: { name: 'Fresh Onions (3kg)', price: 30, thb: 0.3, room: 22 },
-            spinach: { name: 'Fresh Spinach (2kg)', price: 35, thb: 0.35, room: 22 },
-            carrots: { name: 'Carrots (4kg)', price: 45, thb: 0.45, room: 22 }
-        };
-        
-        const item = products[product];
-        
-        // Get cart from localStorage
-        let cart = JSON.parse(localStorage.getItem('bstm_cart') || '[]');
-        cart.push(item);
-        localStorage.setItem('bstm_cart', JSON.stringify(cart));
-        
-        // Show success message
-        alert(`${item.name} added to basket!\nYou'll earn ${item.thb} THB on purchase.`);
-        
-        // Vibrate if supported
-        if (navigator.vibrate) {
-            navigator.vibrate(50);
-        }
-    }
-</script>
 <script src="components/smart-loader.js"></script>
 <script type="module" src="js/app.js"></script>
 <script>

@@ -1,9 +1,14 @@
 // BSTM Configuration - Production
+// NOTE: This is a plain static site with no bundler, so `import.meta.env`
+// is never populated in the browser (that only exists under Vite/similar).
+// The Supabase anon/publishable key is safe to ship client-side by design —
+// it is rate-limited and access is enforced by Postgres RLS policies, not
+// by keeping this key secret. Never put the SERVICE ROLE key here.
 export const CONFIG = {
   API: {
-    SUPABASE_URL: import.meta.env?.VITE_SUPABASE_URL || 'https://your-project.supabase.co',
-    SUPABASE_KEY: import.meta.env?.VITE_SUPABASE_ANON_KEY || 'your-key',
-    PAYSTACK_PUBLIC: import.meta.env?.VITE_PAYSTACK_PUBLIC_KEY || 'pk_live_xxx',
+    SUPABASE_URL: 'https://tvtfxkavjqvurdezhyvu.supabase.co',
+    SUPABASE_KEY: 'sb_publishable_xlZ3YKF6h5XBMhARWkE9_g_PVudo5r8',
+    PAYSTACK_PUBLIC: window.BSTM_CONFIG?.PAYSTACK_PUBLIC_KEY || 'pk_live_xxx',
   },
   APP: {
     NAME: 'BSTM Digital Mall',

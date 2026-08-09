@@ -1,4 +1,8 @@
 import { supabase } from "./core/supabase-client.js";
+import "./core/cart.js"; // registers window.addToCart globally
+import "./multi-language.js"; // registers window.MultiLanguage globally
+import "./form-validation.js"; // registers window.FormValidator globally
+import "./toast-notifications.js"; // registers window.Toast globally
 
 // ============================================
 // BSTM APP CORE (SINGLE SOURCE OF TRUTH)

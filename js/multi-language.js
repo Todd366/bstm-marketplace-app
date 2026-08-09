@@ -9,6 +9,7 @@ const MultiLanguage = {
     translations: {
         en: {
             // Navigation
+            'nav.home': 'Home',
             'nav.marketplace': 'Marketplace',
             'nav.farm': 'Farm',
             'nav.cablink': 'CabLink',
@@ -57,6 +58,7 @@ const MultiLanguage = {
         
         tn: {
             // Navigation (Setswana)
+            'nav.home': 'Gae',
             'nav.marketplace': 'Mmaraka',
             'nav.farm': 'Polasi',
             'nav.cablink': 'CabLink',
@@ -111,74 +113,70 @@ const MultiLanguage = {
         if (saved) {
             this.currentLanguage = saved;
         }
-        
+
         // Apply translations
         this.applyTranslations();
-        
-        // Add language switcher
-        this.addLanguageSwitcher();
+
+        // Highlight the active language button (real markup lives in nav.html,
+        // outside the desktop-only nav, so it stays visible on mobile too)
+        this.updateSwitcherState();
     },
-    
+
     // Get translation
     t(key) {
         return this.translations[this.currentLanguage][key] || key;
     },
-    
+
     // Switch language
     setLanguage(lang) {
         if (!this.translations[lang]) {
             console.error('Language not supported:', lang);
             return;
         }
-        
+
         this.currentLanguage = lang;
         localStorage.setItem('bstm_language', lang);
         this.applyTranslations();
-        
-        // Reload page to apply changes
-        location.reload();
+        this.updateSwitcherState();
     },
-    
+
     // Apply translations to page
     applyTranslations() {
         document.querySelectorAll('[data-i18n]').forEach(element => {
             const key = element.getAttribute('data-i18n');
             element.textContent = this.t(key);
         });
-        
+
         // Translate placeholders
         document.querySelectorAll('[data-i18n-placeholder]').forEach(element => {
             const key = element.getAttribute('data-i18n-placeholder');
             element.placeholder = this.t(key);
         });
     },
-    
-    // Add language switcher to nav
-    addLanguageSwitcher() {
-        const switcher = document.createElement('div');
-        switcher.className = 'flex items-center space-x-2';
-        switcher.innerHTML = `
-            <button onclick="MultiLanguage.setLanguage('en')" 
-                    class="px-3 py-1 rounded ${this.currentLanguage === 'en' ? 'bg-purple-600 text-white' : 'bg-gray-200 text-gray-700'}">
-                EN
-            </button>
-            <button onclick="MultiLanguage.setLanguage('tn')" 
-                    class="px-3 py-1 rounded ${this.currentLanguage === 'tn' ? 'bg-purple-600 text-white' : 'bg-gray-200 text-gray-700'}">
-                TN
-            </button>
-        `;
-        
-        // Add to navigation
-        const nav = document.querySelector('.bstm-nav-desktop');
-        if (nav) {
-            nav.appendChild(switcher);
-        }
+
+    updateSwitcherState() {
+        const enBtn = document.getElementById('lang-en-btn');
+        const tnBtn = document.getElementById('lang-tn-btn');
+        if (!enBtn || !tnBtn) return;
+        const active = 'background:#7C3AED;color:#fff;padding:4px 8px;border-radius:6px;font-size:11px;font-weight:700;';
+        const inactive = 'background:#F3F4F6;color:#374151;padding:4px 8px;border-radius:6px;font-size:11px;font-weight:700;';
+        enBtn.style.cssText = this.currentLanguage === 'en' ? active : inactive;
+        tnBtn.style.cssText = this.currentLanguage === 'tn' ? active : inactive;
     }
 };
 
-// Auto-initialize
+// Auto-initialize once the nav (loaded async by smart-loader.js) is in the DOM
 document.addEventListener('DOMContentLoaded', () => {
-    MultiLanguage.init();
+    let attempts = 0;
+    const tryInit = () => {
+        attempts++;
+        if (document.getElementById('lang-en-btn')) {
+            MultiLanguage.init();
+        } else if (attempts < 50) {
+            setTimeout(tryInit, 100);
+        }
+    };
+    tryInit();
 });
 
 window.MultiLanguage = MultiLanguage;

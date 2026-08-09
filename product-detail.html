@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fresh Tomatoes - BSTM Marketplace</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="css/tailwind.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <style>
         .gradient-bg { background: linear-gradient(135deg, #7C3AED 0%, #4F46E5 100%); }
@@ -18,27 +18,7 @@
     <div id="bstm-nav"></div>
     
     <!-- Header -->
-    <header class="bg-white shadow-md sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-6 py-4">
-            <div class="flex justify-between items-center">
-                <a href="index.html" class="flex items-center space-x-3">
-                    <div class="w-10 h-10 gradient-bg rounded-xl flex items-center justify-center">
-                        <span class="text-white font-bold text-xl">B</span>
-                    </div>
-                    <span class="text-2xl font-bold text-gray-800">BSTM</span>
-                </a>
-                <div class="flex items-center space-x-4">
-                    <a href="index.html" class="text-gray-600 hover:text-purple-600">
-                        <i class="fas fa-arrow-left mr-2"></i>Back to Store
-                    </a>
-                    <button class="relative text-gray-700 hover:text-purple-600">
-                        <i class="fas fa-shopping-cart text-xl"></i>
-                        <span class="absolute -top-2 -right-2 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">0</span>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </header>
+    
 
     <div class="max-w-7xl mx-auto px-6 py-8">
         <!-- Breadcrumb -->
@@ -76,7 +56,7 @@
                     </span>
                 </div>
 
-                <h1 class="text-4xl font-bold text-gray-800 mb-4">Fresh Tomatoes (5kg)</h1>
+                <h1 class="text-4xl font-bold text-gray-800 mb-4" id="product-title">Loading…</h1>
 
                 <div class="flex items-center mb-6">
                     <div class="flex text-yellow-400 mr-3">
@@ -91,8 +71,8 @@
 
                 <div class="bg-gray-100 rounded-xl p-6 mb-6">
                     <div class="flex items-baseline mb-4">
-                        <span class="text-5xl font-bold text-gray-800">P50</span>
-                        <span class="text-xl text-purple-600 ml-4">or 0.5 THB</span>
+                        <span class="text-5xl font-bold text-gray-800" id="product-price">P0</span>
+                        <span class="text-xl text-purple-600 ml-4" id="product-thb">or 0.0 THB</span>
                     </div>
                     <p class="text-sm text-gray-600">≈ $3.50 USD • Includes delivery</p>
                 </div>
@@ -133,15 +113,15 @@
 
                 <!-- Action Buttons -->
                 <div class="flex space-x-4 mb-8">
-                    <button onclick="addToCart()" class="flex-1 gradient-bg text-white py-4 px-8 rounded-xl font-bold text-lg hover:shadow-2xl transition-all">
+                    <button id="add-to-cart-btn" class="flex-1 gradient-bg text-white py-4 px-8 rounded-xl font-bold text-lg hover:shadow-2xl transition-all">
                         <i class="fas fa-shopping-cart mr-2"></i>Add to Cart
                     </button>
-                    <button class="bg-gray-100 hover:bg-gray-200 text-gray-800 py-4 px-6 rounded-xl transition-all">
-                        <i class="far fa-heart text-2xl"></i>
+                    <button id="wishlist-btn" class="bg-gray-100 hover:bg-gray-200 text-gray-800 py-4 px-6 rounded-xl transition-all">
+                        <i class="far fa-heart text-2xl" id="wishlist-icon"></i>
                     </button>
                 </div>
 
-                <a href="checkout.html" class="block w-full bg-green-600 hover:bg-green-700 text-white text-center py-4 px-8 rounded-xl font-bold text-lg transition-all">
+                <a href="checkout.html" id="buy-now-btn" class="block w-full bg-green-600 hover:bg-green-700 text-white text-center py-4 px-8 rounded-xl font-bold text-lg transition-all">
                     <i class="fas fa-bolt mr-2"></i>Buy Now
                 </a>
 
@@ -152,7 +132,7 @@
                         <div class="flex items-center space-x-3">
                             <img src="https://via.placeholder.com/60" alt="Seller" class="w-14 h-14 rounded-full">
                             <div>
-                                <h4 class="font-bold text-gray-800">Room 22 Farm</h4>
+                                <h4 class="font-bold text-gray-800" id="seller-name-display">Seller</h4>
                                 <div class="flex text-yellow-400 text-sm">
                                     <i class="fas fa-star"></i>
                                     <i class="fas fa-star"></i>
@@ -160,10 +140,9 @@
                                     <i class="fas fa-star"></i>
                                     <i class="fas fa-star"></i>
                                 </div>
-                                <p class="text-xs text-gray-600">1,247 sales</p>
                             </div>
                         </div>
-                        <button class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-lg font-semibold">
+                        <button id="message-seller-btn" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-lg font-semibold">
                             <i class="fas fa-comment mr-2"></i>Chat
                         </button>
                     </div>
@@ -254,11 +233,7 @@
     </div>
 
     <!-- Footer -->
-    <footer class="bg-gray-900 text-white py-8">
-        <div class="max-w-7xl mx-auto px-6 text-center">
-            <p class="text-gray-400">© 2026 BSTM Marketplace • Room 18</p>
-        </div>
-    </footer>
+    
 
         <script>
 function changeImage(img) {

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Seller Dashboard — BSTM</title>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+  <link href="css/tailwind.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
   <link rel="manifest" href="/manifest.json">
   <style>
@@ -69,6 +69,15 @@
       <div style="font-size:26px;font-weight:900;color:#1E1B4B;" id="seller-thb">0</div>
       <div style="font-size:12px;color:#9CA3AF;font-weight:600;">THB Earned</div>
     </div>
+  </div>
+
+  <!-- My Products -->
+  <div style="display:flex;justify-content:space-between;align-items:center;margin:28px 0 16px;">
+    <h2 style="font-size:18px;font-weight:900;color:#1E1B4B;margin:0;">My Products</h2>
+    <a href="upload-product.html" style="font-size:13px;font-weight:700;color:#7C3AED;text-decoration:none;">+ Add Product</a>
+  </div>
+  <div id="my-products-list" style="display:grid;gap:12px;margin-bottom:28px;">
+    <p style="color:#9CA3AF;font-size:14px;">Loading your products…</p>
   </div>
 
   <!-- Quick Actions -->

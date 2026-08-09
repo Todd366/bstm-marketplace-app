@@ -1,5 +1,6 @@
 // js/pages/transactions.js
 import { getOrders } from '../bstm-core.js';
+import { supabase } from '../core/supabase-client.js';
 
 window.BSTM.ready().then(async function(session) {
   if (!session) {
@@ -9,15 +10,25 @@ window.BSTM.ready().then(async function(session) {
   document.getElementById('tx-content').style.display = 'block';
 
   var { data: orders } = await getOrders(session.user.id);
+
+  // Real THB earned — sum actual credits from wallet_ledger, not a
+  // recomputed guess that can drift from whatever rate checkout.js used.
+  var { data: ledger } = await supabase
+    .from('wallet_ledger')
+    .select('amount_thb, type')
+    .eq('user_id', session.user.id)
+    .eq('reference_type', 'order');
+  var thbEarned = (ledger || []).reduce(function(sum, e) {
+    return sum + (e.type === 'credit' ? e.amount_thb : 0);
+  }, 0);
+  document.getElementById('thb-earned').textContent = thbEarned.toFixed(2) + ' THB';
+
   if (!orders || orders.length === 0) return;
 
   document.getElementById('total-orders').textContent = orders.length;
 
   var totalSpent = orders.reduce(function(sum, o) { return sum + (Number(o.total_amount) || 0); }, 0);
   document.getElementById('total-spent').textContent = 'P' + totalSpent.toFixed(2);
-
-  var thbEarned = totalSpent * 0.01;
-  document.getElementById('thb-earned').textContent = thbEarned.toFixed(2) + ' THB';
 
   document.getElementById('tx-list').innerHTML = orders.map(function(o) {
     var date = new Date(o.created_at).toLocaleDateString('en-BW', {day:'numeric',month:'short',year:'numeric'});
