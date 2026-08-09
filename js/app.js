@@ -24,10 +24,16 @@ function updateNav(session) {
 
   const navLoginBtns = document.querySelectorAll("#nav-login-btn");
   const navUserNames = document.querySelectorAll("#nav-user-name");
+  const navUserMenus = document.querySelectorAll("#nav-user-menu");
 
   navLoginBtns.forEach((el) => {
     if (!el) return;
     el.style.display = user ? "none" : "inline-block";
+  });
+
+  navUserMenus.forEach((el) => {
+    if (!el) return;
+    el.style.display = user ? "flex" : "none";
   });
 
   navUserNames.forEach((el) => {

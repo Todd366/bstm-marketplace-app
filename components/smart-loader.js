@@ -74,6 +74,20 @@
         }
       });
     }
+
+    const userDropdown = document.getElementById("nav-user-dropdown");
+    const userNameBtn = document.getElementById("nav-user-name");
+    if (userDropdown && userNameBtn) {
+      document.addEventListener("click", (e) => {
+        if (
+          userDropdown.classList.contains("open") &&
+          !userDropdown.contains(e.target) &&
+          e.target !== userNameBtn
+        ) {
+          userDropdown.classList.remove("open");
+        }
+      });
+    }
   }
 
   function tryBind() {
