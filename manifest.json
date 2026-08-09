@@ -11,6 +11,11 @@
       "src": "data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 192 192%27%3E%3Crect width=%27192%27 height=%27192%27 rx=%2724%27 fill=%27%237C3AED%27/%3E%3Ctext x=%2796%27 y=%27135%27 font-size=%27110%27 text-anchor=%27middle%27 fill=%27white%27 font-family=%27Arial%27 font-weight=%27900%27%3EB%3C/text%3E%3C/svg%3E",
       "sizes": "192x192",
       "type": "image/svg+xml"
+    },
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 512 512%27%3E%3Crect width=%27512%27 height=%27512%27 rx=%2764%27 fill=%27%237C3AED%27/%3E%3Ctext x=%27256%27 y=%27360%27 font-size=%27293%27 text-anchor=%27middle%27 fill=%27white%27 font-family=%27Arial%27 font-weight=%27900%27%3EB%3C/text%3E%3C/svg%3E",
+      "sizes": "512x512",
+      "type": "image/svg+xml"
     }
   ]
 }

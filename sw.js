@@ -1,12 +1,12 @@
 // BSTM Marketplace Service Worker
-// Version 1.1.0
+// Version 1.2.0
 
-const CACHE_NAME = 'bstm-marketplace-v1.1';
+const CACHE_NAME = 'bstm-marketplace-v1.2';
 const urlsToCache = [
-  '/',
-  '/index.html',
-  '/manifest.json',
-  'https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css',
+  './',
+  './index.html',
+  './manifest.json',
+  './css/tailwind.css',
   'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css'
 ];
 
@@ -17,7 +17,14 @@ self.addEventListener('install', (event) => {
     caches.open(CACHE_NAME)
       .then((cache) => {
         console.log('[SW] Caching app shell');
-        return cache.addAll(urlsToCache);
+        // Cache each resource independently so one flaky fetch (e.g. the
+        // CDN on a bad connection) doesn't fail the entire install —
+        // addAll() is all-or-nothing by spec, which is too fragile here.
+        return Promise.allSettled(
+          urlsToCache.map((url) =>
+            cache.add(url).catch((err) => console.warn('[SW] Failed to cache', url, err))
+          )
+        );
       })
   );
   self.skipWaiting();
@@ -65,7 +72,7 @@ self.addEventListener('fetch', (event) => {
           
           // If not in cache, return offline page
           if (event.request.mode === 'navigate') {
-            return caches.match('/index.html');
+            return caches.match('./index.html');
           }
         });
       })
@@ -92,8 +99,6 @@ self.addEventListener('push', (event) => {
   
   const options = {
     body: data.body || 'New update from BSTM Marketplace',
-    icon: '/assets/icons/icon-192x192.png',
-    badge: '/assets/icons/badge-72x72.png',
     vibrate: [200, 100, 200],
     tag: 'bstm-notification',
     actions: [
@@ -113,7 +118,7 @@ self.addEventListener('notificationclick', (event) => {
   
   if (event.action === 'view') {
     event.waitUntil(
-      clients.openWindow('/')
+      clients.openWindow('./')
     );
   }
 });
