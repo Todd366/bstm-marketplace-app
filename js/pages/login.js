@@ -1,6 +1,18 @@
 import { supabase } from "../core/supabase-client.js";
 
-var VERIFY_URL = "https://todd366.github.io/bstm-marketplace-app/verify.html";
+// Dynamic instead of hardcoded — works correctly whether deployed on
+// GitHub Pages (subdirectory), Vercel, or a custom domain, unlike a
+// hardcoded absolute URL which would silently break on any other host.
+var VERIFY_BASE_URL = window.location.origin + window.location.pathname.replace(/login\.html$/, "verify.html");
+
+// Preserve where the user was trying to go before being sent to log in
+// (e.g. login.html?redirect=checkout.html) through the magic-link email
+// round-trip, so verify.html can send them back there instead of always
+// landing on buyer-dashboard.html.
+var redirectTarget = new URLSearchParams(window.location.search).get("redirect");
+var VERIFY_URL = redirectTarget
+  ? VERIFY_BASE_URL + "?redirect=" + encodeURIComponent(redirectTarget)
+  : VERIFY_BASE_URL;
 
 function showStatus(msg, type) {
   var el = document.getElementById("status");

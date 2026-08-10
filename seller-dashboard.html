@@ -40,11 +40,23 @@
   </div>
 
   <!-- Open Room CTA -->
-  <div style="background:#fff;border:2px dashed #DDD6FE;border-radius:20px;padding:40px;text-align:center;margin-bottom:28px;">
+  <div id="open-room-cta" style="background:#fff;border:2px dashed #DDD6FE;border-radius:20px;padding:40px;text-align:center;margin-bottom:28px;">
     <div style="font-size:48px;margin-bottom:12px;">🏪</div>
     <h2 style="font-size:22px;font-weight:900;color:#1E1B4B;margin-bottom:8px;">Open Your Room in the BSTM Mall</h2>
-    <p style="color:#9CA3AF;font-size:14px;margin-bottom:24px;max-width:400px;margin-left:auto;margin-right:auto;">List your products and start selling to thousands of Botswana shoppers. Every sale earns you THB rewards.</p>
-    <a href="upload-product.html" style="display:inline-block;background:linear-gradient(135deg,#7C3AED,#4F46E5);color:#fff;padding:14px 32px;border-radius:14px;font-weight:800;text-decoration:none;box-shadow:0 6px 20px rgba(124,58,237,0.35);">+ List Your First Product</a>
+    <p style="color:#9CA3AF;font-size:14px;margin-bottom:24px;max-width:400px;margin-left:auto;margin-right:auto;">Get your own branded storefront and start selling to thousands of Botswana shoppers. Every sale earns you THB rewards.</p>
+    <a href="open-room.html" style="display:inline-block;background:linear-gradient(135deg,#7C3AED,#4F46E5);color:#fff;padding:14px 32px;border-radius:14px;font-weight:800;text-decoration:none;box-shadow:0 6px 20px rgba(124,58,237,0.35);">+ Open My Room</a>
+  </div>
+
+  <!-- My Room (shown instead, once opened) -->
+  <div id="my-room-card" style="display:none;background:#fff;border-radius:20px;padding:28px;margin-bottom:28px;box-shadow:0 4px 20px rgba(0,0,0,0.06);">
+    <div style="display:flex;align-items:center;gap:16px;">
+      <div id="my-room-emoji" style="font-size:40px;"></div>
+      <div style="flex:1;">
+        <p style="font-size:12px;color:#9CA3AF;font-weight:700;" id="my-room-number"></p>
+        <h2 style="font-size:18px;font-weight:900;color:#1E1B4B;" id="my-room-name"></h2>
+      </div>
+      <a id="my-room-link" href="#" style="background:#F5F3FF;color:#7C3AED;padding:10px 18px;border-radius:12px;font-weight:800;text-decoration:none;font-size:13px;">Visit My Room →</a>
+    </div>
   </div>
 
   <!-- Stats -->

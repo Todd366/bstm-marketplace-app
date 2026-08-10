@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Open Your Room - BSTM Digital Mall</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#7C3AED">
+    <link href="css/tailwind.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        .gradient-bg { background: linear-gradient(135deg, #7C3AED 0%, #4F46E5 100%); }
+        .emoji-option { cursor: pointer; border: 2px solid transparent; border-radius: 12px; padding: 8px; font-size: 28px; text-align: center; transition: all 0.15s; }
+        .emoji-option.selected { border-color: #7C3AED; background: #F5F3FF; }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div id="bstm-nav"></div>
+
+    <div id="auth-wall" style="display:none;min-height:60vh;align-items:center;justify-content:center;padding:40px;flex-direction:column;text-align:center;">
+        <div style="font-size:56px;margin-bottom:16px;">🔒</div>
+        <p style="color:#6B7280;font-size:15px;margin-bottom:24px;">Please log in to open a room.</p>
+        <a href="login.html?redirect=open-room.html" style="background:linear-gradient(135deg,#7C3AED,#4F46E5);color:#fff;padding:14px 28px;border-radius:14px;font-weight:800;text-decoration:none;">Log In</a>
+    </div>
+
+    <div id="already-has-room" style="display:none;max-width:600px;margin:60px auto;padding:0 20px;text-align:center;">
+        <div style="font-size:56px;margin-bottom:16px;">🏪</div>
+        <h1 class="text-2xl font-bold text-gray-800 mb-3">You already have a room open</h1>
+        <p class="text-gray-600 mb-6" id="existing-room-name"></p>
+        <a href="seller-dashboard.html" class="inline-block gradient-bg text-white px-8 py-3 rounded-xl font-bold">Go to My Dashboard</a>
+    </div>
+
+    <div id="room-form-content" style="display:none;" class="max-w-2xl mx-auto px-6 py-10">
+        <div class="text-center mb-8">
+            <div class="text-5xl mb-3">🏪</div>
+            <h1 class="text-3xl font-bold text-gray-800 mb-2">Open Your Room in the BSTM Mall</h1>
+            <p class="text-gray-600">This is your storefront — give it a name and start listing products.</p>
+        </div>
+
+        <form id="roomForm" class="bg-white rounded-2xl shadow-lg p-8 space-y-6">
+            <div>
+                <label class="block text-gray-700 font-semibold mb-2">Room Name *</label>
+                <input type="text" id="roomName" required maxlength="60"
+                       class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:border-purple-600"
+                       placeholder="e.g. Kgosi's Electronics">
+            </div>
+
+            <div>
+                <label class="block text-gray-700 font-semibold mb-2">What will you sell? *</label>
+                <select id="roomCategory" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:border-purple-600">
+                    <option value="">Select a category</option>
+                    <option value="fresh-produce">Fresh Produce</option>
+                    <option value="electronics">Electronics</option>
+                    <option value="fashion">Fashion</option>
+                    <option value="home">Home & Living</option>
+                    <option value="vehicles">Vehicles</option>
+                    <option value="services">Services</option>
+                    <option value="agriculture">Agriculture</option>
+                </select>
+            </div>
+
+            <div>
+                <label class="block text-gray-700 font-semibold mb-2">Room Description</label>
+                <textarea id="roomDescription" rows="3" maxlength="200"
+                          class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:border-purple-600"
+                          placeholder="Tell shoppers what makes your room special"></textarea>
+            </div>
+
+            <div>
+                <label class="block text-gray-700 font-semibold mb-2">Room Icon</label>
+                <div class="grid grid-cols-6 gap-2" id="emojiPicker">
+                    <div class="emoji-option selected" data-emoji="🏪">🏪</div>
+                    <div class="emoji-option" data-emoji="🌾">🌾</div>
+                    <div class="emoji-option" data-emoji="📱">📱</div>
+                    <div class="emoji-option" data-emoji="👗">👗</div>
+                    <div class="emoji-option" data-emoji="🏠">🏠</div>
+                    <div class="emoji-option" data-emoji="🚗">🚗</div>
+                    <div class="emoji-option" data-emoji="🔧">🔧</div>
+                    <div class="emoji-option" data-emoji="🎨">🎨</div>
+                    <div class="emoji-option" data-emoji="📚">📚</div>
+                    <div class="emoji-option" data-emoji="🍲">🍲</div>
+                    <div class="emoji-option" data-emoji="💄">💄</div>
+                    <div class="emoji-option" data-emoji="🛠️">🛠️</div>
+                </div>
+            </div>
+
+            <p id="room-error" class="text-red-600 text-sm hidden"></p>
+
+            <button type="submit" id="openRoomBtn" class="w-full gradient-bg text-white py-4 rounded-xl font-bold text-lg hover:shadow-2xl transition-all">
+                <i class="fas fa-store mr-2"></i>Open My Room
+            </button>
+        </form>
+    </div>
+
+    <div id="bstm-footer"></div>
+    <script src="components/smart-loader.js"></script>
+    <script type="module" src="js/app.js"></script>
+    <script type="module" src="js/pages/open-room.js"></script>
+</body>
+</html>

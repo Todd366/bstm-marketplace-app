@@ -8,5 +8,6 @@ Disallow: /checkout.html
 Disallow: /order-tracking.html
 Disallow: /messages.html
 Disallow: /thb-wallet.html
+Disallow: /open-room.html
 
 Sitemap: https://todd366.github.io/bstm-marketplace-app/sitemap.xml

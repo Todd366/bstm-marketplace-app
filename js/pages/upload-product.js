@@ -43,6 +43,24 @@ window.BSTM.ready().then(async function (session) {
     el.textContent = user.email.split("@")[0];
   });
 
+  const { data: myRoom } = await supabase
+    .from("rooms")
+    .select("id")
+    .eq("seller_id", user.id)
+    .maybeSingle();
+
+  if (!myRoom) {
+    const form = document.getElementById("productForm");
+    if (form) {
+      form.innerHTML =
+        '<div style="text-align:center;padding:40px 20px;">' +
+        '<div style="font-size:48px;margin-bottom:12px;">🏪</div>' +
+        '<p style="color:#6B7280;margin-bottom:20px;">You need to open a room before listing products.</p>' +
+        '<a href="open-room.html" style="background:linear-gradient(135deg,#7C3AED,#4F46E5);color:#fff;padding:14px 28px;border-radius:14px;font-weight:800;text-decoration:none;">Open My Room →</a></div>';
+    }
+    return;
+  }
+
   const form = document.getElementById("productForm");
   if (!form) {
     console.warn("[BSTM Upload] #productForm not found on this page");
@@ -89,6 +107,7 @@ window.BSTM.ready().then(async function (session) {
         location,
         image: imageUrls[0] || null,
         seller_id: user.id,
+        room_id: myRoom.id,
         status: "active",
       })
       .select()
@@ -119,7 +138,7 @@ window.BSTM.ready().then(async function (session) {
     if (btn) btn.textContent = "✅ Listed!";
 
     setTimeout(function () {
-      window.location.href = "seller-dashboard.html";
+      window.location.href = "room.html?id=" + myRoom.id;
     }, 1500);
   });
 });

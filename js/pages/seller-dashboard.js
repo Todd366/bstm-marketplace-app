@@ -50,6 +50,22 @@ window.BSTM.ready().then(async function (session) {
 
   const userId = session.user.id;
 
+  // Room status — controls whether "Open Your Room" CTA or "My Room" card shows
+  const { data: myRoom } = await supabase
+    .from("rooms")
+    .select("id, room_number, name, banner_emoji")
+    .eq("seller_id", userId)
+    .maybeSingle();
+
+  if (myRoom) {
+    document.getElementById("open-room-cta").style.display = "none";
+    document.getElementById("my-room-card").style.display = "block";
+    document.getElementById("my-room-emoji").textContent = myRoom.banner_emoji || "🏪";
+    document.getElementById("my-room-number").textContent = `ROOM ${myRoom.room_number}`;
+    document.getElementById("my-room-name").textContent = myRoom.name;
+    document.getElementById("my-room-link").href = `room.html?id=${myRoom.id}`;
+  }
+
   // My products
   const { data: products, error: productsErr } = await supabase
     .from("products")

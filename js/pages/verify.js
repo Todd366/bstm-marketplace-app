@@ -14,12 +14,13 @@ function show(state) {
 function startCountdown() {
   var n = 3;
   var el = document.getElementById("countdown");
+  var destination = new URLSearchParams(window.location.search).get("redirect") || "buyer-dashboard.html";
   var iv = setInterval(function() {
     n--;
     if (el) el.textContent = n;
     if (n <= 0) {
       clearInterval(iv);
-      window.location.href = "buyer-dashboard.html";
+      window.location.href = destination;
     }
   }, 1000);
 }
