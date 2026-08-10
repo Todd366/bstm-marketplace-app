@@ -19,7 +19,7 @@ const BSTMEcosystem = {
         
         cablink: {
             name: 'CabLink PWA',
-            url: 'https://todd366.github.io/CabLink-pwa/',
+            url: 'https://cab-link-pwa.vercel.app',
             description: 'Ride-booking platform with THB rewards',
             room: 'CabLink',
             status: 'active',
