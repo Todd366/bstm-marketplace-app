@@ -14,7 +14,12 @@ function show(state) {
 function startCountdown() {
   var n = 3;
   var el = document.getElementById("countdown");
-  var destination = new URLSearchParams(window.location.search).get("redirect") || "buyer-dashboard.html";
+  var destination = localStorage.getItem("bstm_post_login_redirect") || "buyer-dashboard.html";
+  localStorage.removeItem("bstm_post_login_redirect");
+
+  var manualLink = document.getElementById("manual-continue-link");
+  if (manualLink) manualLink.href = destination;
+
   var iv = setInterval(function() {
     n--;
     if (el) el.textContent = n;

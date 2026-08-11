@@ -105,8 +105,17 @@ document.addEventListener("DOMContentLoaded", bootstrap);
 // ===============================
 // HANDLE DYNAMIC NAV INJECTION
 // ===============================
+// bstm:ready (session check, usually fast/local) and bstm:componentLoaded
+// (nav.html network fetch via smart-loader.js) are two independent async
+// operations with no guaranteed order. On a slow connection the nav fetch
+// can easily finish AFTER the session check, meaning the first updateNav()
+// call finds no nav elements in the DOM yet (silently does nothing) and
+// never gets retried. Listening for both makes sure at least one call
+// happens after the nav actually exists.
 window.addEventListener("bstm:ready", () => {
-  // re-sync AFTER navbar is injected
+  requestAnimationFrame(() => updateNav(currentSession));
+});
+window.addEventListener("bstm:componentLoaded", () => {
   requestAnimationFrame(() => updateNav(currentSession));
 });
 

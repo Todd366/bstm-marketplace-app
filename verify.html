@@ -18,7 +18,6 @@
   </style>
 </head>
 <body style="background:linear-gradient(135deg,#7C3AED 0%,#4F46E5 100%);min-height:100vh;display:flex;flex-direction:column;">
-<div id="bstm-nav"></div>
 <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:40px 20px;">
   <div style="background:#fff;border-radius:28px;box-shadow:0 24px 80px rgba(0,0,0,0.2);max-width:420px;width:100%;padding:48px 32px;text-align:center;">
     <div id="state-loading">
@@ -31,7 +30,7 @@
       <h2 style="font-size:26px;font-weight:900;color:#1E1B4B;margin:0 0 8px;">You're in!</h2>
       <p id="welcome-msg" style="color:#6B7280;font-size:15px;margin:0 0 28px;"></p>
       <p style="color:#C4B5FD;font-size:13px;margin:0 0 16px;">Redirecting in <span id="countdown">3</span>s...</p>
-      <a href="buyer-dashboard.html" style="display:block;background:linear-gradient(135deg,#7C3AED,#4F46E5);color:#fff;padding:14px;border-radius:14px;font-weight:800;font-size:15px;text-decoration:none;">Go to Dashboard →</a>
+      <a id="manual-continue-link" href="buyer-dashboard.html" style="display:block;background:linear-gradient(135deg,#7C3AED,#4F46E5);color:#fff;padding:14px;border-radius:14px;font-weight:800;font-size:15px;text-decoration:none;">Go to Dashboard →</a>
     </div>
     <div id="state-error" style="display:none;" class="pop">
       <div style="width:80px;height:80px;background:#FEE2E2;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 24px;font-size:36px;">✕</div>
@@ -42,8 +41,6 @@
     </div>
   </div>
 </div>
-<div id="bstm-footer"></div>
-<script src="components/smart-loader.js"></script>
 
 <script type="module" src="js/app.js"></script>
 

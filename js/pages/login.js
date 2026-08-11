@@ -3,16 +3,20 @@ import { supabase } from "../core/supabase-client.js";
 // Dynamic instead of hardcoded — works correctly whether deployed on
 // GitHub Pages (subdirectory), Vercel, or a custom domain, unlike a
 // hardcoded absolute URL which would silently break on any other host.
-var VERIFY_BASE_URL = window.location.origin + window.location.pathname.replace(/login\.html$/, "verify.html");
+// IMPORTANT: this URL must stay EXACTLY as-is with no query params —
+// Supabase's redirect URL allowlist likely requires an exact match, so
+// appending anything here risks the whole magic-link send being silently
+// rejected. The intended post-login destination is preserved separately
+// via localStorage instead (see below), not via the URL.
+var VERIFY_URL = window.location.origin + window.location.pathname.replace(/login\.html$/, "verify.html");
 
 // Preserve where the user was trying to go before being sent to log in
-// (e.g. login.html?redirect=checkout.html) through the magic-link email
-// round-trip, so verify.html can send them back there instead of always
-// landing on buyer-dashboard.html.
+// (e.g. login.html?redirect=checkout.html) so verify.html can send them
+// back there instead of always landing on buyer-dashboard.html.
 var redirectTarget = new URLSearchParams(window.location.search).get("redirect");
-var VERIFY_URL = redirectTarget
-  ? VERIFY_BASE_URL + "?redirect=" + encodeURIComponent(redirectTarget)
-  : VERIFY_BASE_URL;
+if (redirectTarget) {
+  localStorage.setItem("bstm_post_login_redirect", redirectTarget);
+}
 
 function showStatus(msg, type) {
   var el = document.getElementById("status");
