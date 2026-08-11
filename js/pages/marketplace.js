@@ -1,5 +1,6 @@
 // js/pages/marketplace.js
 import { supabase } from "../core/supabase-client.js";
+import { getRoomTemplate } from "../core/room-templates.js";
 
 const CATEGORY_MAP = {
   food: ["fresh-produce", "agriculture"],
@@ -51,24 +52,25 @@ function renderRooms() {
   noResults.style.display = "none";
 
   grid.innerHTML = filtered
-    .map(
-      (r) => `
+    .map((r) => {
+      const tpl = getRoomTemplate(r.category);
+      return `
     <div class="room-card" onclick="window.location.href='room.html?id=${r.id}'"
-         style="background:#fff;border-radius:20px;overflow:hidden;border:1.5px solid #EDE9FE;">
-      <div style="height:120px;background:${r.banner_color || "#7C3AED"};display:flex;align-items:center;justify-content:center;">
+         style="background:#fff;border-radius:20px;overflow:hidden;border:1.5px solid #EDE9FE;cursor:pointer;">
+      <div style="height:120px;background:${tpl.bannerBg};display:flex;align-items:center;justify-content:center;">
         <span style="font-size:48px;">${r.banner_emoji || "🏪"}</span>
       </div>
       <div style="padding:16px;">
-        <div style="font-size:11px;color:#9CA3AF;font-weight:700;margin-bottom:4px;">ROOM ${r.room_number}</div>
-        <div style="font-weight:900;color:#1E1B4B;font-size:16px;margin-bottom:6px;">${r.name}</div>
+        <div style="font-size:11px;color:#9CA3AF;font-weight:700;margin-bottom:4px;">ROOM ${r.room_number} · ${tpl.label.toUpperCase()}</div>
+        <div style="font-weight:900;color:#1E1B4B;font-size:16px;margin-bottom:6px;font-family:${tpl.font};">${r.name}</div>
         <div style="font-size:12px;color:#9CA3AF;margin-bottom:10px;">${r.productCount} product${r.productCount === 1 ? "" : "s"}</div>
-        <div style="display:block;background:linear-gradient(135deg,#7C3AED,#4F46E5);color:#fff;padding:10px;
+        <div style="display:block;background:${tpl.bannerBg};color:#fff;padding:10px;
                     border-radius:10px;font-weight:700;font-size:13px;text-align:center;">
           Visit Room
         </div>
       </div>
-    </div>`
-    )
+    </div>`;
+    })
     .join("");
 }
 
