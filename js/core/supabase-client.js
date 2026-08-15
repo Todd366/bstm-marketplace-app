@@ -2,7 +2,15 @@
 // BSTM SUPABASE CLIENT (LOCAL + BROWSER SAFE)
 // ============================================
 
-import { createClient } from '@supabase/supabase-js';
+// IMPORTANT: this MUST be a full URL, not a bare package name.
+// This is a plain static site with no bundler (no Vite/Webpack), deployed
+// as-is to GitHub Pages. Browsers cannot resolve bare specifiers like
+// '@supabase/supabase-js' in native <script type="module"> — that only
+// works when a bundler rewrites the import at build time. A bare specifier
+// here throws "Failed to resolve module specifier" and silently kills
+// EVERY page's JS, since app.js (and therefore login/cart/checkout/etc.)
+// imports from this file. Pinned to match package.json's ^2.110.0.
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.110.0';
 import { loadConfig } from './config.js';
 
 // Load config

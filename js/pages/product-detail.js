@@ -40,9 +40,48 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   const img = p.image || "";
   const imgEl = document.getElementById("mainImage");
-  if (imgEl && img) {
+  const imgFallback = document.getElementById("mainImage-fallback");
+  if (img && imgEl) {
     imgEl.src = img;
     imgEl.alt = p.name || "Product";
+    imgEl.style.display = "block";
+    if (imgFallback) imgFallback.style.display = "none";
+  }
+  // else: leave the 🛍️ emoji fallback showing — no via.placeholder.com filler
+
+  // Real "more from this room" — only shown if other products actually exist
+  if (p.room_id) {
+    const { data: related } = await supabase
+      .from("products")
+      .select("id, name, price, image")
+      .eq("room_id", p.room_id)
+      .eq("status", "active")
+      .neq("id", p.id)
+      .limit(4);
+
+    if (related && related.length > 0) {
+      const section = document.getElementById("related-products-section");
+      const grid = document.getElementById("related-products-grid");
+      if (section && grid) {
+        section.style.display = "block";
+        grid.innerHTML = related
+          .map(
+            (r) => `
+          <a href="product-detail.html?id=${r.id}" class="bg-white rounded-2xl shadow-lg overflow-hidden block hover:shadow-xl transition-shadow">
+            ${
+              r.image
+                ? `<img src="${r.image}" alt="${r.name}" class="w-full h-48 object-cover">`
+                : `<div style="height:192px;background:#F5F3FF;display:flex;align-items:center;justify-content:center;font-size:40px;">🛍️</div>`
+            }
+            <div class="p-4">
+              <h4 class="font-bold text-gray-800 mb-2">${r.name}</h4>
+              <span class="text-xl font-bold">P${Number(r.price || 0).toFixed(2)}</span>
+            </div>
+          </a>`
+          )
+          .join("");
+      }
+    }
   }
 
   // Resolve seller display name (best-effort — profiles may not have a name set)
