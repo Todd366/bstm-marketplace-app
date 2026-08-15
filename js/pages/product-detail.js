@@ -24,6 +24,18 @@ document.addEventListener("DOMContentLoaded", async function () {
     return;
   }
 
+  // Cart items need to know which room they came from, since each room is
+  // a separate seller — checkout splits the cart into one order per room.
+  let roomName = null;
+  if (p.room_id) {
+    const { data: roomRow } = await supabase
+      .from("rooms")
+      .select("name")
+      .eq("id", p.room_id)
+      .single();
+    roomName = roomRow?.name || null;
+  }
+
   document.title = (p.name || "Product") + " — BSTM Mall";
 
   const set = function (sel, val) {
@@ -109,7 +121,16 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   function buildCartItem() {
     const qty = Math.max(1, parseInt(qtyInput?.value, 10) || 1);
-    return { id: p.id, name: p.name, price: Number(p.price), image: p.image, qty };
+    return {
+      id: p.id,
+      name: p.name,
+      price: Number(p.price),
+      image: p.image,
+      qty,
+      room_id: p.room_id || null,
+      room_name: roomName,
+      seller_id: p.seller_id || null,
+    };
   }
 
   const addBtn = document.getElementById("add-to-cart-btn");

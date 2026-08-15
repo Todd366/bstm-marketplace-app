@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CabLink - Ride & Earn THB | BSTM</title>
+    <title>CabLink Tasks — BSTM</title>
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#7C3AED">
     <link href="css/tailwind.css" rel="stylesheet">
@@ -12,237 +12,96 @@
         .gradient-bg { background: linear-gradient(135deg, #7C3AED 0%, #4F46E5 100%); }
         .cablink-gradient { background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%); }
         body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+        .status-pill { display:inline-block; padding:4px 12px; border-radius:999px; font-size:12px; font-weight:700; }
     </style>
 </head>
 <body class="bg-gray-50">
     <div id="bstm-nav"></div>
 
     <!-- Hero -->
-    <section class="cablink-gradient text-white py-20">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                <div>
-                    <div class="inline-block bg-white bg-opacity-20 rounded-full px-4 py-2 mb-6">
-                        <span class="font-bold text-sm">🚗 CABLINK - POWERED BY BSTM</span>
-                    </div>
-                    <h1 class="text-6xl font-bold mb-6">Book Rides, Earn THB</h1>
-                    <p class="text-xl text-blue-100 mb-8">
-                        Botswana's smart ride-booking platform. Every ride earns you THoBoCoin rewards.
-                    </p>
-                    
-                    <div class="flex flex-col sm:flex-row gap-4">
-                        <a href="https://cab-link-pwa.vercel.app" target="_blank" class="bg-white text-blue-600 hover:bg-blue-50 px-8 py-4 rounded-xl font-bold text-lg text-center shadow-xl transition-all transform hover:scale-105">
-                            <i class="fas fa-external-link-alt mr-2"></i>Open CabLink PWA
-                        </a>
-                        <button onclick="showDemoRide()" class="bg-yellow-400 hover:bg-yellow-500 text-gray-900 px-8 py-4 rounded-xl font-bold text-lg transition-all transform hover:scale-105">
-                            <i class="fas fa-play mr-2"></i>Demo Ride
-                        </button>
-                    </div>
-
-                    <div class="grid grid-cols-3 gap-6 mt-12">
-                        <div>
-                            <p class="text-4xl font-bold">0.8</p>
-                            <p class="text-sm text-blue-200">THB per ride</p>
-                        </div>
-                        <div>
-                            <p class="text-4xl font-bold">&lt;5min</p>
-                            <p class="text-sm text-blue-200">Avg pickup</p>
-                        </div>
-                        <div>
-                            <p class="text-4xl font-bold">24/7</p>
-                            <p class="text-sm text-blue-200">Available</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="hidden lg:block">
-                    <div class="bg-white rounded-3xl shadow-2xl p-8">
-                        <h3 class="text-2xl font-bold text-gray-800 mb-6">Quick Fare Estimate</h3>
-                        
-                        <div class="space-y-4 mb-6">
-                            <div>
-                                <label class="block text-gray-700 font-semibold mb-2">Pickup Location</label>
-                                <input type="text" id="pickupInput" placeholder="Enter pickup address" class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:border-blue-600" value="Gaborone CBD">
-                            </div>
-                            
-                            <div>
-                                <label class="block text-gray-700 font-semibold mb-2">Drop-off Location</label>
-                                <input type="text" id="dropoffInput" placeholder="Enter destination" class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:border-blue-600" value="Mmopane">
-                            </div>
-                        </div>
-
-                        <button onclick="calculateFare()" class="w-full cablink-gradient text-white py-4 rounded-xl font-bold text-lg hover:shadow-lg transition-all">
-                            Calculate Fare
-                        </button>
-
-                        <div id="fareResult" style="display:none;" class="mt-6 bg-yellow-50 border-2 border-yellow-300 rounded-xl p-4">
-                            <p class="text-sm text-gray-700">
-                                <i class="fas fa-coins text-yellow-600 mr-2"></i>
-                                Estimated fare: <strong id="fareAmount">P80</strong> · You'll earn <strong id="earnAmount">0.8 THB</strong>!
-                            </p>
-                        </div>
-                    </div>
-                </div>
+    <section class="cablink-gradient text-white py-12">
+        <div class="max-w-5xl mx-auto px-6">
+            <div class="inline-block bg-white bg-opacity-20 rounded-full px-4 py-2 mb-4">
+                <span class="font-bold text-sm">🚗 CABLINK TASKS</span>
             </div>
-        </div>
-    </section>
-
-    <!-- Features -->
-    <section class="py-20 bg-white">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="text-center mb-16">
-                <h2 class="text-5xl font-bold text-gray-800 mb-4">Why CabLink?</h2>
-                <p class="text-xl text-gray-600">More than just a ride - it's part of your digital nation</p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-8 border-2 border-blue-200">
-                    <div class="w-16 h-16 bg-blue-500 rounded-2xl flex items-center justify-center mb-6">
-                        <i class="fas fa-coins text-white text-3xl"></i>
-                    </div>
-                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Earn THB Rewards</h3>
-                    <p class="text-gray-700">
-                        Get 0.8 THB per ride automatically added to your wallet. Use it in the marketplace or convert to BWP.
-                    </p>
-                </div>
-
-                <div class="bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-8 border-2 border-green-200">
-                    <div class="w-16 h-16 bg-green-500 rounded-2xl flex items-center justify-center mb-6">
-                        <i class="fas fa-map-marked-alt text-white text-3xl"></i>
-                    </div>
-                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Real-Time Tracking</h3>
-                    <p class="text-gray-700">
-                        Track your driver's location in real-time. Know exactly when they'll arrive with live ETA updates.
-                    </p>
-                </div>
-
-                <div class="bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl p-8 border-2 border-purple-200">
-                    <div class="w-16 h-16 bg-purple-500 rounded-2xl flex items-center justify-center mb-6">
-                        <i class="fas fa-shield-alt text-white text-3xl"></i>
-                    </div>
-                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Verified Drivers</h3>
-                    <p class="text-gray-700">
-                        All drivers are KYC verified and rated by passengers. Your safety is our priority.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- CTA -->
-    <section class="py-20 cablink-gradient text-white">
-        <div class="max-w-4xl mx-auto px-6 text-center">
-            <h2 class="text-5xl font-bold mb-6">Ready to Ride?</h2>
-            <p class="text-2xl text-blue-100 mb-12">
-                Start earning THB today
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">Get a Room's Order Delivered</h1>
+            <p class="text-lg text-blue-100 mb-2 max-w-2xl">
+                Create a pickup-and-delivery task here, then hand it off to the real CabLink driver app —
+                CabLink matches it with the right driver and vehicle for the job.
             </p>
-            <a href="https://cab-link-pwa.vercel.app" target="_blank" class="inline-block bg-white text-blue-600 hover:bg-blue-50 px-12 py-5 rounded-2xl font-bold text-2xl shadow-2xl transition-all transform hover:scale-105">
-                <i class="fas fa-rocket mr-3"></i>Launch CabLink
+            <a href="https://todd366.github.io/CabLink-pwa/" target="_blank"
+               class="inline-flex items-center gap-2 mt-4 bg-white text-blue-600 hover:bg-blue-50 px-6 py-3 rounded-xl font-bold shadow-lg transition-all">
+                <i class="fas fa-external-link-alt"></i> Open CabLink Driver App
             </a>
         </div>
     </section>
 
-    <!-- Footer -->
-    <div id="bstm-footer"></div>
+    <div class="max-w-5xl mx-auto px-6 py-10">
 
-    <!-- Demo Modal -->
-    <div id="demoModal" class="fixed inset-0 bg-black bg-opacity-70 hidden z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl max-w-md w-full p-8">
-            <div class="text-center mb-6">
-                <div class="w-20 h-20 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <i class="fas fa-car text-white text-3xl"></i>
+        <!-- Create Task -->
+        <div class="bg-white rounded-2xl shadow-lg p-8 mb-10">
+            <h2 class="text-2xl font-bold text-gray-800 mb-1">Create a Delivery Task</h2>
+            <p class="text-gray-500 text-sm mb-6">Pick which room to collect from, tell us where it's going.</p>
+
+            <form id="task-form" class="space-y-5">
+                <div>
+                    <label class="block text-gray-700 font-semibold mb-2">Pickup Room *</label>
+                    <select id="pickup-room" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:border-blue-600">
+                        <option value="">Loading rooms…</option>
+                    </select>
                 </div>
-                <h3 class="text-2xl font-bold text-gray-800 mb-2">Demo Ride Booked!</h3>
-                <p class="text-gray-600">Simulating a CabLink ride...</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <div>
+                        <label class="block text-gray-700 font-semibold mb-2">Drop-off Phone *</label>
+                        <input type="tel" id="dropoff-phone" required placeholder="+267 7X XXX XXX"
+                               class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:border-blue-600">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 font-semibold mb-2">Drop-off City *</label>
+                        <input type="text" id="dropoff-city" required placeholder="e.g. Gaborone"
+                               class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:border-blue-600">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-gray-700 font-semibold mb-2">Drop-off Address *</label>
+                    <input type="text" id="dropoff-address" required placeholder="Plot number, street, landmark"
+                           class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:border-blue-600">
+                </div>
+
+                <div id="task-error" class="hidden text-red-600 text-sm font-semibold"></div>
+
+                <button type="submit" id="create-task-btn"
+                        class="w-full cablink-gradient text-white py-4 rounded-xl font-bold text-lg hover:shadow-lg transition-all">
+                    Create Task
+                </button>
+            </form>
+
+            <div id="task-success" class="hidden mt-6 bg-green-50 border-2 border-green-300 rounded-xl p-6 text-center">
+                <div class="text-4xl mb-2">✅</div>
+                <h3 class="text-xl font-bold text-gray-800 mb-2">Task Created</h3>
+                <p class="text-gray-600 text-sm mb-4">Now open the CabLink app so a driver can pick this up.</p>
+                <a href="https://todd366.github.io/CabLink-pwa/" target="_blank"
+                   class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-bold transition-all">
+                    <i class="fas fa-external-link-alt"></i> Open CabLink Driver App
+                </a>
             </div>
+        </div>
 
-            <div class="space-y-4 mb-6">
-                <div class="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
-                    <span class="text-gray-700">Pickup:</span>
-                    <span class="font-bold text-gray-800">Gaborone CBD</span>
-                </div>
-                <div class="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
-                    <span class="text-gray-700">Destination:</span>
-                    <span class="font-bold text-gray-800">Mmopane</span>
-                </div>
-                <div class="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
-                    <span class="text-gray-700">Fare:</span>
-                    <span class="font-bold text-gray-800">P80</span>
-                </div>
-                <div class="flex items-center justify-between p-4 bg-green-50 rounded-xl border-2 border-green-300">
-                    <span class="text-gray-700">You'll Earn:</span>
-                    <span class="font-bold text-green-600">+0.8 THB</span>
-                </div>
+        <!-- Your Tasks -->
+        <div class="bg-white rounded-2xl shadow-lg p-8">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">Your Tasks</h2>
+            <div id="task-list">
+                <p class="text-gray-400 text-sm">Loading…</p>
             </div>
-
-            <button onclick="completeDemoRide()" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-xl font-bold text-lg mb-3 transition-all">
-                Complete Ride
-            </button>
-            <button onclick="closeDemoModal()" class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 py-4 rounded-xl font-bold transition-all">
-                Cancel
-            </button>
         </div>
     </div>
 
+    <!-- Footer -->
+    <div id="bstm-footer"></div>
+
     <script src="components/smart-loader.js"></script>
-    <script type="module" src="js/app.js"></script>
-    <script>
-function calculateFare() {
-            const distance = 8;
-            const baseRate = 5;
-            const perKm = 8;
-            const fare = baseRate + (distance * perKm);
-            const thb = (fare / 100).toFixed(2);
-            
-            document.getElementById('fareAmount').textContent = 'P' + fare;
-            document.getElementById('earnAmount').textContent = thb + ' THB';
-            document.getElementById('fareResult').style.display = 'block';
-        }
-
-        function showDemoRide() {
-            document.getElementById('demoModal').classList.remove('hidden');
-        }
-
-        function closeDemoModal() {
-            document.getElementById('demoModal').classList.add('hidden');
-        }
-
-        function completeDemoRide() {
-            closeDemoModal();
-            
-            const notification = document.createElement('div');
-            notification.className = 'fixed top-20 right-4 bg-green-500 text-white px-6 py-4 rounded-xl shadow-2xl z-50';
-            notification.innerHTML = `
-                <p class="font-bold">🎉 Ride Completed!</p>
-                <p class="text-sm">You earned 0.8 THB</p>
-            `;
-            document.body.appendChild(notification);
-            setTimeout(() => notification.remove(), 3000);
-        }
-
-        // Nav/footer injection is handled by components/smart-loader.js —
-        // this used to also call loadComponents(), an undefined legacy
-        // function that threw a ReferenceError on every page load.
-
-</script>
-
-<script>
-/**
- * BSTM SAFE RUNTIME BRIDGE
- * prevents onclick breakage without modifying architecture
- */
-window.__BSTM_BRIDGE_INSTALLED__ = true;
-
-window.__bstm_safe_bind = function(fnName, fallback) {
-    if (typeof window[fnName] !== 'function') {
-        window[fnName] = fallback || function() {
-            console.warn('[BSTM] Missing function:', fnName);
-        };
-    }
-};
-</script>
-
-<script type="module" src="js/pages/cablink.js"></script>
+    <script type="module" src="js/app.js?v=1786828104"></script>
+    <script type="module" src="js/pages/cablink.js"></script>
 
 </body>
 </html>

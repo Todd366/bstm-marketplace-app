@@ -1,6 +1,6 @@
 // js/pages/checkout.js
 import { supabase } from "../core/supabase-client.js";
-import { getCart, getCartTotal, clearCart } from "../core/cart.js";
+import { getCart, getCartGroupedByRoom, getCartTotal, clearCart } from "../core/cart.js";
 import { CONFIG } from "../core/config.js";
 
 const REWARD_PERCENT = CONFIG.MARKETPLACE.REWARD_PERCENT / 100; // e.g. 1%
@@ -18,7 +18,7 @@ function renderCart() {
   if (cart.length === 0) {
     itemsEl.innerHTML =
       '<p class="text-gray-500 text-sm">Your cart is empty. ' +
-      '<a href="room22-farm.html" class="text-purple-600 font-semibold">Go shopping →</a></p>';
+      '<a href="marketplace.html" class="text-purple-600 font-semibold">Go shopping →</a></p>';
     if (placeOrderBtn) placeOrderBtn.disabled = true;
     if (subtotalEl) subtotalEl.textContent = "P0";
     if (totalEl) totalEl.textContent = "P0";
@@ -26,16 +26,35 @@ function renderCart() {
     return cart;
   }
 
-  itemsEl.innerHTML = cart
+  const groups = getCartGroupedByRoom();
+  const multiRoom = groups.length > 1;
+
+  itemsEl.innerHTML = groups
     .map(
-      (item) => `
-      <div class="flex items-center space-x-4">
-        <img src="${item.image || "https://via.placeholder.com/80"}" alt="${item.name}" class="w-16 h-16 rounded-lg object-cover">
-        <div class="flex-1">
-          <h4 class="font-semibold text-gray-800">${item.name}</h4>
-          <p class="text-sm text-gray-600">Qty: ${item.qty}</p>
-        </div>
-        <span class="font-bold text-gray-800">P${(item.price * item.qty).toFixed(2)}</span>
+      (group) => `
+      <div class="mb-4 pb-4 border-b border-gray-100 last:border-0 last:mb-0 last:pb-0">
+        ${
+          multiRoom
+            ? `<div class="flex items-center justify-between mb-2">
+                 <span class="text-xs font-bold text-purple-600 uppercase tracking-wide">🏬 ${group.room_name}</span>
+                 <span class="text-xs text-gray-400">Separate order — this seller ships independently</span>
+               </div>`
+            : ""
+        }
+        ${group.items
+          .map(
+            (item) => `
+          <div class="flex items-center space-x-4 mb-2">
+            <img src="${item.image || ""}" onerror="this.style.display='none'" alt="${item.name}" class="w-16 h-16 rounded-lg object-cover bg-purple-50">
+            <div class="flex-1">
+              <h4 class="font-semibold text-gray-800">${item.name}</h4>
+              <p class="text-sm text-gray-600">Qty: ${item.qty}</p>
+            </div>
+            <span class="font-bold text-gray-800">P${(item.price * item.qty).toFixed(2)}</span>
+          </div>`
+          )
+          .join("")}
+        ${multiRoom ? `<p class="text-right text-sm text-gray-500 mt-1">Room subtotal: P${group.subtotal.toFixed(2)}</p>` : ""}
       </div>`
     )
     .join("");
@@ -46,6 +65,17 @@ function renderCart() {
   if (subtotalEl) subtotalEl.textContent = `P${total.toFixed(2)}`;
   if (totalEl) totalEl.textContent = `P${total.toFixed(2)}`;
   if (thbEl) thbEl.textContent = reward.toFixed(3);
+
+  if (multiRoom) {
+    let note = document.getElementById("checkout-multiroom-note");
+    if (!note) {
+      note = document.createElement("p");
+      note.id = "checkout-multiroom-note";
+      note.className = "text-xs text-gray-500 mt-2";
+      itemsEl.parentElement?.insertBefore(note, itemsEl.nextSibling);
+    }
+    note.textContent = `Your items are from ${groups.length} different rooms — this will create ${groups.length} separate orders, one per seller, each with its own tracking.`;
+  }
 
   return cart;
 }
@@ -64,7 +94,6 @@ function clearError() {
 }
 
 async function createOrder(session, cart) {
-  const total = getCartTotal();
   const userId = session.user.id;
 
   const form = document.getElementById("checkoutForm");
@@ -80,37 +109,64 @@ async function createOrder(session, cart) {
   const paymentMethod =
     document.querySelector('input[name="payment"]:checked')?.value || "paystack";
 
-  // One order represents the whole cart; each cart line becomes an order_item.
-  // product_id is kept on the order for backward compatibility (first item).
-  const { data: order, error: orderErr } = await supabase
-    .from("orders")
-    .insert({
-      buyer_id: userId,
-      product_id: cart[0].id,
-      status: "confirmed",
-      total_amount: total,
-      delivery_method: deliveryMethod,
-      payment_method: paymentMethod,
-      ...delivery,
-    })
-    .select()
-    .single();
+  // Each room is a separate seller — split the cart into one order per room
+  // rather than one order for the whole basket. A shopper buying from 3
+  // rooms in one checkout ends up with 3 independent orders, each visible
+  // only to its own seller, each trackable separately.
+  const groups = getCartGroupedByRoom();
+  const createdOrders = [];
 
-  if (orderErr) throw orderErr;
+  for (const group of groups) {
+    const { data: order, error: orderErr } = await supabase
+      .from("orders")
+      .insert({
+        buyer_id: userId,
+        product_id: group.items[0].id, // kept for backward-compat joins
+        room_id: group.room_id,
+        seller_id: group.seller_id,
+        status: "confirmed",
+        total_amount: group.subtotal,
+        delivery_method: deliveryMethod,
+        payment_method: paymentMethod,
+        ...delivery,
+      })
+      .select()
+      .single();
 
-  const items = cart.map((item) => ({
-    order_id: order.id,
-    product_id: item.id,
-    product_name: item.name,
-    quantity: item.qty,
-    unit_price: item.price,
-  }));
+    if (orderErr) throw orderErr;
 
-  const { error: itemsErr } = await supabase.from("order_items").insert(items);
-  if (itemsErr) throw itemsErr;
+    const items = group.items.map((item) => ({
+      order_id: order.id,
+      product_id: item.id,
+      product_name: item.name,
+      quantity: item.qty,
+      unit_price: item.price,
+    }));
+
+    const { error: itemsErr } = await supabase.from("order_items").insert(items);
+    if (itemsErr) throw itemsErr;
+
+    // Auto-create a CabLink pickup task for this room's order so it shows
+    // up ready-to-claim in the real CabLink driver app — no manual step
+    // needed from the buyer or seller.
+    if (deliveryMethod === "cablink" && group.room_id) {
+      await supabase.from("delivery_requests").insert({
+        order_id: order.id,
+        buyer_id: userId,
+        pickup_room_id: group.room_id,
+        dropoff_address: delivery.delivery_address,
+        dropoff_city: delivery.delivery_city,
+        dropoff_phone: delivery.delivery_phone,
+        status: "pending",
+      });
+    }
+
+    createdOrders.push(order);
+  }
 
   // Reward THB — credited immediately for MVP. In production this should be
   // confirmed server-side once the Paystack webhook verifies payment.
+  const total = getCartTotal();
   const reward = Math.round(total * REWARD_PERCENT);
   if (reward > 0) {
     await supabase.from("wallet_ledger").insert({
@@ -118,12 +174,12 @@ async function createOrder(session, cart) {
       amount_thb: reward,
       type: "credit",
       reference_type: "order",
-      reference_id: order.id,
-      meta: { reason: "purchase_reward" },
+      reference_id: createdOrders[0].id,
+      meta: { reason: "purchase_reward", order_count: createdOrders.length },
     });
   }
 
-  return order;
+  return createdOrders;
 }
 
 async function handlePlaceOrder() {
@@ -176,9 +232,10 @@ async function handlePlaceOrder() {
     ref: "BSTM-" + Date.now() + "-" + Math.floor(Math.random() * 10000),
     callback: function (response) {
       createOrder(session, cart)
-        .then((order) => {
+        .then((orders) => {
           clearCart();
-          window.location.href = `order-tracking.html?order=${order.id}&ref=${response.reference}`;
+          const orderIds = orders.map((o) => o.id).join(",");
+          window.location.href = `order-tracking.html?order=${orders[0].id}&orders=${orderIds}&ref=${response.reference}`;
         })
         .catch((err) => {
           console.error("[BSTM Checkout] Order creation failed:", err);

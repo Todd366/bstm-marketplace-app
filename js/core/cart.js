@@ -27,6 +27,35 @@ export function getCart() {
   return readCart();
 }
 
+/**
+ * Groups the cart by room, since each room is a separate seller who needs
+ * their own order. A shopper sees one cart; checkout splits it into one
+ * order per room behind the scenes.
+ * @returns {Array<{room_id: string|null, room_name: string, seller_id: string|null, items: Array, subtotal: number}>}
+ */
+export function getCartGroupedByRoom() {
+  const cart = readCart();
+  const groups = new Map();
+
+  for (const item of cart) {
+    const key = item.room_id || "unassigned";
+    if (!groups.has(key)) {
+      groups.set(key, {
+        room_id: item.room_id || null,
+        room_name: item.room_name || "This Room",
+        seller_id: item.seller_id || null,
+        items: [],
+        subtotal: 0,
+      });
+    }
+    const group = groups.get(key);
+    group.items.push(item);
+    group.subtotal += item.price * item.qty;
+  }
+
+  return Array.from(groups.values());
+}
+
 export function getCartCount() {
   return readCart().reduce((sum, item) => sum + item.qty, 0);
 }
@@ -37,7 +66,7 @@ export function getCartTotal() {
 
 /**
  * Add an item to the cart.
- * @param {{id: string, name: string, price: number, image?: string, qty?: number}} item
+ * @param {{id: string, name: string, price: number, image?: string, qty?: number, room_id?: string, room_name?: string, seller_id?: string}} item
  */
 export function addToCart(item) {
   if (!item || !item.id || !item.name || typeof item.price !== "number") {
@@ -57,6 +86,9 @@ export function addToCart(item) {
       price: item.price,
       image: item.image || "",
       qty: item.qty || 1,
+      room_id: item.room_id || null,
+      room_name: item.room_name || null,
+      seller_id: item.seller_id || null,
     });
   }
 
