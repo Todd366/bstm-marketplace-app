@@ -105,19 +105,24 @@ document.addEventListener("DOMContentLoaded", bootstrap);
 // ===============================
 // HANDLE DYNAMIC NAV INJECTION
 // ===============================
-// bstm:ready (session check, usually fast/local) and bstm:componentLoaded
-// (nav.html network fetch via smart-loader.js) are two independent async
-// operations with no guaranteed order. On a slow connection the nav fetch
-// can easily finish AFTER the session check, meaning the first updateNav()
-// call finds no nav elements in the DOM yet (silently does nothing) and
-// never gets retried. Listening for both makes sure at least one call
-// happens after the nav actually exists.
-window.addEventListener("bstm:ready", () => {
-  requestAnimationFrame(() => updateNav(currentSession));
-});
-window.addEventListener("bstm:componentLoaded", () => {
-  requestAnimationFrame(() => updateNav(currentSession));
-});
+// nav.html is fetched and injected asynchronously by smart-loader.js, with
+// no guaranteed ordering against the session check above. Event-based
+// retries (bstm:ready / bstm:componentLoaded) were tried here before and
+// still proved unreliable in practice — chasing exact timing across three
+// independent async systems (fetch, DOMContentLoaded, requestAnimationFrame)
+// is fragile by nature. A MutationObserver sidesteps the whole problem: it
+// fires the instant nav.html's markup actually lands in the DOM, no matter
+// what order anything else happens in, and needs no retry logic at all.
+const navContainer = document.getElementById("bstm-nav");
+if (navContainer) {
+  const navObserver = new MutationObserver(() => {
+    updateNav(currentSession);
+  });
+  navObserver.observe(navContainer, { childList: true });
+}
+// Also covers the case where nav.html was already injected before this
+// script ran (e.g. cached/instant fetch on a fast connection).
+requestAnimationFrame(() => updateNav(currentSession));
 
 // ===============================
 // GLOBAL API

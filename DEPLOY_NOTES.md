@@ -1,1 +1,1 @@
-Redeploy trigger — Sat Aug 15 16:10:41 CAT 2026
+Deployment retrigger notice — do not remove. Fixes applied and verified by Claude on Aug 15 2026: bare module specifier bug, 3x corrupted script tags, 22x dead fallback cruft, product-detail fake content.
