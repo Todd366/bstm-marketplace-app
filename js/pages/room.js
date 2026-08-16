@@ -1,6 +1,7 @@
 // js/pages/room.js
 import { supabase } from "../core/supabase-client.js";
 import { getRoomTemplate } from "../core/room-templates.js";
+import { escapeHtml } from "../core/sanitize.js";
 
 function renderCard(p, tpl) {
   const img = p.image
@@ -12,7 +13,7 @@ function renderCard(p, tpl) {
       <a href="product-detail.html?id=${p.id}" style="display:block;background:#fff;border:2px solid #D9C9A3;border-radius:10px;overflow:hidden;text-decoration:none;">
         <div style="aspect-ratio:1;background:#F3EEE0;">${img}</div>
         <div style="padding:10px;font-family:${tpl.font};">
-          <div style="font-weight:700;color:#292524;font-size:13px;">${p.name}</div>
+          <div style="font-weight:700;color:#292524;font-size:13px;">${escapeHtml(p.name)}</div>
           <div style="color:${tpl.accent};font-weight:900;margin-top:4px;">P${Number(p.price).toFixed(2)}</div>
         </div>
       </a>`;
@@ -23,7 +24,7 @@ function renderCard(p, tpl) {
       <a href="product-detail.html?id=${p.id}" style="display:block;background:#1E293B;border:1px solid #334155;border-radius:8px;overflow:hidden;text-decoration:none;">
         <div style="aspect-ratio:1;background:#0F172A;">${img}</div>
         <div style="padding:10px;font-family:${tpl.font};">
-          <div style="font-weight:600;color:#E2E8F0;font-size:12px;">${p.name}</div>
+          <div style="font-weight:600;color:#E2E8F0;font-size:12px;">${escapeHtml(p.name)}</div>
           <div style="color:${tpl.accent};font-weight:900;margin-top:6px;font-size:14px;">P${Number(p.price).toFixed(2)}</div>
         </div>
       </a>`;
@@ -34,7 +35,7 @@ function renderCard(p, tpl) {
       <a href="product-detail.html?id=${p.id}" style="display:block;text-decoration:none;">
         <div style="aspect-ratio:3/4;background:#F5E6EC;border-radius:2px;overflow:hidden;">${img}</div>
         <div style="padding:12px 4px;font-family:${tpl.font};text-align:center;">
-          <div style="color:#57534E;font-size:13px;letter-spacing:0.5px;">${p.name}</div>
+          <div style="color:#57534E;font-size:13px;letter-spacing:0.5px;">${escapeHtml(p.name)}</div>
           <div style="color:${tpl.accent};font-weight:700;margin-top:4px;">P${Number(p.price).toFixed(2)}</div>
         </div>
       </a>`;
@@ -45,7 +46,7 @@ function renderCard(p, tpl) {
       <a href="product-detail.html?id=${p.id}" style="display:block;background:#1F2937;border-radius:14px;overflow:hidden;text-decoration:none;">
         <div style="aspect-ratio:16/9;background:#111827;">${img}</div>
         <div style="padding:16px;">
-          <div style="color:#F3F4F6;font-weight:700;font-size:15px;">${p.name}</div>
+          <div style="color:#F3F4F6;font-weight:700;font-size:15px;">${escapeHtml(p.name)}</div>
           <div style="color:${tpl.accent};font-weight:900;margin-top:6px;font-size:18px;">P${Number(p.price).toFixed(2)}</div>
         </div>
       </a>`;
@@ -56,7 +57,7 @@ function renderCard(p, tpl) {
       <a href="product-detail.html?id=${p.id}" style="display:flex;align-items:center;gap:16px;background:#fff;border-radius:12px;padding:16px;text-decoration:none;box-shadow:0 1px 4px rgba(0,0,0,0.06);">
         <div style="width:64px;height:64px;border-radius:10px;overflow:hidden;flex-shrink:0;background:#EFF6FF;">${img}</div>
         <div style="flex:1;">
-          <div style="color:#1F2937;font-weight:700;">${p.name}</div>
+          <div style="color:#1F2937;font-weight:700;">${escapeHtml(p.name)}</div>
         </div>
         <div style="color:${tpl.accent};font-weight:900;">P${Number(p.price).toFixed(2)}</div>
       </a>`;
@@ -67,7 +68,7 @@ function renderCard(p, tpl) {
     <a href="product-detail.html?id=${p.id}" style="display:block;background:#fff;border-radius:14px;overflow:hidden;text-decoration:none;box-shadow:0 1px 6px rgba(0,0,0,0.06);">
       <div style="aspect-ratio:1;background:#F3F4F6;">${img}</div>
       <div style="padding:12px;">
-        <div style="color:#374151;font-weight:700;font-size:13px;">${p.name}</div>
+        <div style="color:#374151;font-weight:700;font-size:13px;">${escapeHtml(p.name)}</div>
         <div style="color:${tpl.accent};font-weight:900;margin-top:4px;">P${Number(p.price).toFixed(2)}</div>
       </div>
     </a>`;

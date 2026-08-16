@@ -1,6 +1,7 @@
 // js/pages/admin-dashboard.js
 import { getProfile } from "../bstm-core.js";
 import { supabase } from "../core/supabase-client.js";
+import { escapeHtml } from "../core/sanitize.js";
 
 window.BSTM.ready().then(async function (session) {
   if (!session) {
@@ -51,7 +52,7 @@ window.BSTM.ready().then(async function (session) {
       .map(
         (k) => `
       <div class="flex justify-between items-center p-3 bg-yellow-50 rounded-lg">
-        <span class="text-sm font-semibold text-gray-800">${k.full_name || "Unnamed applicant"}</span>
+        <span class="text-sm font-semibold text-gray-800">${escapeHtml(k.full_name || "Unnamed applicant")}</span>
         <span class="text-xs text-gray-500">${new Date(k.created_at).toLocaleDateString()}</span>
       </div>`
       )

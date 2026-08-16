@@ -1,5 +1,6 @@
 // js/pages/messages.js
 import { supabase } from "../core/supabase-client.js";
+import { escapeHtml } from "../core/sanitize.js";
 
 let currentUserId = null;
 let currentConversation = null;
@@ -37,7 +38,7 @@ async function loadConversationList() {
   listEl.innerHTML = convos
     .map((c) => {
       const isSeller = c.seller_id === currentUserId;
-      const label = c.products?.name || "Conversation";
+      const label = escapeHtml(c.products?.name || "Conversation");
       return `
       <div class="p-4 hover:bg-gray-50 cursor-pointer conversation-item" data-id="${c.id}">
         <div class="flex items-center space-x-3">
@@ -116,7 +117,7 @@ async function loadMessages(conversationId) {
       <div class="flex items-start ${mine ? "justify-end" : ""}">
         <div>
           <div class="${mine ? "message-sent rounded-tr-none" : "message-received rounded-tl-none"} rounded-2xl px-4 py-3 max-w-md">
-            <p>${m.body}</p>
+            <p>${escapeHtml(m.body)}</p>
           </div>
           <p class="text-xs text-gray-500 mt-1 ${mine ? "text-right mr-2" : "ml-2"}">
             ${new Date(m.created_at).toLocaleTimeString("en-BW", { hour: "2-digit", minute: "2-digit" })}

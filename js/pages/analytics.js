@@ -1,5 +1,6 @@
 // js/pages/analytics.js
 import { supabase } from "../core/supabase-client.js";
+import { escapeHtml } from "../core/sanitize.js";
 
 window.BSTM.ready().then(async function (session) {
   const wall = document.getElementById("auth-wall");
@@ -77,7 +78,7 @@ window.BSTM.ready().then(async function (session) {
         (p) => `
       <div class="flex items-center justify-between p-4 border-2 border-gray-200 rounded-lg">
         <div>
-          <h4 class="font-semibold text-gray-800">${p.name}</h4>
+          <h4 class="font-semibold text-gray-800">${escapeHtml(p.name)}</h4>
           <p class="text-sm text-gray-600">${p.units} sold</p>
         </div>
         <span class="text-green-600 font-bold">P${p.revenue.toFixed(2)}</span>

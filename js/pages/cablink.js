@@ -1,5 +1,6 @@
 // js/pages/cablink.js
 import { supabase } from "../core/supabase-client.js";
+import { escapeHtml } from "../core/sanitize.js";
 
 const STATUS_STYLES = {
   pending: "background:#FEF3C7;color:#92400E;",
@@ -42,7 +43,7 @@ async function loadRooms() {
     rooms
       .map(
         (r) =>
-          `<option value="${r.id}">Room ${r.room_number ?? "?"} — ${r.name}</option>`
+          `<option value="${r.id}">Room ${escapeHtml(r.room_number ?? "?")} — ${escapeHtml(r.name)}</option>`
       )
       .join("");
 }
@@ -72,15 +73,17 @@ async function loadTasks(userId) {
   listEl.innerHTML = tasks
     .map((t) => {
       const style = STATUS_STYLES[t.status] || STATUS_STYLES.pending;
-      const roomName = t.rooms?.name || "Unknown room";
+      const roomName = escapeHtml(t.rooms?.name || "Unknown room");
+      const dropoffCity = escapeHtml(t.dropoff_city || "?");
+      const dropoffAddress = escapeHtml(t.dropoff_address || "");
       const date = t.requested_at
         ? new Date(t.requested_at).toLocaleDateString()
         : "";
       return `
         <div class="flex items-center justify-between py-4 border-b border-gray-100 last:border-0">
           <div>
-            <p class="font-semibold text-gray-800">${roomName} → ${t.dropoff_city || "?"}</p>
-            <p class="text-sm text-gray-500">${t.dropoff_address || ""}</p>
+            <p class="font-semibold text-gray-800">${roomName} → ${dropoffCity}</p>
+            <p class="text-sm text-gray-500">${dropoffAddress}</p>
             <p class="text-xs text-gray-400 mt-1">${date}</p>
           </div>
           <span class="status-pill" style="${style}">${(t.status || "pending").replace("_", " ")}</span>

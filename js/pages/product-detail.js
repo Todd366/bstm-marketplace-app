@@ -2,6 +2,7 @@
 import { supabase } from "../core/supabase-client.js";
 import { addToCart } from "../core/cart.js";
 import { addToWishlist, removeFromWishlist } from "../bstm-core.js";
+import { escapeHtml } from "../core/sanitize.js";
 
 document.addEventListener("DOMContentLoaded", async function () {
   const id = new URLSearchParams(window.location.search).get("id");
@@ -82,11 +83,11 @@ document.addEventListener("DOMContentLoaded", async function () {
           <a href="product-detail.html?id=${r.id}" class="bg-white rounded-2xl shadow-lg overflow-hidden block hover:shadow-xl transition-shadow">
             ${
               r.image
-                ? `<img src="${r.image}" alt="${r.name}" class="w-full h-48 object-cover">`
+                ? `<img src="${escapeHtml(r.image)}" alt="${escapeHtml(r.name)}" class="w-full h-48 object-cover">`
                 : `<div style="height:192px;background:#F5F3FF;display:flex;align-items:center;justify-content:center;font-size:40px;">🛍️</div>`
             }
             <div class="p-4">
-              <h4 class="font-bold text-gray-800 mb-2">${r.name}</h4>
+              <h4 class="font-bold text-gray-800 mb-2">${escapeHtml(r.name)}</h4>
               <span class="text-xl font-bold">P${Number(r.price || 0).toFixed(2)}</span>
             </div>
           </a>`

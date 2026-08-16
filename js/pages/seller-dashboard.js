@@ -1,5 +1,6 @@
 // js/pages/seller-dashboard.js
 import { supabase } from "../core/supabase-client.js";
+import { escapeHtml } from "../core/sanitize.js";
 
 function renderProducts(products) {
   const container = document.getElementById("my-products-list");
@@ -20,7 +21,7 @@ function renderProducts(products) {
         ${p.image ? `<img src="${p.image}" style="width:100%;height:100%;object-fit:cover;">` : '<span style="font-size:24px;">📦</span>'}
       </div>
       <div style="flex:1;min-width:0;">
-        <div style="font-weight:800;color:#1E1B4B;font-size:14px;">${p.name}</div>
+        <div style="font-weight:800;color:#1E1B4B;font-size:14px;">${escapeHtml(p.name)}</div>
         <div style="font-size:12px;color:#9CA3AF;">Qty: ${p.quantity ?? "—"} · ${p.status}</div>
       </div>
       <div style="font-weight:900;color:#7C3AED;font-size:15px;">P${Number(p.price).toFixed(2)}</div>

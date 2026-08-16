@@ -1,5 +1,6 @@
 // js/pages/notifications-all.js
 import { supabase } from "../core/supabase-client.js";
+import { escapeHtml } from "../core/sanitize.js";
 
 let currentUserId = null;
 let allNotifications = [];
@@ -39,10 +40,10 @@ function render() {
             </div>
             <div class="flex-1">
               <div class="flex justify-between items-start mb-2">
-                <p class="font-bold text-gray-800">${n.title}</p>
+                <p class="font-bold text-gray-800">${escapeHtml(n.title)}</p>
                 ${!n.is_read ? `<span class="w-2 h-2 bg-${style.color}-500 rounded-full"></span>` : ""}
               </div>
-              <p class="text-gray-600 mb-2">${n.body || ""}</p>
+              <p class="text-gray-600 mb-2">${escapeHtml(n.body || "")}</p>
               <p class="text-xs text-gray-500">${formatTime(n.created_at)}</p>
             </div>
             <i class="fas fa-chevron-right text-gray-400"></i>

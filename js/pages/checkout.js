@@ -1,6 +1,7 @@
 // js/pages/checkout.js
 import { supabase } from "../core/supabase-client.js";
 import { getCart, getCartGroupedByRoom, getCartTotal, clearCart } from "../core/cart.js";
+import { escapeHtml } from "../core/sanitize.js";
 import { CONFIG } from "../core/config.js";
 
 const REWARD_PERCENT = CONFIG.MARKETPLACE.REWARD_PERCENT / 100; // e.g. 1%
@@ -36,7 +37,7 @@ function renderCart() {
         ${
           multiRoom
             ? `<div class="flex items-center justify-between mb-2">
-                 <span class="text-xs font-bold text-purple-600 uppercase tracking-wide">🏬 ${group.room_name}</span>
+                 <span class="text-xs font-bold text-purple-600 uppercase tracking-wide">🏬 ${escapeHtml(group.room_name)}</span>
                  <span class="text-xs text-gray-400">Separate order — this seller ships independently</span>
                </div>`
             : ""
@@ -45,9 +46,9 @@ function renderCart() {
           .map(
             (item) => `
           <div class="flex items-center space-x-4 mb-2">
-            <img src="${item.image || ""}" onerror="this.style.display='none'" alt="${item.name}" class="w-16 h-16 rounded-lg object-cover bg-purple-50">
+            <img src="${escapeHtml(item.image || "")}" onerror="this.style.display='none'" alt="${escapeHtml(item.name)}" class="w-16 h-16 rounded-lg object-cover bg-purple-50">
             <div class="flex-1">
-              <h4 class="font-semibold text-gray-800">${item.name}</h4>
+              <h4 class="font-semibold text-gray-800">${escapeHtml(item.name)}</h4>
               <p class="text-sm text-gray-600">Qty: ${item.qty}</p>
             </div>
             <span class="font-bold text-gray-800">P${(item.price * item.qty).toFixed(2)}</span>
