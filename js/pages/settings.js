@@ -28,8 +28,9 @@ window.BSTM.ready().then(async function (session) {
 
   const { data: profile } = await getProfile(session.user.id);
   if (profile) {
+    const role = profile.role || "buyer";
     document.getElementById("settings-role-badge").textContent =
-      profile.role.charAt(0).toUpperCase() + profile.role.slice(1);
+      role.charAt(0).toUpperCase() + role.slice(1);
     if (profile.phone) document.getElementById("settings-phone").value = profile.phone;
     if (profile.location) document.getElementById("settings-location").value = profile.location;
   }

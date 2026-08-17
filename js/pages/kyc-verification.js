@@ -14,13 +14,56 @@ async function uploadDoc(file, userId, label) {
   return path; // private bucket — store the path, not a public URL
 }
 
-window.BSTM.ready().then(function (session) {
+window.BSTM.ready().then(async function (session) {
   if (!session) {
     window.location.href = "login.html?redirect=kyc-verification.html";
     return;
   }
 
   const user = session.user;
+
+  // If the user already has a submission, show its status instead of
+  // presenting a blank form they could confusingly resubmit.
+  const { data: existing } = await supabase
+    .from("kyc_submissions")
+    .select("status, created_at, reviewed_at")
+    .eq("user_id", user.id)
+    .order("created_at", { ascending: false })
+    .maybeSingle();
+
+  const banner = document.getElementById("kyc-status-banner");
+  const formWrapper = document.getElementById("kyc-form-wrapper");
+
+  if (existing && banner && formWrapper) {
+    const statusConfig = {
+      pending: {
+        icon: "⏳",
+        title: "Verification Pending",
+        text: "We've received your documents and they're under review. This usually takes 1-2 business days.",
+      },
+      approved: {
+        icon: "✅",
+        title: "You're Verified",
+        text: "Your identity has been verified. You have full access to buy and sell on BSTM.",
+      },
+      rejected: {
+        icon: "❌",
+        title: "Verification Not Approved",
+        text: "Your submission wasn't approved. Please contact support to find out why and resubmit.",
+      },
+    };
+    const cfg = statusConfig[existing.status] || statusConfig.pending;
+
+    banner.innerHTML = `
+      <div style="font-size:56px;margin-bottom:16px;">${cfg.icon}</div>
+      <h2 class="text-2xl font-bold text-gray-800 mb-2">${cfg.title}</h2>
+      <p class="text-gray-600">${cfg.text}</p>
+      <p class="text-xs text-gray-400 mt-4">Submitted ${new Date(existing.created_at).toLocaleDateString()}</p>
+    `;
+    banner.classList.remove("hidden");
+    formWrapper.style.display = "none";
+    return;
+  }
 
   window.submitKYC = async function () {
     const agreed = document.getElementById("termsAgree").checked;
