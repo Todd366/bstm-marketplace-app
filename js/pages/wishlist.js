@@ -1,4 +1,5 @@
 import { getWishlist, removeFromWishlist, normalizeProduct } from "../bstm-core.js";
+import { escapeHtml } from "../core/sanitize.js";
 
 function showSection(id) {
   ["auth-wall", "wishlist-content", "empty-wishlist"].forEach(function(s) {
@@ -14,11 +15,11 @@ function buildCard(item) {
     '<div style="background:#fff;border-radius:20px;overflow:hidden;border:1.5px solid #EDE9FE;transition:all 0.3s;">',
       '<div style="height:160px;background:linear-gradient(135deg,#F5F3FF,#EEF2FF);display:flex;align-items:center;justify-content:center;overflow:hidden;">',
         p.image
-          ? '<img src="' + p.image + '" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display=\'none\'">'
+          ? '<img src="' + escapeHtml(p.image) + '" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display=\'none\'">'
           : '<span style="font-size:48px;">📦</span>',
       '</div>',
       '<div style="padding:16px;">',
-        '<div style="font-weight:900;color:#1E1B4B;font-size:16px;margin-bottom:6px;">' + (p.title || "Product") + '</div>',
+        '<div style="font-weight:900;color:#1E1B4B;font-size:16px;margin-bottom:6px;">' + escapeHtml(p.title || "Product") + '</div>',
         '<div style="font-size:22px;font-weight:900;color:#7C3AED;margin-bottom:12px;">P' + Number(p.price || 0).toFixed(2) + '</div>',
         '<div style="display:flex;gap:8px;">',
           '<a href="product-detail.html?id=' + p.id + '" style="flex:1;background:linear-gradient(135deg,#7C3AED,#4F46E5);color:#fff;padding:10px;border-radius:10px;font-weight:700;font-size:13px;text-decoration:none;text-align:center;">View</a>',
