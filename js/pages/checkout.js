@@ -211,12 +211,45 @@ async function handlePlaceOrder() {
   const total = getCartTotal();
   const email = document.getElementById("email").value;
 
+  // Reserve stock BEFORE payment, not after — nobody should be charged for
+  // something that's actually out of stock. Each decrement is atomic at the
+  // database level (see decrement_product_stock), so two buyers racing for
+  // the last unit can never both succeed. If anything fails here, roll back
+  // whatever already succeeded and stop before Paystack ever opens.
+  const reserved = [];
+  for (const item of cart) {
+    const { data: ok, error: stockErr } = await supabase.rpc(
+      "decrement_product_stock",
+      { p_product_id: item.id, p_qty: item.qty }
+    );
+    if (stockErr || !ok) {
+      for (const r of reserved) {
+        await supabase.rpc("restore_product_stock", {
+          p_product_id: r.id,
+          p_qty: r.qty,
+        });
+      }
+      showError(`"${item.name}" doesn't have enough stock left. Please adjust your cart.`);
+      btn.disabled = false;
+      btn.textContent = "Place Order";
+      return;
+    }
+    reserved.push({ id: item.id, qty: item.qty });
+  }
+
+  async function restoreAllReserved() {
+    for (const r of reserved) {
+      await supabase.rpc("restore_product_stock", { p_product_id: r.id, p_qty: r.qty });
+    }
+  }
+
   // NOTE: This confirms payment on the client-side Paystack callback, which
   // is fine for early testing but is NOT secure for real money — a user
   // could fake success without paying. Before going live, verify payment
   // server-side via a Paystack webhook (see backend/) before creating the
   // order. Flagging this clearly rather than hiding it.
   if (!window.PaystackPop || CONFIG.API.PAYSTACK_PUBLIC === "pk_live_xxx") {
+    await restoreAllReserved();
     showError(
       "Payment isn't configured yet — add a real Paystack public key in js/core/config.js before going live."
     );
@@ -239,6 +272,9 @@ async function handlePlaceOrder() {
           window.location.href = `order-tracking.html?order=${orders[0].id}&orders=${orderIds}&ref=${response.reference}`;
         })
         .catch((err) => {
+          // Payment already succeeded here — do NOT restore stock, since
+          // this buyer did pay for it. This becomes a support case instead
+          // of silently letting someone else buy the same unit.
           console.error("[BSTM Checkout] Order creation failed:", err);
           showError(
             "Payment succeeded but saving your order failed. Contact support with reference " +
@@ -248,7 +284,8 @@ async function handlePlaceOrder() {
           btn.textContent = "Place Order";
         });
     },
-    onClose: function () {
+    onClose: async function () {
+      await restoreAllReserved();
       btn.disabled = false;
       btn.textContent = "Place Order";
     },

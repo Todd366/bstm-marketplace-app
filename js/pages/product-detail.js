@@ -109,11 +109,19 @@ document.addEventListener("DOMContentLoaded", async function () {
     set("#seller-name-display", "BSTM Marketplace");
   }
 
-  // Quantity selector — real state instead of the old no-op increase/decreaseQty
+  // Quantity selector — capped at real available stock
   const qtyInput = document.getElementById("quantity");
+  const stock = Number.isFinite(p.quantity) ? p.quantity : Infinity;
+
+  if (qtyInput) {
+    qtyInput.max = stock;
+    if (parseInt(qtyInput.value, 10) > stock) qtyInput.value = Math.max(1, stock);
+  }
+
   window.increaseQty = function () {
     if (!qtyInput) return;
-    qtyInput.value = Math.max(1, (parseInt(qtyInput.value, 10) || 1) + 1);
+    const next = (parseInt(qtyInput.value, 10) || 1) + 1;
+    qtyInput.value = Math.min(stock, Math.max(1, next));
   };
   window.decreaseQty = function () {
     if (!qtyInput) return;
@@ -121,7 +129,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   };
 
   function buildCartItem() {
-    const qty = Math.max(1, parseInt(qtyInput?.value, 10) || 1);
+    const qty = Math.min(stock, Math.max(1, parseInt(qtyInput?.value, 10) || 1));
     return {
       id: p.id,
       name: p.name,
@@ -136,9 +144,15 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   const addBtn = document.getElementById("add-to-cart-btn");
   if (addBtn) {
-    addBtn.addEventListener("click", function () {
-      window.addToCart(buildCartItem());
-    });
+    if (stock <= 0) {
+      addBtn.disabled = true;
+      addBtn.textContent = "Out of Stock";
+      addBtn.classList.add("opacity-50", "cursor-not-allowed");
+    } else {
+      addBtn.addEventListener("click", function () {
+        window.addToCart(buildCartItem());
+      });
+    }
   }
 
   // Wishlist toggle — real add/remove against the wishlist table
