@@ -250,6 +250,124 @@ document.addEventListener("DOMContentLoaded", async function () {
     });
   }
 
+  // ==========================================================
+  // Reviews — verified-purchase only, enforced by RLS on insert
+  // ==========================================================
+  async function loadReviews() {
+    const { data: reviews } = await supabase
+      .from("reviews")
+      .select("id, rating, comment, created_at")
+      .eq("product_id", p.id)
+      .order("created_at", { ascending: false });
+
+    const summaryEl = document.getElementById("review-summary");
+    const listEl = document.getElementById("reviews-list");
+    if (!summaryEl || !listEl) return;
+
+    if (!reviews || reviews.length === 0) {
+      summaryEl.textContent = "No reviews yet";
+      listEl.innerHTML = '<p class="text-gray-400 text-sm">Be the first to review this product.</p>';
+      return;
+    }
+
+    const avg = reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length;
+    summaryEl.innerHTML = `⭐ ${avg.toFixed(1)} · ${reviews.length} review${reviews.length === 1 ? "" : "s"}`;
+
+    listEl.innerHTML = reviews
+      .map(
+        (r) => `
+      <div class="bg-white border border-gray-100 rounded-xl p-4">
+        <div class="flex items-center justify-between mb-1">
+          <span class="text-yellow-400">${"★".repeat(r.rating)}${"☆".repeat(5 - r.rating)}</span>
+          <span class="text-xs text-gray-400">${new Date(r.created_at).toLocaleDateString()}</span>
+        </div>
+        <p class="text-sm text-gray-500 font-medium mb-1">Verified Buyer</p>
+        ${r.comment ? `<p class="text-gray-700 text-sm">${escapeHtml(r.comment)}</p>` : ""}
+      </div>`
+      )
+      .join("");
+  }
+
+  async function checkReviewEligibility(session) {
+    if (!session) return;
+
+    // Already reviewed this product?
+    const { data: mine } = await supabase
+      .from("reviews")
+      .select("id")
+      .eq("product_id", p.id)
+      .eq("buyer_id", session.user.id)
+      .maybeSingle();
+    if (mine) return; // already reviewed — box stays hidden
+
+    // Has a delivered order containing this product?
+    const { data: eligibleOrder } = await supabase
+      .from("orders")
+      .select("id, order_items!inner(product_id)")
+      .eq("buyer_id", session.user.id)
+      .eq("status", "delivered")
+      .eq("order_items.product_id", p.id)
+      .limit(1)
+      .maybeSingle();
+
+    if (!eligibleOrder) return; // not a verified buyer of this product yet
+
+    const box = document.getElementById("write-review-box");
+    if (!box) return;
+    box.classList.remove("hidden");
+
+    let selectedRating = 0;
+    const stars = box.querySelectorAll("#star-picker span");
+    stars.forEach((star) => {
+      star.addEventListener("click", () => {
+        selectedRating = parseInt(star.dataset.star, 10);
+        stars.forEach((s, i) => {
+          s.textContent = i < selectedRating ? "★" : "☆";
+        });
+      });
+    });
+
+    document.getElementById("submit-review-btn").addEventListener("click", async () => {
+      const errEl = document.getElementById("review-error");
+      errEl.classList.add("hidden");
+
+      if (selectedRating < 1) {
+        errEl.textContent = "Please pick a star rating.";
+        errEl.classList.remove("hidden");
+        return;
+      }
+
+      const comment = document.getElementById("review-comment").value.trim();
+      const btn = document.getElementById("submit-review-btn");
+      btn.disabled = true;
+      btn.textContent = "Submitting…";
+
+      const { error } = await supabase.from("reviews").insert({
+        product_id: p.id,
+        order_id: eligibleOrder.id,
+        buyer_id: session.user.id,
+        rating: selectedRating,
+        comment: comment || null,
+      });
+
+      btn.disabled = false;
+      btn.textContent = "Submit Review";
+
+      if (error) {
+        console.error("[BSTM] Review submission failed:", error);
+        errEl.textContent = "Couldn't submit your review. Please try again.";
+        errEl.classList.remove("hidden");
+        return;
+      }
+
+      box.classList.add("hidden");
+      loadReviews();
+    });
+  }
+
+  loadReviews();
+  window.BSTM.ready().then((session) => checkReviewEligibility(session));
+
   // Store product in sessionStorage for legacy checkout paths that read it
   sessionStorage.setItem("checkout_product", JSON.stringify(p));
 });
