@@ -18,7 +18,7 @@ function renderProducts(products) {
       (p) => `
     <div style="background:#fff;border:1.5px solid #EDE9FE;border-radius:16px;padding:16px;display:flex;align-items:center;gap:14px;">
       <div style="width:56px;height:56px;border-radius:10px;background:#F5F3FF;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;">
-        ${p.image ? `<img src="${p.image}" style="width:100%;height:100%;object-fit:cover;">` : '<span style="font-size:24px;">📦</span>'}
+        ${p.image ? `<img src="${escapeHtml(p.image)}" style="width:100%;height:100%;object-fit:cover;">` : '<span style="font-size:24px;">📦</span>'}
       </div>
       <div style="flex:1;min-width:0;">
         <div style="font-weight:800;color:#1E1B4B;font-size:14px;">${escapeHtml(p.name)}</div>

@@ -566,22 +566,6 @@
 <script src="components/smart-loader.js"></script>
 <script type="module" src="js/app.js?v=1786828104"></script>
 
-<script>
-/**
- * BSTM SAFE RUNTIME BRIDGE
- * prevents onclick breakage without modifying architecture
- */
-window.__BSTM_BRIDGE_INSTALLED__ = true;
-
-window.__bstm_safe_bind = function(fnName, fallback) {
-    if (typeof window[fnName] !== 'function') {
-        window[fnName] = fallback || function() {
-            console.warn('[BSTM] Missing function:', fnName);
-        };
-    }
-};
-</script>
-
 <script type="module" src="js/pages/thb-wallet.js"></script>
 
 </body>

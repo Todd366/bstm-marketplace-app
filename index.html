@@ -92,36 +92,12 @@
     </div>
   </section>
 
-  <!-- FEATURED ROOM -->
-  <section style="max-width:900px;margin:60px auto;padding:0 24px;text-align:center;">
-
-    <h2 style="font-size:32px;font-weight:900;margin-bottom:24px;">
-      Room 22 — The Farm
-    </h2>
-
-    <div class="room-card"
-         onclick="location.href='room22-farm.html'"
+  <!-- FEATURED ROOM (populated dynamically — see js/pages/index.js) -->
+  <section id="featured-room-section" class="hidden" style="max-width:900px;margin:60px auto;padding:0 24px;text-align:center;">
+    <h2 id="featured-room-heading" style="font-size:32px;font-weight:900;margin-bottom:24px;"></h2>
+    <div id="featured-room-card" class="room-card"
          style="background:#fff;border-radius:24px;border:2px solid #6EE7B7;overflow:hidden;max-width:420px;margin:auto;cursor:pointer;">
-
-      <div style="height:180px;background:linear-gradient(135deg,#059669,#34D399);display:flex;align-items:center;justify-content:center;font-size:70px;">
-        🌾
-      </div>
-
-      <div style="padding:24px;text-align:left;">
-        <h3 style="margin:0;font-size:22px;">The Farm</h3>
-
-        <p style="margin:12px 0;color:#666;">
-          Fresh produce and organic goods.
-        </p>
-
-        <span style="font-weight:700;color:#7C3AED;">
-          Enter Room →
-        </span>
-
-      </div>
-
     </div>
-
   </section>
 
   <!-- Universal Footer -->
@@ -131,22 +107,6 @@
   <script src="components/smart-loader.js"></script>
   <script type="module" src="js/app.js?v=1786828104"></script>
 
-
-<script>
-/**
- * BSTM SAFE RUNTIME BRIDGE
- * prevents onclick breakage without modifying architecture
- */
-window.__BSTM_BRIDGE_INSTALLED__ = true;
-
-window.__bstm_safe_bind = function(fnName, fallback) {
-    if (typeof window[fnName] !== 'function') {
-        window[fnName] = fallback || function() {
-            console.warn('[BSTM] Missing function:', fnName);
-        };
-    }
-};
-</script>
 
 <script type="module" src="js/pages/index.js"></script>
 
