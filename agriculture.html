@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agriculture & Fresh Produce — BSTM Mall</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#059669">
+    <link href="css/tailwind.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50">
+    <div id="bstm-nav"></div>
+
+    <section style="background:linear-gradient(135deg,#059669,#34D399);color:#fff;padding:56px 24px;">
+        <div style="max-width:1000px;margin:auto;">
+            <div style="display:inline-block;background:rgba(255,255,255,0.2);border-radius:999px;padding:8px 16px;margin-bottom:16px;font-weight:700;font-size:13px;">
+                🌾 AGRICULTURE & FRESH PRODUCE
+            </div>
+            <h1 style="font-size:38px;font-weight:900;margin-bottom:12px;">Botswana's Farmers, Online</h1>
+            <p style="font-size:17px;opacity:0.92;max-width:640px;">
+                Every farm, fresh produce seller, and agriculture business in the mall — in one place.
+                Real rooms, real listings, no filler.
+            </p>
+            <a href="open-room.html" style="display:inline-flex;align-items:center;gap:8px;margin-top:20px;background:#fff;color:#059669;
+               padding:12px 24px;border-radius:12px;font-weight:800;text-decoration:none;">
+                🌱 List Your Farm or Produce
+            </a>
+        </div>
+    </section>
+
+    <div style="max-width:1000px;margin:auto;padding:40px 24px;">
+
+        <div id="sector-empty-state" class="hidden text-center py-16">
+            <div style="font-size:56px;margin-bottom:16px;">🌾</div>
+            <p class="text-gray-500">No agriculture rooms yet — be the first to list.</p>
+        </div>
+
+        <div id="sector-rooms-section">
+            <h2 style="font-size:24px;font-weight:900;color:#1E1B4B;margin-bottom:20px;">Agriculture Rooms</h2>
+            <div id="sector-rooms-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:20px;margin-bottom:48px;">
+                <p class="text-gray-400 text-sm">Loading…</p>
+            </div>
+        </div>
+
+        <div id="sector-products-section" class="hidden">
+            <h2 style="font-size:24px;font-weight:900;color:#1E1B4B;margin-bottom:20px;">All Produce & Farm Products</h2>
+            <div id="sector-products-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:20px;"></div>
+        </div>
+
+    </div>
+
+    <div id="bstm-footer"></div>
+    <script src="components/smart-loader.js"></script>
+    <script type="module" src="js/app.js?v=1786828104"></script>
+    <script type="module" src="js/pages/agriculture.js"></script>
+</body>
+</html>

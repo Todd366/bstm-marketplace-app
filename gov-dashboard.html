@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Government Dashboard - BSTM</title>
+    <title>Control Center — BSTM</title>
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#7C3AED">
     <link href="css/tailwind.css" rel="stylesheet">
@@ -11,29 +11,47 @@
 </head>
 <body class="bg-gray-50">
     <div id="bstm-nav"></div>
-    
-    <div class="bg-gradient-to-r from-red-600 to-pink-600 text-white py-4 px-6">
+
+    <div class="bg-gradient-to-r from-purple-700 to-indigo-700 text-white py-4 px-6">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
             <div>
-                <h1 class="text-2xl font-bold">🏛️ Government Dashboard</h1>
-                <p class="text-red-100 text-sm">Admin: <span id="userName">Loading...</span></p>
+                <h1 class="text-2xl font-bold">🎛️ Platform Control Center</h1>
+                <p class="text-purple-100 text-sm">Admin: <span id="userName">Loading...</span></p>
             </div>
-            <button onclick="handleLogout()" class="bg-white text-red-600 px-4 py-2 rounded-lg font-semibold hover:bg-red-50">
+            <button onclick="handleLogout()" class="bg-white text-purple-700 px-4 py-2 rounded-lg font-semibold hover:bg-purple-50">
                 <i class="fas fa-sign-out-alt mr-2"></i>Logout
             </button>
         </div>
     </div>
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-8">
-        
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+    <div id="access-denied" class="hidden max-w-7xl mx-auto px-4 sm:px-6 py-16 text-center">
+        <p class="text-gray-500">This page is restricted to administrators.</p>
+    </div>
+
+    <div id="control-center-content" class="hidden max-w-7xl mx-auto px-4 sm:px-6 py-8 space-y-8">
+
+        <!-- THB Distribution -->
+        <div class="bg-white rounded-2xl shadow-lg p-6">
+            <h2 class="text-xl font-bold text-gray-800 mb-1">💰 Distribute THB</h2>
+            <p class="text-sm text-gray-500 mb-4">Credit or debit a user's wallet directly. Every action is logged with a reason.</p>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
+                <input id="thb-target-email" type="email" placeholder="user@email.com" class="md:col-span-2 px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-purple-500">
+                <input id="thb-amount" type="number" placeholder="Amount (negative to debit)" class="px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-purple-500">
+                <button id="thb-distribute-btn" class="bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-xl px-4 py-2.5">Distribute</button>
+            </div>
+            <input id="thb-reason" type="text" placeholder="Reason (shown to the user)" class="w-full mt-3 px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-purple-500">
+            <div id="thb-status" class="hidden mt-3 text-sm font-semibold"></div>
+        </div>
+
+        <!-- Platform stats -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
             <div class="bg-white rounded-xl shadow-lg p-6">
                 <p class="text-3xl font-bold text-gray-800" id="stat-total-users">—</p>
                 <p class="text-sm text-gray-600">Total Users</p>
             </div>
             <div class="bg-white rounded-xl shadow-lg p-6">
-                <p class="text-3xl font-bold text-gray-800" id="stat-pending-kyc">—</p>
-                <p class="text-sm text-gray-600">Pending KYC</p>
+                <p class="text-3xl font-bold text-gray-800" id="stat-total-rooms">—</p>
+                <p class="text-sm text-gray-600">Total Rooms</p>
             </div>
             <div class="bg-white rounded-xl shadow-lg p-6">
                 <p class="text-3xl font-bold text-gray-800" id="stat-all-products">—</p>
@@ -45,18 +63,26 @@
             </div>
         </div>
 
-        <div class="bg-gradient-to-r from-red-600 to-pink-600 rounded-2xl shadow-xl p-8 text-white">
-            <h2 class="text-3xl font-bold mb-4">BSTM Nation Control Center</h2>
-            <p class="text-lg">Manage users, approve sellers, and monitor platform health.</p>
+        <!-- Room oversight -->
+        <div class="bg-white rounded-2xl shadow-lg p-6">
+            <h2 class="text-xl font-bold text-gray-800 mb-4">🏬 All Rooms</h2>
+            <div id="rooms-oversight-list" class="space-y-2">
+                <p class="text-gray-400 text-sm">Loading…</p>
+            </div>
+        </div>
+
+        <!-- User search -->
+        <div class="bg-white rounded-2xl shadow-lg p-6">
+            <h2 class="text-xl font-bold text-gray-800 mb-4">👥 User Lookup</h2>
+            <input id="user-search-input" type="text" placeholder="Search by email…" class="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-purple-500 mb-4">
+            <div id="user-search-results" class="space-y-2"></div>
         </div>
 
     </div>
 
     <div id="bstm-footer"></div>
     <script src="components/smart-loader.js"></script>
-<script type="module" src="js/app.js?v=1786828104"></script>
-
-<script type="module" src="js/pages/gov-dashboard.js"></script>
-
+    <script type="module" src="js/app.js?v=1786828104"></script>
+    <script type="module" src="js/pages/control-center.js"></script>
 </body>
 </html>

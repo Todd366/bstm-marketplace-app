@@ -39,7 +39,7 @@
                     <i class="fas fa-home text-purple-600 text-3xl mb-3"></i>
                     <p class="font-bold text-gray-800">Go Home</p>
                 </a>
-                <a href="room22-farm.html" class="bg-white rounded-xl shadow-lg p-6 hover:shadow-2xl transition-all">
+                <a href="agriculture.html" class="bg-white rounded-xl shadow-lg p-6 hover:shadow-2xl transition-all">
                     <i class="fas fa-seedling text-green-600 text-3xl mb-3"></i>
                     <p class="font-bold text-gray-800">Room 22 Farm</p>
                 </a>
@@ -63,7 +63,7 @@
             <div class="mt-12 bg-purple-50 border-2 border-purple-200 rounded-xl p-6 max-w-md mx-auto">
                 <p class="text-sm text-gray-700">
                     <i class="fas fa-info-circle text-purple-600 mr-2"></i>
-                    <strong>6 of 63 rooms</strong> are currently active. More coming soon!
+                    <strong id="active-rooms-count-404">Loading</strong> rooms are currently active. More coming soon!
                 </p>
             </div>
         </div>
@@ -72,6 +72,17 @@
     <div id="bstm-footer"></div>
     <script src="components/smart-loader.js"></script>
 <script type="module" src="js/app.js?v=1786828104"></script>
+<script type="module">
+  import { supabase } from "./js/core/supabase-client.js";
+  supabase
+    .from("rooms")
+    .select("id", { count: "exact", head: true })
+    .eq("status", "active")
+    .then(({ count }) => {
+      const el = document.getElementById("active-rooms-count-404");
+      if (el && typeof count === "number") el.textContent = count;
+    });
+</script>
 
 <script type="module" src="js/pages/404.js"></script>
 
