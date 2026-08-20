@@ -120,5 +120,9 @@ document.addEventListener("DOMContentLoaded", async function () {
   });
 
   allRooms = rooms.map((r) => ({ ...r, productCount: countByRoom[r.id] || 0 }));
+
+  const heroCount = document.getElementById("marketplace-hero-count");
+  if (heroCount) heroCount.textContent = `${allRooms.length} Open`;
+
   renderRooms();
 });
