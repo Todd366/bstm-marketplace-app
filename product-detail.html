@@ -27,9 +27,9 @@
         <nav class="text-sm mb-8">
             <a href="index.html" class="text-gray-600 hover:text-purple-600">Home</a>
             <span class="mx-2 text-gray-400">/</span>
-            <a href="index.html#categories" class="text-gray-600 hover:text-purple-600">Fresh Produce</a>
+            <a href="marketplace.html" class="text-gray-600 hover:text-purple-600" id="breadcrumb-room">Mall</a>
             <span class="mx-2 text-gray-400">/</span>
-            <span class="text-gray-800 font-semibold">Fresh Tomatoes</span>
+            <span class="text-gray-800 font-semibold" id="breadcrumb-product">Loading…</span>
         </nav>
 
         <!-- Product Section -->
@@ -45,11 +45,11 @@
             <!-- Product Info -->
             <div>
                 <div class="flex items-center mb-4">
-                    <span class="bg-green-100 text-green-800 text-xs font-bold px-3 py-1 rounded-full mr-2">
-                        <i class="fas fa-leaf mr-1"></i>Room 22 Farm
+                    <span class="bg-green-100 text-green-800 text-xs font-bold px-3 py-1 rounded-full mr-2" id="room-badge">
+                        <i class="fas fa-store mr-1"></i><span id="room-badge-name">Loading…</span>
                     </span>
                     <span class="bg-yellow-100 text-yellow-800 text-xs font-bold px-3 py-1 rounded-full">
-                        <i class="fas fa-coins mr-1"></i>Earn 0.5 THB
+                        <i class="fas fa-coins mr-1"></i>Earn <span id="thb-reward-badge">0.0</span> THB
                     </span>
                 </div>
 
@@ -60,25 +60,20 @@
                         <span class="text-5xl font-bold text-gray-800" id="product-price">P0</span>
                         <span class="text-xl text-purple-600 ml-4" id="product-thb">or 0.0 THB</span>
                     </div>
-                    <p class="text-sm text-gray-600">≈ $3.50 USD • Includes delivery</p>
                 </div>
 
                 <div class="space-y-4 mb-6">
                     <div class="flex items-center">
-                        <i class="fas fa-check-circle text-green-500 mr-3"></i>
-                        <span class="text-gray-700">Organic & Locally Grown</span>
-                    </div>
-                    <div class="flex items-center">
                         <i class="fas fa-truck text-purple-600 mr-3"></i>
                         <span class="text-gray-700">CabLink Delivery Available</span>
                     </div>
-                    <div class="flex items-center">
+                    <div class="flex items-center hidden" id="verified-seller-row">
                         <i class="fas fa-shield-alt text-blue-600 mr-3"></i>
                         <span class="text-gray-700">Verified Seller</span>
                     </div>
-                    <div class="flex items-center">
+                    <div class="flex items-center hidden" id="ships-from-row">
                         <i class="fas fa-map-marker-alt text-red-500 mr-3"></i>
-                        <span class="text-gray-700">Ships from: Gaborone</span>
+                        <span class="text-gray-700">Ships from: <span id="ships-from-location"></span></span>
                     </div>
                 </div>
 

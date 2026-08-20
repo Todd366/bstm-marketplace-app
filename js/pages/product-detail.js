@@ -3,6 +3,7 @@ import { supabase } from "../core/supabase-client.js";
 import { addToCart } from "../core/cart.js";
 import { addToWishlist, removeFromWishlist } from "../bstm-core.js";
 import { escapeHtml } from "../core/sanitize.js";
+import { CONFIG } from "../core/config.js";
 
 document.addEventListener("DOMContentLoaded", async function () {
   const id = new URLSearchParams(window.location.search).get("id");
@@ -37,6 +38,17 @@ document.addEventListener("DOMContentLoaded", async function () {
     roomName = roomRow?.name || null;
   }
 
+  const roomBadgeName = document.getElementById("room-badge-name");
+  if (roomBadgeName) roomBadgeName.textContent = roomName || "BSTM Mall";
+
+  const breadcrumbRoom = document.getElementById("breadcrumb-room");
+  if (breadcrumbRoom) {
+    breadcrumbRoom.textContent = roomName || "Mall";
+    if (p.room_id) breadcrumbRoom.setAttribute("href", `room.html?id=${p.room_id}`);
+  }
+  const breadcrumbProduct = document.getElementById("breadcrumb-product");
+  if (breadcrumbProduct) breadcrumbProduct.textContent = p.name || "Product";
+
   document.title = (p.name || "Product") + " — BSTM Mall";
 
   const set = function (sel, val) {
@@ -47,7 +59,10 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   set("#product-title", p.name || "Product");
   set("#product-price", "P" + Number(p.price || 0).toFixed(2));
-  set("#product-thb", "or " + (Number(p.price || 0) * 0.01).toFixed(2) + " THB");
+  const rewardPercent = (CONFIG.MARKETPLACE?.REWARD_PERCENT ?? 1) / 100;
+  set("#product-thb", "or " + (Number(p.price || 0) * rewardPercent).toFixed(2) + " THB");
+  const thbBadge = document.getElementById("thb-reward-badge");
+  if (thbBadge) thbBadge.textContent = (Number(p.price || 0) * rewardPercent).toFixed(1);
   set("#product-description", p.description || "No description available.");
   set("#product-category", p.category || "");
 
@@ -97,16 +112,32 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
   }
 
-  // Resolve seller display name (best-effort — profiles may not have a name set)
+  // Seller display name + verification — profiles RLS blocks a direct read
+  // of another user's row, so this goes through the seller_public_info
+  // view, which exposes only the two safe columns needed here.
   if (p.seller_id) {
     const { data: seller } = await supabase
-      .from("profiles")
-      .select("full_name, email")
+      .from("seller_public_info")
+      .select("display_name, is_verified")
       .eq("id", p.seller_id)
       .maybeSingle();
-    set("#seller-name-display", seller?.full_name || seller?.email?.split("@")[0] || "BSTM Seller");
+
+    set("#seller-name-display", seller?.display_name || "BSTM Seller");
+
+    if (seller?.is_verified) {
+      document.getElementById("verified-seller-row")?.classList.remove("hidden");
+    }
   } else {
     set("#seller-name-display", "BSTM Marketplace");
+  }
+
+  if (p.location) {
+    const locEl = document.getElementById("ships-from-location");
+    const rowEl = document.getElementById("ships-from-row");
+    if (locEl && rowEl) {
+      locEl.textContent = p.location; // textContent — inherently safe
+      rowEl.classList.remove("hidden");
+    }
   }
 
   // Quantity selector — capped at real available stock
