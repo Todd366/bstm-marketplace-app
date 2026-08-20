@@ -5,7 +5,7 @@ import { escapeHtml } from "../core/sanitize.js";
 
 function renderCard(p, tpl) {
   const img = p.image
-    ? `<img src="${p.image}" style="width:100%;height:100%;object-fit:cover;">`
+    ? `<img src="${escapeHtml(p.image)}" style="width:100%;height:100%;object-fit:cover;">`
     : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:32px;">📦</div>`;
 
   if (tpl.cardStyle === "market") {
