@@ -32,12 +32,7 @@
                 <div class="w-16 h-1 bg-purple-600"></div>
                 <div class="flex items-center">
                     <div class="w-10 h-10 step-active rounded-full flex items-center justify-center font-bold">2</div>
-                    <span class="ml-2 font-semibold text-purple-600">Shipping</span>
-                </div>
-                <div class="w-16 h-1 bg-gray-300"></div>
-                <div class="flex items-center">
-                    <div class="w-10 h-10 step-inactive rounded-full flex items-center justify-center font-bold">3</div>
-                    <span class="ml-2 font-semibold text-gray-600">Payment</span>
+                    <span class="ml-2 font-semibold text-purple-600">Checkout</span>
                 </div>
             </div>
         </div>
@@ -99,7 +94,7 @@
                     <div class="space-y-4">
                         <label class="flex items-center justify-between p-4 border-2 border-purple-600 rounded-lg cursor-pointer bg-purple-50">
                             <div class="flex items-center">
-                                <input type="radio" name="delivery" value="cablink" checked class="mr-4">
+                                <input type="radio" name="delivery" value="cablink" data-fee="0" checked class="mr-4">
                                 <div>
                                     <p class="font-bold text-gray-800">CabLink Express</p>
                                     <p class="text-sm text-gray-600">Delivered in 1-2 hours</p>
@@ -110,7 +105,7 @@
 
                         <label class="flex items-center justify-between p-4 border-2 border-gray-300 rounded-lg cursor-pointer hover:border-purple-400">
                             <div class="flex items-center">
-                                <input type="radio" name="delivery" value="standard" class="mr-4">
+                                <input type="radio" name="delivery" value="standard" data-fee="20" class="mr-4">
                                 <div>
                                     <p class="font-bold text-gray-800">Standard Delivery</p>
                                     <p class="text-sm text-gray-600">Delivered in 2-3 days</p>
@@ -121,10 +116,10 @@
 
                         <label class="flex items-center justify-between p-4 border-2 border-gray-300 rounded-lg cursor-pointer hover:border-purple-400">
                             <div class="flex items-center">
-                                <input type="radio" name="delivery" value="pickup" class="mr-4">
+                                <input type="radio" name="delivery" value="pickup" data-fee="0" class="mr-4">
                                 <div>
                                     <p class="font-bold text-gray-800">Pickup from Seller</p>
-                                    <p class="text-sm text-gray-600">Room 22 Farm, Gaborone</p>
+                                    <p class="text-sm text-gray-600">Collect directly from the room(s) in your cart</p>
                                 </div>
                             </div>
                             <span class="font-bold text-green-600">FREE</span>
@@ -149,12 +144,12 @@
                             <i class="fas fa-shield-alt text-green-600 text-2xl"></i>
                         </label>
 
-                        <label class="flex items-center justify-between p-4 border-2 border-gray-300 rounded-lg cursor-pointer hover:border-purple-400">
+                        <label class="flex items-center justify-between p-4 border-2 border-gray-200 rounded-lg opacity-60 cursor-not-allowed">
                             <div class="flex items-center">
-                                <input type="radio" name="payment" value="thb" class="mr-4">
+                                <input type="radio" name="payment" value="thb" disabled class="mr-4">
                                 <div>
                                     <p class="font-bold text-gray-800">Pay with THB</p>
-                                    <p class="text-sm text-gray-600">Balance: 12.5 THB (≈ P125)</p>
+                                    <p class="text-sm text-gray-600">Coming soon — balance: <span id="thb-balance-display">0.0</span> THB</p>
                                 </div>
                             </div>
                             <i class="fas fa-coins text-yellow-600 text-2xl"></i>
@@ -191,8 +186,8 @@
                             <span id="checkout-subtotal">P0</span>
                         </div>
                         <div class="flex justify-between text-gray-700">
-                            <span>Delivery (CabLink)</span>
-                            <span class="text-green-600 font-semibold">FREE</span>
+                            <span>Delivery</span>
+                            <span id="checkout-delivery-fee" class="text-green-600 font-semibold">FREE</span>
                         </div>
                     </div>
 

@@ -6,12 +6,18 @@ import { CONFIG } from "../core/config.js";
 
 const REWARD_PERCENT = CONFIG.MARKETPLACE.REWARD_PERCENT / 100; // e.g. 1%
 
+function getDeliveryFee() {
+  const checked = document.querySelector('input[name="delivery"]:checked');
+  return checked ? Number(checked.dataset.fee || 0) : 0;
+}
+
 function renderCart() {
   const cart = getCart();
   const itemsEl = document.getElementById("checkout-items");
   const subtotalEl = document.getElementById("checkout-subtotal");
   const totalEl = document.getElementById("checkout-total");
   const thbEl = document.getElementById("checkout-thb-reward");
+  const deliveryFeeEl = document.getElementById("checkout-delivery-fee");
   const placeOrderBtn = document.getElementById("place-order-btn");
 
   if (!itemsEl) return cart;
@@ -60,12 +66,23 @@ function renderCart() {
     )
     .join("");
 
-  const total = getCartTotal();
-  const reward = total * REWARD_PERCENT;
+  const subtotal = getCartTotal();
+  const deliveryFee = getDeliveryFee();
+  const total = subtotal + deliveryFee;
+  const reward = subtotal * REWARD_PERCENT; // reward is based on goods, not delivery fee
 
-  if (subtotalEl) subtotalEl.textContent = `P${total.toFixed(2)}`;
+  if (subtotalEl) subtotalEl.textContent = `P${subtotal.toFixed(2)}`;
   if (totalEl) totalEl.textContent = `P${total.toFixed(2)}`;
   if (thbEl) thbEl.textContent = reward.toFixed(3);
+  if (deliveryFeeEl) {
+    if (deliveryFee > 0) {
+      deliveryFeeEl.textContent = `P${deliveryFee.toFixed(2)}`;
+      deliveryFeeEl.classList.remove("text-green-600");
+    } else {
+      deliveryFeeEl.textContent = "FREE";
+      deliveryFeeEl.classList.add("text-green-600");
+    }
+  }
 
   if (multiRoom) {
     let note = document.getElementById("checkout-multiroom-note");
@@ -94,7 +111,7 @@ function clearError() {
   el.classList.add("hidden");
 }
 
-async function createOrder(session, cart) {
+async function createOrder(session, cart, { deliveryFee, orderStatus, paystackRef }) {
   const userId = session.user.id;
 
   const form = document.getElementById("checkoutForm");
@@ -113,9 +130,11 @@ async function createOrder(session, cart) {
   // Each room is a separate seller — split the cart into one order per room
   // rather than one order for the whole basket. A shopper buying from 3
   // rooms in one checkout ends up with 3 independent orders, each visible
-  // only to its own seller, each trackable separately.
+  // only to its own seller, each trackable separately. Delivery fee is
+  // split evenly across room-orders rather than charged per-room again.
   const groups = getCartGroupedByRoom();
   const createdOrders = [];
+  const feePerOrder = groups.length > 0 ? deliveryFee / groups.length : 0;
 
   for (const group of groups) {
     const { data: order, error: orderErr } = await supabase
@@ -125,10 +144,11 @@ async function createOrder(session, cart) {
         product_id: group.items[0].id, // kept for backward-compat joins
         room_id: group.room_id,
         seller_id: group.seller_id,
-        status: "confirmed",
-        total_amount: group.subtotal,
+        status: orderStatus,
+        total_amount: group.subtotal + feePerOrder,
         delivery_method: deliveryMethod,
         payment_method: paymentMethod,
+        paystack_reference: paystackRef || null,
         ...delivery,
       })
       .select()
@@ -167,8 +187,9 @@ async function createOrder(session, cart) {
 
   // Reward THB — credited immediately for MVP. In production this should be
   // confirmed server-side once the Paystack webhook verifies payment.
-  const total = getCartTotal();
-  const reward = Math.round(total * REWARD_PERCENT);
+  // Based on goods subtotal only, not the delivery fee, matching renderCart.
+  const subtotal = getCartTotal();
+  const reward = Math.round(subtotal * REWARD_PERCENT);
   if (reward > 0) {
     await supabase.from("wallet_ledger").insert({
       user_id: userId,
@@ -208,14 +229,18 @@ async function handlePlaceOrder() {
   btn.disabled = true;
   btn.textContent = "Processing…";
 
-  const total = getCartTotal();
+  const subtotal = getCartTotal();
+  const deliveryFee = getDeliveryFee();
+  const total = subtotal + deliveryFee;
   const email = document.getElementById("email").value;
+  const paymentMethod =
+    document.querySelector('input[name="payment"]:checked')?.value || "paystack";
 
   // Reserve stock BEFORE payment, not after — nobody should be charged for
   // something that's actually out of stock. Each decrement is atomic at the
   // database level (see decrement_product_stock), so two buyers racing for
   // the last unit can never both succeed. If anything fails here, roll back
-  // whatever already succeeded and stop before Paystack ever opens.
+  // whatever already succeeded and stop before payment is even attempted.
   const reserved = [];
   for (const item of cart) {
     const { data: ok, error: stockErr } = await supabase.rpc(
@@ -243,6 +268,29 @@ async function handlePlaceOrder() {
     }
   }
 
+  // Cash on Delivery: genuinely different path — no payment gateway at all.
+  // Order is created as "pending" since payment hasn't happened yet; it's
+  // confirmed at the point of physical handover, not here.
+  if (paymentMethod === "cod") {
+    try {
+      const orders = await createOrder(session, cart, {
+        deliveryFee,
+        orderStatus: "pending",
+        paystackRef: null,
+      });
+      clearCart();
+      const orderIds = orders.map((o) => o.id).join(",");
+      window.location.href = `order-tracking.html?order=${orders[0].id}&orders=${orderIds}`;
+    } catch (err) {
+      console.error("[BSTM Checkout] COD order creation failed:", err);
+      await restoreAllReserved();
+      showError("Couldn't place your order. Please try again.");
+      btn.disabled = false;
+      btn.textContent = "Place Order";
+    }
+    return;
+  }
+
   // NOTE: This confirms payment on the client-side Paystack callback, which
   // is fine for early testing but is NOT secure for real money — a user
   // could fake success without paying. Before going live, verify payment
@@ -261,11 +309,15 @@ async function handlePlaceOrder() {
   const handler = PaystackPop.setup({
     key: CONFIG.API.PAYSTACK_PUBLIC,
     email: email,
-    amount: Math.round(total * 100), // kobo/thebe
+    amount: Math.round(total * 100), // kobo/thebe — now correctly includes delivery fee
     currency: CONFIG.PAYSTACK.CURRENCY,
     ref: "BSTM-" + Date.now() + "-" + Math.floor(Math.random() * 10000),
     callback: function (response) {
-      createOrder(session, cart)
+      createOrder(session, cart, {
+        deliveryFee,
+        orderStatus: "confirmed",
+        paystackRef: response.reference,
+      })
         .then((orders) => {
           clearCart();
           const orderIds = orders.map((o) => o.id).join(",");
@@ -294,7 +346,7 @@ async function handlePlaceOrder() {
   handler.openIframe();
 }
 
-window.BSTM.ready().then(function (session) {
+window.BSTM.ready().then(async function (session) {
   if (!session) {
     window.location.href = "login.html?redirect=checkout.html";
     return;
@@ -307,7 +359,19 @@ window.BSTM.ready().then(function (session) {
     nameEl.value =
       session.user.user_metadata?.full_name || session.user.email.split("@")[0];
 
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("thb_balance")
+    .eq("id", session.user.id)
+    .maybeSingle();
+  const balanceEl = document.getElementById("thb-balance-display");
+  if (balanceEl) balanceEl.textContent = Number(profile?.thb_balance || 0).toFixed(1);
+
   renderCart();
+
+  document.querySelectorAll('input[name="delivery"]').forEach((el) => {
+    el.addEventListener("change", renderCart);
+  });
 
   const btn = document.getElementById("place-order-btn");
   if (btn) btn.addEventListener("click", handlePlaceOrder);
