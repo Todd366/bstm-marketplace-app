@@ -78,27 +78,28 @@
     <a href="seller-dashboard.html" class="quick-btn"><div style="font-size:28px;margin-bottom:8px;">🛒</div><div style="font-size:13px;font-weight:700;color:#1E1B4B;">Start Selling</div></a>
   </div>
 
-  <!-- Active Rooms -->
+  <!-- Active Rooms (real, loaded dynamically) -->
   <h2 style="font-size:18px;font-weight:900;color:#1E1B4B;margin:0 0 16px;">Open Rooms</h2>
+  <div id="dashboard-rooms-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-bottom:16px;">
+    <p style="color:#9CA3AF;font-size:13px;">Loading…</p>
+  </div>
+
+  <!-- Services (not rooms — kept visually distinct) -->
   <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-bottom:32px;">
-    <a href="agriculture.html" style="display:flex;align-items:center;gap:12px;background:#fff;border:1.5px solid #D1FAE5;border-radius:16px;padding:16px;text-decoration:none;transition:all 0.2s;" onmouseover="this.style.borderColor='#059669'" onmouseout="this.style.borderColor='#D1FAE5'">
-      <div style="font-size:28px;">🌾</div><div><div style="font-size:13px;font-weight:800;color:#1E1B4B;">Room 22 Farm</div><div style="font-size:11px;color:#059669;font-weight:600;">● Open Now</div></div>
-    </a>
     <a href="cablink.html" style="display:flex;align-items:center;gap:12px;background:#fff;border:1.5px solid #FEF3C7;border-radius:16px;padding:16px;text-decoration:none;transition:all 0.2s;" onmouseover="this.style.borderColor='#D97706'" onmouseout="this.style.borderColor='#FEF3C7'">
-      <div style="font-size:28px;">🚕</div><div><div style="font-size:13px;font-weight:800;color:#1E1B4B;">CabLink Rides</div><div style="font-size:11px;color:#D97706;font-weight:600;">● Open Now</div></div>
+      <div style="font-size:28px;">🚕</div><div><div style="font-size:13px;font-weight:800;color:#1E1B4B;">CabLink</div><div style="font-size:11px;color:#D97706;font-weight:600;">Rides & deliveries</div></div>
     </a>
     <a href="thb-wallet.html" style="display:flex;align-items:center;gap:12px;background:#fff;border:1.5px solid #EDE9FE;border-radius:16px;padding:16px;text-decoration:none;transition:all 0.2s;" onmouseover="this.style.borderColor='#7C3AED'" onmouseout="this.style.borderColor='#EDE9FE'">
-      <div style="font-size:28px;">💰</div><div><div style="font-size:13px;font-weight:800;color:#1E1B4B;">THB Wallet</div><div style="font-size:11px;color:#7C3AED;font-weight:600;">● Active</div></div>
+      <div style="font-size:28px;">💰</div><div><div style="font-size:13px;font-weight:800;color:#1E1B4B;">THB Wallet</div><div style="font-size:11px;color:#7C3AED;font-weight:600;">Your rewards balance</div></div>
     </a>
   </div>
 
   <!-- Referral -->
   <div style="background:linear-gradient(135deg,#1E1B4B,#312E81);border-radius:20px;padding:24px;color:#fff;">
-    <h3 style="font-size:16px;font-weight:900;margin:0 0 6px;">Refer a Friend, Earn THB</h3>
-    <p style="color:#A78BFA;font-size:13px;margin:0 0 16px;">Share your referral code and earn 5 THB for every friend who joins.</p>
+    <h3 style="font-size:16px;font-weight:900;margin:0 0 6px;">Refer a Friend</h3>
+    <p style="color:#A78BFA;font-size:13px;margin:0 0 16px;">Referral rewards are coming soon — we want the tracking to be real before we promise a payout.</p>
     <div style="display:flex;gap:10px;flex-wrap:wrap;">
       <div style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:10px;padding:10px 16px;font-size:15px;font-weight:800;letter-spacing:1px;" id="ref-code-display">LOADING</div>
-      <button onclick="copyReferral()" style="background:#7C3AED;color:#fff;border:none;padding:10px 20px;border-radius:10px;font-weight:700;cursor:pointer;font-size:13px;">Copy Link</button>
     </div>
   </div>
 

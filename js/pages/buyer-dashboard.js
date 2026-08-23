@@ -1,4 +1,6 @@
 import { getProfile, getOrders } from "../bstm-core.js";
+import { supabase } from "../core/supabase-client.js";
+import { escapeHtml } from "../core/sanitize.js";
 
 async function render(session) {
   if (!session) {
@@ -25,15 +27,11 @@ async function render(session) {
 
   if (profile) {
     var thbEl = document.getElementById("stat-thb");
-    var roleEl = document.getElementById("stat-role");
-    if (thbEl) thbEl.textContent = (profile.thb_balance || 0).toFixed(2) + " THB";
-    if (roleEl) roleEl.textContent = profile.role || "buyer";
+    if (thbEl) thbEl.textContent = (profile.thb_balance || 0).toFixed(2);
 
-    // These columns don't exist in live DB — show safe fallbacks
-    var ordersEl = document.getElementById("stat-orders");
+    // referral_code doesn't exist in the live DB yet — show a safe, honest fallback
     var refEl = document.getElementById("stat-referral");
     var refCodeEl = document.getElementById("ref-code-display");
-    if (ordersEl) ordersEl.textContent = "—";
     if (refEl) refEl.textContent = "Coming soon";
     if (refCodeEl) refCodeEl.textContent = "Coming soon";
   }
@@ -44,6 +42,42 @@ async function render(session) {
     var ordersEl = document.getElementById("stat-orders");
     if (ordersEl) ordersEl.textContent = orders.length;
   }
+
+  // Load real wishlist count — this stat was never wired to anything real
+  const { count: wishlistCount } = await supabase
+    .from("wishlist")
+    .select("id", { count: "exact", head: true })
+    .eq("user_id", user.id);
+  const wishlistEl = document.getElementById("stat-wishlist");
+  if (wishlistEl && typeof wishlistCount === "number") wishlistEl.textContent = wishlistCount;
+
+  // Real open rooms — no filler shown if none exist yet
+  const { data: rooms } = await supabase
+    .from("rooms")
+    .select("id, name, banner_emoji, category")
+    .eq("status", "active")
+    .order("room_number")
+    .limit(6);
+
+  const roomsGrid = document.getElementById("dashboard-rooms-grid");
+  if (roomsGrid) {
+    if (!rooms || rooms.length === 0) {
+      roomsGrid.innerHTML =
+        '<p style="color:#9CA3AF;font-size:13px;">No rooms open yet — ' +
+        '<a href="open-room.html" style="color:#7C3AED;font-weight:700;">open the first one →</a></p>';
+    } else {
+      roomsGrid.innerHTML = rooms
+        .map(
+          (r) => `
+        <a href="room.html?id=${r.id}" style="display:flex;align-items:center;gap:12px;background:#fff;border:1.5px solid #D1FAE5;border-radius:16px;padding:16px;text-decoration:none;">
+          <div style="font-size:28px;">${escapeHtml(r.banner_emoji || "🏬")}</div>
+          <div><div style="font-size:13px;font-weight:800;color:#1E1B4B;">${escapeHtml(r.name)}</div>
+          <div style="font-size:11px;color:#059669;font-weight:600;">● Open</div></div>
+        </a>`
+        )
+        .join("");
+    }
+  }
 }
 
 window.BSTM.ready().then(render);
@@ -53,9 +87,4 @@ window.logout = function() {
   if (confirm("Are you sure you want to logout?")) {
     window.BSTM.logout();
   }
-};
-
-window.copyReferral = function() {
-  // referral_code not in live DB yet — show info message
-  alert("Referral system coming soon. Stay tuned!");
 };
