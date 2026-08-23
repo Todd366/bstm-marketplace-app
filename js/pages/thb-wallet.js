@@ -118,14 +118,7 @@ window.BSTM.ready().then(async function (session) {
   document.querySelectorAll(".wallet-user-name").forEach((el) => (el.textContent = name));
   document.querySelectorAll(".wallet-user-email").forEach((el) => (el.textContent = email));
 
-  // Internal display identifier only — not a real blockchain address, since
-  // there is no blockchain integration behind THB. It's a Postgres ledger.
   const uid = session.user.id.replace(/-/g, "");
-  const addrEl = document.getElementById("walletAddress");
-  if (addrEl) addrEl.textContent = "0x" + uid.substring(0, 40);
-
-  const codeEl = document.getElementById("referralCode");
-  if (codeEl) codeEl.textContent = "BSTM-" + uid.substring(0, 4).toUpperCase();
 
   await refreshBalance();
   await loadTransactions();

@@ -62,10 +62,10 @@
             <div class="relative z-10">
                 <div class="flex items-center justify-between mb-8">
                     <div>
-                        <p class="text-sm text-blue-200 mb-2">Total Balance</p>
+                        <p class="text-sm text-blue-200 mb-2">BSTM Rewards Balance</p>
                         <div class="flex items-baseline space-x-3">
                             <h2 class="text-6xl font-bold" id="walletTHBBalance">0.0</h2>
-                            <span class="text-3xl text-yellow-300">THB</span>
+                            <span class="text-3xl text-yellow-300">THB pts</span>
                         </div>
                         <p class="text-blue-200 mt-2">
                             ≈ P<span id="walletBWPEquivalent">0.00</span> BWP
@@ -75,27 +75,18 @@
                         <div class="w-20 h-20 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center mb-2">
                             <i class="fas fa-coins text-4xl text-white"></i>
                         </div>
-                        <p class="text-xs text-blue-200">BSC Testnet</p>
+                        <p class="text-xs text-blue-200">Internal balance</p>
                     </div>
                 </div>
 
-                <!-- Wallet Address -->
+                <!-- Honest disclosure: this is a Mall points balance, not the -->
+                <!-- real on-chain THoBoCoin token, until wallet connect ships. -->
                 <div class="bg-white bg-opacity-10 rounded-xl p-4 backdrop-blur-sm">
-                    <div class="flex items-center justify-between">
-                        <div class="flex-1">
-                            <p class="text-xs text-blue-200 mb-1">Wallet Address</p>
-                            <p class="font-mono text-sm" id="walletAddress">0x0000...0000</p>
-                        </div>
-                        <button onclick="copyWalletAddress()" class="bg-white bg-opacity-20 hover:bg-opacity-30 px-4 py-2 rounded-lg transition-all">
-                            <i class="fas fa-copy mr-2"></i>Copy
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Contract Info -->
-                <div class="mt-4 flex items-center justify-between text-xs text-blue-200">
-                    <span>Contract: 0xaf2f...3c615628</span>
-                    <span>Chain ID: 97 (BSC Testnet)</span>
+                    <p class="text-sm text-blue-100">
+                        <i class="fas fa-info-circle mr-2"></i>
+                        This is your BSTM Mall rewards balance — separate from the on-chain
+                        THoBoCoin token. Wallet connection is coming soon.
+                    </p>
                 </div>
             </div>
         </div>
@@ -243,38 +234,13 @@
 
             <!-- Referrals Tab -->
             <div id="referralsTab" class="p-6 hidden">
-                <!-- Referral Code -->
-                <div class="bg-gradient-to-br from-purple-50 to-indigo-50 rounded-2xl p-6 mb-6 border-2 border-purple-200">
-                    <h3 class="font-bold text-gray-800 mb-4">Your Referral Code</h3>
-                    <div class="flex items-center space-x-4">
-                        <div class="flex-1 bg-white rounded-xl p-4 border-2 border-purple-300">
-                            <p class="text-3xl font-bold text-purple-600 font-mono text-center" id="referralCode">BSTM-XXXX</p>
-                        </div>
-                        <button onclick="copyReferralCode()" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-4 rounded-xl font-bold">
-                            <i class="fas fa-copy mr-2"></i>Copy
-                        </button>
-                    </div>
-                    <p class="text-sm text-gray-600 mt-4 text-center">
-                        Share this code and earn <strong>50 THB</strong> for each friend who signs up!
+                <div class="bg-gray-50 rounded-2xl p-8 text-center border-2 border-gray-200">
+                    <div class="text-4xl mb-3">🎁</div>
+                    <h3 class="font-bold text-gray-800 mb-2">Referrals — Coming Soon</h3>
+                    <p class="text-sm text-gray-600">
+                        We're building real referral tracking so this reward is genuine, not just a
+                        promise. Check back soon.
                     </p>
-                </div>
-
-                <!-- Referral Stats -->
-                <div class="grid grid-cols-2 gap-4 mb-6">
-                    <div class="bg-white rounded-xl p-6 text-center border-2 border-gray-200">
-                        <p class="text-3xl font-bold text-purple-600" id="totalReferrals">0</p>
-                        <p class="text-sm text-gray-600">Total Referrals</p>
-                    </div>
-                    <div class="bg-white rounded-xl p-6 text-center border-2 border-gray-200">
-                        <p class="text-3xl font-bold text-green-600" id="referralEarnings">0</p>
-                        <p class="text-sm text-gray-600">THB Earned</p>
-                    </div>
-                </div>
-
-                <!-- Referral List -->
-                <h4 class="font-bold text-gray-800 mb-4">Recent Referrals</h4>
-                <div class="space-y-3" id="referralsList">
-                    <p class="text-center text-gray-500 py-8">No referrals yet. Share your code to start earning!</p>
                 </div>
             </div>
         </div>
@@ -311,31 +277,30 @@
                     <i class="fas fa-chevron-right text-gray-400"></i>
                 </a>
 
-                <a href="https://cab-link-pwa.vercel.app" class="flex items-center justify-between p-4 bg-blue-50 rounded-xl hover:bg-blue-100 transition-all">
+                <a href="https://todd366.github.io/CabLink-pwa/" target="_blank" class="flex items-center justify-between p-4 bg-blue-50 rounded-xl hover:bg-blue-100 transition-all">
                     <div class="flex items-center space-x-4">
                         <div class="w-14 h-14 bg-blue-500 rounded-full flex items-center justify-center">
                             <i class="fas fa-car text-white text-xl"></i>
                         </div>
                         <div>
-                            <p class="font-bold text-gray-800">Take CabLink Rides</p>
-                            <p class="text-sm text-gray-600">Earn THB on every ride booked</p>
+                            <p class="font-bold text-gray-800">Open CabLink</p>
+                            <p class="text-sm text-gray-600">Book rides & deliveries</p>
                         </div>
                     </div>
                     <i class="fas fa-chevron-right text-gray-400"></i>
                 </a>
 
-                <button onclick="shareReferral()" class="w-full flex items-center justify-between p-4 bg-purple-50 rounded-xl hover:bg-purple-100 transition-all">
+                <div class="w-full flex items-center justify-between p-4 bg-gray-50 rounded-xl opacity-70">
                     <div class="flex items-center space-x-4">
-                        <div class="w-14 h-14 bg-purple-500 rounded-full flex items-center justify-center">
+                        <div class="w-14 h-14 bg-gray-400 rounded-full flex items-center justify-center">
                             <i class="fas fa-users text-white text-xl"></i>
                         </div>
                         <div class="text-left">
-                            <p class="font-bold text-gray-800">Refer Friends</p>
-                            <p class="text-sm text-gray-600">Get 50 THB per referral</p>
+                            <p class="font-bold text-gray-600">Refer Friends</p>
+                            <p class="text-sm text-gray-500">Coming soon</p>
                         </div>
                     </div>
-                    <i class="fas fa-chevron-right text-gray-400"></i>
-                </button>
+                </div>
 
                 <a href="agriculture.html" class="flex items-center justify-between p-4 bg-yellow-50 rounded-xl hover:bg-yellow-100 transition-all">
                     <div class="flex items-center space-x-4">
@@ -536,32 +501,6 @@
     // once the real wallet data has loaded), so no local definitions here.
 
     // Copy functions
-    function copyWalletAddress() {
-        const address = document.getElementById('walletAddress').textContent;
-        navigator.clipboard.writeText(address);
-        alert('Wallet address copied!');
-    }
-
-    function copyReferralCode() {
-        const code = document.getElementById('referralCode').textContent;
-        navigator.clipboard.writeText(code);
-        alert('Referral code copied! Share it to earn 50 THB per friend.');
-    }
-
-    function shareReferral() {
-        const code = document.getElementById('referralCode').textContent;
-        const text = `Join BSTM Digital Nation and get 50 THB! Use my code: ${code}\n\nhttps://bstm.bw/signup?ref=${code}`;
-        
-        if (navigator.share) {
-            navigator.share({
-                title: 'Join BSTM Nation',
-                text: text
-            });
-        } else {
-            navigator.clipboard.writeText(text);
-            alert('Referral message copied to clipboard!');
-        }
-    }
 </script>
 <script src="components/smart-loader.js"></script>
 <script type="module" src="js/app.js?v=1786828104"></script>
