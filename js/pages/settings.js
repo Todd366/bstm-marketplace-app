@@ -33,15 +33,62 @@ window.BSTM.ready().then(async function (session) {
       role.charAt(0).toUpperCase() + role.slice(1);
     if (profile.phone) document.getElementById("settings-phone").value = profile.phone;
     if (profile.location) document.getElementById("settings-location").value = profile.location;
+
+    const thbEl = document.getElementById("settings-thb-balance");
+    if (thbEl) thbEl.textContent = Number(profile.thb_balance || 0).toFixed(1);
+
+    const prefs = profile.notification_prefs || {};
+    const setToggle = (id, key, defaultVal) => {
+      const el = document.getElementById(id);
+      if (el) el.checked = prefs[key] ?? defaultVal;
+    };
+    setToggle("pref-order-updates", "order_updates", true);
+    setToggle("pref-messages", "messages", true);
+    setToggle("pref-promotions", "promotions", false);
+    setToggle("pref-price-drops", "price_drops", true);
   }
 });
+
+window.saveNotificationPref = async function (key, value) {
+  const { data: sessionData } = await supabase.auth.getSession();
+  const userId = sessionData?.session?.user?.id;
+  if (!userId) return;
+
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("notification_prefs")
+    .eq("id", userId)
+    .maybeSingle();
+
+  const prefs = { ...(profile?.notification_prefs || {}), [key]: value };
+
+  await supabase.from("profiles").update({ notification_prefs: prefs }).eq("id", userId);
+};
+
+window.requestPasswordReset = async function () {
+  const btn = document.getElementById("change-password-btn");
+  const { data: sessionData } = await supabase.auth.getSession();
+  const email = sessionData?.session?.user?.email;
+  if (!email) return;
+
+  if (btn) btn.textContent = "Sending…";
+
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: window.location.origin + "/login.html",
+  });
+
+  if (btn) {
+    btn.textContent = error ? "❌ Failed — try again" : "✅ Check your email";
+    setTimeout(() => (btn.textContent = "Send Link"), 3000);
+  }
+};
 
 window.logout = function () {
   if (confirm("Logout?")) window.BSTM.logout();
 };
 
 window.saveProfile = async function () {
-  const btn = document.querySelector('button[onclick="saveProfile()"]');
+  const btn = document.getElementById("save-profile-btn");
   const name = document.getElementById("settings-name").value.trim();
   const phone = document.getElementById("settings-phone").value.trim();
   const location = document.getElementById("settings-location").value;

@@ -77,7 +77,7 @@
                 </div>
             </div>
 
-            <button class="mt-6 gradient-bg text-white px-8 py-3 rounded-lg font-semibold hover:shadow-lg transition-all">
+            <button id="save-profile-btn" onclick="saveProfile()" class="mt-6 gradient-bg text-white px-8 py-3 rounded-lg font-semibold hover:shadow-lg transition-all">
                 <i class="fas fa-save mr-2"></i>Save Changes
             </button>
         </div>
@@ -92,31 +92,25 @@
                 <div class="flex items-center justify-between p-4 border-2 border-gray-200 rounded-lg">
                     <div>
                         <h4 class="font-semibold text-gray-800">Change Password</h4>
-                        <p class="text-sm text-gray-600">Last changed 30 days ago</p>
+                        <p class="text-sm text-gray-600">We'll email you a reset link</p>
                     </div>
-                    <button class="text-purple-600 hover:text-purple-800 font-semibold">
-                        Change <i class="fas fa-arrow-right ml-1"></i>
+                    <button id="change-password-btn" onclick="requestPasswordReset()" class="text-purple-600 hover:text-purple-800 font-semibold">
+                        Send Link <i class="fas fa-arrow-right ml-1"></i>
                     </button>
                 </div>
 
-                <div class="flex items-center justify-between p-4 border-2 border-gray-200 rounded-lg">
+                <div class="flex items-center justify-between p-4 border-2 border-gray-200 rounded-lg opacity-70">
                     <div>
                         <h4 class="font-semibold text-gray-800">Two-Factor Authentication</h4>
-                        <p class="text-sm text-gray-600">Add an extra layer of security</p>
+                        <p class="text-sm text-gray-600">Coming soon</p>
                     </div>
-                    <button class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-semibold">
-                        Enable
-                    </button>
                 </div>
 
-                <div class="flex items-center justify-between p-4 border-2 border-gray-200 rounded-lg">
+                <div class="flex items-center justify-between p-4 border-2 border-gray-200 rounded-lg opacity-70">
                     <div>
                         <h4 class="font-semibold text-gray-800">Active Sessions</h4>
-                        <p class="text-sm text-gray-600">Manage your active devices</p>
+                        <p class="text-sm text-gray-600">Coming soon</p>
                     </div>
-                    <button class="text-purple-600 hover:text-purple-800 font-semibold">
-                        View <i class="fas fa-arrow-right ml-1"></i>
-                    </button>
                 </div>
             </div>
         </div>
@@ -131,50 +125,36 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-sm mb-1">THB Wallet Balance</p>
-                        <p class="text-4xl font-bold">12.5 THB</p>
-                        <p class="text-sm mt-1">≈ P125 BWP</p>
+                        <p class="text-4xl font-bold"><span id="settings-thb-balance">0.0</span> THB</p>
+                        <p class="text-sm mt-1"><a href="thb-wallet.html" class="underline">Manage in wallet →</a></p>
                     </div>
                     <i class="fas fa-coins text-6xl opacity-20"></i>
-                </div>
-                <div class="flex space-x-3 mt-6">
-                    <button class="flex-1 bg-white text-orange-600 hover:bg-gray-100 py-2 rounded-lg font-semibold">
-                        <i class="fas fa-download mr-2"></i>Withdraw
-                    </button>
-                    <button class="flex-1 bg-white bg-opacity-20 hover:bg-opacity-30 py-2 rounded-lg font-semibold">
-                        <i class="fas fa-history mr-2"></i>History
-                    </button>
                 </div>
             </div>
 
             <div class="space-y-4">
-                <div class="flex items-center justify-between p-4 border-2 border-gray-200 rounded-lg">
+                <div class="flex items-center justify-between p-4 border-2 border-gray-200 rounded-lg opacity-70">
                     <div class="flex items-center space-x-4">
                         <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
                             <i class="fas fa-credit-card text-blue-600 text-xl"></i>
                         </div>
                         <div>
                             <h4 class="font-semibold text-gray-800">Payment Methods</h4>
-                            <p class="text-sm text-gray-600">1 card saved</p>
+                            <p class="text-sm text-gray-600">Coming soon</p>
                         </div>
                     </div>
-                    <button class="text-purple-600 hover:text-purple-800 font-semibold">
-                        Manage <i class="fas fa-arrow-right ml-1"></i>
-                    </button>
                 </div>
 
-                <div class="flex items-center justify-between p-4 border-2 border-gray-200 rounded-lg">
+                <div class="flex items-center justify-between p-4 border-2 border-gray-200 rounded-lg opacity-70">
                     <div class="flex items-center space-x-4">
                         <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
                             <i class="fas fa-university text-green-600 text-xl"></i>
                         </div>
                         <div>
                             <h4 class="font-semibold text-gray-800">Bank Accounts</h4>
-                            <p class="text-sm text-gray-600">For withdrawals</p>
+                            <p class="text-sm text-gray-600">Coming soon</p>
                         </div>
                     </div>
-                    <button class="text-purple-600 hover:text-purple-800 font-semibold">
-                        Add <i class="fas fa-plus ml-1"></i>
-                    </button>
                 </div>
             </div>
         </div>
@@ -192,7 +172,7 @@
                         <p class="text-sm text-gray-600">Get notified about your orders</p>
                     </div>
                     <label class="relative inline-flex items-center cursor-pointer">
-                        <input type="checkbox" checked class="sr-only peer">
+                        <input type="checkbox" id="pref-order-updates" class="sr-only peer" onchange="saveNotificationPref('order_updates', this.checked)">
                         <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600"></div>
                     </label>
                 </div>
@@ -203,7 +183,7 @@
                         <p class="text-sm text-gray-600">Alerts for new chat messages</p>
                     </div>
                     <label class="relative inline-flex items-center cursor-pointer">
-                        <input type="checkbox" checked class="sr-only peer">
+                        <input type="checkbox" id="pref-messages" class="sr-only peer" onchange="saveNotificationPref('messages', this.checked)">
                         <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600"></div>
                     </label>
                 </div>
@@ -214,7 +194,7 @@
                         <p class="text-sm text-gray-600">Deals and special offers</p>
                     </div>
                     <label class="relative inline-flex items-center cursor-pointer">
-                        <input type="checkbox" class="sr-only peer">
+                        <input type="checkbox" id="pref-promotions" class="sr-only peer" onchange="saveNotificationPref('promotions', this.checked)">
                         <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600"></div>
                     </label>
                 </div>
@@ -225,7 +205,7 @@
                         <p class="text-sm text-gray-600">Wishlist item price alerts</p>
                     </div>
                     <label class="relative inline-flex items-center cursor-pointer">
-                        <input type="checkbox" checked class="sr-only peer">
+                        <input type="checkbox" id="pref-price-drops" class="sr-only peer" onchange="saveNotificationPref('price_drops', this.checked)">
                         <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600"></div>
                     </label>
                 </div>
@@ -239,37 +219,28 @@
             </h2>
 
             <div class="space-y-4">
-                <div class="flex items-center justify-between p-4 border-2 border-gray-200 rounded-lg">
+                <div class="flex items-center justify-between p-4 border-2 border-gray-200 rounded-lg opacity-70">
                     <div>
                         <h4 class="font-semibold text-gray-800">Profile Visibility</h4>
-                        <p class="text-sm text-gray-600">Who can see your profile</p>
+                        <p class="text-sm text-gray-600">Coming soon</p>
                     </div>
-                    <select class="px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-purple-600">
-                        <option>Everyone</option>
-                        <option>BSTM Members Only</option>
-                        <option>Nobody</option>
-                    </select>
                 </div>
 
-                <div class="flex items-center justify-between p-4 border-2 border-gray-200 rounded-lg">
+                <div class="flex items-center justify-between p-4 border-2 border-gray-200 rounded-lg opacity-70">
                     <div>
                         <h4 class="font-semibold text-gray-800">Activity Status</h4>
-                        <p class="text-sm text-gray-600">Show when you're online</p>
+                        <p class="text-sm text-gray-600">Coming soon</p>
                     </div>
-                    <label class="relative inline-flex items-center cursor-pointer">
-                        <input type="checkbox" checked class="sr-only peer">
-                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600"></div>
-                    </label>
                 </div>
 
                 <div class="flex items-center justify-between p-4 border-2 border-gray-200 rounded-lg">
                     <div>
                         <h4 class="font-semibold text-gray-800">Data & Privacy</h4>
-                        <p class="text-sm text-gray-600">Download or delete your data</p>
+                        <p class="text-sm text-gray-600">Email support to request or delete your data</p>
                     </div>
-                    <button class="text-purple-600 hover:text-purple-800 font-semibold">
-                        Manage <i class="fas fa-arrow-right ml-1"></i>
-                    </button>
+                    <a href="mailto:bstm366@gmail.com?subject=Data%20Request" class="text-purple-600 hover:text-purple-800 font-semibold">
+                        Contact <i class="fas fa-arrow-right ml-1"></i>
+                    </a>
                 </div>
             </div>
         </div>
@@ -284,21 +255,21 @@
                 <div class="flex items-center justify-between p-4 bg-white border-2 border-red-200 rounded-lg">
                     <div>
                         <h4 class="font-semibold text-gray-800">Deactivate Account</h4>
-                        <p class="text-sm text-gray-600">Temporarily disable your account</p>
+                        <p class="text-sm text-gray-600">Temporarily disable your account — email us to arrange this</p>
                     </div>
-                    <button class="text-red-600 hover:text-red-800 font-semibold">
-                        Deactivate
-                    </button>
+                    <a href="mailto:bstm366@gmail.com?subject=Deactivate%20My%20Account" class="text-red-600 hover:text-red-800 font-semibold">
+                        Contact
+                    </a>
                 </div>
 
                 <div class="flex items-center justify-between p-4 bg-white border-2 border-red-200 rounded-lg">
                     <div>
                         <h4 class="font-semibold text-gray-800">Delete Account</h4>
-                        <p class="text-sm text-gray-600">Permanently delete your account and data</p>
+                        <p class="text-sm text-gray-600">Permanently delete your account and data — email us to arrange this</p>
                     </div>
-                    <button class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-semibold">
-                        Delete Account
-                    </button>
+                    <a href="mailto:bstm366@gmail.com?subject=Delete%20My%20Account" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-semibold">
+                        Contact
+                    </a>
                 </div>
             </div>
         </div>
