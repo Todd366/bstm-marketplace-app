@@ -26,6 +26,17 @@ document.addEventListener("DOMContentLoaded", async function () {
     return;
   }
 
+  if (p.status !== "active") {
+    const main = document.querySelector("main") || document.body;
+    main.innerHTML =
+      '<div style="text-align:center;padding:80px 20px;">' +
+      '<div style="font-size:56px;margin-bottom:16px;">🚫</div>' +
+      '<p style="color:#9CA3AF;font-size:15px;margin-bottom:24px;">This product is no longer available.</p>' +
+      '<a href="marketplace.html" style="background:linear-gradient(135deg,#7C3AED,#4F46E5);' +
+      'color:#fff;padding:14px 28px;border-radius:14px;font-weight:800;text-decoration:none;">Browse Mall →</a></div>';
+    return;
+  }
+
   // Cart items need to know which room they came from, since each room is
   // a separate seller — checkout splits the cart into one order per room.
   let roomName = null;

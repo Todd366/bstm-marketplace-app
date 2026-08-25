@@ -2,9 +2,13 @@
 import { supabase } from "../core/supabase-client.js";
 import { escapeHtml } from "../core/sanitize.js";
 
+let productLookup = new Map();
+
 function renderProducts(products) {
   const container = document.getElementById("my-products-list");
   if (!container) return;
+
+  productLookup = new Map(products.map((p) => [p.id, p]));
 
   if (products.length === 0) {
     container.innerHTML =
@@ -14,19 +18,30 @@ function renderProducts(products) {
   }
 
   container.innerHTML = products
-    .map(
-      (p) => `
-    <div style="background:#fff;border:1.5px solid #EDE9FE;border-radius:16px;padding:16px;display:flex;align-items:center;gap:14px;">
-      <div style="width:56px;height:56px;border-radius:10px;background:#F5F3FF;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;">
-        ${p.image ? `<img src="${escapeHtml(p.image)}" style="width:100%;height:100%;object-fit:cover;">` : '<span style="font-size:24px;">📦</span>'}
+    .map((p) => {
+      const isActive = p.status === "active";
+      return `
+    <div style="background:#fff;border:1.5px solid #EDE9FE;border-radius:16px;padding:16px;">
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:12px;">
+        <div style="width:56px;height:56px;border-radius:10px;background:#F5F3FF;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;">
+          ${p.image ? `<img src="${escapeHtml(p.image)}" style="width:100%;height:100%;object-fit:cover;">` : '<span style="font-size:24px;">📦</span>'}
+        </div>
+        <div style="flex:1;min-width:0;">
+          <div style="font-weight:800;color:#1E1B4B;font-size:14px;">${escapeHtml(p.name)}</div>
+          <div style="font-size:12px;color:${isActive ? "#9CA3AF" : "#DC2626"};">Qty: ${p.quantity ?? "—"} · ${p.status}</div>
+        </div>
+        <div style="font-weight:900;color:#7C3AED;font-size:15px;">P${Number(p.price).toFixed(2)}</div>
       </div>
-      <div style="flex:1;min-width:0;">
-        <div style="font-weight:800;color:#1E1B4B;font-size:14px;">${escapeHtml(p.name)}</div>
-        <div style="font-size:12px;color:#9CA3AF;">Qty: ${p.quantity ?? "—"} · ${p.status}</div>
+      <div style="display:flex;gap:8px;">
+        <button onclick="openEditModal('${p.id}')" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid #DDD6FE;background:#F5F3FF;color:#7C3AED;font-weight:700;font-size:12px;">
+          <i class="fas fa-edit"></i> Edit
+        </button>
+        <button onclick="toggleProductStatus('${p.id}', '${p.status}')" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid ${isActive ? "#FECACA" : "#BBF7D0"};background:${isActive ? "#FEF2F2" : "#F0FDF4"};color:${isActive ? "#DC2626" : "#16A34A"};font-weight:700;font-size:12px;">
+          <i class="fas fa-${isActive ? "eye-slash" : "eye"}"></i> ${isActive ? "Deactivate" : "Reactivate"}
+        </button>
       </div>
-      <div style="font-weight:900;color:#7C3AED;font-size:15px;">P${Number(p.price).toFixed(2)}</div>
-    </div>`
-    )
+    </div>`;
+    })
     .join("");
 }
 
@@ -70,7 +85,7 @@ window.BSTM.ready().then(async function (session) {
   // My products
   const { data: products, error: productsErr } = await supabase
     .from("products")
-    .select("id, name, price, image, quantity, status")
+    .select("id, name, price, image, quantity, status, description")
     .eq("seller_id", userId)
     .order("created_at", { ascending: false });
 
@@ -130,4 +145,89 @@ window.BSTM.ready().then(async function (session) {
 
 window.logout = function () {
   if (confirm("Logout?")) window.BSTM.logout();
+};
+
+// ---------- Edit / Deactivate ----------
+
+window.openEditModal = function (productId) {
+  const p = productLookup.get(productId);
+  if (!p) return;
+
+  document.getElementById("edit-product-id").value = p.id;
+  document.getElementById("edit-product-name").value = p.name || "";
+  document.getElementById("edit-product-price").value = p.price;
+  document.getElementById("edit-product-quantity").value = p.quantity ?? 0;
+  document.getElementById("edit-product-description").value = p.description || "";
+  document.getElementById("edit-product-error").style.display = "none";
+  document.getElementById("edit-product-modal").style.display = "flex";
+};
+
+window.closeEditModal = function () {
+  document.getElementById("edit-product-modal").style.display = "none";
+};
+
+window.saveProductEdit = async function () {
+  const errEl = document.getElementById("edit-product-error");
+  errEl.style.display = "none";
+
+  const id = document.getElementById("edit-product-id").value;
+  const name = document.getElementById("edit-product-name").value.trim();
+  const price = parseFloat(document.getElementById("edit-product-price").value);
+  const quantity = parseInt(document.getElementById("edit-product-quantity").value, 10);
+  const description = document.getElementById("edit-product-description").value.trim();
+
+  if (!name || !(price > 0) || !(quantity >= 0)) {
+    errEl.textContent = "Please fill in a valid name, price, and quantity.";
+    errEl.style.display = "block";
+    return;
+  }
+
+  const btn = document.getElementById("edit-product-save-btn");
+  btn.disabled = true;
+  btn.textContent = "Saving…";
+
+  const { error } = await supabase
+    .from("products")
+    .update({ name, price, quantity, description })
+    .eq("id", id);
+
+  btn.disabled = false;
+  btn.textContent = "Save";
+
+  if (error) {
+    console.error("[BSTM Seller] Product update failed:", error);
+    errEl.textContent = "Couldn't save changes. Please try again.";
+    errEl.style.display = "block";
+    return;
+  }
+
+  closeEditModal();
+  location.reload();
+};
+
+// "Delete" is intentionally a status change, not a real row deletion —
+// products with existing orders can't be hard-deleted (order_items
+// references them with no cascade), and hard-deleting would silently wipe
+// any real reviews on the product (reviews cascade on product delete).
+// Deactivating is safe and reversible: marketplace/room listings already
+// filter on status=active, and product-detail.js now also checks status
+// directly so a deactivated product can't be reached via a stale link either.
+window.toggleProductStatus = async function (productId, currentStatus) {
+  const newStatus = currentStatus === "active" ? "inactive" : "active";
+  const verb = newStatus === "inactive" ? "deactivate" : "reactivate";
+
+  if (!confirm(`Are you sure you want to ${verb} this product?`)) return;
+
+  const { error } = await supabase
+    .from("products")
+    .update({ status: newStatus })
+    .eq("id", productId);
+
+  if (error) {
+    console.error("[BSTM Seller] Status toggle failed:", error);
+    alert("Couldn't update the product. Please try again.");
+    return;
+  }
+
+  location.reload();
 };
