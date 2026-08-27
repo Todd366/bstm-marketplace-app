@@ -182,19 +182,13 @@ window.withdrawTHB = async function (e) {
   }
 
   alert(
-    `Withdrawal request recorded for P${(amount * 10).toFixed(2)} BWP.\n\n` +
+    `Withdrawal request recorded for P${(amount / 10).toFixed(2)} BWP.\n\n` +
       "BSTM will contact you to confirm payout within 1-2 business days " +
       "(automatic payouts aren't connected yet)."
   );
   window.closeWithdrawModal?.();
   await refreshBalance();
   await loadTransactions();
-};
-
-// --- Staking: honest placeholder, no fake success ---
-window.stakeTHB = function (e) {
-  e.preventDefault();
-  alert("Staking isn't available yet — it's on the roadmap. Your THB is safe in your balance.");
 };
 
 window.logout = function () {

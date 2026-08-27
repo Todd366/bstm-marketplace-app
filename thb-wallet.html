@@ -400,33 +400,14 @@
                 </button>
             </div>
 
-            <div class="bg-purple-50 border-2 border-purple-300 rounded-xl p-6 mb-6">
-                <div class="flex items-center justify-between mb-4">
-                    <span class="text-gray-700 font-semibold">APY</span>
-                    <span class="text-3xl font-bold text-purple-600">12%</span>
-                </div>
+            <div class="bg-gray-50 border-2 border-gray-200 rounded-xl p-8 text-center">
+                <div class="text-4xl mb-3">🔒</div>
+                <h3 class="font-bold text-gray-800 mb-2">Staking — Coming Soon</h3>
                 <p class="text-sm text-gray-600">
-                    Lock your THB for 30 days and earn 12% annual returns
+                    We want the real APY and lock terms finalized before showing any numbers here.
+                    Your THB is safe in your balance in the meantime.
                 </p>
             </div>
-
-            <form id="stakeForm" onsubmit="stakeTHB(event)">
-                <div class="mb-6">
-                    <label class="block text-gray-700 font-semibold mb-2">Amount to Stake (THB)</label>
-                    <input type="number" id="stakeAmount" step="0.1" min="10" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:border-purple-600" placeholder="Minimum 10 THB">
-                    <p class="text-sm text-gray-600 mt-2">
-                        Estimated earnings: <span id="stakeEarnings">0.0</span> THB in 30 days
-                    </p>
-                </div>
-
-                <button type="submit" class="w-full bg-purple-600 hover:bg-purple-700 text-white py-4 rounded-xl font-bold text-lg">
-                    <i class="fas fa-lock mr-2"></i>Stake THB
-                </button>
-
-                <p class="text-xs text-gray-500 mt-4 text-center">
-                    Funds will be locked for 30 days. Early withdrawal not available.
-                </p>
-            </form>
         </div>
     </div>
 
@@ -485,20 +466,13 @@
     // Withdraw amount calculation
     document.getElementById('withdrawAmount')?.addEventListener('input', (e) => {
         const thb = parseFloat(e.target.value) || 0;
-        const bwp = thb * 10;
+        const bwp = thb / 10;
         document.getElementById('withdrawBWP').textContent = bwp.toFixed(2);
     });
 
-    // Stake amount calculation
-    document.getElementById('stakeAmount')?.addEventListener('input', (e) => {
-        const amount = parseFloat(e.target.value) || 0;
-        const earnings = (amount * 0.12) / 12; // 12% APY for 30 days
-        document.getElementById('stakeEarnings').textContent = earnings.toFixed(2);
-    });
-
-    // Send/Withdraw/Stake are implemented in js/pages/thb-wallet.js
-    // (registered as window.sendTHB / window.withdrawTHB / window.stakeTHB
-    // once the real wallet data has loaded), so no local definitions here.
+    // Send/Withdraw are implemented in js/pages/thb-wallet.js
+    // (registered as window.sendTHB / window.withdrawTHB once the real
+    // wallet data has loaded), so no local definitions here.
 
     // Copy functions
 </script>
