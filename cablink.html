@@ -29,7 +29,7 @@
                 Create a pickup-and-delivery task here, then hand it off to the real CabLink driver app —
                 CabLink matches it with the right driver and vehicle for the job.
             </p>
-            <a href="https://todd366.github.io/CabLink-pwa/" target="_blank"
+            <a href="https://cab-link-pwa.vercel.app" target="_blank"
                class="inline-flex items-center gap-2 mt-4 bg-white text-blue-600 hover:bg-blue-50 px-6 py-3 rounded-xl font-bold shadow-lg transition-all">
                 <i class="fas fa-external-link-alt"></i> Open CabLink Driver App
             </a>
@@ -38,53 +38,13 @@
 
     <div class="max-w-5xl mx-auto px-6 py-10">
 
-        <!-- Create Task -->
-        <div class="bg-white rounded-2xl shadow-lg p-8 mb-10">
-            <h2 class="text-2xl font-bold text-gray-800 mb-1">Create a Delivery Task</h2>
-            <p class="text-gray-500 text-sm mb-6">Pick which room to collect from, tell us where it's going.</p>
-
-            <form id="task-form" class="space-y-5">
-                <div>
-                    <label class="block text-gray-700 font-semibold mb-2">Pickup Room *</label>
-                    <select id="pickup-room" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:border-blue-600">
-                        <option value="">Loading rooms…</option>
-                    </select>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                    <div>
-                        <label class="block text-gray-700 font-semibold mb-2">Drop-off Phone *</label>
-                        <input type="tel" id="dropoff-phone" required placeholder="+267 7X XXX XXX"
-                               class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:border-blue-600">
-                    </div>
-                    <div>
-                        <label class="block text-gray-700 font-semibold mb-2">Drop-off City *</label>
-                        <input type="text" id="dropoff-city" required placeholder="e.g. Gaborone"
-                               class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:border-blue-600">
-                    </div>
-                </div>
-                <div>
-                    <label class="block text-gray-700 font-semibold mb-2">Drop-off Address *</label>
-                    <input type="text" id="dropoff-address" required placeholder="Plot number, street, landmark"
-                           class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:border-blue-600">
-                </div>
-
-                <div id="task-error" class="hidden text-red-600 text-sm font-semibold"></div>
-
-                <button type="submit" id="create-task-btn"
-                        class="w-full cablink-gradient text-white py-4 rounded-xl font-bold text-lg hover:shadow-lg transition-all">
-                    Create Task
-                </button>
-            </form>
-
-            <div id="task-success" class="hidden mt-6 bg-green-50 border-2 border-green-300 rounded-xl p-6 text-center">
-                <div class="text-4xl mb-2">✅</div>
-                <h3 class="text-xl font-bold text-gray-800 mb-2">Task Created</h3>
-                <p class="text-gray-600 text-sm mb-4">Now open the CabLink app so a driver can pick this up.</p>
-                <a href="https://todd366.github.io/CabLink-pwa/" target="_blank"
-                   class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-bold transition-all">
-                    <i class="fas fa-external-link-alt"></i> Open CabLink Driver App
-                </a>
-            </div>
+        <!-- Info: deliveries are automatic now -->
+        <div class="bg-blue-50 border-2 border-blue-200 rounded-2xl p-6 mb-10">
+            <h2 class="text-lg font-bold text-gray-800 mb-1">Deliveries now happen automatically</h2>
+            <p class="text-gray-600 text-sm">
+                When you choose CabLink delivery at checkout, a pickup task is created and sent to a real
+                CabLink driver for you — no separate step needed here. This page shows the status of those tasks.
+            </p>
         </div>
 
         <!-- Your Tasks -->

@@ -171,15 +171,40 @@ async function createOrder(session, cart, { deliveryFee, orderStatus, paystackRe
     // up ready-to-claim in the real CabLink driver app — no manual step
     // needed from the buyer or seller.
     if (deliveryMethod === "cablink" && group.room_id) {
-      await supabase.from("delivery_requests").insert({
-        order_id: order.id,
-        buyer_id: userId,
-        pickup_room_id: group.room_id,
-        dropoff_address: delivery.delivery_address,
-        dropoff_city: delivery.delivery_city,
-        dropoff_phone: delivery.delivery_phone,
-        status: "pending",
-      });
+      const { data: deliveryRequest, error: deliveryErr } = await supabase
+        .from("delivery_requests")
+        .insert({
+          order_id: order.id,
+          buyer_id: userId,
+          pickup_room_id: group.room_id,
+          dropoff_address: delivery.delivery_address,
+          dropoff_city: delivery.delivery_city,
+          dropoff_phone: delivery.delivery_phone,
+          status: "pending",
+        })
+        .select("id")
+        .single();
+
+      // Actually hand the task to CabLink's real driver network. This is
+      // best-effort on purpose: if CabLink is briefly unreachable or the
+      // shared key isn't configured yet, the order must still succeed —
+      // the row above stays "pending" and can be retried later rather
+      // than blocking checkout.
+      if (!deliveryErr && deliveryRequest) {
+        try {
+          const { error: dispatchErr } = await supabase.functions.invoke(
+            "dispatch-to-cablink",
+            { body: { delivery_request_id: deliveryRequest.id } }
+          );
+          if (dispatchErr) {
+            console.error("[BSTM Checkout] CabLink dispatch failed (order still placed):", dispatchErr);
+          }
+        } catch (dispatchException) {
+          console.error("[BSTM Checkout] CabLink dispatch threw (order still placed):", dispatchException);
+        }
+      } else if (deliveryErr) {
+        console.error("[BSTM Checkout] Couldn't create delivery_requests row:", deliveryErr);
+      }
     }
 
     createdOrders.push(order);
