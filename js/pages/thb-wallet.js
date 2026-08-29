@@ -25,7 +25,7 @@ async function refreshBalance() {
 
   const el = (id) => document.getElementById(id);
   if (el("walletTHBBalance")) el("walletTHBBalance").textContent = currentBalance.toFixed(1);
-  if (el("walletBWPEquivalent")) el("walletBWPEquivalent").textContent = (currentBalance * 10).toFixed(2);
+  if (el("walletBWPEquivalent")) el("walletBWPEquivalent").textContent = (currentBalance / 10).toFixed(2);
   if (el("availableTHB")) el("availableTHB").textContent = currentBalance.toFixed(1);
 }
 
@@ -123,13 +123,93 @@ window.BSTM.ready().then(async function (session) {
   await refreshBalance();
   await loadTransactions();
 
-  const { data: orderCount } = await supabase
+  const { count: orderCount } = await supabase
     .from("orders")
     .select("id", { count: "exact", head: true })
     .eq("buyer_id", currentUserId);
   const orderCountEl = document.getElementById("order-count");
-  if (orderCountEl && orderCount) orderCountEl.textContent = orderCount.length;
+  if (orderCountEl && typeof orderCount === "number") orderCountEl.textContent = orderCount;
+
+  await initWalletConnect(session.user.id);
 });
+
+// ---------- MetaMask Connect (Stage 1: identity link only, no token movement) ----------
+
+async function initWalletConnect(userId) {
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("wallet_address")
+    .eq("id", userId)
+    .maybeSingle();
+
+  if (profile?.wallet_address) {
+    showConnectedState(profile.wallet_address);
+  }
+
+  const connectBtn = document.getElementById("connect-wallet-btn");
+  const disconnectBtn = document.getElementById("disconnect-wallet-btn");
+  const errEl = document.getElementById("wallet-connect-error");
+
+  if (connectBtn) {
+    connectBtn.addEventListener("click", async () => {
+      errEl?.classList.add("hidden");
+
+      if (!window.ethereum) {
+        if (errEl) {
+          errEl.textContent =
+            "No wallet found. Open this page inside the MetaMask app's browser, or install the MetaMask extension on desktop.";
+          errEl.classList.remove("hidden");
+        }
+        return;
+      }
+
+      connectBtn.disabled = true;
+      connectBtn.textContent = "Connecting…";
+
+      try {
+        const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
+        const address = accounts[0];
+
+        const { error } = await supabase
+          .from("profiles")
+          .update({ wallet_address: address })
+          .eq("id", userId);
+
+        if (error) throw error;
+
+        showConnectedState(address);
+      } catch (err) {
+        console.error("[BSTM Wallet] Connect failed:", err);
+        if (errEl) {
+          errEl.textContent =
+            err.code === 4001 ? "Connection request was rejected." : "Couldn't connect wallet. Please try again.";
+          errEl.classList.remove("hidden");
+        }
+      } finally {
+        connectBtn.disabled = false;
+        connectBtn.textContent = "Connect MetaMask";
+      }
+    });
+  }
+
+  if (disconnectBtn) {
+    disconnectBtn.addEventListener("click", async () => {
+      await supabase.from("profiles").update({ wallet_address: null }).eq("id", userId);
+      document.getElementById("wallet-connected").classList.add("hidden");
+      document.getElementById("wallet-not-connected").classList.remove("hidden");
+    });
+  }
+}
+
+function showConnectedState(address) {
+  const short = address.slice(0, 6) + "..." + address.slice(-4);
+  const addrEl = document.getElementById("connected-wallet-address");
+  if (addrEl) {
+    addrEl.innerHTML = `<i class="fas fa-check-circle text-green-400 mr-2"></i>${short}`;
+  }
+  document.getElementById("wallet-not-connected")?.classList.add("hidden");
+  document.getElementById("wallet-connected")?.classList.remove("hidden");
+}
 
 // --- Send THB (real transfer between two users, by email) ---
 window.sendTHB = async function (e) {

@@ -37,8 +37,8 @@
                     <span class="text-gray-400">Website</span>
                     <span id="websiteStatus" class="w-3 h-3 bg-green-500 rounded-full"></span>
                 </div>
-                <p class="text-3xl font-bold">Online</p>
-                <p class="text-sm text-gray-400">99.9% uptime</p>
+                <p class="text-3xl font-bold" id="websiteStatusText">Online</p>
+                <p class="text-sm text-gray-400">No uptime monitoring configured yet</p>
             </div>
 
             <div class="bg-gray-800 rounded-xl p-6">
@@ -46,8 +46,8 @@
                     <span class="text-gray-400">Database</span>
                     <span id="dbStatus" class="w-3 h-3 bg-green-500 rounded-full"></span>
                 </div>
-                <p class="text-3xl font-bold">Healthy</p>
-                <p class="text-sm text-gray-400">12ms latency</p>
+                <p class="text-3xl font-bold" id="dbStatusText">Checking…</p>
+                <p class="text-sm text-gray-400">Live latency shown below</p>
             </div>
 
             <div class="bg-gray-800 rounded-xl p-6">
@@ -55,8 +55,8 @@
                     <span class="text-gray-400">Payments</span>
                     <span id="paymentsStatus" class="w-3 h-3 bg-green-500 rounded-full"></span>
                 </div>
-                <p class="text-3xl font-bold">Active</p>
-                <p class="text-sm text-gray-400">Paystack OK</p>
+                <p class="text-3xl font-bold" id="paymentsStatusText">—</p>
+                <p class="text-sm text-gray-400" id="paymentsStatusSub"></p>
             </div>
 
             <div class="bg-gray-800 rounded-xl p-6">
@@ -64,8 +64,8 @@
                     <span class="text-gray-400">API</span>
                     <span id="apiStatus" class="w-3 h-3 bg-green-500 rounded-full"></span>
                 </div>
-                <p class="text-3xl font-bold">Running</p>
-                <p class="text-sm text-gray-400">All endpoints OK</p>
+                <p class="text-3xl font-bold" id="apiStatusText">Checking…</p>
+                <p class="text-sm text-gray-400">Only endpoint monitored is the database read above</p>
             </div>
         </div>
 

@@ -80,13 +80,39 @@
                 </div>
 
                 <!-- Honest disclosure: this is a Mall points balance, not the -->
-                <!-- real on-chain THoBoCoin token, until wallet connect ships. -->
-                <div class="bg-white bg-opacity-10 rounded-xl p-4 backdrop-blur-sm">
+                <!-- real on-chain THoBoCoin token. Connecting a wallet below -->
+                <!-- links your address for identity only — no tokens move -->
+                <!-- through this app. -->
+                <div class="bg-white bg-opacity-10 rounded-xl p-4 backdrop-blur-sm mb-4">
                     <p class="text-sm text-blue-100">
                         <i class="fas fa-info-circle mr-2"></i>
                         This is your BSTM Mall rewards balance — separate from the on-chain
-                        THoBoCoin token. Wallet connection is coming soon.
+                        THoBoCoin token.
                     </p>
+                </div>
+
+                <div id="wallet-not-connected" class="bg-white bg-opacity-10 rounded-xl p-4 backdrop-blur-sm">
+                    <div class="flex items-center justify-between flex-wrap gap-3">
+                        <p class="text-sm text-blue-100">
+                            <i class="fas fa-wallet mr-2"></i>
+                            No wallet connected — link your MetaMask for identity only, no tokens move.
+                        </p>
+                        <button id="connect-wallet-btn" class="bg-orange-500 hover:bg-orange-600 text-white px-5 py-2 rounded-lg font-bold text-sm whitespace-nowrap">
+                            Connect MetaMask
+                        </button>
+                    </div>
+                    <p id="wallet-connect-error" class="hidden text-red-300 text-xs mt-2"></p>
+                </div>
+
+                <div id="wallet-connected" class="hidden bg-white bg-opacity-10 rounded-xl p-4 backdrop-blur-sm">
+                    <div class="flex items-center justify-between flex-wrap gap-3">
+                        <p class="text-sm text-blue-100 font-mono" id="connected-wallet-address">
+                            <i class="fas fa-check-circle text-green-400 mr-2"></i>
+                        </p>
+                        <button id="disconnect-wallet-btn" class="text-blue-200 hover:text-white text-xs underline">
+                            Disconnect
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

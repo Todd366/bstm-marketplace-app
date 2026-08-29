@@ -9,6 +9,11 @@ function setDot(id, healthy) {
   el.classList.add(healthy ? "bg-green-500" : "bg-red-500");
 }
 
+function setText(id, text) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = text;
+}
+
 async function checkHealth() {
   const start = performance.now();
   const { error } = await supabase.from("products").select("id").limit(1);
@@ -17,9 +22,20 @@ async function checkHealth() {
   const dbHealthy = !error;
   document.getElementById("responseTime").textContent = dbHealthy ? `${latency}ms` : "—";
   setDot("dbStatus", dbHealthy);
+  setText("dbStatusText", dbHealthy ? "Healthy" : "Degraded");
+
   setDot("websiteStatus", true); // tautological — if this script ran, the site loaded
-  setDot("apiStatus", dbHealthy); // Supabase is the only real backend API in use
-  setDot("paymentsStatus", false); // Paystack still on placeholder key — honestly red until configured
+  setText("websiteStatusText", "Online");
+
+  const apiHealthy = dbHealthy; // Supabase is the only real backend API in use
+  setDot("apiStatus", apiHealthy);
+  setText("apiStatusText", apiHealthy ? "Running" : "Degraded");
+
+  // Paystack still on placeholder key — honestly red until a real key is set
+  const paystackConfigured = false;
+  setDot("paymentsStatus", paystackConfigured);
+  setText("paymentsStatusText", paystackConfigured ? "Active" : "Inactive");
+  setText("paymentsStatusSub", paystackConfigured ? "Paystack OK" : "Paystack not configured");
 
   const log = document.getElementById("errorLog");
   const entries = [];
