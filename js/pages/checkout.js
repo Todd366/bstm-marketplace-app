@@ -69,11 +69,11 @@ function renderCart() {
   const subtotal = getCartTotal();
   const deliveryFee = getDeliveryFee();
   const total = subtotal + deliveryFee;
-  const reward = subtotal * REWARD_PERCENT; // reward is based on goods, not delivery fee
+  const reward = Math.round(subtotal * REWARD_PERCENT); // reward is based on goods, not delivery fee — rounded to match what actually gets credited (see handlePlaceOrder)
 
   if (subtotalEl) subtotalEl.textContent = `P${subtotal.toFixed(2)}`;
   if (totalEl) totalEl.textContent = `P${total.toFixed(2)}`;
-  if (thbEl) thbEl.textContent = reward.toFixed(3);
+  if (thbEl) thbEl.textContent = reward.toFixed(1);
   if (deliveryFeeEl) {
     if (deliveryFee > 0) {
       deliveryFeeEl.textContent = `P${deliveryFee.toFixed(2)}`;

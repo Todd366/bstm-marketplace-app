@@ -1,5 +1,6 @@
 // js/pages/order-tracking.js
 import { supabase } from "../core/supabase-client.js";
+import { escapeHtml } from "../core/sanitize.js";
 
 const STATUS_STEPS = [
   { key: "pending", label: "Order Placed", icon: "fa-check", desc: "Your order has been received." },
@@ -57,7 +58,7 @@ function renderItems(items) {
       (item) => `
       <div class="flex items-center space-x-4 p-4 border-2 border-gray-200 rounded-xl">
         <div class="flex-1">
-          <h3 class="font-bold text-gray-800">${item.product_name}</h3>
+          <h3 class="font-bold text-gray-800">${escapeHtml(item.product_name)}</h3>
           <span class="text-sm text-gray-600">Qty: ${item.quantity}</span>
         </div>
         <div class="text-right">
@@ -113,10 +114,10 @@ async function loadOrder(orderId, session) {
   const addrEl = document.getElementById("delivery-address");
   if (order.delivery_name || order.delivery_address) {
     addrEl.innerHTML = `
-      <p class="text-gray-700">${order.delivery_name || ""}</p>
-      <p class="text-gray-700">${order.delivery_address || ""}</p>
-      <p class="text-gray-700">${order.delivery_city || ""}, Botswana</p>
-      <p class="text-gray-700">${order.delivery_phone || ""}</p>`;
+      <p class="text-gray-700">${escapeHtml(order.delivery_name || "")}</p>
+      <p class="text-gray-700">${escapeHtml(order.delivery_address || "")}</p>
+      <p class="text-gray-700">${escapeHtml(order.delivery_city || "")}, Botswana</p>
+      <p class="text-gray-700">${escapeHtml(order.delivery_phone || "")}</p>`;
   }
 
   // THB reward is logged in wallet_ledger against this order
