@@ -120,6 +120,31 @@ async function loadOrder(orderId, session) {
       <p class="text-gray-700">${escapeHtml(order.delivery_phone || "")}</p>`;
   }
 
+  // Only CabLink orders have a driver at all — this section was previously
+  // shown to every buyer regardless of delivery method, including people
+  // who chose self-pickup and have no driver coming.
+  if (order.delivery_method === "cablink") {
+    const section = document.getElementById("cablink-driver-section");
+    const statusEl = document.getElementById("cablink-driver-status");
+    if (section) section.classList.remove("hidden");
+
+    const { data: deliveryRequest } = await supabase
+      .from("delivery_requests")
+      .select("status, cablink_ride_id")
+      .eq("order_id", order.id)
+      .maybeSingle();
+
+    if (statusEl) {
+      if (deliveryRequest?.cablink_ride_id) {
+        statusEl.innerHTML =
+          '<i class="fas fa-check-circle text-green-500 text-4xl mb-4 block"></i>Sent to a CabLink driver';
+      } else {
+        statusEl.innerHTML =
+          '<i class="fas fa-clock text-4xl mb-4 block"></i>Waiting to be sent to CabLink';
+      }
+    }
+  }
+
   // THB reward is logged in wallet_ledger against this order
   const { data: reward } = await supabase
     .from("wallet_ledger")
