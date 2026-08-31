@@ -111,22 +111,52 @@ window.BSTM.ready().then(async function (session) {
     .from("orders")
     .select("id, total_amount, status, created_at")
     .order("created_at", { ascending: false })
-    .limit(5);
+    .limit(15);
 
   const ordersEl = document.getElementById("recent-orders-list");
   if (!recentOrders || recentOrders.length === 0) {
     ordersEl.innerHTML = '<p class="text-sm text-gray-400">No orders yet.</p>';
   } else {
+    const ADMIN_ACTIONS = {
+      pending: [{ label: "Confirm", next: "confirmed" }, { label: "Cancel", next: "cancelled" }],
+      confirmed: [{ label: "Mark Shipped", next: "shipped" }, { label: "Cancel", next: "cancelled" }],
+      shipped: [{ label: "Mark Delivered", next: "delivered" }],
+    };
     ordersEl.innerHTML = recentOrders
-      .map(
-        (o) => `
-      <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+      .map((o) => {
+        const actions = ADMIN_ACTIONS[o.status] || [];
+        const btns = actions
+          .map(
+            (a) =>
+              `<button data-order-id="${o.id}" data-next-status="${a.next}" class="admin-order-btn text-xs font-semibold px-2 py-1 rounded ${a.next === "cancelled" ? "bg-red-100 text-red-700" : "bg-purple-100 text-purple-700"}">${a.label}</button>`
+          )
+          .join(" ");
+        return `
+      <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg gap-2">
         <span class="text-sm font-semibold text-gray-800">#${o.id.split("-")[0].toUpperCase()}</span>
         <span class="text-xs text-gray-500 capitalize">${o.status}</span>
         <span class="text-sm font-bold text-purple-600">P${Number(o.total_amount || 0).toFixed(2)}</span>
-      </div>`
-      )
+        <span class="flex gap-1">${btns}</span>
+      </div>`;
+      })
       .join("");
+
+    ordersEl.querySelectorAll(".admin-order-btn").forEach((btn) => {
+      btn.addEventListener("click", async () => {
+        btn.disabled = true;
+        const { error } = await supabase.rpc("advance_order_status", {
+          p_order_id: btn.dataset.orderId,
+          p_new_status: btn.dataset.nextStatus,
+        });
+        if (error) {
+          console.error("[BSTM Admin] Couldn't update order:", error);
+          alert("Couldn't update this order: " + error.message);
+          btn.disabled = false;
+          return;
+        }
+        location.reload();
+      });
+    });
   }
 });
 
