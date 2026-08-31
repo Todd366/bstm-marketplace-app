@@ -123,14 +123,20 @@ window.BSTM.ready().then(async function (session) {
     listEl.querySelectorAll(".room-toggle-btn").forEach((btn) => {
       btn.addEventListener("click", async () => {
         const newStatus = btn.dataset.current === "active" ? "inactive" : "active";
+        const reason = prompt(
+          newStatus === "inactive" ? "Reason for deactivating this room:" : "Reason for reactivating this room:"
+        );
+        if (!reason || !reason.trim()) return;
+
         btn.disabled = true;
-        const { error } = await supabase
-          .from("rooms")
-          .update({ status: newStatus })
-          .eq("id", btn.dataset.id);
+        const { error } = await supabase.rpc("set_room_status", {
+          p_room_id: btn.dataset.id,
+          p_new_status: newStatus,
+          p_reason: reason.trim(),
+        });
         btn.disabled = false;
         if (error) {
-          alert("Couldn't update room status.");
+          alert("Couldn't update room status: " + error.message);
           return;
         }
         loadRooms();
