@@ -66,12 +66,28 @@ window.BSTM.ready().then(async function (session) {
 
   const userId = session.user.id;
 
-  // Room status — controls whether "Open Your Room" CTA or "My Room" card shows
-  const { data: myRoom } = await supabase
+  // Room status — controls whether "Open Your Room" CTA or "My Room" card shows.
+  // Checks both ownership AND staff membership (room_roles) — an employee
+  // added via Room Staff needs to actually see the room they work in, not
+  // just the literal owner.
+  const { data: ownedRoom } = await supabase
     .from("rooms")
     .select("id, room_number, name, banner_emoji")
     .eq("seller_id", userId)
     .maybeSingle();
+
+  let myRoom = ownedRoom;
+  let isOwner = !!ownedRoom;
+
+  if (!myRoom) {
+    const { data: staffedRoles } = await supabase
+      .from("room_roles")
+      .select("room_id, rooms(id, room_number, name, banner_emoji)")
+      .eq("user_id", userId)
+      .limit(1)
+      .maybeSingle();
+    if (staffedRoles?.rooms) myRoom = staffedRoles.rooms;
+  }
 
   if (myRoom) {
     document.getElementById("open-room-cta").style.display = "none";
@@ -80,7 +96,13 @@ window.BSTM.ready().then(async function (session) {
     document.getElementById("my-room-number").textContent = `ROOM ${myRoom.room_number}`;
     document.getElementById("my-room-name").textContent = myRoom.name;
     document.getElementById("my-room-link").href = `room.html?id=${myRoom.id}`;
-    loadRoomStaff(myRoom.id);
+    // Only the actual owner manages staff — an employee shouldn't add more staff.
+    const staffSection = document.getElementById("room-staff-section");
+    if (isOwner) {
+      loadRoomStaff(myRoom.id);
+    } else if (staffSection) {
+      staffSection.style.display = "none";
+    }
   }
 
   // My products
@@ -156,10 +178,37 @@ async function loadSellerOrders(sellerId) {
   const listEl = document.getElementById("seller-orders-list");
   if (!listEl) return;
 
+  // Figure out which product_ids this person is actually allowed to
+  // fulfill: their own products, plus products in any room they're
+  // staff of. Matches the room_roles-aware RLS policy — without this,
+  // a staff member's orders would never show up even though they're
+  // technically allowed to see them.
+  const { data: staffRooms } = await supabase
+    .from("room_roles")
+    .select("room_id")
+    .eq("user_id", sellerId)
+    .in("role_id", ["ROOM_MANAGER", "EMPLOYEE"]);
+
+  const roomIds = (staffRooms || []).map((r) => r.room_id);
+
+  let productQuery = supabase.from("products").select("id");
+  if (roomIds.length > 0) {
+    productQuery = productQuery.or(`seller_id.eq.${sellerId},room_id.in.(${roomIds.join(",")})`);
+  } else {
+    productQuery = productQuery.eq("seller_id", sellerId);
+  }
+  const { data: myProducts } = await productQuery;
+  const productIds = (myProducts || []).map((p) => p.id);
+
+  if (productIds.length === 0) {
+    listEl.innerHTML = '<p class="text-gray-400 text-sm">No orders yet.</p>';
+    return;
+  }
+
   const { data: items, error } = await supabase
     .from("order_items")
     .select("order_id, quantity, unit_price, product_id, products(name), orders(id, status, delivery_name, delivery_address, delivery_city, created_at)")
-    .eq("products.seller_id", sellerId)
+    .in("product_id", productIds)
     .order("order_id", { ascending: false });
 
   if (error) {
