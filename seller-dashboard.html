@@ -92,6 +92,24 @@
     <p style="color:#9CA3AF;font-size:14px;">Loading your products…</p>
   </div>
 
+  <!-- Room Staff -->
+  <h2 style="font-size:18px;font-weight:900;color:#1E1B4B;margin:0 0 16px;">Room Staff</h2>
+  <div style="background:#fff;border-radius:20px;padding:24px;margin-bottom:28px;box-shadow:0 4px 20px rgba(0,0,0,0.06);">
+    <form id="add-staff-form" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;">
+      <input id="staff-email" type="email" required placeholder="staff@email.com" style="flex:1;min-width:180px;padding:10px 14px;border:2px solid #E5E7EB;border-radius:10px;">
+      <select id="staff-role" style="padding:10px 14px;border:2px solid #E5E7EB;border-radius:10px;">
+        <option value="EMPLOYEE">Employee</option>
+        <option value="ROOM_MANAGER">Room Manager</option>
+      </select>
+      <button type="submit" style="background:#7C3AED;color:#fff;border:none;padding:10px 20px;border-radius:10px;font-weight:700;">Add</button>
+    </form>
+    <p id="staff-error" class="hidden" style="color:#DC2626;font-size:13px;margin-bottom:12px;"></p>
+    <div id="room-staff-list">
+      <p style="color:#9CA3AF;font-size:14px;">Loading staff…</p>
+    </div>
+    <p style="color:#9CA3AF;font-size:12px;margin-top:8px;">They need a BSTM account already — invite them to sign up first if they don't have one.</p>
+  </div>
+
   <!-- Orders To Fulfill -->
   <h2 style="font-size:18px;font-weight:900;color:#1E1B4B;margin:0 0 16px;">Orders To Fulfill</h2>
   <div id="seller-orders-list" style="margin-bottom:28px;">

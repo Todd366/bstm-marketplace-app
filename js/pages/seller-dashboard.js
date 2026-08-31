@@ -80,6 +80,7 @@ window.BSTM.ready().then(async function (session) {
     document.getElementById("my-room-number").textContent = `ROOM ${myRoom.room_number}`;
     document.getElementById("my-room-name").textContent = myRoom.name;
     document.getElementById("my-room-link").href = `room.html?id=${myRoom.id}`;
+    loadRoomStaff(myRoom.id);
   }
 
   // My products
@@ -226,6 +227,66 @@ async function loadSellerOrders(sellerId) {
       loadSellerOrders(sellerId);
     });
   });
+}
+
+async function loadRoomStaff(roomId) {
+  const listEl = document.getElementById("room-staff-list");
+  if (!listEl) return;
+
+  const { data: staff, error } = await supabase
+    .from("room_roles")
+    .select("id, role_id, user_id, profiles(email)")
+    .eq("room_id", roomId);
+
+  if (error) {
+    console.error("[BSTM Seller] Failed to load room staff:", error);
+    listEl.innerHTML = \'<p class="text-sm text-gray-400">Couldn\\\'t load staff.</p>\';
+    return;
+  }
+
+  if (!staff || staff.length === 0) {
+    listEl.innerHTML = \'<p class="text-sm text-gray-400">No staff added yet.</p>\';
+  } else {
+    listEl.innerHTML = staff
+      .map(
+        (s) => `
+      <div class="flex justify-between items-center py-2 border-b border-gray-100 last:border-0">
+        <span class="text-sm text-gray-700">${escapeHtml(s.profiles?.email || "Unknown")}</span>
+        <span class="text-xs font-semibold text-purple-600">${escapeHtml(s.role_id)}</span>
+      </div>`
+      )
+      .join("");
+  }
+
+  const form = document.getElementById("add-staff-form");
+  if (form && !form.dataset.bound) {
+    form.dataset.bound = "true";
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const emailInput = document.getElementById("staff-email");
+      const roleInput = document.getElementById("staff-role");
+      const errEl = document.getElementById("staff-error");
+      if (errEl) errEl.classList.add("hidden");
+
+      const { error: addErr } = await supabase.rpc("add_room_employee", {
+        p_room_id: roomId,
+        p_employee_email: emailInput.value.trim(),
+        p_role_id: roleInput.value,
+      });
+
+      if (addErr) {
+        console.error("[BSTM Seller] Couldn\'t add staff:", addErr);
+        if (errEl) {
+          errEl.textContent = addErr.message || "Couldn\'t add this person.";
+          errEl.classList.remove("hidden");
+        }
+        return;
+      }
+
+      emailInput.value = "";
+      loadRoomStaff(roomId);
+    });
+  }
 }
 
 window.logout = function () {
