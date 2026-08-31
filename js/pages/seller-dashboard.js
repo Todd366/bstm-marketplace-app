@@ -141,7 +141,92 @@ window.BSTM.ready().then(async function (session) {
 
   const thbEl = document.getElementById("seller-thb");
   if (thbEl) thbEl.textContent = thbBalance.toFixed(1);
+
+  loadSellerOrders(session.user.id);
 });
+
+const STATUS_NEXT = {
+  pending: { label: "Confirm Order", next: "confirmed" },
+  confirmed: { label: "Mark Shipped", next: "shipped" },
+  shipped: { label: "Mark Delivered", next: "delivered" },
+};
+
+async function loadSellerOrders(sellerId) {
+  const listEl = document.getElementById("seller-orders-list");
+  if (!listEl) return;
+
+  const { data: items, error } = await supabase
+    .from("order_items")
+    .select("order_id, quantity, unit_price, product_id, products(name), orders(id, status, delivery_name, delivery_address, delivery_city, created_at)")
+    .eq("products.seller_id", sellerId)
+    .order("order_id", { ascending: false });
+
+  if (error) {
+    console.error("[BSTM Seller] Failed to load orders:", error);
+    listEl.innerHTML = '<p class="text-red-500 text-sm">Couldn\'t load orders.</p>';
+    return;
+  }
+
+  const rows = (items || []).filter((i) => i.orders);
+  if (rows.length === 0) {
+    listEl.innerHTML = '<p class="text-gray-400 text-sm">No orders yet.</p>';
+    return;
+  }
+
+  // group line items by order
+  const byOrder = {};
+  for (const row of rows) {
+    const oid = row.orders.id;
+    if (!byOrder[oid]) byOrder[oid] = { order: row.orders, lines: [] };
+    byOrder[oid].lines.push(row);
+  }
+
+  listEl.innerHTML = Object.values(byOrder)
+    .map(({ order, lines }) => {
+      const action = STATUS_NEXT[order.status];
+      const itemsHtml = lines
+        .map((l) => `<li>${escapeHtml(l.products?.name || "Item")} × ${l.quantity} — P${(l.unit_price * l.quantity).toFixed(2)}</li>`)
+        .join("");
+      const btnHtml = action
+        ? `<button data-order-id="${order.id}" data-next-status="${action.next}" class="seller-advance-btn bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg text-sm font-semibold">${action.label}</button>`
+        : order.status === "cancelled"
+        ? '<span class="text-red-500 text-sm font-semibold">Cancelled</span>'
+        : '<span class="text-green-600 text-sm font-semibold">Delivered</span>';
+
+      return `
+        <div class="border-2 border-gray-100 rounded-xl p-5 mb-4">
+          <div class="flex justify-between items-start mb-2">
+            <div>
+              <p class="font-bold text-gray-800">${escapeHtml(order.delivery_name || "Buyer")}</p>
+              <p class="text-sm text-gray-500">${escapeHtml(order.delivery_address || "")}, ${escapeHtml(order.delivery_city || "")}</p>
+            </div>
+            <span class="text-xs uppercase font-semibold text-gray-400">${escapeHtml(order.status)}</span>
+          </div>
+          <ul class="text-sm text-gray-600 list-disc list-inside mb-3">${itemsHtml}</ul>
+          ${btnHtml}
+        </div>`;
+    })
+    .join("");
+
+  document.querySelectorAll(".seller-advance-btn").forEach((btn) => {
+    btn.addEventListener("click", async () => {
+      btn.disabled = true;
+      const orderId = btn.dataset.orderId;
+      const nextStatus = btn.dataset.nextStatus;
+      const { error } = await supabase.rpc("advance_order_status", {
+        p_order_id: orderId,
+        p_new_status: nextStatus,
+      });
+      if (error) {
+        console.error("[BSTM Seller] Couldn't advance order:", error);
+        alert("Couldn't update this order. Please try again.");
+        btn.disabled = false;
+        return;
+      }
+      loadSellerOrders(sellerId);
+    });
+  });
+}
 
 window.logout = function () {
   if (confirm("Logout?")) window.BSTM.logout();
