@@ -289,12 +289,12 @@ async function loadRoomStaff(roomId) {
 
   if (error) {
     console.error("[BSTM Seller] Failed to load room staff:", error);
-    listEl.innerHTML = \'<p class="text-sm text-gray-400">Couldn\\\'t load staff.</p>\';
+    listEl.innerHTML = '<p class="text-sm text-gray-400">Couldn\'t load staff.</p>';
     return;
   }
 
   if (!staff || staff.length === 0) {
-    listEl.innerHTML = \'<p class="text-sm text-gray-400">No staff added yet.</p>\';
+    listEl.innerHTML = '<p class="text-sm text-gray-400">No staff added yet.</p>';
   } else {
     listEl.innerHTML = staff
       .map(
@@ -324,9 +324,9 @@ async function loadRoomStaff(roomId) {
       });
 
       if (addErr) {
-        console.error("[BSTM Seller] Couldn\'t add staff:", addErr);
+        console.error("[BSTM Seller] Couldn't add staff:", addErr);
         if (errEl) {
-          errEl.textContent = addErr.message || "Couldn\'t add this person.";
+          errEl.textContent = addErr.message || "Couldn't add this person.";
           errEl.classList.remove("hidden");
         }
         return;
