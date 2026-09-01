@@ -17,11 +17,22 @@ document.addEventListener("DOMContentLoaded", async function () {
   const roomsSection = document.getElementById("sector-rooms-section");
   const productsSection = document.getElementById("sector-products-section");
   const productsGrid = document.getElementById("sector-products-grid");
+  const heroSubtitle = document.getElementById("sector-hero-subtitle");
 
   if (!rooms || rooms.length === 0) {
     roomsSection.classList.add("hidden");
     emptyState.classList.remove("hidden");
+    if (heroSubtitle)
+      heroSubtitle.textContent =
+        "No agriculture rooms yet — be the first Botswana farm or produce seller here.";
     return;
+  }
+
+  if (heroSubtitle) {
+    heroSubtitle.textContent =
+      rooms.length === 1
+        ? "1 active agriculture room so far — real listing, no filler. Be the next."
+        : `${rooms.length} active agriculture rooms — real listings, no filler.`;
   }
 
   roomsGrid.innerHTML = rooms
