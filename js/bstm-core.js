@@ -28,7 +28,7 @@ export async function logout() {
 export async function getProfile(userId) {
   const result = await supabase
     .from("profiles")
-    .select("id, email, role, thb_balance")
+    .select("id, email, role, thb_balance, phone, location, notification_prefs, wallet_address, created_at")
     .eq("id", userId)
     .single();
   if (result.error) console.error("getProfile error:", result.error);
