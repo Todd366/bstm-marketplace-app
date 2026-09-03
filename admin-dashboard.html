@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - BSTM Marketplace</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#7C3AED">
+    <link href="css/tailwind.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        .gradient-bg { background: linear-gradient(135deg, #7C3AED 0%, #4F46E5 100%); }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div id="bstm-nav"></div>
+
+    <div class="gradient-bg text-white py-4 px-6">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div>
+                <h1 class="text-2xl font-bold">⚙️ Admin Dashboard</h1>
+                <p class="text-purple-100 text-sm">Signed in as: <span id="admin-user">Loading…</span></p>
+            </div>
+            <button onclick="handleLogout()" class="bg-white text-purple-700 px-4 py-2 rounded-lg font-semibold hover:bg-purple-50">
+                <i class="fas fa-sign-out-alt mr-2"></i>Logout
+            </button>
+        </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <p class="text-3xl font-bold text-gray-800" id="stat-users">—</p>
+                <p class="text-sm text-gray-600">Total Users</p>
+            </div>
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <p class="text-3xl font-bold text-gray-800" id="stat-sellers">—</p>
+                <p class="text-sm text-gray-600">Active Sellers</p>
+            </div>
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <p class="text-3xl font-bold text-gray-800" id="stat-orders">—</p>
+                <p class="text-sm text-gray-600">Total Orders</p>
+            </div>
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <p class="text-3xl font-bold text-gray-800" id="stat-revenue">—</p>
+                <p class="text-sm text-gray-600">Total Revenue</p>
+            </div>
+        </div>
+
+        <!-- 1. Needs Attention -->
+        <div class="bg-white rounded-2xl shadow-lg p-6 mb-8">
+            <h2 class="text-lg font-bold text-gray-800 mb-4">🔔 Needs Attention</h2>
+            <div id="needs-attention-list" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <p class="text-sm text-gray-500">Loading…</p>
+            </div>
+        </div>
+
+        <!-- 2. Revenue Breakdown -->
+        <div class="bg-white rounded-2xl shadow-lg p-6 mb-8">
+            <h2 class="text-lg font-bold text-gray-800 mb-4">💰 Revenue Breakdown</h2>
+            <div id="revenue-breakdown" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <p class="text-sm text-gray-500">Loading…</p>
+            </div>
+        </div>
+
+        <!-- 3. Customers -->
+        <div class="bg-white rounded-2xl shadow-lg p-6 mb-8">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-lg font-bold text-gray-800">👥 Customers</h2>
+                <input id="customer-search" type="text" placeholder="Search by email…" class="text-sm border-2 border-gray-200 rounded-lg px-3 py-1.5">
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                    <thead><tr class="text-left text-gray-500 border-b">
+                        <th class="pb-2 pr-4">Email</th><th class="pb-2 pr-4">Role</th><th class="pb-2 pr-4">THB</th><th class="pb-2 pr-4">Orders</th><th class="pb-2">Joined</th>
+                    </tr></thead>
+                    <tbody id="customers-table"><tr><td colspan="5" class="py-3 text-gray-400">Loading…</td></tr></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 4. Sellers / Rooms -->
+        <div class="bg-white rounded-2xl shadow-lg p-6 mb-8">
+            <h2 class="text-lg font-bold text-gray-800 mb-4">🏪 Sellers &amp; Rooms</h2>
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                    <thead><tr class="text-left text-gray-500 border-b">
+                        <th class="pb-2 pr-4">Room</th><th class="pb-2 pr-4">Owner Email</th><th class="pb-2 pr-4">Status</th><th class="pb-2 pr-4">Products</th><th class="pb-2">Revenue</th>
+                    </tr></thead>
+                    <tbody id="sellers-table"><tr><td colspan="5" class="py-3 text-gray-400">Loading…</td></tr></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 5. Audit Log -->
+        <div class="bg-white rounded-2xl shadow-lg p-6 mb-8">
+            <h2 class="text-lg font-bold text-gray-800 mb-4">📋 Recent Admin Actions (Audit Log)</h2>
+            <div id="audit-log-list" class="space-y-2 text-sm">
+                <p class="text-gray-500">Loading…</p>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            <div class="bg-white rounded-2xl shadow-lg p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-lg font-bold text-gray-800">Pending KYC Reviews</h2>
+                </div>
+                <div id="pending-kyc-list" class="space-y-3">
+                    <p class="text-sm text-gray-500">Loading…</p>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-lg p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-lg font-bold text-gray-800">Recent Orders</h2>
+                </div>
+                <div id="recent-orders-list" class="space-y-3">
+                    <p class="text-sm text-gray-500">Loading…</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="bstm-footer"></div>
+    <script src="components/smart-loader.js"></script>
+    <script type="module" src="js/app.js?v=1786828104"></script>
+    <script type="module" src="js/pages/admin-dashboard.js?v=1788385162"></script>
+</body>
+</html>
