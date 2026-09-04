@@ -162,7 +162,7 @@ window.BSTM.ready().then(async function (session) {
   // ===== Customers (with real emails) =====
   const { data: allProfiles } = await supabase
     .from("profiles")
-    .select("id, email, role, thb_balance, created_at"//
+    .select("id, email, role, thb_balance, created_at")
     .order("created_at", { ascending: false });
 
   const { data: allOrdersForCount } = await supabase.from("orders").select("buyer_id");
