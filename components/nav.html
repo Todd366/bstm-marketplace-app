@@ -120,45 +120,43 @@
 
         </a>
 
-        <!-- DESKTOP NAV (FULL RESTORED LIST) -->
+        <!-- DESKTOP NAV (role-filtered by app.js) -->
         <nav id="desktop-nav">
 
-          <a class="nav-link" href="index.html" data-i18n="nav.home">Home</a>
-          <a class="nav-link" href="marketplace.html" data-i18n="nav.marketplace">Mall</a>
-          <a class="nav-link" href="agriculture.html" data-i18n="nav.farm">Farm</a>
+          <a class="nav-link" href="index.html" data-i18n="nav.home" data-roles="public">Home</a>
+          <a class="nav-link" href="marketplace.html" data-i18n="nav.marketplace" data-roles="public">Mall</a>
+          <a class="nav-link" href="agriculture.html" data-i18n="nav.farm" data-roles="public">Farm</a>
 
-          <a class="nav-link" href="cablink.html" data-i18n="nav.cablink">CabLink</a>
-          <a class="nav-link" href="thb-wallet.html" data-i18n="nav.wallet">Wallet</a>
-          <a class="nav-link" href="transactions.html">Transactions</a>
-          <a class="nav-link" href="earnings.html">Earnings</a>
+          <a class="nav-link" href="cablink.html" data-i18n="nav.cablink" data-roles="auth">CabLink</a>
+          <a class="nav-link" href="thb-wallet.html" data-i18n="nav.wallet" data-roles="auth">Wallet</a>
+          <a class="nav-link" href="transactions.html" data-roles="auth">Transactions</a>
+          <a class="nav-link" href="earnings.html" data-roles="seller,admin">Earnings</a>
 
-          <a class="nav-link" href="buyer-dashboard.html">Buyer</a>
-          <a class="nav-link" href="seller-dashboard.html">Seller</a>
+          <a class="nav-link" href="buyer-dashboard.html" data-roles="auth">Buyer</a>
+          <a class="nav-link" href="seller-dashboard.html" data-roles="seller,admin">Seller</a>
 
-          <a class="nav-link" href="open-room.html">Open Room</a>
-          <a class="nav-link" href="upload-product.html">Upload</a>
-          <a class="nav-link" href="product-detail.html">Product</a>
-          <a class="nav-link" href="checkout.html">Checkout</a>
-          <a class="nav-link" href="order-tracking.html">Tracking</a>
+          <a class="nav-link" href="open-room.html" data-roles="auth">Open Room</a>
+          <a class="nav-link" href="upload-product.html" data-roles="seller,admin">Upload</a>
+          <a class="nav-link" href="checkout.html" data-roles="auth">Checkout</a>
+          <a class="nav-link" href="order-tracking.html" data-roles="auth">Tracking</a>
 
-          <a class="nav-link" href="messages.html">Messages</a>
-          <a class="nav-link" href="notifications-all.html">Notifications</a>
-          <a class="nav-link" href="wishlist.html">Wishlist</a>
+          <a class="nav-link" href="messages.html" data-roles="auth">Messages</a>
+          <a class="nav-link" href="notifications-all.html" data-roles="auth">Notifications</a>
+          <a class="nav-link" href="wishlist.html" data-roles="auth">Wishlist</a>
 
-          <a class="nav-link" href="analytics.html">Analytics</a>
-          <a class="nav-link" href="monitoring-dashboard.html">Monitoring</a>
+          <a class="nav-link" href="analytics.html" data-roles="seller,admin">Analytics</a>
+          <a class="nav-link" href="monitoring-dashboard.html" data-roles="admin">Monitoring</a>
 
-          <a class="nav-link" href="admin-dashboard.html">Admin</a>
-          <a class="nav-link" href="gov-dashboard.html">Control Center</a>
+          <a class="nav-link" href="admin-dashboard.html" data-roles="admin">Admin</a>
+          <a class="nav-link" href="gov-dashboard.html" data-roles="admin">Control Center</a>
 
-          <a class="nav-link" href="kyc-verification.html">KYC</a>
-          <a class="nav-link" href="verify.html">Verify</a>
+          <a class="nav-link" href="kyc-verification.html" data-roles="auth">KYC</a>
 
-          <a class="nav-link" href="help.html">Help</a>
-          <a class="nav-link" href="terms.html">Terms</a>
+          <a class="nav-link" href="help.html" data-roles="public">Help</a>
+          <a class="nav-link" href="terms.html" data-roles="public">Terms</a>
 
-          <a class="nav-link" href="settings.html">Settings</a>
-          <a class="nav-link" href="profile.html">Profile</a>
+          <a class="nav-link" href="settings.html" data-roles="auth">Settings</a>
+          <a class="nav-link" href="profile.html" data-roles="auth">Profile</a>
 
         </nav>
 
@@ -184,7 +182,7 @@
           <div id="nav-user-dropdown"
                style="display:none;position:absolute;top:calc(100% + 6px);right:0;background:#fff;border:1px solid #EDE9FE;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,0.12);min-width:160px;overflow:hidden;z-index:200;">
             <a href="profile.html" style="display:block;padding:12px 16px;color:#374151;text-decoration:none;font-size:13px;font-weight:600;">👤 Profile</a>
-            <a href="buyer-dashboard.html" style="display:block;padding:12px 16px;color:#374151;text-decoration:none;font-size:13px;font-weight:600;">📦 My Orders</a>
+            <a href="buyer-dashboard.html" style="display:block:padding:12px 16px;color:#374151;text-decoration:none;font-size:13px;font-weight:600;">📦 My Orders</a>
             <button id="nav-logout-btn" onclick="window.BSTM.logout()"
                     style="display:block;width:100%;text-align:left;padding:12px 16px;color:#DC2626;background:none;border:none;border-top:1px solid #F3F4F6;font-size:13px;font-weight:600;cursor:pointer;">🚪 Logout</button>
           </div>
@@ -208,42 +206,40 @@
   <!-- MOBILE MENU (FULL RESTORED LIST 30+) -->
   <div id="mobile-menu">
 
-    <a href="index.html">🏠 Home</a>
-    <a href="marketplace.html">🏬 Mall</a>
-    <a href="agriculture.html">🌾 Farm</a>
+    <a href="index.html" data-roles="public">🏠 Home</a>
+    <a href="marketplace.html" data-roles="public">🏬 Mall</a>
+    <a href="agriculture.html" data-roles="public">🌾 Farm</a>
 
-    <a href="cablink.html">🚕 CabLink</a>
-    <a href="thb-wallet.html">💰 Wallet</a>
-    <a href="transactions.html">📊 Transactions</a>
-    <a href="earnings.html">💸 Earnings</a>
+    <a href="cablink.html" data-roles="auth">🚕 CabLink</a>
+    <a href="thb-wallet.html" data-roles="auth">💰 Wallet</a>
+    <a href="transactions.html" data-roles="auth">📊 Transactions</a>
+    <a href="earnings.html" data-roles="seller,admin">💸 Earnings</a>
 
-    <a href="buyer-dashboard.html">👤 Buyer</a>
-    <a href="seller-dashboard.html">🛒 Seller</a>
+    <a href="buyer-dashboard.html" data-roles="auth">👤 Buyer</a>
+    <a href="seller-dashboard.html" data-roles="seller,admin">🛒 Seller</a>
 
-    <a href="open-room.html">🏪 Open Room</a>
-    <a href="upload-product.html">📤 Upload</a>
-    <a href="product-detail.html">📦 Product</a>
-    <a href="checkout.html">🧾 Checkout</a>
-    <a href="order-tracking.html">📍 Tracking</a>
+    <a href="open-room.html" data-roles="auth">🏪 Open Room</a>
+    <a href="upload-product.html" data-roles="seller,admin">📤 Upload</a>
+    <a href="checkout.html" data-roles="auth">🧾 Checkout</a>
+    <a href="order-tracking.html" data-roles="auth">📍 Tracking</a>
 
-    <a href="messages.html">💬 Messages</a>
-    <a href="notifications-all.html">🔔 Notifications</a>
-    <a href="wishlist.html">❤️ Wishlist</a>
+    <a href="messages.html" data-roles="auth">💬 Messages</a>
+    <a href="notifications-all.html" data-roles="auth">🔔 Notifications</a>
+    <a href="wishlist.html" data-roles="auth">❤️ Wishlist</a>
 
-    <a href="analytics.html">📊 Analytics</a>
-    <a href="monitoring-dashboard.html">📡 Monitoring</a>
+    <a href="analytics.html" data-roles="seller,admin">📊 Analytics</a>
+    <a href="monitoring-dashboard.html" data-roles="admin">📡 Monitoring</a>
 
-    <a href="admin-dashboard.html">🧠 Admin</a>
-    <a href="gov-dashboard.html">🎛 Control Center</a>
+    <a href="admin-dashboard.html" data-roles="admin">🧠 Admin</a>
+    <a href="gov-dashboard.html" data-roles="admin">🎛 Control Center</a>
 
-    <a href="kyc-verification.html">🪪 KYC</a>
-    <a href="verify.html">✔️ Verify</a>
+    <a href="kyc-verification.html" data-roles="auth">🪪 KYC</a>
 
-    <a href="help.html">❓ Help</a>
-    <a href="terms.html">📘 Terms</a>
+    <a href="help.html" data-roles="public">❓ Help</a>
+    <a href="terms.html" data-roles="public">📘 Terms</a>
 
-    <a href="settings.html">⚙️ Settings</a>
-    <a href="profile.html">👤 Profile</a>
+    <a href="settings.html" data-roles="auth">���️ Settings</a>
+    <a href="profile.html" data-roles="auth">👤 Profile</a>
 
   </div>
 

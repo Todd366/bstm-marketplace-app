@@ -1,4 +1,5 @@
 import { supabase } from "./core/supabase-client.js";
+import { getProfile } from "./bstm-core.js";
 import "./core/cart.js"; // registers window.addToCart globally
 import "./multi-language.js"; // registers window.MultiLanguage globally
 import "./form-validation.js"; // registers window.FormValidator globally
@@ -9,12 +10,34 @@ import "./toast-notifications.js"; // registers window.Toast globally
 // ============================================
 
 let currentSession = null;
+let currentRole = null; // resolved once per session, used for nav filtering
 let isBootstrapped = false;
 let readyResolve;
 
 const readyPromise = new Promise((resolve) => {
   readyResolve = resolve;
 });
+
+// ===============================
+// ROLE-BASED NAV VISIBILITY
+// ===============================
+// Every nav link declares data-roles="public" / "auth" / "buyer" /
+// "seller" / "admin" (comma-separated for more than one). A logged-out
+// visitor sees only "public". A logged-in user sees "public" + "auth"
+// + whichever of their own roles match — so a buyer never sees Admin,
+// Seller, Analytics, etc, without a single new page being created.
+function filterNavByRole() {
+  const links = document.querySelectorAll("[data-roles]");
+  links.forEach((el) => {
+    const allowed = el.dataset.roles.split(",").map((r) => r.trim());
+    let visible = allowed.includes("public");
+    if (currentSession) {
+      if (allowed.includes("auth")) visible = true;
+      if (currentRole && allowed.includes(currentRole)) visible = true;
+    }
+    el.style.display = visible ? "" : "none";
+  });
+}
 
 // ===============================
 // NAV UI SYNC (SAFE DOM VERSION)
@@ -46,7 +69,23 @@ function updateNav(session) {
       el.style.display = "none";
     }
   });
+
+  filterNavByRole();
 }
+
+// ===============================
+// ROLE RESOLUTION
+// ===============================
+async function resolveRole(userId) {
+  const { data: profile, error } = await getProfile(userId);
+  if (error || !profile) return null;
+  return profile.role || null;
+}
+
+// Nav is injected asynchronously by smart-loader.js and may finish
+// before or after session bootstrap — re-apply filtering whichever
+// happens second, so a role is never left unapplied by a race.
+window.addEventListener("bstm:componentLoaded", filterNavByRole);
 
 // ===============================
 // BOOTSTRAP SESSION
@@ -63,6 +102,7 @@ async function bootstrap() {
     }
 
     currentSession = data?.session || null;
+    currentRole = currentSession ? await resolveRole(currentSession.user.id) : null;
 
     // IMPORTANT: only update nav AFTER DOM is ready
     requestAnimationFrame(() => updateNav(currentSession));
@@ -76,8 +116,9 @@ async function bootstrap() {
     );
 
     // AUTH LISTENER (single source)
-    supabase.auth.onAuthStateChange((event, session) => {
+    supabase.auth.onAuthStateChange(async (event, session) => {
       currentSession = session;
+      currentRole = session ? await resolveRole(session.user.id) : null;
 
       requestAnimationFrame(() => updateNav(session));
 
