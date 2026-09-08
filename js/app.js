@@ -4,6 +4,7 @@ import "./core/cart.js"; // registers window.addToCart globally
 import "./multi-language.js"; // registers window.MultiLanguage globally
 import "./form-validation.js"; // registers window.FormValidator globally
 import "./toast-notifications.js"; // registers window.Toast globally
+import "./core/nav-notifications.js"; // wires the real notification bell in nav.html
 
 // ============================================
 // BSTM APP CORE (SINGLE SOURCE OF TRUTH)
