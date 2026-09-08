@@ -1,4 +1,8 @@
 {
+  "redirects": [
+    { "source": "/room22-farm.html", "destination": "/agriculture.html", "permanent": true },
+    { "source": "/room22-farm", "destination": "/agriculture.html", "permanent": true }
+  ],
   "headers": [
     {
       "source": "/(.*)",
