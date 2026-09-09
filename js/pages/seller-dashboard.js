@@ -1,6 +1,7 @@
 // js/pages/seller-dashboard.js
 import { supabase } from "../core/supabase-client.js";
 import { escapeHtml } from "../core/sanitize.js";
+import { requireSellerAccess } from "../bstm-core.js";
 
 let productLookup = new Map();
 
@@ -55,6 +56,14 @@ window.BSTM.ready().then(async function (session) {
     return;
   }
 
+  // Real gate: a plain buyer with no seller role and no room-staff
+  // membership shouldn't land on this page at all — this used to only
+  // check login, so any logged-in buyer could reach the seller shell
+  // by URL. Staff members (added via add_room_employee) keep access
+  // even though their base profiles.role stays "buyer".
+  const gate = await requireSellerAccess();
+  if (!gate) return;
+
   if (wall) wall.style.display = "none";
   if (content) content.style.display = "block";
 
@@ -102,6 +111,14 @@ window.BSTM.ready().then(async function (session) {
       loadRoomStaff(myRoom.id);
     } else if (staffSection) {
       staffSection.style.display = "none";
+    }
+
+    // Business info — owner-only, shown to shoppers on the public room page.
+    const infoSection = document.getElementById("room-info-section");
+    if (isOwner) {
+      loadRoomInfo(myRoom.id);
+    } else if (infoSection) {
+      infoSection.style.display = "none";
     }
   }
 
@@ -275,6 +292,55 @@ async function loadSellerOrders(sellerId) {
       }
       loadSellerOrders(sellerId);
     });
+  });
+}
+
+async function loadRoomInfo(roomId) {
+  const { data: room, error } = await supabase
+    .from("rooms")
+    .select("contact_phone, contact_email, address, business_hours, policies")
+    .eq("id", roomId)
+    .single();
+
+  if (error || !room) {
+    console.error("[BSTM Seller] Failed to load room info:", error);
+    return;
+  }
+
+  document.getElementById("room-info-phone").value = room.contact_phone || "";
+  document.getElementById("room-info-email").value = room.contact_email || "";
+  document.getElementById("room-info-address").value = room.address || "";
+  document.getElementById("room-info-hours").value = room.business_hours || "";
+  document.getElementById("room-info-policies").value = room.policies || "";
+
+  const saveBtn = document.getElementById("room-info-save-btn");
+  const statusEl = document.getElementById("room-info-status");
+  if (!saveBtn) return;
+
+  saveBtn.addEventListener("click", async () => {
+    saveBtn.disabled = true;
+    const updates = {
+      contact_phone: document.getElementById("room-info-phone").value.trim() || null,
+      contact_email: document.getElementById("room-info-email").value.trim() || null,
+      address: document.getElementById("room-info-address").value.trim() || null,
+      business_hours: document.getElementById("room-info-hours").value.trim() || null,
+      policies: document.getElementById("room-info-policies").value.trim() || null,
+    };
+    const { error: saveError } = await supabase.from("rooms").update(updates).eq("id", roomId);
+    saveBtn.disabled = false;
+
+    if (statusEl) {
+      statusEl.classList.remove("hidden");
+      if (saveError) {
+        console.error("[BSTM Seller] Failed to save room info:", saveError);
+        statusEl.textContent = "Couldn't save — please try again.";
+        statusEl.style.color = "#DC2626";
+      } else {
+        statusEl.textContent = "Saved ✓";
+        statusEl.style.color = "#166534";
+        setTimeout(() => statusEl.classList.add("hidden"), 3000);
+      }
+    }
   });
 }
 

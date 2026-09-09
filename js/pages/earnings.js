@@ -1,5 +1,5 @@
 // js/pages/earnings.js
-import { getProfile } from "../bstm-core.js";
+import { getProfile, requireSellerAccess } from "../bstm-core.js";
 import { supabase } from "../core/supabase-client.js";
 
 window.BSTM.ready().then(async function (session) {
@@ -7,6 +7,13 @@ window.BSTM.ready().then(async function (session) {
     document.getElementById("auth-wall").style.display = "block";
     return;
   }
+
+  // Real gate: earnings is a seller/staff tool — a buyer with no
+  // seller role and no room-staff membership gets redirected away
+  // instead of seeing the dashboard shell.
+  const gate = await requireSellerAccess();
+  if (!gate) return;
+
   document.getElementById("earnings-content").style.display = "block";
 
   const userId = session.user.id;

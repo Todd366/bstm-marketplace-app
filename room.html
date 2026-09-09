@@ -46,12 +46,25 @@
             <div id="room-products" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
                 <p class="text-gray-400 text-sm col-span-full">Loading…</p>
             </div>
+
+            <!-- Room business info — only rendered if the owner set at least one field -->
+            <div id="room-info-card" class="hidden mt-10 bg-white rounded-2xl shadow p-6" style="max-width:560px;">
+                <h2 class="text-lg font-bold text-gray-800 mb-4">Visit This Room</h2>
+                <div id="room-info-rows" class="space-y-2 text-sm text-gray-700"></div>
+            </div>
+
+            <!-- Reviews summary — real ratings from reviews on this room's products -->
+            <div class="mt-10">
+                <h2 class="text-xl font-bold text-gray-800 mb-4">Reviews</h2>
+                <div id="room-reviews-summary" class="text-sm text-gray-500 mb-4">Loading reviews…</div>
+                <div id="room-reviews-list" class="space-y-3"></div>
+            </div>
         </div>
     </div>
 
     <div id="bstm-footer"></div>
     <script src="components/smart-loader.js"></script>
     <script type="module" src="js/app.js?v=1788846845"></script>
-    <script type="module" src="js/pages/room.js?v=1788260255"></script>
+    <script type="module" src="js/pages/room.js?v=1788867495"></script>
 </body>
 </html>

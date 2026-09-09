@@ -1,6 +1,7 @@
 // js/pages/analytics.js
 import { supabase } from "../core/supabase-client.js";
 import { escapeHtml } from "../core/sanitize.js";
+import { requireSellerAccess } from "../bstm-core.js";
 
 window.BSTM.ready().then(async function (session) {
   const wall = document.getElementById("auth-wall");
@@ -11,6 +12,12 @@ window.BSTM.ready().then(async function (session) {
     if (content) content.style.display = "none";
     return;
   }
+
+  // Real gate: analytics is a seller/staff tool — a buyer with no
+  // seller role and no room-staff membership gets redirected away
+  // instead of seeing the dashboard shell.
+  const gate = await requireSellerAccess();
+  if (!gate) return;
 
   if (wall) wall.style.display = "none";
   if (content) content.style.display = "block";

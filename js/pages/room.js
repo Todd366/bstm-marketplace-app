@@ -140,4 +140,53 @@ document.addEventListener("DOMContentLoaded", async () => {
   if (session && session.user.id === room.seller_id) {
     document.getElementById("room-owner-actions").classList.remove("hidden");
   }
+
+  // Business info — only show rows the owner actually filled in.
+  const infoRows = [
+    { icon: "📞", value: room.contact_phone },
+    { icon: "✉️", value: room.contact_email },
+    { icon: "📍", value: room.address },
+    { icon: "🕒", value: room.business_hours },
+    { icon: "📋", value: room.policies },
+  ].filter((r) => r.value);
+
+  if (infoRows.length > 0) {
+    document.getElementById("room-info-card").classList.remove("hidden");
+    document.getElementById("room-info-rows").innerHTML = infoRows
+      .map((r) => `<div class="flex items-start gap-2"><span>${r.icon}</span><span>${escapeHtml(r.value)}</span></div>`)
+      .join("");
+  }
+
+  // Reviews — real aggregate across every product in this room, not per-product.
+  const { data: roomReviews, error: reviewsError } = await supabase
+    .from("reviews")
+    .select("rating, comment, created_at, products!inner(room_id, name)")
+    .eq("products.room_id", roomId)
+    .order("created_at", { ascending: false })
+    .limit(10);
+
+  const summaryEl = document.getElementById("room-reviews-summary");
+  const listEl = document.getElementById("room-reviews-list");
+
+  if (reviewsError) {
+    summaryEl.textContent = "Couldn't load reviews.";
+  } else if (!roomReviews || roomReviews.length === 0) {
+    summaryEl.textContent = "No reviews yet.";
+  } else {
+    const avg = roomReviews.reduce((sum, r) => sum + r.rating, 0) / roomReviews.length;
+    summaryEl.innerHTML = `<span style="color:#F59E0B;font-weight:800;">${"★".repeat(Math.round(avg))}${"☆".repeat(5 - Math.round(avg))}</span> ${avg.toFixed(1)} out of 5 · ${roomReviews.length} review${roomReviews.length === 1 ? "" : "s"}`;
+    listEl.innerHTML = roomReviews
+      .map(
+        (r) => `
+        <div class="bg-white rounded-xl p-4 shadow-sm">
+          <div class="flex justify-between items-center mb-1">
+            <span style="color:#F59E0B;">${"★".repeat(r.rating)}${"☆".repeat(5 - r.rating)}</span>
+            <span class="text-xs text-gray-400">${new Date(r.created_at).toLocaleDateString()}</span>
+          </div>
+          <p class="text-sm text-gray-500 mb-1">on ${escapeHtml(r.products?.name || "a product")}</p>
+          ${r.comment ? `<p class="text-sm text-gray-700">${escapeHtml(r.comment)}</p>` : ""}
+        </div>`
+      )
+      .join("");
+  }
 });

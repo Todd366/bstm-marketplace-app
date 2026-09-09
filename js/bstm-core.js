@@ -49,7 +49,50 @@ export async function updateProfile(userId, updates) {
 }
 
 // ============================================
-// PRODUCTS
+// ACCESS CONTROL
+// Real page-level guard — nav.html only hides links visually; this
+// actually redirects anyone who lands on a role-restricted page by
+// URL (bookmark, typed link, etc.) instead of leaving the page shell
+// visible to a role it isn't meant for.
+// ============================================
+export async function requireRole(allowedRoles, redirectTo = "buyer-dashboard.html") {
+  const session = await window.BSTM.ready();
+  if (!session) {
+    window.location.href = "login.html?redirect=" + encodeURIComponent(window.location.pathname);
+    return null;
+  }
+  const { data: profile } = await getProfile(session.user.id);
+  const role = profile?.role || "buyer";
+  if (!allowedRoles.includes(role)) {
+    window.location.href = redirectTo;
+    return null;
+  }
+  return { session, profile };
+}
+
+// Seller-tool pages (seller-dashboard, analytics, earnings, upload-product)
+// need to admit room staff too — an employee added via add_room_employee
+// keeps profiles.role = "buyer" but should still reach these pages.
+// Returns { session, profile } on success, or null after redirecting away.
+export async function requireSellerAccess(redirectTo = "buyer-dashboard.html") {
+  const session = await window.BSTM.ready();
+  if (!session) {
+    window.location.href = "login.html?redirect=" + encodeURIComponent(window.location.pathname);
+    return null;
+  }
+  const { data: profile } = await getProfile(session.user.id);
+  const role = profile?.role || "buyer";
+  if (["seller", "admin"].includes(role)) return { session, profile };
+
+  const { count } = await supabase
+    .from("room_roles")
+    .select("room_id", { count: "exact", head: true })
+    .eq("user_id", session.user.id);
+  if ((count || 0) > 0) return { session, profile };
+
+  window.location.href = redirectTo;
+  return null;
+}
 // Live columns: id, name, price, image, seller_id, created_at
 // ============================================
 export async function getProducts(filters = {}) {
