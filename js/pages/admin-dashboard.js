@@ -68,9 +68,26 @@ window.BSTM.ready().then(async function (session) {
     .select("id", { count: "exact", head: true });
   document.getElementById("stat-orders").textContent = orderCount ?? "—";
 
-  const { data: items } = await supabase.from("order_items").select("quantity, unit_price");
+  const { data: items } = await supabase.from("order_items").select("quantity, unit_price, order_id");
   const revenue = (items || []).reduce((sum, i) => sum + i.quantity * i.unit_price, 0);
   document.getElementById("stat-revenue").textContent = `P${revenue.toFixed(2)}`;
+
+  // Confirmed revenue — only orders actually marked delivered. "Order Value"
+  // above includes pending COD orders where no money has changed hands yet;
+  // conflating the two overstates real revenue.
+  const { data: allOrdersForRevenue } = await supabase.from("orders").select("id, status, payment_method");
+  const deliveredIds = new Set((allOrdersForRevenue || []).filter((o) => o.status === "delivered").map((o) => o.id));
+  const confirmedRevenue = (items || [])
+    .filter((i) => deliveredIds.has(i.order_id))
+    .reduce((sum, i) => sum + i.quantity * i.unit_price, 0);
+  document.getElementById("stat-revenue-confirmed").textContent = `Confirmed (delivered): P${confirmedRevenue.toFixed(2)}`;
+
+  const codPendingCount = (allOrdersForRevenue || []).filter((o) => o.payment_method === "cod" && o.status === "pending").length;
+  if (codPendingCount > 0) {
+    document.getElementById("cod-notice").classList.remove("hidden");
+    document.getElementById("cod-notice-text").textContent =
+      `${codPendingCount} order${codPendingCount === 1 ? " is" : "s are"} Cash on Delivery and still pending — that money hasn't been collected yet, so it isn't real revenue until the seller marks the order delivered.`;
+  }
 
   const { data: kycRows } = await supabase
     .from("kyc_submissions")
