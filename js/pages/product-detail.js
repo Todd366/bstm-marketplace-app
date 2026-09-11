@@ -77,6 +77,10 @@ document.addEventListener("DOMContentLoaded", async function () {
   set("#product-description", p.description || "No description available.");
   set("#product-category", p.category || "");
 
+  const isService = p.product_type === "service";
+  const serviceBadge = document.getElementById("service-badge");
+  if (isService && serviceBadge) serviceBadge.classList.remove("hidden");
+
   const img = p.image || "";
   const imgEl = document.getElementById("mainImage");
   const imgFallback = document.getElementById("mainImage-fallback");

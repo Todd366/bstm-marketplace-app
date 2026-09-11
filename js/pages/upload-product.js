@@ -67,20 +67,54 @@ window.BSTM.ready().then(async function (session) {
     return;
   }
 
+  // Toggle condition/quantity for service listings — a haircut or a
+  // consulting session doesn't have a "condition" or stock count.
+  const conditionField = document.getElementById("condition-field");
+  const quantityField = document.getElementById("quantity-field");
+  const conditionInput = document.getElementById("condition");
+  const quantityInput = document.getElementById("quantity");
+
+  function applyListingType() {
+    const isService = document.getElementById("type-service").checked;
+    if (conditionField) conditionField.style.display = isService ? "none" : "block";
+    if (quantityField) quantityField.style.display = isService ? "none" : "block";
+    if (conditionInput) conditionInput.required = !isService;
+    if (quantityInput) quantityInput.required = !isService;
+
+    document.querySelectorAll('input[name="productType"]').forEach((r) => {
+      const label = r.closest("label");
+      if (!label) return;
+      if (r.checked) {
+        label.classList.add("border-purple-300", "bg-purple-50");
+        label.classList.remove("border-gray-300");
+      } else {
+        label.classList.remove("border-purple-300", "bg-purple-50");
+        label.classList.add("border-gray-300");
+      }
+    });
+  }
+  document.querySelectorAll('input[name="productType"]').forEach((r) =>
+    r.addEventListener("change", applyListingType)
+  );
+  applyListingType();
+
   form.addEventListener("submit", async function (e) {
     e.preventDefault();
+
+    const productType = document.querySelector('input[name="productType"]:checked')?.value || "physical";
+    const isService = productType === "service";
 
     const btn = document.getElementById("submit-btn");
     const name = document.getElementById("title").value.trim();
     const description = document.getElementById("description").value.trim();
     const category = document.getElementById("category").value;
-    const condition = document.getElementById("condition").value;
+    const condition = isService ? null : document.getElementById("condition").value;
     const price = parseFloat(document.getElementById("price").value);
-    const quantity = parseInt(document.getElementById("quantity").value, 10);
+    const quantity = isService ? 1 : parseInt(document.getElementById("quantity").value, 10);
     const location = document.getElementById("location").value.trim();
     const files = window.__bstm_uploadedFiles || [];
 
-    if (!name || !price || price <= 0 || !category || !condition || !quantity) {
+    if (!name || !price || price <= 0 || !category || (!isService && (!condition || !quantity))) {
       showMsg("Please fill in all required fields.", "error");
       return;
     }
@@ -104,6 +138,7 @@ window.BSTM.ready().then(async function (session) {
         condition,
         price,
         quantity,
+        product_type: productType,
         location,
         image: imageUrls[0] || null,
         seller_id: user.id,
