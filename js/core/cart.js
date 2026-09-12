@@ -51,6 +51,8 @@ export function getCartGroupedByRoom() {
     const group = groups.get(key);
     group.items.push(item);
     group.subtotal += item.price * item.qty;
+    if (item.product_type === "service") group.hasService = true;
+    else group.hasPhysical = true;
   }
 
   return Array.from(groups.values());
@@ -89,6 +91,7 @@ export function addToCart(item) {
       room_id: item.room_id || null,
       room_name: item.room_name || null,
       seller_id: item.seller_id || null,
+      product_type: item.product_type || "physical",
     });
   }
 

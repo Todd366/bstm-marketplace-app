@@ -185,6 +185,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       room_id: p.room_id || null,
       room_name: roomName,
       seller_id: p.seller_id || null,
+      product_type: p.product_type || "physical",
     };
   }
 

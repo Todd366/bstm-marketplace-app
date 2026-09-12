@@ -95,6 +95,10 @@ function renderCart() {
     note.textContent = `Your items are from ${groups.length} different rooms — this will create ${groups.length} separate orders, one per seller, each with its own tracking.`;
   }
 
+  const hasAnyService = groups.some((g) => g.hasService);
+  const serviceNote = document.getElementById("service-delivery-note");
+  if (serviceNote) serviceNote.classList.toggle("hidden", !hasAnyService);
+
   return cart;
 }
 
@@ -137,6 +141,10 @@ async function createOrder(session, cart, { deliveryFee, orderStatus, paystackRe
   const feePerOrder = groups.length > 0 ? deliveryFee / groups.length : 0;
 
   for (const group of groups) {
+    // A service-only room order (e.g. booking a haircut) has no physical
+    // delivery — dispatching a CabLink pickup for it would be nonsense.
+    const effectiveDeliveryMethod = group.hasService && !group.hasPhysical ? "service" : deliveryMethod;
+
     const { data: order, error: orderErr } = await supabase
       .from("orders")
       .insert({
@@ -146,7 +154,7 @@ async function createOrder(session, cart, { deliveryFee, orderStatus, paystackRe
         seller_id: group.seller_id,
         status: orderStatus,
         total_amount: group.subtotal + feePerOrder,
-        delivery_method: deliveryMethod,
+        delivery_method: effectiveDeliveryMethod,
         payment_method: paymentMethod,
         paystack_reference: paystackRef || null,
         ...delivery,
@@ -169,8 +177,9 @@ async function createOrder(session, cart, { deliveryFee, orderStatus, paystackRe
 
     // Auto-create a CabLink pickup task for this room's order so it shows
     // up ready-to-claim in the real CabLink driver app — no manual step
-    // needed from the buyer or seller.
-    if (deliveryMethod === "cablink" && group.room_id) {
+    // needed from the buyer or seller. Skipped entirely for service-only
+    // orders (the buyer enquires/books with the seller directly).
+    if (effectiveDeliveryMethod === "cablink" && group.room_id) {
       const { data: deliveryRequest, error: deliveryErr } = await supabase
         .from("delivery_requests")
         .insert({
