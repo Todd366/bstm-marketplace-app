@@ -247,12 +247,9 @@ window.withdrawTHB = async function (e) {
   if (amount > currentBalance) return alert("Insufficient balance.");
   if (!details) return alert("Enter mobile money number or bank account details.");
 
-  const { error } = await supabase.from("wallet_ledger").insert({
-    user_id: currentUserId,
-    amount_thb: amount,
-    type: "debit",
-    reference_type: "withdrawal",
-    meta: { payout_details: details, status: "pending_manual_review" },
+  const { error } = await supabase.rpc("request_thb_withdrawal", {
+    p_amount: amount,
+    p_details: details,
   });
 
   if (error) {
