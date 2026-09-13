@@ -6,6 +6,8 @@
 // swallowed by the safe-runtime-bridge fallback.
 // ============================================
 
+import { logEvent } from "./events.js";
+
 const CART_KEY = "bstm_cart";
 
 function readCart() {
@@ -128,6 +130,11 @@ export function clearCart() {
 // Pages call this with a plain object built from data-* attributes.
 window.addToCart = function (item) {
   addToCart(item);
+  logEvent("add_to_cart", {
+    productId: item?.id || null,
+    roomId: item?.room_id || null,
+    metadata: { qty: item?.qty || 1, price: item?.price ?? null },
+  });
   const count = getCartCount();
 
   // Lightweight toast — no dependency on toast-notifications.js internals
