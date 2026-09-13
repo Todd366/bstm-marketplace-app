@@ -2,6 +2,7 @@
 import { supabase } from "../core/supabase-client.js";
 import { getRoomTemplate } from "../core/room-templates.js";
 import { escapeHtml } from "../core/sanitize.js";
+import { logEvent } from "../core/events.js";
 
 function renderCard(p, tpl) {
   const img = p.image
@@ -98,6 +99,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const tpl = getRoomTemplate(room.category);
 
   document.title = `${room.name} — BSTM Mall`;
+  logEvent("room_view", { roomId: room.id, metadata: { room_name: room.name, category: room.category } });
   document.body.style.background = tpl.bodyBg;
   if (tpl.dark) document.body.classList.add("dark-room");
 

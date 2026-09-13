@@ -3,6 +3,7 @@ import { supabase } from "../core/supabase-client.js";
 import { getCart, getCartGroupedByRoom, getCartTotal, clearCart } from "../core/cart.js";
 import { escapeHtml } from "../core/sanitize.js";
 import { CONFIG } from "../core/config.js";
+import { logEvent } from "../core/events.js";
 
 const REWARD_PERCENT = CONFIG.MARKETPLACE.REWARD_PERCENT / 100; // e.g. 1%
 
@@ -217,6 +218,17 @@ async function createOrder(session, cart, { deliveryFee, orderStatus, paystackRe
     }
 
     createdOrders.push(order);
+    logEvent("order_placed", {
+      userId,
+      roomId: group.room_id,
+      orderId: order.id,
+      metadata: {
+        item_count: group.items.length,
+        total: group.subtotal + feePerOrder,
+        payment_method: paymentMethod,
+        delivery_method: effectiveDeliveryMethod,
+      },
+    });
   }
 
   // Reward THB — credited immediately for MVP. In production this should be

@@ -4,6 +4,7 @@ import { addToCart } from "../core/cart.js";
 import { addToWishlist, removeFromWishlist } from "../bstm-core.js";
 import { escapeHtml } from "../core/sanitize.js";
 import { CONFIG } from "../core/config.js";
+import { logEvent } from "../core/events.js";
 
 document.addEventListener("DOMContentLoaded", async function () {
   const id = new URLSearchParams(window.location.search).get("id");
@@ -61,6 +62,12 @@ document.addEventListener("DOMContentLoaded", async function () {
   if (breadcrumbProduct) breadcrumbProduct.textContent = p.name || "Product";
 
   document.title = (p.name || "Product") + " — BSTM Mall";
+
+  logEvent("product_view", {
+    productId: p.id,
+    roomId: p.room_id || null,
+    metadata: { product_name: p.name, category: p.category, product_type: p.product_type || "physical" },
+  });
 
   const set = function (sel, val) {
     document.querySelectorAll(sel).forEach(function (el) {
