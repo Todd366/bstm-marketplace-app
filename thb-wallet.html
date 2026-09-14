@@ -13,7 +13,8 @@
         .gradient-bg { background: linear-gradient(135deg, #7C3AED 0%, #4F46E5 100%); }
         .thb-gradient { background: linear-gradient(135deg, #ffd700 0%, #ff8c00 100%); }
         .wallet-card { 
-            background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 100%);
+            background: linear-gradient(135deg, #78350F 0%, #1E1B4B 60%, #111827 100%);
+            border: 1px solid #EAB30833;
             position: relative;
             overflow: hidden;
         }
@@ -35,9 +36,23 @@
             0% { background-position: -200% 0; }
             100% { background-position: 200% 0; }
         }
+        /* Dark BSTM-X-style theme for the wallet page shell — added
+           alongside the existing gradient/wallet-card styles above, not
+           replacing them. Inline hex values are used throughout below
+           rather than new Tailwind utility classes (slate-900 etc.) since
+           this project's css/tailwind.css is a pre-built static file and
+           unused utility classes were purged from it — new class names
+           would silently render unstyled without a rebuild step. */
+        body.wallet-dark { background: #0B1120; }
+        .wx-card { background: #111827; border: 1px solid #1F2937; border-radius: 20px; }
+        .wx-input { background: #1F2937; border: 1px solid #374151; color: #fff; border-radius: 10px; padding: 12px 16px; width: 100%; }
+        .wx-input::placeholder { color: #6B7280; }
+        .wx-input:focus { outline: none; border-color: #EAB308; }
+        .wx-btn-primary { background: #EAB308; color: #0B1120; font-weight: 800; border-radius: 12px; }
+        .wx-btn-secondary { background: #1F2937; color: #E5E7EB; font-weight: 700; border-radius: 12px; border: 1px solid #374151; }
     </style>
 </head>
-<body class="bg-gray-50">
+<body class="bg-gray-50 wallet-dark">
     
     <!-- Navigation -->
     <div id="bstm-nav"></div>
@@ -48,10 +63,10 @@
         <div class="mb-8">
             <div class="flex items-center justify-between">
                 <div>
-                    <h1 class="text-4xl font-bold text-gray-800 mb-2">💰 THoBoCoin Wallet</h1>
-                    <p class="text-gray-600">Manage your digital currency across BSTM Nation</p>
+                    <h1 class="text-4xl font-bold mb-2" style="color:#fff;">💰 THoBoCoin Wallet</h1>
+                    <p style="color:#9CA3AF;">Manage your digital currency across BSTM Nation</p>
                 </div>
-                <a href="help.html#thb" class="text-purple-600 hover:text-purple-800 font-semibold">
+                <a href="help.html#thb" class="font-semibold" style="color:#EAB308;">
                     <i class="fas fa-question-circle mr-2"></i>What is THB?
                 </a>
             </div>
@@ -119,86 +134,86 @@
 
         <!-- Quick Actions -->
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-            <button onclick="openEarnModal()" class="bg-white rounded-2xl p-6 text-center hover:shadow-xl transition-all">
-                <div class="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                    <i class="fas fa-plus text-green-600 text-2xl"></i>
+            <button onclick="openEarnModal()" class="wx-card p-6 text-center transition-all" style="cursor:pointer;">
+                <div class="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-3" style="background:#052e1a;">
+                    <i class="fas fa-plus text-2xl" style="color:#22C55E;"></i>
                 </div>
-                <p class="font-bold text-gray-800">Earn THB</p>
-                <p class="text-sm text-gray-600">Shop & earn</p>
+                <p class="font-bold" style="color:#fff;">Earn THB</p>
+                <p class="text-sm" style="color:#9CA3AF;">Shop &amp; earn</p>
             </button>
 
-            <button onclick="openSendModal()" class="bg-white rounded-2xl p-6 text-center hover:shadow-xl transition-all">
-                <div class="w-14 h-14 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                    <i class="fas fa-paper-plane text-blue-600 text-2xl"></i>
+            <button onclick="openSendModal()" class="wx-card p-6 text-center transition-all" style="cursor:pointer;">
+                <div class="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-3" style="background:#1E1B4B;">
+                    <i class="fas fa-paper-plane text-2xl" style="color:#818CF8;"></i>
                 </div>
-                <p class="font-bold text-gray-800">Send THB</p>
-                <p class="text-sm text-gray-600">To friends</p>
+                <p class="font-bold" style="color:#fff;">Send THB</p>
+                <p class="text-sm" style="color:#9CA3AF;">To friends</p>
             </button>
 
-            <button onclick="openWithdrawModal()" class="bg-white rounded-2xl p-6 text-center hover:shadow-xl transition-all">
-                <div class="w-14 h-14 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                    <i class="fas fa-download text-purple-600 text-2xl"></i>
+            <button onclick="openWithdrawModal()" class="wx-card p-6 text-center transition-all" style="cursor:pointer;">
+                <div class="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-3" style="background:#3B0764;">
+                    <i class="fas fa-download text-2xl" style="color:#C084FC;"></i>
                 </div>
-                <p class="font-bold text-gray-800">Withdraw</p>
-                <p class="text-sm text-gray-600">To bank</p>
+                <p class="font-bold" style="color:#fff;">Withdraw</p>
+                <p class="text-sm" style="color:#9CA3AF;">To bank</p>
             </button>
 
-            <button onclick="openStakeModal()" class="bg-white rounded-2xl p-6 text-center hover:shadow-xl transition-all">
-                <div class="w-14 h-14 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                    <i class="fas fa-lock text-yellow-600 text-2xl"></i>
+            <button onclick="openStakeModal()" class="wx-card p-6 text-center transition-all" style="cursor:pointer;">
+                <div class="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-3" style="background:#451A03;">
+                    <i class="fas fa-lock text-2xl" style="color:#EAB308;"></i>
                 </div>
-                <p class="font-bold text-gray-800">Stake THB</p>
-                <p class="text-sm text-gray-600">Earn rewards</p>
+                <p class="font-bold" style="color:#fff;">Stake THB</p>
+                <p class="text-sm" style="color:#9CA3AF;">Earn rewards</p>
             </button>
         </div>
 
         <!-- Stats Grid -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <div class="bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-6 border-2 border-green-200">
+            <div class="wx-card p-6">
                 <div class="flex items-center justify-between mb-4">
-                    <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center">
+                    <div class="w-12 h-12 rounded-full flex items-center justify-center" style="background:#16A34A;">
                         <i class="fas fa-arrow-down text-white text-xl"></i>
                     </div>
-                    <span class="text-green-600 font-bold text-sm">This Month</span>
+                    <span class="font-bold text-sm" style="color:#4ADE80;">This Month</span>
                 </div>
-                <p class="text-3xl font-bold text-gray-800" id="monthlyEarned">0.0</p>
-                <p class="text-sm text-gray-600">THB Earned</p>
+                <p class="text-3xl font-bold" style="color:#fff;" id="monthlyEarned">0.0</p>
+                <p class="text-sm" style="color:#9CA3AF;">THB Earned</p>
             </div>
 
-            <div class="bg-gradient-to-br from-red-50 to-red-100 rounded-2xl p-6 border-2 border-red-200">
+            <div class="wx-card p-6">
                 <div class="flex items-center justify-between mb-4">
-                    <div class="w-12 h-12 bg-red-500 rounded-full flex items-center justify-center">
+                    <div class="w-12 h-12 rounded-full flex items-center justify-center" style="background:#DC2626;">
                         <i class="fas fa-arrow-up text-white text-xl"></i>
                     </div>
-                    <span class="text-red-600 font-bold text-sm">This Month</span>
+                    <span class="font-bold text-sm" style="color:#F87171;">This Month</span>
                 </div>
-                <p class="text-3xl font-bold text-gray-800" id="monthlySpent">0.0</p>
-                <p class="text-sm text-gray-600">THB Spent</p>
+                <p class="text-3xl font-bold" style="color:#fff;" id="monthlySpent">0.0</p>
+                <p class="text-sm" style="color:#9CA3AF;">THB Spent</p>
             </div>
 
-            <div class="bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl p-6 border-2 border-purple-200">
+            <div class="wx-card p-6">
                 <div class="flex items-center justify-between mb-4">
-                    <div class="w-12 h-12 bg-purple-500 rounded-full flex items-center justify-center">
+                    <div class="w-12 h-12 rounded-full flex items-center justify-center" style="background:#EAB308;">
                         <i class="fas fa-chart-line text-white text-xl"></i>
                     </div>
-                    <span class="text-purple-600 font-bold text-sm">Lifetime</span>
+                    <span class="font-bold text-sm" style="color:#EAB308;">Lifetime</span>
                 </div>
-                <p class="text-3xl font-bold text-gray-800" id="lifetimeEarned">0.0</p>
-                <p class="text-sm text-gray-600">Total Earned</p>
+                <p class="text-3xl font-bold" style="color:#fff;" id="lifetimeEarned">0.0</p>
+                <p class="text-sm" style="color:#9CA3AF;">Total Earned</p>
             </div>
         </div>
 
         <!-- Tabs: Transactions / Earn History / Referrals -->
-        <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
-            <div class="border-b">
+        <div class="wx-card overflow-hidden">
+            <div style="border-bottom:1px solid #1F2937;">
                 <div class="flex">
-                    <button onclick="switchWalletTab('transactions')" class="wallet-tab active flex-1 py-4 font-bold text-purple-600 border-b-2 border-purple-600">
+                    <button onclick="switchWalletTab('transactions')" class="wallet-tab active flex-1 py-4 font-bold" style="color:#EAB308;border-bottom:2px solid #EAB308;">
                         Transactions
                     </button>
-                    <button onclick="switchWalletTab('earn')" class="wallet-tab flex-1 py-4 font-bold text-gray-600">
+                    <button onclick="switchWalletTab('earn')" class="wallet-tab flex-1 py-4 font-bold" style="color:#9CA3AF;">
                         Earn History
                     </button>
-                    <button onclick="switchWalletTab('referrals')" class="wallet-tab flex-1 py-4 font-bold text-gray-600">
+                    <button onclick="switchWalletTab('referrals')" class="wallet-tab flex-1 py-4 font-bold" style="color:#9CA3AF;">
                         Referrals
                     </button>
                 </div>
@@ -207,50 +222,50 @@
             <!-- Transactions Tab -->
             <div id="transactionsTab" class="p-6">
                 <div class="space-y-4" id="transactionsList">
-                    <p class="text-center text-gray-500 py-12">No transactions yet. Start earning THB!</p>
+                    <p class="text-center py-12" style="color:#6B7280;">No transactions yet. Start earning THB!</p>
                 </div>
             </div>
 
             <!-- Earn History Tab -->
             <div id="earnTab" class="p-6 hidden">
                 <div class="space-y-4" id="earnHistoryList">
-                    <div class="flex items-center justify-between p-4 bg-green-50 rounded-xl">
+                    <div class="flex items-center justify-between p-4 rounded-xl" style="background:#052e1a;">
                         <div class="flex items-center space-x-4">
                             <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center">
                                 <i class="fas fa-shopping-bag text-white"></i>
                             </div>
                             <div>
-                                <p class="font-semibold text-gray-800">Purchase Reward</p>
-                                <p class="text-sm text-gray-600">Fresh Tomatoes order</p>
-                                <p class="text-xs text-gray-500">March 17, 2026</p>
+                                <p class="font-semibold" style="color:#fff;">Purchase Reward</p>
+                                <p class="text-sm" style="color:#9CA3AF;">Fresh Tomatoes order</p>
+                                <p class="text-xs" style="color:#6B7280;">March 17, 2026</p>
                             </div>
                         </div>
                         <span class="text-green-600 font-bold text-xl">+0.5 THB</span>
                     </div>
 
-                    <div class="flex items-center justify-between p-4 bg-green-50 rounded-xl">
+                    <div class="flex items-center justify-between p-4 rounded-xl" style="background:#052e1a;">
                         <div class="flex items-center space-x-4">
                             <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center">
                                 <i class="fas fa-car text-white"></i>
                             </div>
                             <div>
-                                <p class="font-semibold text-gray-800">CabLink Ride</p>
-                                <p class="text-sm text-gray-600">Gaborone to Mmopane</p>
-                                <p class="text-xs text-gray-500">March 16, 2026</p>
+                                <p class="font-semibold" style="color:#fff;">CabLink Ride</p>
+                                <p class="text-sm" style="color:#9CA3AF;">Gaborone to Mmopane</p>
+                                <p class="text-xs" style="color:#6B7280;">March 16, 2026</p>
                             </div>
                         </div>
                         <span class="text-green-600 font-bold text-xl">+0.8 THB</span>
                     </div>
 
-                    <div class="flex items-center justify-between p-4 bg-green-50 rounded-xl">
+                    <div class="flex items-center justify-between p-4 rounded-xl" style="background:#052e1a;">
                         <div class="flex items-center space-x-4">
                             <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center">
                                 <i class="fas fa-user-plus text-white"></i>
                             </div>
                             <div>
-                                <p class="font-semibold text-gray-800">Referral Bonus</p>
-                                <p class="text-sm text-gray-600">Friend joined BSTM</p>
-                                <p class="text-xs text-gray-500">March 15, 2026</p>
+                                <p class="font-semibold" style="color:#fff;">Referral Bonus</p>
+                                <p class="text-sm" style="color:#9CA3AF;">Friend joined BSTM</p>
+                                <p class="text-xs" style="color:#6B7280;">March 15, 2026</p>
                             </div>
                         </div>
                         <span class="text-green-600 font-bold text-xl">+50 THB</span>
@@ -260,10 +275,10 @@
 
             <!-- Referrals Tab -->
             <div id="referralsTab" class="p-6 hidden">
-                <div class="bg-gray-50 rounded-2xl p-8 text-center border-2 border-gray-200">
+                <div class="rounded-2xl p-8 text-center" style="background:#111827;border:1px solid #1F2937;">
                     <div class="text-4xl mb-3">🎁</div>
-                    <h3 class="font-bold text-gray-800 mb-2">Referrals — Coming Soon</h3>
-                    <p class="text-sm text-gray-600">
+                    <h3 class="font-bold mb-2" style="color:#fff;">Referrals — Coming Soon</h3>
+                    <p class="text-sm" style="color:#9CA3AF;">
                         We're building real referral tracking so this reward is genuine, not just a
                         promise. Check back soon.
                     </p>
@@ -446,11 +461,13 @@
     function switchWalletTab(tab) {
         // Update buttons
         document.querySelectorAll('.wallet-tab').forEach(t => {
-            t.classList.remove('active', 'text-purple-600', 'border-purple-600');
-            t.classList.add('text-gray-600');
+            t.classList.remove('active');
+            t.style.color = '#9CA3AF';
+            t.style.borderBottom = 'none';
         });
-        event.target.classList.add('active', 'text-purple-600', 'border-purple-600');
-        event.target.classList.remove('text-gray-600');
+        event.target.classList.add('active');
+        event.target.style.color = '#EAB308';
+        event.target.style.borderBottom = '2px solid #EAB308';
 
         // Show/hide tabs
         document.getElementById('transactionsTab').classList.add('hidden');
@@ -505,7 +522,7 @@
 <script src="components/smart-loader.js"></script>
 <script type="module" src="js/app.js?v=1788846845"></script>
 
-<script type="module" src="js/pages/thb-wallet.js?v=1789274930"></script>
+<script type="module" src="js/pages/thb-wallet.js?v=1789324581"></script>
 
 </body>
 </html>

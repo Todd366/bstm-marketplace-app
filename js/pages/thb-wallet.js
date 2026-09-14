@@ -68,7 +68,7 @@ async function loadTransactions() {
 
   if (rows.length === 0) {
     listEl.innerHTML =
-      '<p class="text-center text-gray-500 py-12">No transactions yet. Start earning THB!</p>';
+      '<p class="text-center py-12" style="color:#6B7280;">No transactions yet. Start earning THB!</p>';
     return;
   }
 
@@ -80,17 +80,17 @@ async function loadTransactions() {
         timeStyle: "short",
       });
       return `
-      <div class="flex items-center justify-between p-4 ${isCredit ? "bg-green-50" : "bg-red-50"} rounded-xl">
+      <div class="flex items-center justify-between p-4 rounded-xl" style="background:${isCredit ? "#052e1a" : "#450a0a"};">
         <div class="flex items-center space-x-4">
-          <div class="w-12 h-12 ${isCredit ? "bg-green-500" : "bg-red-500"} rounded-full flex items-center justify-center">
+          <div class="w-12 h-12 rounded-full flex items-center justify-center" style="background:${isCredit ? "#16A34A" : "#DC2626"};">
             <i class="fas ${isCredit ? "fa-arrow-down" : "fa-arrow-up"} text-white"></i>
           </div>
           <div>
-            <p class="font-semibold text-gray-800">${labelForEntry(entry)}</p>
-            <p class="text-xs text-gray-500">${date}</p>
+            <p class="font-semibold" style="color:#fff;">${labelForEntry(entry)}</p>
+            <p class="text-xs" style="color:#6B7280;">${date}</p>
           </div>
         </div>
-        <span class="${isCredit ? "text-green-600" : "text-red-600"} font-bold text-xl">
+        <span style="color:${isCredit ? "#4ADE80" : "#F87171"};" class="font-bold text-xl">
           ${isCredit ? "+" : "-"}${entry.amount_thb} THB
         </span>
       </div>`;
