@@ -133,6 +133,53 @@ window.BSTM.ready().then(async function (session) {
   await initWalletConnect(session.user.id);
 });
 
+// --- Real on-chain THoBoCoin balance, read directly from BSC Testnet ---
+// Same contract BSTM-X reads (see BSTM-X's src/lib/wallet-context.tsx).
+// This uses a raw eth_call JSON-RPC request instead of pulling in ethers.js
+// for what's only two read-only calls — decimals() and balanceOf(address).
+const THB_CONTRACT = "0xaf2f749ea89b3aa9a2d2028dba4004cb3c615628";
+const BSC_TESTNET_RPC = "https://data-seed-prebsc-1-s1.binance.org:8545";
+
+async function rpcCall(to, data) {
+  const res = await fetch(BSC_TESTNET_RPC, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ jsonrpc: "2.0", id: 1, method: "eth_call", params: [{ to, data }, "latest"] }),
+  });
+  const json = await res.json();
+  if (json.error) throw new Error(json.error.message || "RPC call failed");
+  return json.result;
+}
+
+function encodeBalanceOf(address) {
+  const clean = address.toLowerCase().replace(/^0x/, "");
+  return "0x70a08231" + clean.padStart(64, "0");
+}
+
+async function getOnChainThbBalance(address) {
+  const [decimalsHex, balanceHex] = await Promise.all([
+    rpcCall(THB_CONTRACT, "0x313ce567"), // decimals()
+    rpcCall(THB_CONTRACT, encodeBalanceOf(address)), // balanceOf(address)
+  ]);
+  const decimals = parseInt(decimalsHex, 16);
+  const raw = BigInt(balanceHex);
+  const divisor = 10n ** BigInt(decimals);
+  const whole = raw / divisor;
+  const frac = (raw % divisor).toString().padStart(decimals, "0").slice(0, 2);
+  return `${whole.toString()}.${frac}`;
+}
+
+async function loadOnChainBalance(address) {
+  const el = document.getElementById("onchain-thb-balance");
+  if (!el) return;
+  try {
+    el.textContent = (await getOnChainThbBalance(address)) + " THB";
+  } catch (err) {
+    console.error("[BSTM Wallet] On-chain balance read failed:", err);
+    el.textContent = "Couldn't load";
+  }
+}
+
 // ---------- MetaMask Connect (Stage 1: identity link only, no token movement) ----------
 
 async function initWalletConnect(userId) {
@@ -209,6 +256,7 @@ function showConnectedState(address) {
   }
   document.getElementById("wallet-not-connected")?.classList.add("hidden");
   document.getElementById("wallet-connected")?.classList.remove("hidden");
+  loadOnChainBalance(address);
 }
 
 // --- Send THB (real transfer between two users, by email) ---
