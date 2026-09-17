@@ -59,12 +59,29 @@
                 <div id="room-reviews-summary" class="text-sm text-gray-500 mb-4">Loading reviews…</div>
                 <div id="room-reviews-list" class="space-y-3"></div>
             </div>
+
+            <!-- Q&A — real community questions, publicly visible, answerable by room owner/staff -->
+            <div class="mt-10">
+                <h2 class="text-xl font-bold text-gray-800 mb-4">Questions &amp; Answers</h2>
+                <div id="qa-ask-box" class="hidden bg-purple-50 rounded-2xl p-5 mb-5">
+                    <textarea id="qa-question-input" rows="2" placeholder="Ask this room a question…"
+                        class="w-full px-4 py-3 border-2 border-purple-200 rounded-xl focus:outline-none focus:border-purple-500 text-sm"></textarea>
+                    <div class="flex justify-between items-center mt-2">
+                        <p id="qa-error" class="hidden text-red-600 text-xs"></p>
+                        <button id="qa-submit-btn" class="ml-auto bg-purple-600 hover:bg-purple-700 text-white px-5 py-2 rounded-xl font-semibold text-sm">Post Question</button>
+                    </div>
+                </div>
+                <a id="qa-login-prompt" href="login.html" class="hidden block text-sm text-purple-600 font-semibold mb-5">Log in to ask a question →</a>
+                <div id="room-qa-list" class="space-y-4">
+                    <p class="text-sm text-gray-400">Loading…</p>
+                </div>
+            </div>
         </div>
     </div>
 
     <div id="bstm-footer"></div>
     <script src="components/smart-loader.js"></script>
     <script type="module" src="js/app.js?v=1788846845"></script>
-    <script type="module" src="js/pages/room.js?v=1789298584"></script>
+    <script type="module" src="js/pages/room.js?v=1789682789"></script>
 </body>
 </html>
