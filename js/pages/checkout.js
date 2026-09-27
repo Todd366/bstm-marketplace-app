@@ -4,6 +4,7 @@ import { getCart, getCartGroupedByRoom, getCartTotal, clearCart } from "../core/
 import { escapeHtml } from "../core/sanitize.js";
 import { CONFIG } from "../core/config.js";
 import { logEvent } from "../core/events.js";
+import { sendElosEvent } from "../core/elosEvents.js";
 
 const REWARD_PERCENT = CONFIG.MARKETPLACE.REWARD_PERCENT / 100; // e.g. 1%
 
@@ -228,6 +229,13 @@ async function createOrder(session, cart, { deliveryFee, orderStatus, paystackRe
         payment_method: paymentMethod,
         delivery_method: effectiveDeliveryMethod,
       },
+    });
+    sendElosEvent("ORDER_PLACED", order.id, {
+      roomId: group.room_id,
+      itemCount: group.items.length,
+      total: group.subtotal + feePerOrder,
+      paymentMethod,
+      deliveryMethod: effectiveDeliveryMethod,
     });
   }
 
