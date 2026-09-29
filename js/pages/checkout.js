@@ -4,7 +4,6 @@ import { getCart, getCartGroupedByRoom, getCartTotal, clearCart } from "../core/
 import { escapeHtml } from "../core/sanitize.js";
 import { CONFIG } from "../core/config.js";
 import { logEvent } from "../core/events.js";
-import { sendElosEvent } from "../core/elosEvents.js";
 
 const REWARD_PERCENT = CONFIG.MARKETPLACE.REWARD_PERCENT / 100; // e.g. 1%
 
@@ -230,29 +229,52 @@ async function createOrder(session, cart, { deliveryFee, orderStatus, paystackRe
         delivery_method: effectiveDeliveryMethod,
       },
     });
-    sendElosEvent("ORDER_PLACED", order.id, {
-      roomId: group.room_id,
-      itemCount: group.items.length,
-      total: group.subtotal + feePerOrder,
-      paymentMethod,
-      deliveryMethod: effectiveDeliveryMethod,
-    });
   }
 
   // Reward THB — credited immediately for MVP. In production this should be
   // confirmed server-side once the Paystack webhook verifies payment.
-  // Based on goods subtotal only, not the delivery fee, matching renderCart.
-  const subtotal = getCartTotal();
-  const reward = Math.round(subtotal * REWARD_PERCENT);
-  if (reward > 0) {
-    await supabase.from("wallet_ledger").insert({
-      user_id: userId,
-      amount_thb: reward,
-      type: "credit",
-      reference_type: "order",
-      reference_id: createdOrders[0].id,
-      meta: { reason: "purchase_reward", order_count: createdOrders.length },
-    });
+  // One ledger row PER ORDER (not one combined row on the first order) so
+  // each room's own order-tracking page shows the reward that order actually
+  // earned, instead of order #1 showing the whole basket's reward and every
+  // other room's order showing 0.
+  let totalReward = 0;
+  for (let i = 0; i < groups.length; i++) {
+    const group = groups[i];
+    const order = createdOrders[i];
+    const orderReward = Math.round(group.subtotal * REWARD_PERCENT);
+    if (orderReward > 0) {
+      const { error: rewardErr } = await supabase.from("wallet_ledger").insert({
+        user_id: userId,
+        amount_thb: orderReward,
+        type: "credit",
+        reference_type: "order",
+        reference_id: order.id,
+        meta: { reason: "purchase_reward" },
+      });
+      if (!rewardErr) totalReward += orderReward;
+      else console.error("[BSTM Checkout] Reward ledger insert failed for order", order.id, rewardErr);
+    }
+  }
+
+  // profiles.thb_balance is what every other page (buyer dashboard, settings,
+  // THB wallet) actually reads — crediting wallet_ledger alone never moved
+  // that number, so a buyer's earned reward was invisible everywhere except
+  // a live sum of the ledger. This keeps the two in sync from the one place
+  // that creates purchase-reward ledger rows. Not atomic (read-then-write),
+  // same limitation as the rest of this client-side codebase; a concurrent
+  // reward (e.g. two tabs checking out at once) could race here.
+  if (totalReward > 0) {
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("thb_balance")
+      .eq("id", userId)
+      .single();
+    const newBalance = Number(profile?.thb_balance || 0) + totalReward;
+    const { error: balanceErr } = await supabase
+      .from("profiles")
+      .update({ thb_balance: newBalance })
+      .eq("id", userId);
+    if (balanceErr) console.error("[BSTM Checkout] thb_balance update failed:", balanceErr);
   }
 
   return createdOrders;

@@ -69,6 +69,43 @@ function renderItems(items) {
     .join("");
 }
 
+function renderOrdersList(orders) {
+  const listEl = document.getElementById("orders-list");
+  const emptyEl = document.getElementById("orders-list-empty");
+  document.getElementById("orders-list-section").classList.remove("hidden");
+
+  if (!orders || orders.length === 0) {
+    emptyEl.classList.remove("hidden");
+    return;
+  }
+
+  listEl.innerHTML = orders
+    .map((o) => {
+      const statusColors = {
+        pending: "bg-yellow-100 text-yellow-800",
+        confirmed: "bg-blue-100 text-blue-800",
+        shipped: "bg-purple-100 text-purple-800",
+        delivered: "bg-green-100 text-green-800",
+        cancelled: "bg-red-100 text-red-800",
+      };
+      const colorClass = statusColors[o.status] || "bg-gray-100 text-gray-700";
+      return `
+      <a href="order-tracking.html?order=${o.id}" class="block bg-white rounded-xl shadow p-5 hover:shadow-md transition-shadow">
+        <div class="flex justify-between items-center">
+          <div>
+            <p class="font-bold text-gray-800">BSTM-${o.id.split("-")[0].toUpperCase()}</p>
+            <p class="text-sm text-gray-500">${new Date(o.created_at).toLocaleDateString("en-BW", { dateStyle: "medium" })}</p>
+          </div>
+          <div class="text-right">
+            <p class="text-lg font-bold text-gray-800">P${Number(o.total_amount || 0).toFixed(2)}</p>
+            <span class="inline-block text-xs font-semibold px-2 py-1 rounded-full capitalize ${colorClass}">${escapeHtml(o.status)}</span>
+          </div>
+        </div>
+      </a>`;
+    })
+    .join("");
+}
+
 async function loadOrder(orderId, session) {
   const { data: order, error } = await supabase
     .from("orders")
@@ -170,7 +207,17 @@ window.BSTM.ready().then(async function (session) {
   const orderId = params.get("order");
 
   if (!orderId) {
-    document.getElementById("order-not-found").classList.remove("hidden");
+    const { data: orders, error } = await supabase
+      .from("orders")
+      .select("id, total_amount, status, created_at")
+      .eq("buyer_id", session.user.id)
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      document.getElementById("order-not-found").classList.remove("hidden");
+      return;
+    }
+    renderOrdersList(orders);
     return;
   }
 

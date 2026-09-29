@@ -39,6 +39,15 @@
             <p class="text-gray-600">Check the link, or visit your <a href="buyer-dashboard.html" class="text-purple-600 font-semibold">dashboard</a> to see all your orders.</p>
         </div>
 
+        <!-- Shown when order-tracking.html is opened with no ?order= id (e.g. from nav/dashboard links) -->
+        <div id="orders-list-section" class="hidden">
+            <h1 class="text-2xl font-bold text-gray-800 mb-6">Your Orders</h1>
+            <div id="orders-list" class="space-y-4"></div>
+            <div id="orders-list-empty" class="hidden bg-white rounded-2xl shadow p-8 text-center text-gray-500">
+                No orders yet. <a href="marketplace.html" class="text-purple-600 font-semibold">Browse the Mall</a>.
+            </div>
+        </div>
+
         <div id="order-content" class="hidden">
         <div class="bg-green-50 border-2 border-green-500 rounded-2xl p-8 mb-8 text-center">
             <div class="w-20 h-20 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">

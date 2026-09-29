@@ -250,11 +250,17 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   const buyNowBtn = document.getElementById("buy-now-btn");
   if (buyNowBtn) {
-    buyNowBtn.addEventListener("click", function (e) {
-      e.preventDefault();
-      addToCart(buildCartItem());
-      window.location.href = "checkout.html";
-    });
+    if (stock <= 0) {
+      buyNowBtn.classList.add("opacity-50", "cursor-not-allowed", "pointer-events-none");
+      buyNowBtn.setAttribute("aria-disabled", "true");
+      buyNowBtn.textContent = "Out of Stock";
+    } else {
+      buyNowBtn.addEventListener("click", function (e) {
+        e.preventDefault();
+        addToCart(buildCartItem());
+        window.location.href = "checkout.html";
+      });
+    }
   }
 
   // Message Seller — find or create a conversation for this buyer/seller/product

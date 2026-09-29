@@ -32,7 +32,15 @@ jobs:
     
     - name: Check for secrets in code
       run: |
-        if grep -r "pk_live_" .; then
+        # A real Paystack public key is pk_live_ followed by a long random
+        # string. This used to match on the bare "pk_live_" prefix, which
+        # also matches our own placeholder ('pk_live_xxx' in js/core/config.js
+        # and docs) and even this grep command's own line in this file --
+        # meaning the check failed on every run regardless of whether a real
+        # key was ever committed. Requiring 20+ trailing chars, and excluding
+        # this workflow file, node_modules and .git, makes it only fire on an
+        # actual key.
+        if grep -rE "pk_live_[A-Za-z0-9]{20,}" --exclude-dir=.git --exclude-dir=node_modules --exclude=deploy.yml .; then
           echo "Error: Live API keys found in code!"
           exit 1
         fi
