@@ -53,7 +53,7 @@
         </div>
 
         <!-- 1. Needs Attention -->
-        <div class="bg-white rounded-2xl shadow-lg p-6 mb-8">
+        <div data-permission="attention" class="bg-white rounded-2xl shadow-lg p-6 mb-8">
             <h2 class="text-lg font-bold text-gray-800 mb-4">🔔 Needs Attention</h2>
             <div id="needs-attention-list" class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <p class="text-sm text-gray-500">Loading…</p>
@@ -61,7 +61,7 @@
         </div>
 
         <!-- 2. Revenue Breakdown -->
-        <div class="bg-white rounded-2xl shadow-lg p-6 mb-8">
+        <div data-permission="revenue" class="bg-white rounded-2xl shadow-lg p-6 mb-8">
             <h2 class="text-lg font-bold text-gray-800 mb-4">💰 Revenue Breakdown</h2>
             <div id="revenue-breakdown" class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <p class="text-sm text-gray-500">Loading…</p>
@@ -69,7 +69,7 @@
         </div>
 
         <!-- 3. Customers -->
-        <div class="bg-white rounded-2xl shadow-lg p-6 mb-8">
+        <div data-permission="customers" class="bg-white rounded-2xl shadow-lg p-6 mb-8">
             <div class="flex justify-between items-center mb-4">
                 <h2 class="text-lg font-bold text-gray-800">👥 Customers</h2>
                 <input id="customer-search" type="text" placeholder="Search by email…" class="text-sm border-2 border-gray-200 rounded-lg px-3 py-1.5">
@@ -85,7 +85,7 @@
         </div>
 
         <!-- 4. Sellers / Rooms -->
-        <div class="bg-white rounded-2xl shadow-lg p-6 mb-8">
+        <div data-permission="sellers" class="bg-white rounded-2xl shadow-lg p-6 mb-8">
             <h2 class="text-lg font-bold text-gray-800 mb-4">🏪 Sellers &amp; Rooms</h2>
             <div class="overflow-x-auto">
                 <table class="w-full text-sm">
@@ -98,7 +98,7 @@
         </div>
 
         <!-- 5. Audit Log -->
-        <div class="bg-white rounded-2xl shadow-lg p-6 mb-8">
+        <div data-permission="audit" class="bg-white rounded-2xl shadow-lg p-6 mb-8">
             <h2 class="text-lg font-bold text-gray-800 mb-4">📋 Recent Admin Actions (Audit Log)</h2>
             <div id="audit-log-list" class="space-y-2 text-sm">
                 <p class="text-gray-500">Loading…</p>
@@ -106,7 +106,7 @@
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-            <div class="bg-white rounded-2xl shadow-lg p-6">
+            <div data-permission="kyc" class="bg-white rounded-2xl shadow-lg p-6">
                 <div class="flex justify-between items-center mb-4">
                     <h2 class="text-lg font-bold text-gray-800">Pending KYC Reviews</h2>
                 </div>
@@ -115,7 +115,7 @@
                 </div>
             </div>
 
-            <div class="bg-white rounded-2xl shadow-lg p-6">
+            <div data-permission="orders" class="bg-white rounded-2xl shadow-lg p-6">
                 <div class="flex justify-between items-center mb-4">
                     <h2 class="text-lg font-bold text-gray-800">Recent Orders</h2>
                 </div>

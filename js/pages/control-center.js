@@ -11,13 +11,45 @@ window.BSTM.ready().then(async function (session) {
 
   const { data: profile } = await getProfile(session.user.id);
 
-  if (!profile || profile.role !== "admin") {
+  // Control Center is the super-admin-only room: THB distribution, room
+  // moderation, and granting/revoking staff access all live here. Regular
+  // admins and agents work in admin-dashboard.html instead — they don't get
+  // this page at all, so there's one single place staff access is decided,
+  // not two overlapping ones.
+  if (!profile || profile.role !== "super_admin") {
     document.getElementById("access-denied").classList.remove("hidden");
     return;
   }
 
   document.getElementById("control-center-content").classList.remove("hidden");
   document.getElementById("userName").textContent = session.user.email.split("@")[0];
+
+  const ADMIN_PERMISSIONS = ["kyc", "orders", "customers", "sellers", "revenue", "audit", "attention"];
+  const PERMISSION_LABELS = {
+    kyc: "KYC Reviews",
+    orders: "Orders",
+    customers: "Customers",
+    sellers: "Sellers & Rooms",
+    revenue: "Revenue",
+    audit: "Audit Log",
+    attention: "Needs Attention",
+  };
+
+  // Best-effort audit write — admin_audit_log's exact columns aren't
+  // confirmed from this repo (the table isn't in database/schema.sql), so
+  // this can silently fail on a naming mismatch without blocking the
+  // actual role change. A console warning here means the column name
+  // needs correcting once the real table is confirmed in Supabase.
+  async function logAudit(action, resourceId, reason) {
+    const { error } = await supabase.from("admin_audit_log").insert({
+      actor: session.user.id,
+      action,
+      resource_type: "user",
+      resource_id: resourceId,
+      reason: reason || null,
+    });
+    if (error) console.warn("[BSTM Control Center] Audit log insert failed (action still applied):", error);
+  }
 
   // ---------- THB Distribution ----------
   document.getElementById("thb-distribute-btn").addEventListener("click", async () => {
@@ -160,7 +192,7 @@ window.BSTM.ready().then(async function (session) {
     searchTimer = setTimeout(async () => {
       const { data: users } = await supabase
         .from("profiles")
-        .select("id, email, role, created_at")
+        .select("id, email, role, agent_permissions, created_at")
         .ilike("email", `%${q}%`)
         .limit(10);
 
@@ -169,17 +201,121 @@ window.BSTM.ready().then(async function (session) {
         return;
       }
 
-      resultsEl.innerHTML = users
-        .map(
-          (u) => `
-        <div class="flex items-center justify-between p-3 border border-gray-100 rounded-lg">
-          <span class="text-sm text-gray-800">${escapeHtml(u.email)}</span>
-          <span class="text-xs font-bold px-2 py-1 rounded-full bg-purple-100 text-purple-700">${escapeHtml(u.role)}</span>
-        </div>`
-        )
-        .join("");
+      resultsEl.innerHTML = users.map((u) => renderUserRow(u)).join("");
+      wireUserRowActions();
     }, 300);
   });
+
+  function renderUserRow(u) {
+    const roleColors = {
+      super_admin: "bg-purple-600 text-white",
+      admin: "bg-purple-100 text-purple-700",
+      agent: "bg-blue-100 text-blue-700",
+      seller: "bg-green-100 text-green-700",
+      buyer: "bg-gray-100 text-gray-600",
+    };
+    const badge = `<span class="text-xs font-bold px-2 py-1 rounded-full ${roleColors[u.role] || roleColors.buyer}">${escapeHtml(u.role)}</span>`;
+
+    let actions = "";
+    if (u.role === "super_admin") {
+      actions = `<span class="text-xs text-gray-400">Only you</span>`;
+    } else if (u.role === "admin" || u.role === "agent") {
+      actions = `<button class="revoke-btn text-xs font-bold px-2 py-1 rounded-lg bg-red-100 text-red-700 hover:bg-red-200" data-id="${u.id}">Revoke</button>`;
+    } else {
+      actions = `
+        <button class="make-admin-btn text-xs font-bold px-2 py-1 rounded-lg bg-purple-100 text-purple-700 hover:bg-purple-200" data-id="${u.id}">Make Admin</button>
+        <button class="make-agent-btn text-xs font-bold px-2 py-1 rounded-lg bg-blue-100 text-blue-700 hover:bg-blue-200" data-id="${u.id}">Make Agent</button>`;
+    }
+
+    const permBox =
+      u.role === "agent" && u.agent_permissions?.length
+        ? `<p class="text-xs text-gray-400 mt-1">Access: ${u.agent_permissions.map((p) => escapeHtml(PERMISSION_LABELS[p] || p)).join(", ")}</p>`
+        : "";
+
+    return `
+      <div class="border border-gray-100 rounded-lg p-3" data-user-row="${u.id}">
+        <div class="flex items-center justify-between gap-2 flex-wrap">
+          <span class="text-sm text-gray-800">${escapeHtml(u.email)}</span>
+          <div class="flex items-center gap-2">${badge}${actions}</div>
+        </div>
+        ${permBox}
+        <div class="agent-permission-picker hidden mt-3 pt-3 border-t border-gray-100" data-for="${u.id}">
+          <p class="text-xs text-gray-500 mb-2">Which sections of the admin dashboard can they see?</p>
+          <div class="grid grid-cols-2 gap-1.5 mb-3 text-xs">
+            ${ADMIN_PERMISSIONS.map((p) => `<label class="flex items-center gap-1.5"><input type="checkbox" class="agent-perm-cb" value="${p}"> ${escapeHtml(PERMISSION_LABELS[p])}</label>`).join("")}
+          </div>
+          <button class="confirm-agent-btn text-xs font-bold px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white" data-id="${u.id}">Confirm</button>
+        </div>
+      </div>`;
+  }
+
+  function wireUserRowActions() {
+    resultsEl.querySelectorAll(".make-admin-btn").forEach((btn) => {
+      btn.addEventListener("click", async () => {
+        if (!confirm("Give this account full admin access to the dashboard (KYC, orders, customers, sellers, revenue, audit log)?")) return;
+        btn.disabled = true;
+        const { error } = await supabase
+          .from("profiles")
+          .update({ role: "admin", agent_permissions: null })
+          .eq("id", btn.dataset.id);
+        if (error) {
+          alert("Couldn't grant admin access: " + error.message);
+          btn.disabled = false;
+          return;
+        }
+        await logAudit("ADMIN_GRANTED", btn.dataset.id, null);
+        searchInput.dispatchEvent(new Event("input"));
+      });
+    });
+
+    resultsEl.querySelectorAll(".make-agent-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const row = resultsEl.querySelector(`.agent-permission-picker[data-for="${btn.dataset.id}"]`);
+        if (row) row.classList.toggle("hidden");
+      });
+    });
+
+    resultsEl.querySelectorAll(".confirm-agent-btn").forEach((btn) => {
+      btn.addEventListener("click", async () => {
+        const row = resultsEl.querySelector(`[data-user-row="${btn.dataset.id}"]`);
+        const permissions = Array.from(row.querySelectorAll(".agent-perm-cb:checked")).map((cb) => cb.value);
+        if (permissions.length === 0) {
+          alert("Pick at least one section for this agent to access.");
+          return;
+        }
+        btn.disabled = true;
+        const { error } = await supabase
+          .from("profiles")
+          .update({ role: "agent", agent_permissions: permissions })
+          .eq("id", btn.dataset.id);
+        if (error) {
+          alert("Couldn't grant agent access: " + error.message);
+          btn.disabled = false;
+          return;
+        }
+        await logAudit("AGENT_GRANTED", btn.dataset.id, `Sections: ${permissions.join(", ")}`);
+        searchInput.dispatchEvent(new Event("input"));
+      });
+    });
+
+    resultsEl.querySelectorAll(".revoke-btn").forEach((btn) => {
+      btn.addEventListener("click", async () => {
+        if (!confirm("Revoke this person's admin/agent access? They'll become a regular buyer account.")) return;
+        btn.disabled = true;
+        const { error } = await supabase
+          .from("profiles")
+          .update({ role: "buyer", agent_permissions: null })
+          .eq("id", btn.dataset.id);
+        if (error) {
+          alert("Couldn't revoke access: " + error.message);
+          btn.disabled = false;
+          return;
+        }
+        await logAudit("ACCESS_REVOKED", btn.dataset.id, null);
+        searchInput.dispatchEvent(new Event("input"));
+      });
+    });
+  }
 });
 
 window.handleLogout = function () {

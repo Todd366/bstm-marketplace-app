@@ -11,13 +11,53 @@ window.BSTM.ready().then(async function (session) {
 
   const { data: profile } = await getProfile(session.user.id);
 
-  if (!profile || profile.role !== "admin") {
+  // Three staff tiers: super_admin (full access + can manage the team),
+  // admin (full dashboard access, can't manage other admins), agent
+  // (only the sections listed in profiles.agent_permissions).
+  const STAFF_ROLES = ["admin", "agent", "super_admin"];
+  if (!profile || !STAFF_ROLES.includes(profile.role)) {
     alert("This dashboard is restricted to administrators.");
     window.location.href = "buyer-dashboard.html";
     return;
   }
 
+  const agentPermissions = profile.role === "agent" ? (profile.agent_permissions || []) : null;
+  // null means "not an agent, no restriction" — admin/super_admin see everything.
+  function canAccess(perm) {
+    return agentPermissions === null || agentPermissions.includes(perm);
+  }
+
+  // Hide any section this identity isn't scoped to see. IMPORTANT: this is
+  // a UX convenience only, not the real security boundary. Supabase RLS on
+  // each table below (profiles, orders, kyc_submissions, admin_audit_log,
+  // rooms, order_items) is what actually has to stop an agent's own network
+  // requests from reading data outside their granted sections — hiding a
+  // <div> does nothing to stop someone opening devtools and calling
+  // supabase.from(...) directly. See the RLS policy notes shipped alongside
+  // this change; they need to be applied in Supabase for this to be real
+  // access control rather than a convenience UI.
+  document.querySelectorAll("[data-permission]").forEach((el) => {
+    if (!canAccess(el.dataset.permission)) el.classList.add("hidden");
+  });
+
   document.getElementById("admin-user").textContent = session.user.email.split("@")[0];
+
+  // Best-effort audit log write. admin_audit_log's exact column names
+  // aren't confirmed from this repo (the table isn't in database/schema.sql
+  // at all), so this can silently fail on a naming mismatch without
+  // blocking the actual action — same pattern already used for the
+  // notify_kyc_decision call below. Check the browser console once after
+  // deploying; a warning there means the column name needs correcting.
+  async function logAudit(action, resourceType, resourceId, reason) {
+    const { error } = await supabase.from("admin_audit_log").insert({
+      actor: session.user.id,
+      action,
+      resource_type: resourceType,
+      resource_id: resourceId,
+      reason: reason || null,
+    });
+    if (error) console.warn("[BSTM Admin] Audit log insert failed (action still applied):", error);
+  }
 
   async function reviewKyc(kycId, userId, decision) {
     const row = document.querySelector(`[data-kyc-row="${kycId}"]`);
@@ -40,6 +80,8 @@ window.BSTM.ready().then(async function (session) {
       return;
     }
 
+    await logAudit(decision === "approved" ? "KYC_APPROVED" : "KYC_REJECTED", "kyc_submission", kycId, null);
+
     // Best-effort — the review itself already succeeded even if this fails.
     const { error: notifyErr } = await supabase.rpc("notify_kyc_decision", {
       target_user_id: userId,
@@ -53,7 +95,8 @@ window.BSTM.ready().then(async function (session) {
     }
   }
 
-
+  // ===== Top-line stats (visible to every staff tier, not permission-gated —
+  // aggregate counts only, no operational detail) =====
   const { count: userCount } = await supabase
     .from("profiles")
     .select("id", { count: "exact", head: true });
@@ -72,9 +115,6 @@ window.BSTM.ready().then(async function (session) {
   const revenue = (items || []).reduce((sum, i) => sum + i.quantity * i.unit_price, 0);
   document.getElementById("stat-revenue").textContent = `P${revenue.toFixed(2)}`;
 
-  // Confirmed revenue — only orders actually marked delivered. "Order Value"
-  // above includes pending COD orders where no money has changed hands yet;
-  // conflating the two overstates real revenue.
   const { data: allOrdersForRevenue } = await supabase.from("orders").select("id, status, payment_method");
   const deliveredIds = new Set((allOrdersForRevenue || []).filter((o) => o.status === "delivered").map((o) => o.id));
   const confirmedRevenue = (items || [])
@@ -89,237 +129,258 @@ window.BSTM.ready().then(async function (session) {
       `${codPendingCount} order${codPendingCount === 1 ? " is" : "s are"} Cash on Delivery and still pending — that money hasn't been collected yet, so it isn't real revenue until the seller marks the order delivered.`;
   }
 
-  const { data: kycRows } = await supabase
-    .from("kyc_submissions")
-    .select("id, user_id, full_name, created_at")
-    .eq("status", "pending")
-    .order("created_at", { ascending: false })
-    .limit(5);
-
-  const kycEl = document.getElementById("pending-kyc-list");
-  if (!kycRows || kycRows.length === 0) {
-    kycEl.innerHTML = '<p class="text-sm text-gray-400">No pending reviews.</p>';
-  } else {
-    kycEl.innerHTML = kycRows
-      .map(
-        (k) => `
-      <div class="flex justify-between items-center p-3 bg-yellow-50 rounded-lg" data-kyc-row="${k.id}">
-        <div>
-          <span class="text-sm font-semibold text-gray-800">${escapeHtml(k.full_name || "Unnamed applicant")}</span>
-          <span class="text-xs text-gray-500 block">${new Date(k.created_at).toLocaleDateString()}</span>
-        </div>
-        <div class="flex gap-2">
-          <button class="kyc-approve-btn text-xs font-bold bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 rounded-lg" data-id="${k.id}" data-user="${k.user_id}">Approve</button>
-          <button class="kyc-reject-btn text-xs font-bold bg-red-600 hover:bg-red-700 text-white px-3 py-1.5 rounded-lg" data-id="${k.id}" data-user="${k.user_id}">Reject</button>
-        </div>
-      </div>`
-      )
-      .join("");
-
-    kycEl.querySelectorAll(".kyc-approve-btn").forEach((btn) =>
-      btn.addEventListener("click", () => reviewKyc(btn.dataset.id, btn.dataset.user, "approved"))
-    );
-    kycEl.querySelectorAll(".kyc-reject-btn").forEach((btn) =>
-      btn.addEventListener("click", () => reviewKyc(btn.dataset.id, btn.dataset.user, "rejected"))
-    );
-  }
-
-  const { data: recentOrders } = await supabase
-    .from("orders")
-    .select("id, total_amount, status, created_at")
-    .order("created_at", { ascending: false })
-    .limit(15);
-
-  const ordersEl = document.getElementById("recent-orders-list");
-  if (!recentOrders || recentOrders.length === 0) {
-    ordersEl.innerHTML = '<p class="text-sm text-gray-400">No orders yet.</p>';
-  } else {
-    const ADMIN_ACTIONS = {
-      pending: [{ label: "Confirm", next: "confirmed" }, { label: "Cancel", next: "cancelled" }],
-      confirmed: [{ label: "Mark Shipped", next: "shipped" }, { label: "Cancel", next: "cancelled" }],
-      shipped: [{ label: "Mark Delivered", next: "delivered" }],
-    };
-    ordersEl.innerHTML = recentOrders
-      .map((o) => {
-        const actions = ADMIN_ACTIONS[o.status] || [];
-        const btns = actions
-          .map(
-            (a) =>
-              `<button data-order-id="${o.id}" data-next-status="${a.next}" class="admin-order-btn text-xs font-semibold px-2 py-1 rounded ${a.next === "cancelled" ? "bg-red-100 text-red-700" : "bg-purple-100 text-purple-700"}">${a.label}</button>`
-          )
-          .join(" ");
-        return `
-      <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg gap-2">
-        <span class="text-sm font-semibold text-gray-800">#${o.id.split("-")[0].toUpperCase()}</span>
-        <span class="text-xs text-gray-500 capitalize">${o.status}</span>
-        <span class="text-sm font-bold text-purple-600">P${Number(o.total_amount || 0).toFixed(2)}</span>
-        <span class="flex gap-1">${btns}</span>
-      </div>`;
-      })
-      .join("");
-
-    ordersEl.querySelectorAll(".admin-order-btn").forEach((btn) => {
-      btn.addEventListener("click", async () => {
-        btn.disabled = true;
-        const { error } = await supabase.rpc("advance_order_status", {
-          p_order_id: btn.dataset.orderId,
-          p_new_status: btn.dataset.nextStatus,
-        });
-        if (error) {
-          console.error("[BSTM Admin] Couldn't update order:", error);
-          alert("Couldn't update this order: " + error.message);
-          btn.disabled = false;
-          return;
-        }
-        location.reload();
-      });
-    });
-  }
-
-  // ===== Customers (with real emails) =====
-  const { data: allProfiles } = await supabase
-    .from("profiles")
-    .select("id, email, role, thb_balance, created_at")
-    .order("created_at", { ascending: false });
-
-  const { data: allOrdersForCount } = await supabase.from("orders").select("buyer_id");
-  const orderCountByBuyer = {};
-  (allOrdersForCount || []).forEach((o) => {
-    orderCountByBuyer[o.buyer_id] = (orderCountByBuyer[o.buyer_id] || 0) + 1;
-  });
-
-  function renderCustomers(filterText) {
-    const tbody = document.getElementById("customers-table");
-    const rows = (allProfiles || []).filter(
-      (p) => !filterText || (p.email || "").toLowerCase().includes(filterText.toLowerCase())
-    );
-    if (rows.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="5" class="py-3 text-gray-400">No matching customers.</td></tr>';
-      return;
-    }
-    tbody.innerHTML = rows
-      .map(
-        (p) => `
-      <tr class="border-b last:border-0">
-        <td class="py-2 pr-4">${escapeHtml(p.email || "—")}</td>
-        <td class="py-2 pr-4 capitalize">${escapeHtml(p.role || "buyer")}</td>
-        <td class="py-2 pr-4">${Number(p.thb_balance || 0).toFixed(1)}</td>
-        <td class="py-2 pr-4">${orderCountByBuyer[p.id] || 0}</td>
-        <td class="py-2">${new Date(p.created_at).toLocaleDateString()}</td>
-      </tr>`
-      )
-      .join("");
-  }
-  renderCustomers("");
-  document.getElementById("customer-search").addEventListener("input", (e) => renderCustomers(e.target.value));
-
-  // ===== Sellers & Rooms (with real owner emails) =====
+  // Rooms list is needed by both the Sellers table and Needs Attention —
+  // fetched once here, unconditionally, so Needs Attention still works even
+  // for an agent who isn't granted the "sellers" section.
   const { data: allRooms } = await supabase
     .from("rooms")
     .select("id, name, status, seller_id, profiles(email)");
-  const { data: allProductsForRooms } = await supabase.from("products").select("id, room_id");
-  const { data: allOrderItemsForRooms } = await supabase
-    .from("order_items")
-    .select("quantity, unit_price, product_id, products(room_id)");
 
-  const productCountByRoom = {};
-  (allProductsForRooms || []).forEach((p) => {
-    if (p.room_id) productCountByRoom[p.room_id] = (productCountByRoom[p.room_id] || 0) + 1;
-  });
-  const revenueByRoom = {};
-  (allOrderItemsForRooms || []).forEach((i) => {
-    const rid = i.products?.room_id;
-    if (rid) revenueByRoom[rid] = (revenueByRoom[rid] || 0) + i.quantity * i.unit_price;
-  });
+  // ===== KYC Reviews =====
+  if (canAccess("kyc")) {
+    const { data: kycRows } = await supabase
+      .from("kyc_submissions")
+      .select("id, user_id, full_name, created_at")
+      .eq("status", "pending")
+      .order("created_at", { ascending: false })
+      .limit(5);
 
-  const sellersTbody = document.getElementById("sellers-table");
-  if (!allRooms || allRooms.length === 0) {
-    sellersTbody.innerHTML = '<tr><td colspan="5" class="py-3 text-gray-400">No rooms yet.</td></tr>';
-  } else {
-    sellersTbody.innerHTML = allRooms
-      .map(
-        (r) => `
-      <tr class="border-b last:border-0">
-        <td class="py-2 pr-4 font-semibold">${escapeHtml(r.name)}</td>
-        <td class="py-2 pr-4">${escapeHtml(r.profiles?.email || "—")}</td>
-        <td class="py-2 pr-4 capitalize">${escapeHtml(r.status)}</td>
-        <td class="py-2 pr-4">${productCountByRoom[r.id] || 0}</td>
-        <td class="py-2">P${(revenueByRoom[r.id] || 0).toFixed(2)}</td>
-      </tr>`
-      )
-      .join("");
+    const kycEl = document.getElementById("pending-kyc-list");
+    if (!kycRows || kycRows.length === 0) {
+      kycEl.innerHTML = '<p class="text-sm text-gray-400">No pending reviews.</p>';
+    } else {
+      kycEl.innerHTML = kycRows
+        .map(
+          (k) => `
+        <div class="flex justify-between items-center p-3 bg-yellow-50 rounded-lg" data-kyc-row="${k.id}">
+          <div>
+            <span class="text-sm font-semibold text-gray-800">${escapeHtml(k.full_name || "Unnamed applicant")}</span>
+            <span class="text-xs text-gray-500 block">${new Date(k.created_at).toLocaleDateString()}</span>
+          </div>
+          <div class="flex gap-2">
+            <button class="kyc-approve-btn text-xs font-bold bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 rounded-lg" data-id="${k.id}" data-user="${k.user_id}">Approve</button>
+            <button class="kyc-reject-btn text-xs font-bold bg-red-600 hover:bg-red-700 text-white px-3 py-1.5 rounded-lg" data-id="${k.id}" data-user="${k.user_id}">Reject</button>
+          </div>
+        </div>`
+        )
+        .join("");
+
+      kycEl.querySelectorAll(".kyc-approve-btn").forEach((btn) =>
+        btn.addEventListener("click", () => reviewKyc(btn.dataset.id, btn.dataset.user, "approved"))
+      );
+      kycEl.querySelectorAll(".kyc-reject-btn").forEach((btn) =>
+        btn.addEventListener("click", () => reviewKyc(btn.dataset.id, btn.dataset.user, "rejected"))
+      );
+    }
+  }
+
+  // ===== Recent Orders =====
+  if (canAccess("orders")) {
+    const { data: recentOrders } = await supabase
+      .from("orders")
+      .select("id, total_amount, status, created_at")
+      .order("created_at", { ascending: false })
+      .limit(15);
+
+    const ordersEl = document.getElementById("recent-orders-list");
+    if (!recentOrders || recentOrders.length === 0) {
+      ordersEl.innerHTML = '<p class="text-sm text-gray-400">No orders yet.</p>';
+    } else {
+      const ADMIN_ACTIONS = {
+        pending: [{ label: "Confirm", next: "confirmed" }, { label: "Cancel", next: "cancelled" }],
+        confirmed: [{ label: "Mark Shipped", next: "shipped" }, { label: "Cancel", next: "cancelled" }],
+        shipped: [{ label: "Mark Delivered", next: "delivered" }],
+      };
+      ordersEl.innerHTML = recentOrders
+        .map((o) => {
+          const actions = ADMIN_ACTIONS[o.status] || [];
+          const btns = actions
+            .map(
+              (a) =>
+                `<button data-order-id="${o.id}" data-next-status="${a.next}" class="admin-order-btn text-xs font-semibold px-2 py-1 rounded ${a.next === "cancelled" ? "bg-red-100 text-red-700" : "bg-purple-100 text-purple-700"}">${a.label}</button>`
+            )
+            .join(" ");
+          return `
+        <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg gap-2">
+          <span class="text-sm font-semibold text-gray-800">#${o.id.split("-")[0].toUpperCase()}</span>
+          <span class="text-xs text-gray-500 capitalize">${o.status}</span>
+          <span class="text-sm font-bold text-purple-600">P${Number(o.total_amount || 0).toFixed(2)}</span>
+          <span class="flex gap-1">${btns}</span>
+        </div>`;
+        })
+        .join("");
+
+      ordersEl.querySelectorAll(".admin-order-btn").forEach((btn) => {
+        btn.addEventListener("click", async () => {
+          btn.disabled = true;
+          const { error } = await supabase.rpc("advance_order_status", {
+            p_order_id: btn.dataset.orderId,
+            p_new_status: btn.dataset.nextStatus,
+          });
+          if (error) {
+            console.error("[BSTM Admin] Couldn't update order:", error);
+            alert("Couldn't update this order: " + error.message);
+            btn.disabled = false;
+            return;
+          }
+          location.reload();
+        });
+      });
+    }
+  }
+
+  // ===== Customers (with real emails) =====
+  if (canAccess("customers")) {
+    const { data: allProfiles } = await supabase
+      .from("profiles")
+      .select("id, email, role, thb_balance, created_at")
+      .order("created_at", { ascending: false });
+
+    const { data: allOrdersForCount } = await supabase.from("orders").select("buyer_id");
+    const orderCountByBuyer = {};
+    (allOrdersForCount || []).forEach((o) => {
+      orderCountByBuyer[o.buyer_id] = (orderCountByBuyer[o.buyer_id] || 0) + 1;
+    });
+
+    function renderCustomers(filterText) {
+      const tbody = document.getElementById("customers-table");
+      const rows = (allProfiles || []).filter(
+        (p) => !filterText || (p.email || "").toLowerCase().includes(filterText.toLowerCase())
+      );
+      if (rows.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" class="py-3 text-gray-400">No matching customers.</td></tr>';
+        return;
+      }
+      tbody.innerHTML = rows
+        .map(
+          (p) => `
+        <tr class="border-b last:border-0">
+          <td class="py-2 pr-4">${escapeHtml(p.email || "—")}</td>
+          <td class="py-2 pr-4 capitalize">${escapeHtml(p.role || "buyer")}</td>
+          <td class="py-2 pr-4">${Number(p.thb_balance || 0).toFixed(1)}</td>
+          <td class="py-2 pr-4">${orderCountByBuyer[p.id] || 0}</td>
+          <td class="py-2">${new Date(p.created_at).toLocaleDateString()}</td>
+        </tr>`
+        )
+        .join("");
+    }
+    renderCustomers("");
+    document.getElementById("customer-search").addEventListener("input", (e) => renderCustomers(e.target.value));
+  }
+
+  // ===== Sellers & Rooms (with real owner emails) =====
+  if (canAccess("sellers")) {
+    const { data: allProductsForRooms } = await supabase.from("products").select("id, room_id");
+    const { data: allOrderItemsForRooms } = await supabase
+      .from("order_items")
+      .select("quantity, unit_price, product_id, products(room_id)");
+
+    const productCountByRoom = {};
+    (allProductsForRooms || []).forEach((p) => {
+      if (p.room_id) productCountByRoom[p.room_id] = (productCountByRoom[p.room_id] || 0) + 1;
+    });
+    const revenueByRoom = {};
+    (allOrderItemsForRooms || []).forEach((i) => {
+      const rid = i.products?.room_id;
+      if (rid) revenueByRoom[rid] = (revenueByRoom[rid] || 0) + i.quantity * i.unit_price;
+    });
+
+    const sellersTbody = document.getElementById("sellers-table");
+    if (!allRooms || allRooms.length === 0) {
+      sellersTbody.innerHTML = '<tr><td colspan="5" class="py-3 text-gray-400">No rooms yet.</td></tr>';
+    } else {
+      sellersTbody.innerHTML = allRooms
+        .map(
+          (r) => `
+        <tr class="border-b last:border-0">
+          <td class="py-2 pr-4 font-semibold">${escapeHtml(r.name)}</td>
+          <td class="py-2 pr-4">${escapeHtml(r.profiles?.email || "—")}</td>
+          <td class="py-2 pr-4 capitalize">${escapeHtml(r.status)}</td>
+          <td class="py-2 pr-4">${productCountByRoom[r.id] || 0}</td>
+          <td class="py-2">P${(revenueByRoom[r.id] || 0).toFixed(2)}</td>
+        </tr>`
+        )
+        .join("");
+    }
   }
 
   // ===== Revenue Breakdown (real GMV + platform commission) =====
-  const gmv = (items || []).reduce((sum, i) => sum + i.quantity * i.unit_price, 0);
-  const COMMISSION_RATE = 0.05; // matches the 5% baseline commission
-  const commission = gmv * COMMISSION_RATE;
-  document.getElementById("revenue-breakdown").innerHTML = `
-    <div class="bg-purple-50 rounded-xl p-4">
-      <p class="text-2xl font-bold text-purple-700">P${gmv.toFixed(2)}</p>
-      <p class="text-xs text-gray-600">Gross Order Value</p>
-    </div>
-    <div class="bg-green-50 rounded-xl p-4">
-      <p class="text-2xl font-bold text-green-700">P${commission.toFixed(2)}</p>
-      <p class="text-xs text-gray-600">Platform Commission (5%)</p>
-    </div>
-    <div class="bg-blue-50 rounded-xl p-4">
-      <p class="text-2xl font-bold text-blue-700">P${(gmv - commission).toFixed(2)}</p>
-      <p class="text-xs text-gray-600">Seller Payout (est.)</p>
-    </div>`;
+  if (canAccess("revenue")) {
+    const gmv = (items || []).reduce((sum, i) => sum + i.quantity * i.unit_price, 0);
+    const COMMISSION_RATE = 0.05; // matches the 5% baseline commission
+    const commission = gmv * COMMISSION_RATE;
+    document.getElementById("revenue-breakdown").innerHTML = `
+      <div class="bg-purple-50 rounded-xl p-4">
+        <p class="text-2xl font-bold text-purple-700">P${gmv.toFixed(2)}</p>
+        <p class="text-xs text-gray-600">Gross Order Value</p>
+      </div>
+      <div class="bg-green-50 rounded-xl p-4">
+        <p class="text-2xl font-bold text-green-700">P${commission.toFixed(2)}</p>
+        <p class="text-xs text-gray-600">Platform Commission (5%)</p>
+      </div>
+      <div class="bg-blue-50 rounded-xl p-4">
+        <p class="text-2xl font-bold text-blue-700">P${(gmv - commission).toFixed(2)}</p>
+        <p class="text-xs text-gray-600">Seller Payout (est.)</p>
+      </div>`;
+  }
 
   // ===== Needs Attention =====
-  const staleThreshold = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
-  const { count: stalePendingCount } = await supabase
-    .from("orders")
-    .select("id", { count: "exact", head: true })
-    .eq("status", "pending")
-    .lt("created_at", staleThreshold);
-  const { count: pendingKycCount } = await supabase
-    .from("kyc_submissions")
-    .select("id", { count: "exact", head: true })
-    .eq("status", "pending");
-  const inactiveRoomCount = (allRooms || []).filter((r) => r.status !== "active").length;
+  if (canAccess("attention")) {
+    const staleThreshold = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+    const { count: stalePendingCount } = await supabase
+      .from("orders")
+      .select("id", { count: "exact", head: true })
+      .eq("status", "pending")
+      .lt("created_at", staleThreshold);
+    const { count: pendingKycCount } = await supabase
+      .from("kyc_submissions")
+      .select("id", { count: "exact", head: true })
+      .eq("status", "pending");
+    const inactiveRoomCount = (allRooms || []).filter((r) => r.status !== "active").length;
 
-  document.getElementById("needs-attention-list").innerHTML = `
-    <a href="#" class="block bg-yellow-50 rounded-xl p-4 hover:bg-yellow-100">
-      <p class="text-2xl font-bold text-yellow-700">${pendingKycCount ?? 0}</p>
-      <p class="text-xs text-gray-600">Pending KYC reviews</p>
-    </a>
-    <div class="block bg-red-50 rounded-xl p-4">
-      <p class="text-2xl font-bold text-red-700">${stalePendingCount ?? 0}</p>
-      <p class="text-xs text-gray-600">Orders pending &gt;24h, unconfirmed</p>
-    </div>
-    <div class="block bg-gray-50 rounded-xl p-4">
-      <p class="text-2xl font-bold text-gray-700">${inactiveRoomCount}</p>
-      <p class="text-xs text-gray-600">Inactive / suspended rooms</p>
-    </div>`;
+    document.getElementById("needs-attention-list").innerHTML = `
+      <a href="#" class="block bg-yellow-50 rounded-xl p-4 hover:bg-yellow-100">
+        <p class="text-2xl font-bold text-yellow-700">${pendingKycCount ?? 0}</p>
+        <p class="text-xs text-gray-600">Pending KYC reviews</p>
+      </a>
+      <div class="block bg-red-50 rounded-xl p-4">
+        <p class="text-2xl font-bold text-red-700">${stalePendingCount ?? 0}</p>
+        <p class="text-xs text-gray-600">Orders pending &gt;24h, unconfirmed</p>
+      </div>
+      <div class="block bg-gray-50 rounded-xl p-4">
+        <p class="text-2xl font-bold text-gray-700">${inactiveRoomCount}</p>
+        <p class="text-xs text-gray-600">Inactive / suspended rooms</p>
+      </div>`;
+  }
 
   // ===== Audit Log =====
-  const { data: auditRows } = await supabase
-    .from("admin_audit_log")
-    .select("id, action, resource_type, resource_id, reason, created_at, profiles!admin_audit_log_actor_profiles_fkey(email)")
-    .order("created_at", { ascending: false })
-    .limit(20);
+  if (canAccess("audit")) {
+    const { data: auditRows } = await supabase
+      .from("admin_audit_log")
+      .select("id, action, resource_type, resource_id, reason, created_at, profiles!admin_audit_log_actor_profiles_fkey(email)")
+      .order("created_at", { ascending: false })
+      .limit(20);
 
-  const auditEl = document.getElementById("audit-log-list");
-  if (!auditRows || auditRows.length === 0) {
-    auditEl.innerHTML = '<p class="text-gray-400">No admin actions recorded yet.</p>';
-  } else {
-    auditEl.innerHTML = auditRows
-      .map(
-        (a) => `
-      <div class="flex justify-between items-center py-2 border-b last:border-0">
-        <div>
-          <span class="font-semibold text-gray-800">${escapeHtml(a.action)}</span>
-          <span class="text-gray-500"> on ${escapeHtml(a.resource_type)} · by ${escapeHtml(a.profiles?.email || "system")}</span>
-          ${a.reason ? `<span class="block text-xs text-gray-400">"${escapeHtml(a.reason)}"</span>` : ""}
-        </div>
-        <span class="text-xs text-gray-400">${new Date(a.created_at).toLocaleString()}</span>
-      </div>`
-      )
-      .join("");
+    const auditEl = document.getElementById("audit-log-list");
+    if (!auditRows || auditRows.length === 0) {
+      auditEl.innerHTML = '<p class="text-gray-400">No admin actions recorded yet.</p>';
+    } else {
+      auditEl.innerHTML = auditRows
+        .map(
+          (a) => `
+        <div class="flex justify-between items-center py-2 border-b last:border-0">
+          <div>
+            <span class="font-semibold text-gray-800">${escapeHtml(a.action)}</span>
+            <span class="text-gray-500"> on ${escapeHtml(a.resource_type)} · by ${escapeHtml(a.profiles?.email || "system")}</span>
+            ${a.reason ? `<span class="block text-xs text-gray-400">"${escapeHtml(a.reason)}"</span>` : ""}
+          </div>
+          <span class="text-xs text-gray-400">${new Date(a.created_at).toLocaleString()}</span>
+        </div>`
+        )
+        .join("");
+    }
   }
+
 });
 
 window.handleLogout = function () {

@@ -58,7 +58,7 @@ window.BSTM.ready().then(async function (session) {
   }
 
   const { data: profile } = await getProfile(session.user.id);
-  if (!profile || !["admin", "government"].includes(profile.role)) {
+  if (!profile || !["admin", "super_admin", "government"].includes(profile.role)) {
     alert("This dashboard is restricted to BSTM staff.");
     window.location.href = "buyer-dashboard.html";
     return;

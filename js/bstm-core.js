@@ -28,7 +28,7 @@ export async function logout() {
 export async function getProfile(userId) {
   const result = await supabase
     .from("profiles")
-    .select("id, email, role, thb_balance, phone, location, notification_prefs, wallet_address, created_at")
+    .select("id, email, role, thb_balance, phone, location, notification_prefs, wallet_address, agent_permissions, created_at")
     .eq("id", userId)
     .single();
   if (result.error) console.error("getProfile error:", result.error);
@@ -82,7 +82,7 @@ export async function requireSellerAccess(redirectTo = "buyer-dashboard.html") {
   }
   const { data: profile } = await getProfile(session.user.id);
   const role = profile?.role || "buyer";
-  if (["seller", "admin"].includes(role)) return { session, profile };
+  if (["seller", "admin", "super_admin"].includes(role)) return { session, profile };
 
   const { count } = await supabase
     .from("room_roles")
