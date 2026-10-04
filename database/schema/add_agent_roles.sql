@@ -23,8 +23,14 @@ BEGIN
 EXCEPTION WHEN OTHERS THEN NULL;
 END $$;
 
+-- 'government' is included here because monitoring-dashboard.js's own
+-- access check already allows it (!["admin","super_admin","government"]) —
+-- this constraint has to admit every role value any page actually checks
+-- for, even ones this patch didn't add. If you've never used that role and
+-- never plan to, it's harmless to leave allowed; it's just not possible to
+-- safely guess it belonged here without having read that file.
 ALTER TABLE profiles ADD CONSTRAINT profiles_role_check
-  CHECK (role IN ('buyer', 'seller', 'admin', 'agent', 'super_admin'));
+  CHECK (role IN ('buyer', 'seller', 'admin', 'agent', 'super_admin', 'government'));
 
 -- 3. Make yourself the one and only super_admin. Replace the email below
 --    with the actual email on your account before running.
