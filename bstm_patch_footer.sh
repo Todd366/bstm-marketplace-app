@@ -1,3 +1,9 @@
+#!/data/data/com.termux/files/usr/bin/bash
+set -e
+echo "Adding a link to ecosystem-hub.html in the site-wide footer — it was a real page with zero links pointing to it anywhere in the app."
+
+mkdir -p "$(dirname "components/universal-footer.html")"
+cat > components/universal-footer.html << 'BSTM_PATCH_EOF'
 <!-- BSTM Universal Footer - CLEAN PRODUCTION VERSION -->
 <footer style="background:#0f172a;color:#fff;margin-top:60px;font-family:Inter,sans-serif;">
 
@@ -47,3 +53,9 @@
   </div>
 
       </footer>
+BSTM_PATCH_EOF
+
+git add -A
+git commit -m "Link ecosystem-hub.html from the site footer — it had no path to it anywhere"
+git push
+echo "Pushed."
