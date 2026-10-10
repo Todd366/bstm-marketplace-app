@@ -132,6 +132,12 @@
             <option value="Palapye">Palapye</option>
           </select>
         </div>
+        <div>
+          <label class="block text-gray-700 font-semibold mb-2">Shelf / Section <span class="text-gray-400 font-normal">(optional)</span></label>
+          <input type="text" id="shelf" maxlength="40" list="shelf-options" autocomplete="off" class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-purple-600" placeholder="e.g., Fresh Fruit, Winter Collection">
+          <datalist id="shelf-options"></datalist>
+          <p class="text-xs text-gray-500 mt-2">Products with the same shelf name are grouped together in your room.</p>
+        </div>
       </div>
     </div>
 
@@ -150,7 +156,7 @@
 <script src="components/smart-loader.js"></script>
 <script type="module" src="js/app.js?v=1788846845"></script>
 
-<script type="module" src="js/pages/upload-product.js?v=1789125009"></script>
+<script type="module" src="js/pages/upload-product.js?v=1791625509"></script>
 <script>
 // Keep real File objects (window.__bstm_uploadedFiles) for upload-product.js
 // to actually upload, alongside base64 previews for display only.

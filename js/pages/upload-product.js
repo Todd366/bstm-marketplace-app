@@ -98,6 +98,28 @@ window.BSTM.ready().then(async function (session) {
   );
   applyListingType();
 
+  // Offer this room's existing shelf names so sellers reuse them instead of
+  // creating near-duplicates ("Fruit" vs "fruits"). Failure is harmless.
+  try {
+    const { data: shelfRows } = await supabase
+      .from("products")
+      .select("shelf")
+      .eq("room_id", myRoom.id)
+      .not("shelf", "is", null);
+    const shelfList = document.getElementById("shelf-options");
+    if (shelfList && shelfRows) {
+      Array.from(new Set(shelfRows.map((r) => r.shelf)))
+        .sort()
+        .forEach((s) => {
+          const opt = document.createElement("option");
+          opt.value = s;
+          shelfList.appendChild(opt);
+        });
+    }
+  } catch (e) {
+    console.warn("[BSTM Upload] Couldn't load existing shelves:", e);
+  }
+
   form.addEventListener("submit", async function (e) {
     e.preventDefault();
 
@@ -112,6 +134,7 @@ window.BSTM.ready().then(async function (session) {
     const price = parseFloat(document.getElementById("price").value);
     const quantity = isService ? 1 : parseInt(document.getElementById("quantity").value, 10);
     const location = document.getElementById("location").value.trim();
+    const shelf = document.getElementById("shelf").value.trim().replace(/\s+/g, " ").slice(0, 40) || null;
     const files = window.__bstm_uploadedFiles || [];
 
     if (!name || !price || price <= 0 || !category || (!isService && (!condition || !quantity))) {
@@ -140,6 +163,7 @@ window.BSTM.ready().then(async function (session) {
         quantity,
         product_type: productType,
         location,
+        shelf,
         image: imageUrls[0] || null,
         seller_id: user.id,
         room_id: myRoom.id,
