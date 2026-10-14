@@ -12,6 +12,7 @@ import "./core/nav-notifications.js"; // wires the real notification bell in nav
 
 let currentSession = null;
 let currentRole = null; // resolved once per session, used for nav filtering
+let currentIsRoomStaff = false; // owns or works in at least one room (profiles.role stays "buyer")
 let isBootstrapped = false;
 let readyResolve;
 
@@ -35,6 +36,9 @@ function filterNavByRole() {
     if (currentSession) {
       if (allowed.includes("auth")) visible = true;
       if (currentRole && allowed.includes(currentRole)) visible = true;
+      // Room owners and room staff keep profiles.role = "buyer" (role changes
+      // are locked), so seller tools are shown by room membership instead.
+      if (currentIsRoomStaff && allowed.includes("seller")) visible = true;
     }
     el.style.display = visible ? "" : "none";
   });
@@ -83,6 +87,32 @@ async function resolveRole(userId) {
   return profile.role || null;
 }
 
+// True when this person owns a room or holds any room_roles row. Runs in the
+// background (never blocks BSTM.ready()) and re-applies the nav when done.
+async function resolveRoomStaff(userId) {
+  try {
+    const [roles, owned] = await Promise.all([
+      supabase.from("room_roles").select("room_id", { count: "exact", head: true }).eq("user_id", userId),
+      supabase.from("rooms").select("id", { count: "exact", head: true }).eq("seller_id", userId),
+    ]);
+    return (roles.count || 0) > 0 || (owned.count || 0) > 0;
+  } catch (err) {
+    console.warn("[BSTM] Couldn't check room membership:", err);
+    return false;
+  }
+}
+
+function refreshRoomStaff(session) {
+  if (!session) {
+    currentIsRoomStaff = false;
+    return;
+  }
+  resolveRoomStaff(session.user.id).then((isStaff) => {
+    currentIsRoomStaff = isStaff;
+    filterNavByRole();
+  });
+}
+
 // Nav is injected asynchronously by smart-loader.js and may finish
 // before or after session bootstrap — re-apply filtering whichever
 // happens second, so a role is never left unapplied by a race.
@@ -109,6 +139,7 @@ async function bootstrap() {
     requestAnimationFrame(() => updateNav(currentSession));
 
     readyResolve(currentSession);
+    refreshRoomStaff(currentSession);
 
     window.dispatchEvent(
       new CustomEvent("bstm:ready", {
@@ -120,6 +151,7 @@ async function bootstrap() {
     supabase.auth.onAuthStateChange(async (event, session) => {
       currentSession = session;
       currentRole = session ? await resolveRole(session.user.id) : null;
+      refreshRoomStaff(session);
 
       requestAnimationFrame(() => updateNav(session));
 

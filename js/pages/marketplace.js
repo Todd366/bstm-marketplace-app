@@ -4,11 +4,12 @@ import { getRoomTemplate } from "../core/room-templates.js";
 import { escapeHtml } from "../core/sanitize.js";
 
 const CATEGORY_MAP = {
-  food: ["fresh-produce", "agriculture"],
+  food: ["fresh-produce", "agriculture", "food-beverage", "catering"],
   tech: ["electronics"],
   fashion: ["fashion"],
   transport: ["vehicles"],
-  services: ["services", "home"],
+  services: ["services", "home", "car-wash"],
+  retail: ["retail"],
   art: [], // no rooms in this category yet — honestly shows empty, not faked
 };
 

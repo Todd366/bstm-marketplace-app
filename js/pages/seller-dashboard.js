@@ -2,8 +2,47 @@
 import { supabase } from "../core/supabase-client.js";
 import { escapeHtml } from "../core/sanitize.js";
 import { requireSellerAccess } from "../bstm-core.js";
+import { loadMyRooms, pickRoom, roomIdFromUrl } from "../core/my-rooms.js";
 
 let productLookup = new Map();
+
+// Room switcher + shortcuts for the selected room. Several rooms under one
+// owner (e.g. a tuckshop, a café and a car wash) are switched with ?room=<id>.
+function renderRoomTools(room, rooms) {
+  const card = document.getElementById("my-room-card");
+  if (!card || document.getElementById("room-tools")) return;
+
+  const tools = document.createElement("div");
+  tools.id = "room-tools";
+  tools.style.cssText = "display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;";
+
+  const chip = (href, text, active) => {
+    const a = document.createElement("a");
+    a.href = href;
+    a.textContent = text;
+    a.style.cssText =
+      "padding:8px 14px;border-radius:10px;font-weight:700;font-size:12px;text-decoration:none;border:1.5px solid " +
+      (active ? "#7C3AED;background:#7C3AED;color:#fff;" : "#DDD6FE;background:#F5F3FF;color:#7C3AED;");
+    return a;
+  };
+
+  if (rooms.length > 1) {
+    rooms.forEach((r) => {
+      tools.appendChild(chip(`seller-dashboard.html?room=${encodeURIComponent(r.id)}`, `Room ${r.room_number} · ${r.name}`, r.id === room.id));
+    });
+    const sep = document.createElement("div");
+    sep.style.cssText = "flex-basis:100%;height:0;";
+    tools.appendChild(sep);
+  }
+
+  const rid = encodeURIComponent(room.id);
+  tools.appendChild(chip(`counter.html?room=${rid}`, "🧮 Open the till", false));
+  tools.appendChild(chip("daily-sheet.html", "📒 Daily sheet", false));
+  tools.appendChild(chip(`upload-product.html?room=${rid}`, "📤 Add product", false));
+  if (rooms.some((r) => r.isOwner)) tools.appendChild(chip("open-room.html", "➕ Open another room", false));
+
+  card.appendChild(tools);
+}
 
 function renderProducts(products) {
   const container = document.getElementById("my-products-list");
@@ -79,24 +118,9 @@ window.BSTM.ready().then(async function (session) {
   // Checks both ownership AND staff membership (room_roles) — an employee
   // added via Room Staff needs to actually see the room they work in, not
   // just the literal owner.
-  const { data: ownedRoom } = await supabase
-    .from("rooms")
-    .select("id, room_number, name, banner_emoji")
-    .eq("seller_id", userId)
-    .maybeSingle();
-
-  let myRoom = ownedRoom;
-  let isOwner = !!ownedRoom;
-
-  if (!myRoom) {
-    const { data: staffedRoles } = await supabase
-      .from("room_roles")
-      .select("room_id, rooms(id, room_number, name, banner_emoji)")
-      .eq("user_id", userId)
-      .limit(1)
-      .maybeSingle();
-    if (staffedRoles?.rooms) myRoom = staffedRoles.rooms;
-  }
+  const { rooms: myRooms } = await loadMyRooms(userId);
+  const myRoom = pickRoom(myRooms, roomIdFromUrl());
+  const isOwner = !!myRoom && myRoom.isOwner;
 
   if (myRoom) {
     document.getElementById("open-room-cta").style.display = "none";
@@ -105,6 +129,7 @@ window.BSTM.ready().then(async function (session) {
     document.getElementById("my-room-number").textContent = `ROOM ${myRoom.room_number}`;
     document.getElementById("my-room-name").textContent = myRoom.name;
     document.getElementById("my-room-link").href = `room.html?id=${myRoom.id}`;
+    renderRoomTools(myRoom, myRooms);
     // Only the actual owner manages staff — an employee shouldn't add more staff.
     const staffSection = document.getElementById("room-staff-section");
     if (isOwner) {
@@ -123,11 +148,14 @@ window.BSTM.ready().then(async function (session) {
   }
 
   // My products
-  const { data: products, error: productsErr } = await supabase
+  // An owner sees the products of the room selected above (one owner can run
+  // several rooms); everyone else keeps the old per-seller list.
+  let productsQuery = supabase
     .from("products")
     .select("id, name, price, image, quantity, status, description")
-    .eq("seller_id", userId)
-    .order("created_at", { ascending: false });
+    .eq("seller_id", userId);
+  if (isOwner) productsQuery = productsQuery.eq("room_id", myRoom.id);
+  const { data: products, error: productsErr } = await productsQuery.order("created_at", { ascending: false });
 
   if (productsErr) {
     console.error("[BSTM Seller] Failed to load products:", productsErr);
@@ -182,7 +210,7 @@ window.BSTM.ready().then(async function (session) {
   const thbEl = document.getElementById("seller-thb");
   if (thbEl) thbEl.textContent = thbBalance.toFixed(1);
 
-  loadSellerOrders(session.user.id);
+  loadSellerOrders(session.user.id, isOwner ? myRoom.id : null);
 });
 
 const STATUS_NEXT = {
@@ -191,7 +219,7 @@ const STATUS_NEXT = {
   shipped: { label: "Mark Delivered", next: "delivered" },
 };
 
-async function loadSellerOrders(sellerId) {
+async function loadSellerOrders(sellerId, roomId = null) {
   const listEl = document.getElementById("seller-orders-list");
   if (!listEl) return;
 
@@ -209,7 +237,10 @@ async function loadSellerOrders(sellerId) {
   const roomIds = (staffRooms || []).map((r) => r.room_id);
 
   let productQuery = supabase.from("products").select("id");
-  if (roomIds.length > 0) {
+  if (roomId) {
+    // An owner looking at one of their rooms sees only that room's orders.
+    productQuery = productQuery.eq("room_id", roomId);
+  } else if (roomIds.length > 0) {
     productQuery = productQuery.or(`seller_id.eq.${sellerId},room_id.in.(${roomIds.join(",")})`);
   } else {
     productQuery = productQuery.eq("seller_id", sellerId);
@@ -290,7 +321,7 @@ async function loadSellerOrders(sellerId) {
         btn.disabled = false;
         return;
       }
-      loadSellerOrders(sellerId);
+      loadSellerOrders(sellerId, roomId);
     });
   });
 }

@@ -1,5 +1,8 @@
 // js/pages/open-room.js
 import { supabase } from "../core/supabase-client.js";
+import { escapeHtml } from "../core/sanitize.js";
+import { loadMyRooms } from "../core/my-rooms.js";
+import { loadCategories, fillCategorySelect } from "../core/categories.js";
 
 let selectedEmoji = "🏪";
 
@@ -27,18 +30,24 @@ window.BSTM.ready().then(async function (session) {
 
   const userId = session.user.id;
 
-  const { data: existingRoom } = await supabase
-    .from("rooms")
-    .select("id, name, room_number")
-    .eq("seller_id", userId)
-    .maybeSingle();
-
-  if (existingRoom) {
-    document.getElementById("already-has-room").style.display = "block";
-    document.getElementById("existing-room-name").textContent =
-      `Room ${existingRoom.room_number} — ${existingRoom.name}`;
-    return;
+  // One owner can run several businesses, each in its own room (the database
+  // caps it at 10 per owner). Show what they already run, then the form.
+  const { rooms } = await loadMyRooms(userId);
+  const owned = rooms.filter((r) => r.isOwner);
+  const note = document.getElementById("other-rooms-note");
+  if (note && owned.length > 0) {
+    const list = owned
+      .map((r) => `<li>Room ${escapeHtml(r.room_number)} — ${escapeHtml(r.name)}</li>`)
+      .join("");
+    note.innerHTML =
+      `<p class="font-semibold text-gray-800 mb-2">You already run ${owned.length} room${owned.length === 1 ? "" : "s"}:</p>` +
+      `<ul class="list-disc list-inside text-gray-600 mb-2">${list}</ul>` +
+      '<p class="text-gray-500">Each room is a separate business with its own products, sales and daily sheet. ' +
+      '<a href="seller-dashboard.html" class="text-purple-700 font-semibold">Go to my dashboard</a></p>';
+    note.style.display = "block";
   }
+
+  fillCategorySelect(document.getElementById("roomCategory"), await loadCategories());
 
   document.getElementById("room-form-content").style.display = "block";
 

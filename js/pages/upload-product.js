@@ -1,5 +1,7 @@
 // js/pages/upload-product.js
 import { supabase } from "../core/supabase-client.js";
+import { loadMyRooms, pickRoom } from "../core/my-rooms.js";
+import { loadCategories, fillCategorySelect } from "../core/categories.js";
 
 function showMsg(msg, type) {
   var el = document.getElementById("upload-status");
@@ -43,11 +45,12 @@ window.BSTM.ready().then(async function (session) {
     el.textContent = user.email.split("@")[0];
   });
 
-  const { data: myRoom } = await supabase
-    .from("rooms")
-    .select("id")
-    .eq("seller_id", user.id)
-    .maybeSingle();
+  // Only the room's owner lists products (database rule), so offer owned rooms.
+  // One owner may run several businesses: ?room=<id> or the picker below
+  // chooses which one this product goes into.
+  const { rooms: myRooms } = await loadMyRooms(user.id);
+  const ownedRooms = myRooms.filter((r) => r.isOwner);
+  let myRoom = pickRoom(ownedRooms, new URLSearchParams(window.location.search).get("room"));
 
   if (!myRoom) {
     const form = document.getElementById("productForm");
@@ -100,25 +103,59 @@ window.BSTM.ready().then(async function (session) {
 
   // Offer this room's existing shelf names so sellers reuse them instead of
   // creating near-duplicates ("Fruit" vs "fruits"). Failure is harmless.
-  try {
-    const { data: shelfRows } = await supabase
-      .from("products")
-      .select("shelf")
-      .eq("room_id", myRoom.id)
-      .not("shelf", "is", null);
-    const shelfList = document.getElementById("shelf-options");
-    if (shelfList && shelfRows) {
-      Array.from(new Set(shelfRows.map((r) => r.shelf)))
-        .sort()
-        .forEach((s) => {
-          const opt = document.createElement("option");
-          opt.value = s;
-          shelfList.appendChild(opt);
-        });
+  async function loadShelves() {
+    try {
+      const { data: shelfRows } = await supabase
+        .from("products")
+        .select("shelf")
+        .eq("room_id", myRoom.id)
+        .not("shelf", "is", null);
+      const shelfList = document.getElementById("shelf-options");
+      if (shelfList) {
+        shelfList.textContent = "";
+        Array.from(new Set((shelfRows || []).map((r) => r.shelf)))
+          .sort()
+          .forEach((s) => {
+            const opt = document.createElement("option");
+            opt.value = s;
+            shelfList.appendChild(opt);
+          });
+      }
+    } catch (e) {
+      console.warn("[BSTM Upload] Couldn't load existing shelves:", e);
     }
-  } catch (e) {
-    console.warn("[BSTM Upload] Couldn't load existing shelves:", e);
   }
+  await loadShelves();
+
+  // Several rooms under one owner: choose which business this product is for.
+  if (ownedRooms.length > 1) {
+    const wrap = document.createElement("div");
+    wrap.style.cssText = "margin-bottom:20px;";
+    const label = document.createElement("label");
+    label.className = "block text-gray-700 font-semibold mb-2";
+    label.textContent = "Which room is this product for?";
+    const picker = document.createElement("select");
+    picker.id = "room-picker";
+    picker.className =
+      "w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-purple-600";
+    ownedRooms.forEach((r) => {
+      const opt = document.createElement("option");
+      opt.value = r.id;
+      opt.textContent = `Room ${r.room_number} — ${r.name}`;
+      if (r.id === myRoom.id) opt.selected = true;
+      picker.appendChild(opt);
+    });
+    picker.addEventListener("change", () => {
+      myRoom = ownedRooms.find((r) => r.id === picker.value) || myRoom;
+      loadShelves();
+    });
+    wrap.appendChild(label);
+    wrap.appendChild(picker);
+    form.insertBefore(wrap, form.firstChild);
+  }
+
+  // Categories come from the database so new business types need no code change.
+  fillCategorySelect(document.getElementById("category"), await loadCategories());
 
   form.addEventListener("submit", async function (e) {
     e.preventDefault();
