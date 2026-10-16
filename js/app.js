@@ -1,5 +1,5 @@
 import { supabase } from "./core/supabase-client.js";
-import { getProfile } from "./bstm-core.js";
+import { getProfile } from "./bstm-core.js?v=1792108428";
 import "./core/cart.js"; // registers window.addToCart globally
 import "./multi-language.js"; // registers window.MultiLanguage globally
 import "./form-validation.js"; // registers window.FormValidator globally

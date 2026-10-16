@@ -1,6 +1,6 @@
 // js/pages/checkout.js
 import { supabase } from "../core/supabase-client.js";
-import { getCart, getCartGroupedByRoom, getCartTotal, clearCart } from "../core/cart.js";
+import { getCart, getCartGroupedByRoom, getCartTotal, clearCart, removeFromCart } from "../core/cart.js";
 import { escapeHtml } from "../core/sanitize.js";
 import { CONFIG } from "../core/config.js";
 import { logEvent } from "../core/events.js";
@@ -116,7 +116,7 @@ function clearError() {
   el.classList.add("hidden");
 }
 
-async function createOrder(session, cart, { deliveryFee, orderStatus, paystackRef }) {
+async function createOrder(session, cart, { deliveryFee, orderStatus }) {
   const userId = session.user.id;
 
   const form = document.getElementById("checkoutForm");
@@ -130,7 +130,7 @@ async function createOrder(session, cart, { deliveryFee, orderStatus, paystackRe
   const deliveryMethod =
     document.querySelector('input[name="delivery"]:checked')?.value || "cablink";
   const paymentMethod =
-    document.querySelector('input[name="payment"]:checked')?.value || "paystack";
+    document.querySelector('input[name="payment"]:checked')?.value || "cod";
 
   // Each room is a separate seller — split the cart into one order per room
   // rather than one order for the whole basket. A shopper buying from 3
@@ -140,144 +140,137 @@ async function createOrder(session, cart, { deliveryFee, orderStatus, paystackRe
   const groups = getCartGroupedByRoom();
   const createdOrders = [];
   const feePerOrder = groups.length > 0 ? deliveryFee / groups.length : 0;
+  let currentIndex = -1;
 
-  for (const group of groups) {
-    // A service-only room order (e.g. booking a haircut) has no physical
-    // delivery — dispatching a CabLink pickup for it would be nonsense.
-    const effectiveDeliveryMethod = group.hasService && !group.hasPhysical ? "service" : deliveryMethod;
+  try {
+    for (let gi = 0; gi < groups.length; gi++) {
+      currentIndex = gi;
+      const group = groups[gi];
 
-    const { data: order, error: orderErr } = await supabase
-      .from("orders")
-      .insert({
-        buyer_id: userId,
-        product_id: group.items[0].id, // kept for backward-compat joins
-        room_id: group.room_id,
-        seller_id: group.seller_id,
-        status: orderStatus,
-        total_amount: group.subtotal + feePerOrder,
-        delivery_method: effectiveDeliveryMethod,
-        payment_method: paymentMethod,
-        paystack_reference: paystackRef || null,
-        ...delivery,
-      })
-      .select()
-      .single();
+      // A service-only room order (e.g. booking a haircut) has no physical
+      // delivery — dispatching a CabLink pickup for it would be nonsense.
+      const effectiveDeliveryMethod = group.hasService && !group.hasPhysical ? "service" : deliveryMethod;
 
-    if (orderErr) throw orderErr;
-
-    const items = group.items.map((item) => ({
-      order_id: order.id,
-      product_id: item.id,
-      product_name: item.name,
-      quantity: item.qty,
-      unit_price: item.price,
-    }));
-
-    const { error: itemsErr } = await supabase.from("order_items").insert(items);
-    if (itemsErr) throw itemsErr;
-
-    // Auto-create a CabLink pickup task for this room's order so it shows
-    // up ready-to-claim in the real CabLink driver app — no manual step
-    // needed from the buyer or seller. Skipped entirely for service-only
-    // orders (the buyer enquires/books with the seller directly).
-    if (effectiveDeliveryMethod === "cablink" && group.room_id) {
-      const { data: deliveryRequest, error: deliveryErr } = await supabase
-        .from("delivery_requests")
+      const { data: order, error: orderErr } = await supabase
+        .from("orders")
         .insert({
-          order_id: order.id,
           buyer_id: userId,
-          pickup_room_id: group.room_id,
-          dropoff_address: delivery.delivery_address,
-          dropoff_city: delivery.delivery_city,
-          dropoff_phone: delivery.delivery_phone,
-          status: "pending",
+          product_id: group.items[0].id, // kept for backward-compat joins
+          room_id: group.room_id,
+          seller_id: group.seller_id,
+          status: orderStatus,
+          total_amount: group.subtotal + feePerOrder,
+          delivery_method: effectiveDeliveryMethod,
+          payment_method: paymentMethod,
+          ...delivery,
         })
-        .select("id")
+        .select()
         .single();
 
-      // Actually hand the task to CabLink's real driver network. This is
-      // best-effort on purpose: if CabLink is briefly unreachable or the
-      // shared key isn't configured yet, the order must still succeed —
-      // the row above stays "pending" and can be retried later rather
-      // than blocking checkout.
-      if (!deliveryErr && deliveryRequest) {
-        try {
-          const { error: dispatchErr } = await supabase.functions.invoke(
-            "dispatch-to-cablink",
-            { body: { delivery_request_id: deliveryRequest.id } }
-          );
-          if (dispatchErr) {
-            console.error("[BSTM Checkout] CabLink dispatch failed (order still placed):", dispatchErr);
-          }
-        } catch (dispatchException) {
-          console.error("[BSTM Checkout] CabLink dispatch threw (order still placed):", dispatchException);
-        }
-      } else if (deliveryErr) {
-        console.error("[BSTM Checkout] Couldn't create delivery_requests row:", deliveryErr);
+      if (orderErr) throw orderErr;
+
+      const items = group.items.map((item) => ({
+        order_id: order.id,
+        product_id: item.id,
+        product_name: item.name,
+        quantity: item.qty,
+        unit_price: item.price,
+      }));
+
+      const { error: itemsErr } = await supabase.from("order_items").insert(items);
+      if (itemsErr) {
+        // The order row exists but has no items. Buyers cannot cancel orders
+        // (admin-only policy), so this can only be logged for support until
+        // the server-side place_order function replaces this client flow.
+        console.error("[BSTM Checkout] order_items insert failed, empty order left behind:", order.id, itemsErr);
+        throw itemsErr;
       }
-    }
 
-    createdOrders.push(order);
-    logEvent("order_placed", {
-      userId,
-      roomId: group.room_id,
-      orderId: order.id,
-      metadata: {
-        item_count: group.items.length,
-        total: group.subtotal + feePerOrder,
-        payment_method: paymentMethod,
-        delivery_method: effectiveDeliveryMethod,
-      },
-    });
-  }
+      // Auto-create a CabLink pickup task for this room's order so it shows
+      // up ready-to-claim in the real CabLink driver app — no manual step
+      // needed from the buyer or seller. Skipped entirely for service-only
+      // orders (the buyer enquires/books with the seller directly).
+      if (effectiveDeliveryMethod === "cablink" && group.room_id) {
+        // A database trigger on order_items already creates exactly one
+        // delivery_requests row per cablink order (unique on order_id), so
+        // inserting a second one here always failed with a duplicate-key
+        // error and dispatch never ran. Read the existing row first; insert
+        // only if the trigger didn't make one.
+        let { data: deliveryRequest, error: deliveryErr } = await supabase
+          .from("delivery_requests")
+          .select("id")
+          .eq("order_id", order.id)
+          .maybeSingle();
+        if (!deliveryErr && !deliveryRequest) {
+          ({ data: deliveryRequest, error: deliveryErr } = await supabase
+            .from("delivery_requests")
+            .insert({
+              order_id: order.id,
+              buyer_id: userId,
+              pickup_room_id: group.room_id,
+              dropoff_address: delivery.delivery_address,
+              dropoff_city: delivery.delivery_city,
+              dropoff_phone: delivery.delivery_phone,
+              status: "pending",
+            })
+            .select("id")
+            .single());
+        }
 
-  // Reward THB — credited immediately for MVP. In production this should be
-  // confirmed server-side once the Paystack webhook verifies payment.
-  // One ledger row PER ORDER (not one combined row on the first order) so
-  // each room's own order-tracking page shows the reward that order actually
-  // earned, instead of order #1 showing the whole basket's reward and every
-  // other room's order showing 0.
-  let totalReward = 0;
-  for (let i = 0; i < groups.length; i++) {
-    const group = groups[i];
-    const order = createdOrders[i];
-    const orderReward = Math.round(group.subtotal * REWARD_PERCENT);
-    if (orderReward > 0) {
-      const { error: rewardErr } = await supabase.from("wallet_ledger").insert({
-        user_id: userId,
-        amount_thb: orderReward,
-        type: "credit",
-        reference_type: "order",
-        reference_id: order.id,
-        meta: { reason: "purchase_reward" },
+        // Actually hand the task to CabLink's real driver network. This is
+        // best-effort on purpose: if CabLink is briefly unreachable or the
+        // shared key isn't configured yet, the order must still succeed —
+        // the row above stays "pending" and can be retried later rather
+        // than blocking checkout.
+        if (!deliveryErr && deliveryRequest) {
+          try {
+            const { error: dispatchErr } = await supabase.functions.invoke(
+              "dispatch-to-cablink",
+              { body: { delivery_request_id: deliveryRequest.id } }
+            );
+            if (dispatchErr) {
+              console.error("[BSTM Checkout] CabLink dispatch failed (order still placed):", dispatchErr);
+            }
+          } catch (dispatchException) {
+            console.error("[BSTM Checkout] CabLink dispatch threw (order still placed):", dispatchException);
+          }
+        } else if (deliveryErr) {
+          console.error("[BSTM Checkout] Couldn't create delivery_requests row:", deliveryErr);
+        }
+      }
+
+      createdOrders.push(order);
+      logEvent("order_placed", {
+        userId,
+        roomId: group.room_id,
+        orderId: order.id,
+        metadata: {
+          item_count: group.items.length,
+          total: group.subtotal + feePerOrder,
+          payment_method: paymentMethod,
+          delivery_method: effectiveDeliveryMethod,
+        },
       });
-      if (!rewardErr) totalReward += orderReward;
-      else console.error("[BSTM Checkout] Reward ledger insert failed for order", order.id, rewardErr);
     }
+  } catch (err) {
+    // Tell the caller which rooms already have a real order so it only
+    // gives back stock for the rooms that did not.
+    err.createdOrders = createdOrders;
+    err.failedIndex = currentIndex;
+    throw err;
   }
 
-  // profiles.thb_balance is what every other page (buyer dashboard, settings,
-  // THB wallet) actually reads — crediting wallet_ledger alone never moved
-  // that number, so a buyer's earned reward was invisible everywhere except
-  // a live sum of the ledger. This keeps the two in sync from the one place
-  // that creates purchase-reward ledger rows. Not atomic (read-then-write),
-  // same limitation as the rest of this client-side codebase; a concurrent
-  // reward (e.g. two tabs checking out at once) could race here.
-  if (totalReward > 0) {
-    const { data: profile } = await supabase
-      .from("profiles")
-      .select("thb_balance")
-      .eq("id", userId)
-      .single();
-    const newBalance = Number(profile?.thb_balance || 0) + totalReward;
-    const { error: balanceErr } = await supabase
-      .from("profiles")
-      .update({ thb_balance: newBalance })
-      .eq("id", userId);
-    if (balanceErr) console.error("[BSTM Checkout] thb_balance update failed:", balanceErr);
-  }
-
+  // THB rewards are NOT credited from the browser. wallet_ledger and
+  // profiles.thb_balance are server-controlled; the reward is issued by the
+  // database when an order is delivered.
   return createdOrders;
+}
+
+function resetPlaceOrderButton() {
+  const btn = document.getElementById("place-order-btn");
+  if (!btn) return;
+  btn.disabled = false;
+  btn.textContent = "Place Order";
 }
 
 async function handlePlaceOrder() {
@@ -295,6 +288,16 @@ async function handlePlaceOrder() {
     return;
   }
 
+  // Cash on Delivery is the only payment path that is switched on. Online
+  // payment (Paystack) is decommissioned server-side, so refuse anything else
+  // before any stock is touched.
+  const paymentMethod =
+    document.querySelector('input[name="payment"]:checked')?.value || "cod";
+  if (paymentMethod !== "cod") {
+    showError("Online payment isn't switched on yet — please choose Cash on Delivery.");
+    return;
+  }
+
   const session = await window.BSTM.ready();
   if (!session) {
     window.location.href = "login.html?redirect=checkout.html";
@@ -305,18 +308,12 @@ async function handlePlaceOrder() {
   btn.disabled = true;
   btn.textContent = "Processing…";
 
-  const subtotal = getCartTotal();
   const deliveryFee = getDeliveryFee();
-  const total = subtotal + deliveryFee;
-  const email = document.getElementById("email").value;
-  const paymentMethod =
-    document.querySelector('input[name="payment"]:checked')?.value || "paystack";
 
-  // Reserve stock BEFORE payment, not after — nobody should be charged for
-  // something that's actually out of stock. Each decrement is atomic at the
+  // Reserve stock before creating orders. Each decrement is atomic at the
   // database level (see decrement_product_stock), so two buyers racing for
   // the last unit can never both succeed. If anything fails here, roll back
-  // whatever already succeeded and stop before payment is even attempted.
+  // whatever already succeeded and stop.
   const reserved = [];
   for (const item of cart) {
     const { data: ok, error: stockErr } = await supabase.rpc(
@@ -331,95 +328,52 @@ async function handlePlaceOrder() {
         });
       }
       showError(`"${item.name}" doesn't have enough stock left. Please adjust your cart.`);
-      btn.disabled = false;
-      btn.textContent = "Place Order";
+      resetPlaceOrderButton();
       return;
     }
     reserved.push({ id: item.id, qty: item.qty });
   }
 
-  async function restoreAllReserved() {
-    for (const r of reserved) {
+  async function restoreStock(items) {
+    for (const r of items) {
       await supabase.rpc("restore_product_stock", { p_product_id: r.id, p_qty: r.qty });
     }
   }
 
-  // Cash on Delivery: genuinely different path — no payment gateway at all.
-  // Order is created as "pending" since payment hasn't happened yet; it's
-  // confirmed at the point of physical handover, not here.
-  if (paymentMethod === "cod") {
-    try {
-      const orders = await createOrder(session, cart, {
-        deliveryFee,
-        orderStatus: "pending",
-        paystackRef: null,
-      });
-      clearCart();
-      const orderIds = orders.map((o) => o.id).join(",");
-      window.location.href = `order-tracking.html?order=${orders[0].id}&orders=${orderIds}`;
-    } catch (err) {
-      console.error("[BSTM Checkout] COD order creation failed:", err);
-      await restoreAllReserved();
+  // Order is created as "pending" since payment happens at handover; it is
+  // confirmed at the point of physical delivery, not here.
+  try {
+    const orders = await createOrder(session, cart, {
+      deliveryFee,
+      orderStatus: "pending",
+    });
+    clearCart();
+    const orderIds = orders.map((o) => o.id).join(",");
+    window.location.href = `order-tracking.html?order=${orders[0].id}&orders=${orderIds}`;
+  } catch (err) {
+    console.error("[BSTM Checkout] Order creation failed:", err);
+    const placed = Array.isArray(err.createdOrders) ? err.createdOrders : [];
+
+    if (placed.length === 0) {
+      await restoreStock(reserved);
       showError("Couldn't place your order. Please try again.");
-      btn.disabled = false;
-      btn.textContent = "Place Order";
+      resetPlaceOrderButton();
+      return;
     }
-    return;
-  }
 
-  // NOTE: This confirms payment on the client-side Paystack callback, which
-  // is fine for early testing but is NOT secure for real money — a user
-  // could fake success without paying. Before going live, verify payment
-  // server-side via a Paystack webhook (see backend/) before creating the
-  // order. Flagging this clearly rather than hiding it.
-  if (!window.PaystackPop || CONFIG.API.PAYSTACK_PUBLIC === "pk_live_xxx") {
-    await restoreAllReserved();
+    // Some rooms already have a real order (their stock stays taken). Give
+    // back stock only for the rooms that failed, drop the placed rooms from
+    // the cart, and tell the buyer exactly what happened.
+    const groups = getCartGroupedByRoom();
+    const failedItems = groups.slice(err.failedIndex).flatMap((g) => g.items);
+    const placedItems = groups.slice(0, err.failedIndex).flatMap((g) => g.items);
+    await restoreStock(failedItems.map((i) => ({ id: i.id, qty: i.qty })));
+    placedItems.forEach((i) => removeFromCart(i.id));
     showError(
-      "Payment isn't configured yet — add a real Paystack public key in js/core/config.js before going live."
+      `${placed.length} of your orders were placed (see My Orders). The remaining items could not be ordered and are still in your cart — please try again.`
     );
-    btn.disabled = false;
-    btn.textContent = "Place Order";
-    return;
+    resetPlaceOrderButton();
   }
-
-  const handler = PaystackPop.setup({
-    key: CONFIG.API.PAYSTACK_PUBLIC,
-    email: email,
-    amount: Math.round(total * 100), // kobo/thebe — now correctly includes delivery fee
-    currency: CONFIG.PAYSTACK.CURRENCY,
-    ref: "BSTM-" + Date.now() + "-" + Math.floor(Math.random() * 10000),
-    callback: function (response) {
-      createOrder(session, cart, {
-        deliveryFee,
-        orderStatus: "confirmed",
-        paystackRef: response.reference,
-      })
-        .then((orders) => {
-          clearCart();
-          const orderIds = orders.map((o) => o.id).join(",");
-          window.location.href = `order-tracking.html?order=${orders[0].id}&orders=${orderIds}&ref=${response.reference}`;
-        })
-        .catch((err) => {
-          // Payment already succeeded here — do NOT restore stock, since
-          // this buyer did pay for it. This becomes a support case instead
-          // of silently letting someone else buy the same unit.
-          console.error("[BSTM Checkout] Order creation failed:", err);
-          showError(
-            "Payment succeeded but saving your order failed. Contact support with reference " +
-              response.reference
-          );
-          btn.disabled = false;
-          btn.textContent = "Place Order";
-        });
-    },
-    onClose: async function () {
-      await restoreAllReserved();
-      btn.disabled = false;
-      btn.textContent = "Place Order";
-    },
-  });
-
-  handler.openIframe();
 }
 
 window.BSTM.ready().then(async function (session) {

@@ -1,5 +1,5 @@
 // js/pages/transactions.js
-import { getOrders } from '../bstm-core.js';
+import { getOrders } from '../bstm-core.js?v=1792108428';
 import { supabase } from '../core/supabase-client.js';
 
 window.BSTM.ready().then(async function(session) {

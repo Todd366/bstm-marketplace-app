@@ -1,7 +1,7 @@
 // js/pages/product-detail.js
 import { supabase } from "../core/supabase-client.js";
 import { addToCart } from "../core/cart.js";
-import { addToWishlist, removeFromWishlist } from "../bstm-core.js";
+import { addToWishlist, removeFromWishlist } from "../bstm-core.js?v=1792108428";
 import { escapeHtml } from "../core/sanitize.js";
 import { CONFIG } from "../core/config.js";
 import { logEvent } from "../core/events.js";

@@ -1,5 +1,5 @@
 // js/pages/admin-dashboard.js
-import { getProfile } from "../bstm-core.js";
+import { getProfile } from "../bstm-core.js?v=1792108428";
 import { supabase } from "../core/supabase-client.js";
 import { escapeHtml } from "../core/sanitize.js";
 

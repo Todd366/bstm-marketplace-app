@@ -1,4 +1,4 @@
-import { getWishlist, removeFromWishlist, normalizeProduct } from "../bstm-core.js";
+import { getWishlist, removeFromWishlist, normalizeProduct } from "../bstm-core.js?v=1792108428";
 import { escapeHtml } from "../core/sanitize.js";
 
 function showSection(id) {

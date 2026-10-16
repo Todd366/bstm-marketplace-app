@@ -1,7 +1,7 @@
 // js/pages/seller-dashboard.js
 import { supabase } from "../core/supabase-client.js";
 import { escapeHtml } from "../core/sanitize.js";
-import { requireSellerAccess } from "../bstm-core.js";
+import { requireSellerAccess } from "../bstm-core.js?v=1792108428";
 import { loadMyRooms, pickRoom, roomIdFromUrl } from "../core/my-rooms.js";
 
 let productLookup = new Map();
@@ -381,7 +381,7 @@ async function loadRoomStaff(roomId) {
 
   const { data: staff, error } = await supabase
     .from("room_roles")
-    .select("id, role_id, user_id, profiles(email)")
+    .select("id, role_id, user_id, profiles!room_roles_user_id_profiles_fkey(email)")
     .eq("room_id", roomId);
 
   if (error) {
@@ -396,12 +396,37 @@ async function loadRoomStaff(roomId) {
     listEl.innerHTML = staff
       .map(
         (s) => `
-      <div class="flex justify-between items-center py-2 border-b border-gray-100 last:border-0">
+      <div class="flex justify-between items-center gap-2 py-2 border-b border-gray-100 last:border-0">
         <span class="text-sm text-gray-700">${escapeHtml(s.profiles?.email || "Unknown")}</span>
-        <span class="text-xs font-semibold text-purple-600">${escapeHtml(s.role_id)}</span>
+        <span class="flex items-center gap-3">
+          <span class="text-xs font-semibold text-purple-600">${escapeHtml(s.role_id)}</span>
+          ${
+            s.role_id === "ROOM_OWNER"
+              ? ""
+              : `<button type="button" data-remove-staff="${escapeHtml(s.id)}" class="text-xs font-bold text-red-600 hover:text-red-800">Remove</button>`
+          }
+        </span>
       </div>`
       )
       .join("");
+
+    if (!listEl.dataset.removeBound) {
+      listEl.dataset.removeBound = "true";
+      listEl.addEventListener("click", async (e) => {
+        const btn = e.target.closest("[data-remove-staff]");
+        if (!btn) return;
+        if (!window.confirm("Remove this person's access to the room?")) return;
+        btn.disabled = true;
+        const { error: delErr } = await supabase.from("room_roles").delete().eq("id", btn.dataset.removeStaff);
+        if (delErr) {
+          console.error("[BSTM Seller] Couldn't remove staff:", delErr);
+          window.alert("Couldn't remove this person: " + (delErr.message || "unknown error"));
+          btn.disabled = false;
+          return;
+        }
+        loadRoomStaff(roomId);
+      });
+    }
   }
 
   const form = document.getElementById("add-staff-form");

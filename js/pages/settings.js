@@ -1,6 +1,6 @@
 // js/pages/settings.js
 import { supabase } from "../core/supabase-client.js";
-import { getProfile } from "../bstm-core.js";
+import { getProfile } from "../bstm-core.js?v=1792108428";
 
 window.BSTM.ready().then(async function (session) {
   const wall = document.getElementById("auth-wall");

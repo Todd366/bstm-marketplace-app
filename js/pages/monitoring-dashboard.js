@@ -1,6 +1,6 @@
 // js/pages/monitoring-dashboard.js
 import { supabase } from "../core/supabase-client.js";
-import { getProfile } from "../bstm-core.js";
+import { getProfile } from "../bstm-core.js?v=1792108428";
 
 function setDot(id, healthy) {
   const el = document.getElementById(id);

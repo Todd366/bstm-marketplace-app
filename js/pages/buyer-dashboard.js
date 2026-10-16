@@ -1,4 +1,4 @@
-import { getProfile, getOrders } from "../bstm-core.js";
+import { getProfile, getOrders } from "../bstm-core.js?v=1792108428";
 import { supabase } from "../core/supabase-client.js";
 import { escapeHtml } from "../core/sanitize.js";
 
@@ -46,7 +46,7 @@ async function render(session) {
   // Load real wishlist count — this stat was never wired to anything real
   const { count: wishlistCount } = await supabase
     .from("wishlist")
-    .select("id", { count: "exact", head: true })
+    .select("product_id", { count: "exact", head: true })
     .eq("user_id", user.id);
   const wishlistEl = document.getElementById("stat-wishlist");
   if (wishlistEl && typeof wishlistCount === "number") wishlistEl.textContent = wishlistCount;
