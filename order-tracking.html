@@ -49,21 +49,28 @@
         </div>
 
         <div id="order-content" class="hidden">
-        <div class="bg-green-50 border-2 border-green-500 rounded-2xl p-8 mb-8 text-center">
-            <div class="w-20 h-20 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                <i class="fas fa-check text-white text-4xl"></i>
+        <div id="order-banner" class="bg-green-50 border-2 border-green-500 rounded-2xl p-8 mb-8 text-center">
+            <div id="order-banner-icon" class="w-20 h-20 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i id="order-banner-glyph" class="fas fa-check text-white text-4xl"></i>
             </div>
-            <h1 class="text-3xl font-bold text-gray-800 mb-2">Order Placed Successfully!</h1>
-            <p class="text-gray-600 mb-4">Thank you for shopping with BSTM Marketplace</p>
+            <h1 id="order-banner-title" class="text-3xl font-bold text-gray-800 mb-2">Order Placed Successfully!</h1>
+            <p id="order-banner-sub" class="text-gray-600 mb-4">Thank you for shopping with BSTM Marketplace</p>
             <p class="text-lg font-semibold text-gray-800">
                 Order #<span id="order-number" class="text-purple-600">—</span>
             </p>
-            <div class="mt-6 bg-yellow-100 border-2 border-yellow-400 rounded-lg p-4 inline-block">
+            <div id="thb-box" class="mt-6 bg-yellow-100 border-2 border-yellow-400 rounded-lg p-4 inline-block">
                 <p class="text-sm text-gray-700 mb-1">You earned</p>
                 <p class="text-2xl font-bold text-yellow-700">
                     <i class="fas fa-coins mr-2"></i><span id="thb-earned">0.0</span> THB
                 </p>
             </div>
+        </div>
+
+        <!-- Payment panel (online-payment orders only; filled by order-tracking.js) -->
+        <div id="payment-panel" class="hidden rounded-2xl p-6 mb-8" style="border:2px solid #fcd34d;background:#fffbeb;">
+            <p id="payment-panel-title" class="text-lg font-bold text-gray-800 mb-1"></p>
+            <p id="payment-panel-text" class="text-sm text-gray-700 mb-4"></p>
+            <a id="payment-panel-btn" href="payment-status.html" class="hidden gradient-bg text-white text-center py-3 px-6 rounded-xl font-bold inline-block">Pay now</a>
         </div>
 
         <!-- Order Details -->
@@ -87,6 +94,7 @@
                 <div>
                     <p class="text-sm text-gray-600 mb-1">Payment Method</p>
                     <p id="payment-method" class="text-lg font-bold text-gray-800">—</p>
+                    <p id="payment-state" class="mt-1"></p>
                 </div>
                 <div>
                     <p class="text-sm text-gray-600 mb-1">Total Amount</p>
@@ -125,6 +133,9 @@
                     <i class="fas fa-clock text-4xl mb-4 block"></i>
                     Waiting to be sent to CabLink
                 </p>
+                <div id="cablink-send-wrap" class="hidden text-center">
+                    <button id="cablink-send-btn" type="button" class="gradient-bg text-white py-3 px-6 rounded-xl font-bold">Send delivery request now</button>
+                </div>
             </div>
         </div>
 

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payments - BSTM Admin</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#7C3AED">
+    <link href="css/tailwind.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        /* This page carries its own styles: css/tailwind.css is a purged build and lacks many utility classes. */
+        .ap-head { background: linear-gradient(135deg, #7C3AED 0%, #4F46E5 100%); color: #fff; padding: 18px 20px; }
+        .ap-head-in { max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+        .ap-head h1 { font-size: 22px; font-weight: 800; margin: 0; }
+        .ap-head p { font-size: 13px; opacity: .8; margin: 2px 0 0; }
+        .ap-back { background: #fff; color: #6d28d9; font-weight: 700; font-size: 13px; padding: 8px 14px; border-radius: 10px; text-decoration: none; }
+        .ap-wrap { max-width: 1100px; margin: 0 auto; padding: 24px 16px 60px; }
+        .ap-hidden { display: none !important; }
+        .ap-section { background: #fff; border-radius: 18px; box-shadow: 0 6px 22px rgba(79,70,229,.08); padding: 20px; margin-bottom: 24px; }
+        .ap-section h2 { font-size: 18px; font-weight: 800; color: #1f2937; margin: 0 0 4px; }
+        .ap-sub { font-size: 13px; color: #6b7280; margin: 0 0 14px; }
+        .ap-empty { font-size: 14px; color: #6b7280; background: #f9fafb; border-radius: 12px; padding: 16px; text-align: center; }
+        .ap-banner { border-radius: 12px; padding: 12px 14px; font-size: 14px; margin-bottom: 14px; }
+        .ap-banner.bad { background: #fef2f2; border: 1px solid #fca5a5; color: #991b1b; }
+        .ap-banner.ok { background: #f0fdf4; border: 1px solid #86efac; color: #166534; }
+        .ap-banner.info { background: #eff6ff; border: 1px solid #93c5fd; color: #1e40af; }
+        .ap-card { border: 2px solid #f3f4f6; border-radius: 14px; padding: 14px 16px; margin-bottom: 12px; }
+        .ap-card.review { border-color: #fdba74; background: #fff7ed; }
+        .ap-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap; }
+        .ap-title { font-size: 16px; font-weight: 800; color: #1f2937; }
+        .ap-meta { font-size: 13px; color: #4b5563; margin-top: 2px; word-break: break-word; }
+        .ap-amount { font-size: 20px; font-weight: 900; color: #4F46E5; }
+        .ap-pill { display: inline-block; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 999px; background: #e5e7eb; color: #374151; vertical-align: middle; }
+        .ap-pill.live, .ap-pill.on { background: #dcfce7; color: #166534; } .ap-pill.sandbox { background: #dbeafe; color: #1e40af; }
+        .ap-pill.off { background: #e5e7eb; color: #374151; } .ap-pill.warn, .ap-pill.review { background: #ffedd5; color: #9a3412; }
+        .ap-pill.bad { background: #fee2e2; color: #991b1b; } .ap-pill.wait { background: #fef3c7; color: #92400e; }
+        .ap-btn { background: linear-gradient(135deg, #7C3AED 0%, #4F46E5 100%); color: #fff; font-weight: 700; font-size: 13px; padding: 9px 16px; border-radius: 10px; border: 0; cursor: pointer; }
+        .ap-btn:disabled { opacity: .55; cursor: not-allowed; }
+        .ap-btn.ok { background: #16a34a; } .ap-btn.bad { background: #dc2626; } .ap-btn.alt { background: #fff; color: #6d28d9; border: 2px solid #c4b5fd; }
+        .ap-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+        .ap-label { display: block; font-size: 12px; font-weight: 700; color: #374151; margin: 10px 0 4px; }
+        .ap-input, .ap-select, .ap-text { width: 100%; box-sizing: border-box; border: 2px solid #d1d5db; border-radius: 10px; padding: 9px 11px; font-size: 14px; font-family: inherit; }
+        .ap-input:focus, .ap-select:focus, .ap-text:focus { outline: none; border-color: #7C3AED; }
+        .ap-text { min-height: 84px; resize: vertical; }
+        .ap-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 0 14px; }
+        .ap-prov-body { border-top: 1px dashed #e5e7eb; margin-top: 12px; padding-top: 4px; }
+        .ap-err { color: #b91c1c; font-size: 13px; margin-top: 8px; }
+        .ap-check { display: flex; gap: 8px; align-items: flex-start; font-size: 13px; color: #374151; margin-top: 12px; }
+        /* confirm dialog */
+        .ap-modal { position: fixed; inset: 0; background: rgba(17,24,39,.55); display: flex; align-items: center; justify-content: center; padding: 16px; z-index: 1000; }
+        .ap-modal-box { background: #fff; border-radius: 16px; max-width: 460px; width: 100%; padding: 22px; box-shadow: 0 20px 50px rgba(0,0,0,.3); }
+        .ap-modal-box h3 { margin: 0 0 6px; font-size: 18px; font-weight: 800; color: #1f2937; }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div id="bstm-nav"></div>
+
+    <div class="ap-head">
+        <div class="ap-head-in">
+            <div>
+                <h1>💳 Payments</h1>
+                <p>Confirm manual payments, resolve reviews, and switch payment methods on or off.</p>
+            </div>
+            <a class="ap-back" href="admin-dashboard.html">← Admin Dashboard</a>
+        </div>
+    </div>
+
+    <div class="ap-wrap">
+        <div id="ap-loading" class="ap-section"><div class="ap-empty">Loading payments…</div></div>
+        <div id="ap-fatal" class="ap-banner bad ap-hidden"></div>
+
+        <div id="ap-main" class="ap-hidden">
+            <div id="ap-flash" class="ap-hidden"></div>
+
+            <div class="ap-section">
+                <h2>Payments waiting for you</h2>
+                <p class="ap-sub">Manual payments to confirm, and payments held for review. Only confirm money you have actually seen arrive.</p>
+                <div id="ap-queue"></div>
+            </div>
+
+            <div class="ap-section">
+                <h2>Payment methods</h2>
+                <p class="ap-sub">A method only shows to buyers while it is switched on. Nothing is switched on until you do it here.</p>
+                <div id="ap-health" class="ap-banner info ap-hidden"></div>
+                <div id="ap-providers"></div>
+            </div>
+
+            <div class="ap-section">
+                <h2>Add a manual method</h2>
+                <p class="ap-sub">For a wallet or bank account buyers pay by hand (for example another mobile-money wallet). It is added switched off; fill in the instructions, then switch it on above.</p>
+                <form id="ap-add-form" novalidate>
+                    <div class="ap-grid">
+                        <div>
+                            <label class="ap-label" for="ap-add-name">Name buyers will see</label>
+                            <input class="ap-input" id="ap-add-name" type="text" maxlength="60" placeholder="e.g. FNB eWallet">
+                        </div>
+                        <div>
+                            <label class="ap-label" for="ap-add-slug">Short code (letters, numbers, _ or -)</label>
+                            <input class="ap-input" id="ap-add-slug" type="text" maxlength="40" placeholder="e.g. fnb_ewallet">
+                        </div>
+                    </div>
+                    <p id="ap-add-err" class="ap-err ap-hidden"></p>
+                    <div class="ap-actions"><button class="ap-btn" id="ap-add-btn" type="submit">Add method</button></div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="ap-modal-root"></div>
+
+    <div id="bstm-footer"></div>
+    <script src="components/smart-loader.js"></script>
+    <script type="module" src="js/app.js?v=1792108428"></script>
+    <script type="module" src="js/pages/admin-payments.js?v=1792108428"></script>
+</body>
+</html>

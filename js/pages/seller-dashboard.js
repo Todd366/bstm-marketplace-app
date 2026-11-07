@@ -3,6 +3,7 @@ import { supabase } from "../core/supabase-client.js";
 import { escapeHtml } from "../core/sanitize.js";
 import { requireSellerAccess } from "../bstm-core.js?v=1792108428";
 import { loadMyRooms, pickRoom, roomIdFromUrl } from "../core/my-rooms.js";
+import { paymentBadge, awaitingPayment, isOnlineOrder, paymentLabel, paymentErrorMessage, dbErrorCode } from "../core/payments.js";
 
 let productLookup = new Map();
 
@@ -255,7 +256,7 @@ async function loadSellerOrders(sellerId, roomId = null) {
 
   const { data: items, error } = await supabase
     .from("order_items")
-    .select("order_id, quantity, unit_price, product_id, products(name), orders(id, status, delivery_name, delivery_address, delivery_city, created_at)")
+    .select("order_id, quantity, unit_price, product_id, products(name), orders(id, status, delivery_name, delivery_address, delivery_city, created_at, payment_method, payment_status)")
     .in("product_id", productIds)
     .order("order_id", { ascending: false });
 
@@ -281,11 +282,19 @@ async function loadSellerOrders(sellerId, roomId = null) {
 
   listEl.innerHTML = Object.values(byOrder)
     .map(({ order, lines }) => {
-      const action = STATUS_NEXT[order.status];
+      // An online-payment order can't be worked on until it is paid: the database refuses it too.
+      const waitingOnBuyer = awaitingPayment(order);
+      const action = waitingOnBuyer ? null : STATUS_NEXT[order.status];
       const itemsHtml = lines
         .map((l) => `<li>${escapeHtml(l.products?.name || "Item")} × ${l.quantity} — P${(l.unit_price * l.quantity).toFixed(2)}</li>`)
         .join("");
-      const btnHtml = action
+      const payBadge = paymentBadge(order);
+      const payLine = isOnlineOrder(order)
+        ? `<p class="text-xs text-gray-500 mb-3">Payment: ${escapeHtml(paymentLabel(order.payment_method))} ${payBadge}</p>`
+        : '<p class="text-xs text-gray-500 mb-3">Payment: Cash on Delivery</p>';
+      const btnHtml = waitingOnBuyer
+        ? '<span class="text-sm font-semibold" style="color:#92400E;">Waiting for the buyer to pay — nothing to do yet.</span>'
+        : action
         ? `<button data-order-id="${order.id}" data-next-status="${action.next}" class="seller-advance-btn bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg text-sm font-semibold">${action.label}</button>`
         : order.status === "cancelled"
         ? '<span class="text-red-500 text-sm font-semibold">Cancelled</span>'
@@ -301,6 +310,7 @@ async function loadSellerOrders(sellerId, roomId = null) {
             <span class="text-xs uppercase font-semibold text-gray-400">${escapeHtml(order.status)}</span>
           </div>
           <ul class="text-sm text-gray-600 list-disc list-inside mb-3">${itemsHtml}</ul>
+          ${payLine}
           ${btnHtml}
         </div>`;
     })
@@ -317,7 +327,8 @@ async function loadSellerOrders(sellerId, roomId = null) {
       });
       if (error) {
         console.error("[BSTM Seller] Couldn't advance order:", error);
-        alert("Couldn't update this order. Please try again.");
+        const code = dbErrorCode(error);
+        alert(code ? paymentErrorMessage(code) : "Couldn't update this order. Please try again.");
         btn.disabled = false;
         return;
       }

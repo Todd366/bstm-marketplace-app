@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment - BSTM Marketplace</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#7C3AED">
+    <link href="css/tailwind.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        /* This page carries its own styles: css/tailwind.css is a purged build and lacks many utility classes. */
+        .ps-wrap { max-width: 640px; margin: 0 auto; padding: 24px 16px 56px; }
+        .ps-card { background: #fff; border-radius: 20px; box-shadow: 0 8px 28px rgba(79,70,229,.10); padding: 28px 24px; margin-bottom: 20px; }
+        .ps-hidden { display: none !important; }
+        .ps-icon { width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 14px; font-size: 28px; color: #fff; }
+        .ps-icon.ok { background: #16a34a; } .ps-icon.wait { background: #4F46E5; } .ps-icon.warn { background: #d97706; } .ps-icon.bad { background: #dc2626; } .ps-icon.review { background: #ea580c; }
+        .ps-title { font-size: 24px; font-weight: 800; color: #1f2937; text-align: center; margin: 0 0 6px; }
+        .ps-sub { font-size: 14px; color: #6b7280; text-align: center; margin: 0 0 18px; }
+        .ps-amount { font-size: 34px; font-weight: 900; color: #4F46E5; text-align: center; margin: 4px 0 4px; }
+        .ps-method { font-size: 13px; color: #6b7280; text-align: center; margin-bottom: 18px; }
+        .ps-btn { display: block; width: 100%; text-align: center; background: linear-gradient(135deg, #7C3AED 0%, #4F46E5 100%); color: #fff; font-weight: 800; font-size: 16px; padding: 14px 18px; border-radius: 12px; border: 0; cursor: pointer; text-decoration: none; margin-top: 12px; }
+        .ps-btn:disabled { opacity: .6; cursor: not-allowed; }
+        .ps-btn-alt { display: block; width: 100%; text-align: center; background: #fff; color: #6d28d9; font-weight: 700; font-size: 15px; padding: 12px 16px; border-radius: 12px; border: 2px solid #c4b5fd; cursor: pointer; text-decoration: none; margin-top: 10px; }
+        .ps-btn-alt:disabled { opacity: .6; cursor: not-allowed; }
+        .ps-note { font-size: 13px; color: #4b5563; background: #f5f3ff; border-radius: 12px; padding: 12px 14px; margin-top: 14px; }
+        .ps-banner { border-radius: 12px; padding: 12px 14px; font-size: 14px; margin-bottom: 14px; }
+        .ps-banner.warn { background: #fffbeb; border: 1px solid #fcd34d; color: #92400e; }
+        .ps-banner.bad { background: #fef2f2; border: 1px solid #fca5a5; color: #991b1b; }
+        .ps-banner.ok { background: #f0fdf4; border: 1px solid #86efac; color: #166534; }
+        .ps-banner.info { background: #eff6ff; border: 1px solid #93c5fd; color: #1e40af; }
+        .ps-orders { margin-top: 16px; border-top: 1px solid #f3f4f6; padding-top: 10px; }
+        .ps-order { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 10px 4px; border-bottom: 1px solid #f3f4f6; text-decoration: none; color: #1f2937; font-size: 14px; }
+        .ps-order b { font-weight: 700; }
+        .ps-pill { display: inline-block; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 999px; background: #e5e7eb; color: #374151; }
+        .ps-pill.paid { background: #dcfce7; color: #166534; } .ps-pill.unpaid, .ps-pill.pending { background: #fef3c7; color: #92400e; } .ps-pill.failed { background: #fee2e2; color: #991b1b; } .ps-pill.review { background: #ffedd5; color: #9a3412; }
+        .ps-instr { white-space: pre-wrap; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 12px; padding: 14px; font-size: 14px; color: #1f2937; margin-top: 10px; }
+        .ps-kv { display: flex; justify-content: space-between; gap: 12px; font-size: 14px; padding: 8px 0; border-bottom: 1px dashed #e5e7eb; }
+        .ps-kv span:first-child { color: #6b7280; } .ps-kv span:last-child { font-weight: 700; color: #1f2937; text-align: right; word-break: break-word; }
+        .ps-ref { font-family: ui-monospace, Menlo, monospace; font-size: 20px; font-weight: 800; letter-spacing: 1px; color: #4F46E5; text-align: center; background: #eef2ff; border-radius: 12px; padding: 12px; margin: 10px 0; user-select: all; }
+        .ps-input { width: 100%; border: 2px solid #d1d5db; border-radius: 12px; padding: 12px 14px; font-size: 16px; margin-top: 8px; box-sizing: border-box; }
+        .ps-input:focus { outline: none; border-color: #7C3AED; }
+        .ps-label { font-size: 13px; font-weight: 700; color: #374151; margin-top: 14px; display: block; }
+        .ps-radio { display: flex; align-items: flex-start; gap: 10px; border: 2px solid #e5e7eb; border-radius: 12px; padding: 12px; margin-top: 10px; cursor: pointer; }
+        .ps-radio.sel { border-color: #7C3AED; background: #f5f3ff; }
+        .ps-radio b { display: block; font-size: 15px; color: #1f2937; } .ps-radio small { color: #6b7280; font-size: 13px; }
+        .ps-err { color: #b91c1c; font-size: 14px; margin-top: 10px; }
+        .ps-count { font-weight: 800; color: #4F46E5; }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div id="bstm-nav"></div>
+
+    <div class="ps-wrap">
+        <div id="ps-loading" class="ps-card" style="text-align:center;">
+            <div class="ps-icon wait"><i class="fas fa-spinner fa-spin"></i></div>
+            <p class="ps-title">Checking your payment…</p>
+            <p class="ps-sub">This only takes a moment.</p>
+        </div>
+
+        <div id="ps-fatal" class="ps-card ps-hidden" style="text-align:center;">
+            <div class="ps-icon bad"><i class="fas fa-exclamation"></i></div>
+            <p class="ps-title">We couldn't open this payment</p>
+            <p class="ps-sub" id="ps-fatal-text"></p>
+            <a class="ps-btn" href="order-tracking.html">Go to My Orders</a>
+        </div>
+
+        <div id="ps-root" class="ps-hidden"></div>
+
+        <p class="ps-sub" style="margin-top:8px;">
+            <i class="fas fa-lock"></i> Payments are confirmed with the payment provider or by our staff — never by this page alone.
+        </p>
+    </div>
+
+    <div id="bstm-footer"></div>
+    <script src="components/smart-loader.js"></script>
+<script type="module" src="js/app.js?v=1792108428"></script>
+
+<script type="module" src="js/pages/payment-status.js?v=1792108428"></script>
+
+</body>
+</html>

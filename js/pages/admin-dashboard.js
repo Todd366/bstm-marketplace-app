@@ -2,6 +2,7 @@
 import { getProfile } from "../bstm-core.js?v=1792108428";
 import { supabase } from "../core/supabase-client.js";
 import { escapeHtml } from "../core/sanitize.js";
+import { paymentBadge, awaitingPayment, paymentErrorMessage, dbErrorCode } from "../core/payments.js";
 
 window.BSTM.ready().then(async function (session) {
   if (!session) {
@@ -178,7 +179,7 @@ window.BSTM.ready().then(async function (session) {
   if (canAccess("orders")) {
     const { data: recentOrders } = await supabase
       .from("orders")
-      .select("id, total_amount, status, created_at")
+      .select("id, total_amount, status, created_at, payment_method, payment_status")
       .order("created_at", { ascending: false })
       .limit(15);
 
@@ -193,7 +194,10 @@ window.BSTM.ready().then(async function (session) {
       };
       ordersEl.innerHTML = recentOrders
         .map((o) => {
-          const actions = ADMIN_ACTIONS[o.status] || [];
+          // An unpaid online order can only be cancelled: the database refuses to confirm it.
+          const waitingOnBuyer = awaitingPayment(o);
+          const actions = (ADMIN_ACTIONS[o.status] || []).filter((a) => !waitingOnBuyer || a.next === "cancelled");
+          const payBadge = paymentBadge(o);
           const btns = actions
             .map(
               (a) =>
@@ -203,7 +207,7 @@ window.BSTM.ready().then(async function (session) {
           return `
         <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg gap-2">
           <span class="text-sm font-semibold text-gray-800">#${o.id.split("-")[0].toUpperCase()}</span>
-          <span class="text-xs text-gray-500 capitalize">${o.status}</span>
+          <span class="text-xs text-gray-500 capitalize">${o.status}${payBadge ? " " + payBadge : ""}</span>
           <span class="text-sm font-bold text-purple-600">P${Number(o.total_amount || 0).toFixed(2)}</span>
           <span class="flex gap-1">${btns}</span>
         </div>`;
@@ -219,7 +223,8 @@ window.BSTM.ready().then(async function (session) {
           });
           if (error) {
             console.error("[BSTM Admin] Couldn't update order:", error);
-            alert("Couldn't update this order: " + error.message);
+            const code = dbErrorCode(error);
+            alert("Couldn't update this order: " + (code ? paymentErrorMessage(code) : error.message));
             btn.disabled = false;
             return;
           }
@@ -331,12 +336,32 @@ window.BSTM.ready().then(async function (session) {
       .from("orders")
       .select("id", { count: "exact", head: true })
       .eq("status", "pending")
+      // Unpaid online orders expire on their own payment window; they aren't "stuck".
+      .or("payment_method.is.null,payment_method.eq.cod,payment_status.eq.paid")
       .lt("created_at", staleThreshold);
     const { count: pendingKycCount } = await supabase
       .from("kyc_submissions")
       .select("id", { count: "exact", head: true })
       .eq("status", "pending");
     const inactiveRoomCount = (allRooms || []).filter((r) => r.status !== "active").length;
+
+    // Payments that need a person: manual payments to confirm, and payments held for review.
+    // Only admin / super_admin may read the queue (the database enforces it), so an agent just sees 0.
+    let payQueue = null;
+    if (profile.role === "admin" || profile.role === "super_admin") {
+      const { data: q, error: qErr } = await supabase.rpc("admin_list_payment_queue");
+      if (qErr) console.warn("[BSTM Admin] Couldn't load the payment queue:", qErr);
+      else payQueue = Array.isArray(q) ? q : [];
+    }
+    const payReview = payQueue ? payQueue.filter((g) => g.status === "review").length : 0;
+    const payOpen = payQueue ? payQueue.length : 0;
+    const payCard =
+      payQueue === null
+        ? ""
+        : `<a href="admin-payments.html" class="block ${payReview > 0 ? "bg-red-50 hover:bg-red-100" : "bg-purple-50 hover:bg-purple-100"} rounded-xl p-4">
+        <p class="text-2xl font-bold ${payReview > 0 ? "text-red-700" : "text-purple-700"}">${payOpen}</p>
+        <p class="text-xs text-gray-600">Payments to confirm or review${payReview > 0 ? ` (${payReview} under review)` : ""}</p>
+      </a>`;
 
     document.getElementById("needs-attention-list").innerHTML = `
       <a href="#" class="block bg-yellow-50 rounded-xl p-4 hover:bg-yellow-100">
@@ -350,7 +375,8 @@ window.BSTM.ready().then(async function (session) {
       <div class="block bg-gray-50 rounded-xl p-4">
         <p class="text-2xl font-bold text-gray-700">${inactiveRoomCount}</p>
         <p class="text-xs text-gray-600">Inactive / suspended rooms</p>
-      </div>`;
+      </div>
+      ${payCard}`;
   }
 
   // ===== Audit Log =====

@@ -41,6 +41,9 @@
     <button onclick="logout()" style="background:rgba(255,255,255,0.15);color:#fff;border:1.5px solid rgba(255,255,255,0.3);padding:10px 20px;border-radius:12px;font-weight:700;cursor:pointer;font-size:13px;">Logout</button>
   </div>
 
+  <!-- Orders waiting for an online payment (filled by buyer-dashboard.js; stays empty when there are none) -->
+  <div id="payment-due-notice" style="display:none;background:#FFFBEB;border:2px solid #FCD34D;border-radius:16px;padding:16px 20px;margin-bottom:20px;"></div>
+
   <!-- Stats -->
   <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;margin-bottom:28px;">
     <div class="stat-card">

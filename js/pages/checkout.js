@@ -4,8 +4,150 @@ import { getCart, getCartGroupedByRoom, getCartTotal, clearCart, removeFromCart 
 import { escapeHtml } from "../core/sanitize.js";
 import { CONFIG } from "../core/config.js";
 import { logEvent } from "../core/events.js";
+import {
+  getPaymentMethods,
+  isMethodReady,
+  startPayment,
+  newIdempotencyKey,
+  paymentErrorMessage,
+  dbErrorCode,
+  safeHttpsUrl,
+} from "../core/payments.js";
 
 const REWARD_PERCENT = CONFIG.MARKETPLACE.REWARD_PERCENT / 100; // e.g. 1%
+const MAX_ORDERS_PER_PAYMENT = 20; // the payments service pays at most this many room-orders at once
+
+// Online payment methods that are switched on right now, keyed by slug (filled from the database).
+let onlineMethods = new Map();
+
+function selectedPayment() {
+  return document.querySelector('input[name="payment"]:checked')?.value || "cod";
+}
+
+function placeOrderLabel() {
+  const m = onlineMethods.get(selectedPayment());
+  if (!m) return "Place Order";
+  return m.kind === "manual" ? "Place Order & Get Payment Details" : "Place Order & Pay";
+}
+
+function setPlaceOrderButton(text, disabled) {
+  const btn = document.getElementById("place-order-btn");
+  if (!btn) return;
+  btn.disabled = disabled;
+  btn.innerHTML = "";
+  const icon = document.createElement("i");
+  icon.className = "fas fa-lock mr-2";
+  btn.appendChild(icon);
+  btn.appendChild(document.createTextNode(text));
+}
+
+// Highlights the chosen payment option and shows what happens next for online methods.
+function syncPaymentUi() {
+  const chosen = selectedPayment();
+  document.querySelectorAll("[data-pay-option]").forEach((el) => {
+    el.classList.toggle("pay-opt-selected", el.dataset.payOption === chosen);
+  });
+  document.querySelectorAll("[data-pay-hint]").forEach((el) => {
+    el.classList.toggle("hidden", el.dataset.payHint !== chosen);
+  });
+  const btn = document.getElementById("place-order-btn");
+  if (btn && !btn.disabled) setPlaceOrderButton(placeOrderLabel(), false);
+}
+
+function renderPaymentMethods(methods) {
+  const box = document.getElementById("payment-methods-online");
+  if (!box) return;
+  onlineMethods = new Map(methods.map((m) => [m.slug, m]));
+  box.innerHTML = "";
+
+  if (methods.length === 0) {
+    const row = document.createElement("div");
+    row.className = "pay-opt pay-opt-off";
+    const text = document.createElement("div");
+    const title = document.createElement("p");
+    title.className = "pay-opt-title";
+    title.textContent = "Card / Mobile Money / Bank";
+    const sub = document.createElement("p");
+    sub.className = "pay-opt-sub";
+    sub.textContent = "Online payment is not switched on yet — choose Cash on Delivery.";
+    text.appendChild(title);
+    text.appendChild(sub);
+    const icon = document.createElement("i");
+    icon.className = "fas fa-shield-alt text-gray-400 text-2xl";
+    row.appendChild(text);
+    row.appendChild(icon);
+    box.appendChild(row);
+    return;
+  }
+
+  methods.forEach((m) => {
+    const wrap = document.createElement("div");
+
+    const label = document.createElement("label");
+    label.className = "pay-opt";
+    label.dataset.payOption = m.slug;
+
+    const left = document.createElement("div");
+    left.className = "flex items-center";
+    const input = document.createElement("input");
+    input.type = "radio";
+    input.name = "payment";
+    input.value = m.slug;
+    input.className = "mr-4";
+    const text = document.createElement("div");
+    const title = document.createElement("p");
+    title.className = "pay-opt-title";
+    title.textContent = m.name;
+    const sub = document.createElement("p");
+    sub.className = "pay-opt-sub";
+    sub.textContent = m.description || "";
+    text.appendChild(title);
+    text.appendChild(sub);
+    left.appendChild(input);
+    left.appendChild(text);
+
+    const icon = document.createElement("i");
+    icon.className = (m.kind === "manual" ? "fas fa-mobile-alt" : "fas fa-credit-card") + " text-purple-600 text-2xl";
+    label.appendChild(left);
+    label.appendChild(icon);
+    wrap.appendChild(label);
+
+    const hint = document.createElement("p");
+    hint.className = "pay-opt-hint hidden";
+    hint.dataset.payHint = m.slug;
+    hint.textContent =
+      m.kind === "manual"
+        ? "After you place the order you'll see exactly how to pay, then confirm your payment reference."
+        : "After you place the order you'll be taken to a secure page to complete the payment.";
+    wrap.appendChild(hint);
+
+    box.appendChild(wrap);
+  });
+}
+
+async function loadPaymentMethods() {
+  const methods = await getPaymentMethods();
+  renderPaymentMethods(methods);
+  // If the selected method vanished (switched off) fall back to Cash on Delivery.
+  if (!document.querySelector('input[name="payment"]:checked')) {
+    const cod = document.querySelector('input[name="payment"][value="cod"]');
+    if (cod) cod.checked = true;
+  }
+  syncPaymentUi();
+}
+
+// Splits the delivery fee across the room-orders in whole cents, so the per-order totals add up to
+// exactly the total the buyer was shown (a plain division leaves fractions of a cent that the
+// payment service would round order by order).
+function splitFee(fee, n) {
+  if (n <= 0) return [];
+  const cents = Math.round(fee * 100);
+  const base = Math.floor(cents / n);
+  const extra = cents - base * n;
+  return Array.from({ length: n }, (_, i) => (base + (i < extra ? 1 : 0)) / 100);
+}
+
+const round2 = (x) => Math.round(x * 100) / 100;
 
 function getDeliveryFee() {
   const checked = document.querySelector('input[name="delivery"]:checked');
@@ -116,7 +258,7 @@ function clearError() {
   el.classList.add("hidden");
 }
 
-async function createOrder(session, cart, { deliveryFee, orderStatus }) {
+async function createOrder(session, cart, { deliveryFee, orderStatus, paymentMethod }) {
   const userId = session.user.id;
 
   const form = document.getElementById("checkoutForm");
@@ -129,23 +271,23 @@ async function createOrder(session, cart, { deliveryFee, orderStatus }) {
   };
   const deliveryMethod =
     document.querySelector('input[name="delivery"]:checked')?.value || "cablink";
-  const paymentMethod =
-    document.querySelector('input[name="payment"]:checked')?.value || "cod";
+  const online = paymentMethod !== "cod";
 
   // Each room is a separate seller — split the cart into one order per room
   // rather than one order for the whole basket. A shopper buying from 3
   // rooms in one checkout ends up with 3 independent orders, each visible
   // only to its own seller, each trackable separately. Delivery fee is
-  // split evenly across room-orders rather than charged per-room again.
+  // split across room-orders (in whole cents) rather than charged per-room again.
   const groups = getCartGroupedByRoom();
   const createdOrders = [];
-  const feePerOrder = groups.length > 0 ? deliveryFee / groups.length : 0;
+  const fees = splitFee(deliveryFee, groups.length);
   let currentIndex = -1;
 
   try {
     for (let gi = 0; gi < groups.length; gi++) {
       currentIndex = gi;
       const group = groups[gi];
+      const orderTotal = round2(group.subtotal + fees[gi]);
 
       // A service-only room order (e.g. booking a haircut) has no physical
       // delivery — dispatching a CabLink pickup for it would be nonsense.
@@ -159,7 +301,7 @@ async function createOrder(session, cart, { deliveryFee, orderStatus }) {
           room_id: group.room_id,
           seller_id: group.seller_id,
           status: orderStatus,
-          total_amount: group.subtotal + feePerOrder,
+          total_amount: orderTotal,
           delivery_method: effectiveDeliveryMethod,
           payment_method: paymentMethod,
           ...delivery,
@@ -190,7 +332,10 @@ async function createOrder(session, cart, { deliveryFee, orderStatus }) {
       // up ready-to-claim in the real CabLink driver app — no manual step
       // needed from the buyer or seller. Skipped entirely for service-only
       // orders (the buyer enquires/books with the seller directly).
-      if (effectiveDeliveryMethod === "cablink" && group.room_id) {
+      // Skipped for online-payment orders too: the database trigger has already
+      // made the (pending) delivery request, and it is only handed to CabLink
+      // once the payment has been received (payment-status.html does that).
+      if (!online && effectiveDeliveryMethod === "cablink" && group.room_id) {
         // A database trigger on order_items already creates exactly one
         // delivery_requests row per cablink order (unique on order_id), so
         // inserting a second one here always failed with a duplicate-key
@@ -246,7 +391,7 @@ async function createOrder(session, cart, { deliveryFee, orderStatus }) {
         orderId: order.id,
         metadata: {
           item_count: group.items.length,
-          total: group.subtotal + feePerOrder,
+          total: orderTotal,
           payment_method: paymentMethod,
           delivery_method: effectiveDeliveryMethod,
         },
@@ -267,10 +412,28 @@ async function createOrder(session, cart, { deliveryFee, orderStatus }) {
 }
 
 function resetPlaceOrderButton() {
-  const btn = document.getElementById("place-order-btn");
-  if (!btn) return;
-  btn.disabled = false;
-  btn.textContent = "Place Order";
+  setPlaceOrderButton(placeOrderLabel(), false);
+}
+
+// Sends the buyer on to pay for orders that already exist. Gateways go to the provider's secure
+// page; manual rails (and every problem) go to the payment status page, which explains the state
+// and lets the buyer retry or pick another method.
+async function goToPayment(provider, orderIds) {
+  setPlaceOrderButton("Starting payment…", true);
+  const pay = await startPayment({ provider, orderIds, idempotencyKey: newIdempotencyKey() });
+  if (pay.ok && pay.group) {
+    const g = pay.group;
+    const url = g.kind === "gateway" ? safeHttpsUrl(g.checkout_url) : null;
+    window.location.href = url || `payment-status.html?group=${encodeURIComponent(g.id)}`;
+    return;
+  }
+  if (pay.groupId) {
+    window.location.href = `payment-status.html?group=${encodeURIComponent(pay.groupId)}`;
+    return;
+  }
+  window.location.href =
+    `payment-status.html?orders=${encodeURIComponent(orderIds.join(","))}` +
+    `&provider=${encodeURIComponent(provider)}&error=${encodeURIComponent(pay.error || "internal_error")}`;
 }
 
 async function handlePlaceOrder() {
@@ -288,14 +451,22 @@ async function handlePlaceOrder() {
     return;
   }
 
-  // Cash on Delivery is the only payment path that is switched on. Online
-  // payment (Paystack) is decommissioned server-side, so refuse anything else
-  // before any stock is touched.
-  const paymentMethod =
-    document.querySelector('input[name="payment"]:checked')?.value || "cod";
-  if (paymentMethod !== "cod") {
-    showError("Online payment isn't switched on yet — please choose Cash on Delivery.");
-    return;
+  // Cash on Delivery, or one of the online methods that is switched on right now.
+  // Anything else is refused before any stock is touched.
+  const paymentMethod = selectedPayment();
+  const online = paymentMethod !== "cod";
+  if (online) {
+    if (!onlineMethods.has(paymentMethod)) {
+      showError("That payment method isn't available right now. Please choose another one.");
+      await loadPaymentMethods();
+      return;
+    }
+    if (getCartGroupedByRoom().length > MAX_ORDERS_PER_PAYMENT) {
+      showError(
+        `Online payment covers up to ${MAX_ORDERS_PER_PAYMENT} rooms at a time. Please remove some items or choose Cash on Delivery.`
+      );
+      return;
+    }
   }
 
   const session = await window.BSTM.ready();
@@ -304,9 +475,17 @@ async function handlePlaceOrder() {
     return;
   }
 
-  const btn = document.getElementById("place-order-btn");
-  btn.disabled = true;
-  btn.textContent = "Processing…";
+  setPlaceOrderButton("Processing…", true);
+
+  // Ask the server whether this method can really take a payment BEFORE any stock is
+  // reserved or any order is created, so a method that is switched on but not fully
+  // set up never leaves the buyer with an unpayable order.
+  if (online && !(await isMethodReady(paymentMethod))) {
+    showError(paymentErrorMessage("provider_not_configured"));
+    await loadPaymentMethods();
+    resetPlaceOrderButton();
+    return;
+  }
 
   const deliveryFee = getDeliveryFee();
 
@@ -340,23 +519,28 @@ async function handlePlaceOrder() {
     }
   }
 
-  // Order is created as "pending" since payment happens at handover; it is
-  // confirmed at the point of physical delivery, not here.
+  // Orders are always created as "pending". Cash on Delivery is confirmed at the point of
+  // physical delivery; an online order is confirmed by the database itself the moment the
+  // payment is received (the buyer cannot mark anything paid from here).
+  let orders;
   try {
-    const orders = await createOrder(session, cart, {
+    orders = await createOrder(session, cart, {
       deliveryFee,
       orderStatus: "pending",
+      paymentMethod,
     });
-    clearCart();
-    const orderIds = orders.map((o) => o.id).join(",");
-    window.location.href = `order-tracking.html?order=${orders[0].id}&orders=${orderIds}`;
   } catch (err) {
     console.error("[BSTM Checkout] Order creation failed:", err);
     const placed = Array.isArray(err.createdOrders) ? err.createdOrders : [];
 
     if (placed.length === 0) {
       await restoreStock(reserved);
-      showError("Couldn't place your order. Please try again.");
+      if (dbErrorCode(err) === "method_unavailable") {
+        showError(paymentErrorMessage("method_unavailable"));
+        await loadPaymentMethods();
+      } else {
+        showError("Couldn't place your order. Please try again.");
+      }
       resetPlaceOrderButton();
       return;
     }
@@ -370,10 +554,20 @@ async function handlePlaceOrder() {
     await restoreStock(failedItems.map((i) => ({ id: i.id, qty: i.qty })));
     placedItems.forEach((i) => removeFromCart(i.id));
     showError(
-      `${placed.length} of your orders were placed (see My Orders). The remaining items could not be ordered and are still in your cart — please try again.`
+      `${placed.length} of your orders were placed (see My Orders${online ? ", where you can pay for them" : ""}). The remaining items could not be ordered and are still in your cart — please try again.`
     );
     resetPlaceOrderButton();
+    return;
   }
+
+  clearCart();
+  const orderIds = orders.map((o) => o.id);
+
+  if (!online) {
+    window.location.href = `order-tracking.html?order=${orders[0].id}&orders=${orderIds.join(",")}`;
+    return;
+  }
+  await goToPayment(paymentMethod, orderIds);
 }
 
 window.BSTM.ready().then(async function (session) {
@@ -402,6 +596,12 @@ window.BSTM.ready().then(async function (session) {
   document.querySelectorAll('input[name="delivery"]').forEach((el) => {
     el.addEventListener("change", renderCart);
   });
+
+  // Payment methods come from the database (only the ones switched on are shown).
+  document.addEventListener("change", (e) => {
+    if (e.target && e.target.name === "payment") syncPaymentUi();
+  });
+  await loadPaymentMethods();
 
   const btn = document.getElementById("place-order-btn");
   if (btn) btn.addEventListener("click", handlePlaceOrder);

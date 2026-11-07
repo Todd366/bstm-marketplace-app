@@ -1,6 +1,53 @@
 import { getProfile, getOrders } from "../bstm-core.js?v=1792108428";
 import { supabase } from "../core/supabase-client.js";
 import { escapeHtml } from "../core/sanitize.js";
+import { awaitingPayment, shortOrderRef, money } from "../core/payments.js";
+
+// Online-payment orders the buyer still has to pay (or whose payment needs a look).
+async function showPaymentDue(userId) {
+  const box = document.getElementById("payment-due-notice");
+  if (!box) return;
+  const { data, error } = await supabase
+    .from("orders")
+    .select("id, status, total_amount, payment_method, payment_status, payment_group_id, payment_due_at")
+    .eq("buyer_id", userId)
+    .neq("payment_method", "cod")
+    .neq("status", "cancelled")
+    .in("payment_status", ["unpaid", "failed", "pending", "review"])
+    .order("created_at", { ascending: false })
+    .limit(10);
+  if (error || !data) {
+    console.warn("[BSTM Buyer] Couldn't load payment-due orders:", error);
+    box.style.display = "none";
+    return;
+  }
+  const due = data.filter((o) => awaitingPayment(o));
+  if (due.length === 0) {
+    box.style.display = "none";
+    return;
+  }
+  const rows = due
+    .map((o) => {
+      const href = o.payment_group_id
+        ? "payment-status.html?group=" + encodeURIComponent(o.payment_group_id)
+        : "payment-status.html?orders=" + encodeURIComponent(o.id);
+      const label = o.payment_status === "review" ? "View" : o.payment_status === "pending" ? "View payment" : "Pay now";
+      const dueTxt = o.payment_due_at
+        ? " · pay before " + new Date(o.payment_due_at).toLocaleString("en-BW", { dateStyle: "medium", timeStyle: "short" })
+        : "";
+      return (
+        '<div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:6px 0;">' +
+        '<span style="font-size:14px;color:#1F2937;"><b>' + escapeHtml(shortOrderRef(o.id)) + "</b> · " + escapeHtml(money(o.total_amount)) + escapeHtml(dueTxt) + "</span>" +
+        '<a href="' + escapeHtml(href) + '" style="background:#7C3AED;color:#fff;padding:8px 16px;border-radius:10px;font-weight:700;font-size:13px;text-decoration:none;">' + label + "</a></div>"
+      );
+    })
+    .join("");
+  box.innerHTML =
+    '<p style="margin:0 0 6px;font-weight:800;color:#92400E;">' +
+    (due.length === 1 ? "1 order is waiting for payment" : due.length + " orders are waiting for payment") +
+    "</p>" + rows;
+  box.style.display = "block";
+}
 
 async function render(session) {
   if (!session) {
@@ -35,6 +82,8 @@ async function render(session) {
     if (refEl) refEl.textContent = "Coming soon";
     if (refCodeEl) refCodeEl.textContent = "Coming soon";
   }
+
+  showPaymentDue(user.id);
 
   // Load real order count from orders table
   var { data: orders } = await getOrders(user.id);
