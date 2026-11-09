@@ -176,13 +176,15 @@ window.BSTM.ready().then(async function (session) {
   if (productIds.length > 0) {
     const { data: items, error: itemsErr } = await supabase
       .from("order_items")
-      .select("order_id, quantity, unit_price")
+      .select("order_id, quantity, unit_price, orders(status, payment_method, payment_status)")
       .in("product_id", productIds);
 
     if (itemsErr) {
       console.error("[BSTM Seller] Failed to load order items:", itemsErr);
     } else if (items) {
-      revenue = items.reduce((sum, i) => sum + i.unit_price * i.quantity, 0);
+      // Cancelled orders and online orders the buyer hasn't paid yet are not revenue.
+      const counts = (i) => !i.orders || (i.orders.status !== "cancelled" && !awaitingPayment(i.orders));
+      revenue = items.filter(counts).reduce((sum, i) => sum + i.unit_price * i.quantity, 0);
       orderCount = new Set(items.map((i) => i.order_id)).size;
     }
   }

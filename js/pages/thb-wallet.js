@@ -99,17 +99,12 @@ async function loadTransactions() {
 }
 
 window.BSTM.ready().then(async function (session) {
-  const wall = document.getElementById("auth-wall");
-  const content = document.getElementById("wallet-content");
-
+  // The wallet is personal: a visitor who isn't signed in is sent to log in and brought back here
+  // (the page has no sign-in wall of its own, so without this they would just see an empty wallet).
   if (!session) {
-    if (wall) wall.style.display = "flex";
-    if (content) content.style.display = "none";
+    window.location.href = "login.html?redirect=thb-wallet.html";
     return;
   }
-
-  if (wall) wall.style.display = "none";
-  if (content) content.style.display = "block";
 
   currentUserId = session.user.id;
   const email = session.user.email;
