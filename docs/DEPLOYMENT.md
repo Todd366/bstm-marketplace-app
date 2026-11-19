@@ -1,6 +1,6 @@
-# 🚀 BSTM Digital Nation - Deployment Guide
+# 🚀 BSTM Digital Ecosystem - Deployment Guide
 
-Complete guide to deploy your Digital Nation to production.
+Complete guide to deploy your Digital Ecosystem to production.
 
 ---
 

@@ -1,9 +1,9 @@
 {
   "name": "bstm-digital-nation",
   "version": "2.0.0",
-  "description": "Africa's First Digital Nation",
+  "description": "Africa's Digital Ecosystem",
   "scripts": {
-    "test": "echo \"Tests coming soon\"",
+    "test": "node tests/browser/run.mjs",
     "lint": "htmlhint **/*.html",
     "build:css": "tailwindcss -i ./css/tailwind-input.css -o ./css/tailwind.css --minify",
     "deploy": "npm run build:css && gh-pages -d ."

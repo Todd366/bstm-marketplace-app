@@ -76,11 +76,6 @@ async function render(session) {
     var thbEl = document.getElementById("stat-thb");
     if (thbEl) thbEl.textContent = (profile.thb_balance || 0).toFixed(2);
 
-    // referral_code doesn't exist in the live DB yet — show a safe, honest fallback
-    var refEl = document.getElementById("stat-referral");
-    var refCodeEl = document.getElementById("ref-code-display");
-    if (refEl) refEl.textContent = "Coming soon";
-    if (refCodeEl) refCodeEl.textContent = "Coming soon";
   }
 
   showPaymentDue(user.id);

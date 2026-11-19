@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>THB Wallet - BSTM Digital Nation</title>
+    <title>THB Wallet - BSTM Digital Ecosystem</title>
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32.png">
   <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
@@ -67,7 +67,7 @@
             <div class="flex items-center justify-between">
                 <div>
                     <h1 class="text-4xl font-bold mb-2" style="color:#fff;">💰 THoBoCoin Wallet</h1>
-                    <p style="color:#9CA3AF;">Manage your digital currency across BSTM Nation</p>
+                    <p style="color:#9CA3AF;">Manage your digital currency across the BSTM Ecosystem</p>
                 </div>
                 <a href="help.html#thb" class="font-semibold" style="color:#EAB308;">
                     <i class="fas fa-question-circle mr-2"></i>What is THB?
@@ -142,7 +142,7 @@
         </div>
 
         <!-- Quick Actions -->
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
             <button onclick="openEarnModal()" class="wx-card p-6 text-center transition-all" style="cursor:pointer;">
                 <div class="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-3" style="background:#052e1a;">
                     <i class="fas fa-plus text-2xl" style="color:#22C55E;"></i>
@@ -165,14 +165,6 @@
                 </div>
                 <p class="font-bold" style="color:#fff;">Withdraw</p>
                 <p class="text-sm" style="color:#9CA3AF;">To bank</p>
-            </button>
-
-            <button onclick="openStakeModal()" class="wx-card p-6 text-center transition-all" style="cursor:pointer;">
-                <div class="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-3" style="background:#451A03;">
-                    <i class="fas fa-lock text-2xl" style="color:#EAB308;"></i>
-                </div>
-                <p class="font-bold" style="color:#fff;">Stake THB</p>
-                <p class="text-sm" style="color:#9CA3AF;">Earn rewards</p>
             </button>
         </div>
 
@@ -212,7 +204,7 @@
             </div>
         </div>
 
-        <!-- Tabs: Transactions / Earn History / Referrals -->
+        <!-- Tabs: Transactions / Earn History -->
         <div class="wx-card overflow-hidden">
             <div style="border-bottom:1px solid #1F2937;">
                 <div class="flex">
@@ -221,9 +213,6 @@
                     </button>
                     <button onclick="switchWalletTab('earn')" class="wallet-tab flex-1 py-4 font-bold" style="color:#9CA3AF;">
                         Earn History
-                    </button>
-                    <button onclick="switchWalletTab('referrals')" class="wallet-tab flex-1 py-4 font-bold" style="color:#9CA3AF;">
-                        Referrals
                     </button>
                 </div>
             </div>
@@ -238,58 +227,7 @@
             <!-- Earn History Tab -->
             <div id="earnTab" class="p-6 hidden">
                 <div class="space-y-4" id="earnHistoryList">
-                    <div class="flex items-center justify-between p-4 rounded-xl" style="background:#052e1a;">
-                        <div class="flex items-center space-x-4">
-                            <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center">
-                                <i class="fas fa-shopping-bag text-white"></i>
-                            </div>
-                            <div>
-                                <p class="font-semibold" style="color:#fff;">Purchase Reward</p>
-                                <p class="text-sm" style="color:#9CA3AF;">Fresh Tomatoes order</p>
-                                <p class="text-xs" style="color:#6B7280;">March 17, 2026</p>
-                            </div>
-                        </div>
-                        <span class="text-green-600 font-bold text-xl">+0.5 THB</span>
-                    </div>
-
-                    <div class="flex items-center justify-between p-4 rounded-xl" style="background:#052e1a;">
-                        <div class="flex items-center space-x-4">
-                            <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center">
-                                <i class="fas fa-car text-white"></i>
-                            </div>
-                            <div>
-                                <p class="font-semibold" style="color:#fff;">CabLink Ride</p>
-                                <p class="text-sm" style="color:#9CA3AF;">Gaborone to Mmopane</p>
-                                <p class="text-xs" style="color:#6B7280;">March 16, 2026</p>
-                            </div>
-                        </div>
-                        <span class="text-green-600 font-bold text-xl">+0.8 THB</span>
-                    </div>
-
-                    <div class="flex items-center justify-between p-4 rounded-xl" style="background:#052e1a;">
-                        <div class="flex items-center space-x-4">
-                            <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center">
-                                <i class="fas fa-user-plus text-white"></i>
-                            </div>
-                            <div>
-                                <p class="font-semibold" style="color:#fff;">Referral Bonus</p>
-                                <p class="text-sm" style="color:#9CA3AF;">Friend joined BSTM</p>
-                                <p class="text-xs" style="color:#6B7280;">March 15, 2026</p>
-                            </div>
-                        </div>
-                        <span class="text-green-600 font-bold text-xl">+50 THB</span>
-                    </div>
-            </div>
-
-            <!-- Referrals Tab -->
-            <div id="referralsTab" class="p-6 hidden">
-                <div class="rounded-2xl p-8 text-center" style="background:#111827;border:1px solid #1F2937;">
-                    <div class="text-4xl mb-3">🎁</div>
-                    <h3 class="font-bold mb-2" style="color:#fff;">Referrals — Coming Soon</h3>
-                    <p class="text-sm" style="color:#9CA3AF;">
-                        We're building real referral tracking so this reward is genuine, not just a
-                        promise. Check back soon.
-                    </p>
+                    <p class="text-center py-12" style="color:#6B7280;">No rewards earned yet. Rewards appear here after your orders are delivered.</p>
                 </div>
             </div>
         </div>
@@ -326,7 +264,7 @@
                     <i class="fas fa-chevron-right text-gray-400"></i>
                 </a>
 
-                <a href="https://todd366.github.io/CabLink-pwa/" target="_blank" class="flex items-center justify-between p-4 bg-blue-50 rounded-xl hover:bg-blue-100 transition-all">
+                <a href="https://cab-link-pwa.vercel.app/" target="_blank" class="flex items-center justify-between p-4 bg-blue-50 rounded-xl hover:bg-blue-100 transition-all">
                     <div class="flex items-center space-x-4">
                         <div class="w-14 h-14 bg-blue-500 rounded-full flex items-center justify-center">
                             <i class="fas fa-car text-white text-xl"></i>
@@ -338,18 +276,6 @@
                     </div>
                     <i class="fas fa-chevron-right text-gray-400"></i>
                 </a>
-
-                <div class="w-full flex items-center justify-between p-4 bg-gray-50 rounded-xl opacity-70">
-                    <div class="flex items-center space-x-4">
-                        <div class="w-14 h-14 bg-gray-400 rounded-full flex items-center justify-center">
-                            <i class="fas fa-users text-white text-xl"></i>
-                        </div>
-                        <div class="text-left">
-                            <p class="font-bold text-gray-600">Refer Friends</p>
-                            <p class="text-sm text-gray-500">Coming soon</p>
-                        </div>
-                    </div>
-                </div>
 
                 <a href="agriculture.html" class="flex items-center justify-between p-4 bg-yellow-50 rounded-xl hover:bg-yellow-100 transition-all">
                     <div class="flex items-center space-x-4">
@@ -439,27 +365,6 @@
         </div>
     </div>
 
-    <!-- Stake Modal -->
-    <div id="stakeModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl max-w-md w-full p-8">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-2xl font-bold text-gray-800">Stake THB</h2>
-                <button onclick="closeStakeModal()" class="text-gray-500 hover:text-gray-700">
-                    <i class="fas fa-times text-2xl"></i>
-                </button>
-            </div>
-
-            <div class="bg-gray-50 border-2 border-gray-200 rounded-xl p-8 text-center">
-                <div class="text-4xl mb-3">🔒</div>
-                <h3 class="font-bold text-gray-800 mb-2">Staking — Coming Soon</h3>
-                <p class="text-sm text-gray-600">
-                    We want the real APY and lock terms finalized before showing any numbers here.
-                    Your THB is safe in your balance in the meantime.
-                </p>
-            </div>
-        </div>
-    </div>
-
 <script>
     // Real wallet data loading happens in js/pages/thb-wallet.js once the
     // authenticated session is ready. This script only handles pure UI:
@@ -480,7 +385,6 @@
         // Show/hide tabs
         document.getElementById('transactionsTab').classList.add('hidden');
         document.getElementById('earnTab').classList.add('hidden');
-        document.getElementById('referralsTab').classList.add('hidden');
 
         document.getElementById(tab + 'Tab').classList.remove('hidden');
     }
@@ -505,13 +409,6 @@
     }
     function closeWithdrawModal() {
         document.getElementById('withdrawModal').classList.add('hidden');
-    }
-
-    function openStakeModal() {
-        document.getElementById('stakeModal').classList.remove('hidden');
-    }
-    function closeStakeModal() {
-        document.getElementById('stakeModal').classList.add('hidden');
     }
 
     // Withdraw amount calculation

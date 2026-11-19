@@ -29,6 +29,29 @@ async function refreshBalance() {
   if (el("availableTHB")) el("availableTHB").textContent = currentBalance.toFixed(1);
 }
 
+function renderEntry(entry) {
+  const isCredit = entry.type === "credit";
+    const date = new Date(entry.created_at).toLocaleString("en-BW", {
+      dateStyle: "medium",
+      timeStyle: "short",
+    });
+    return `
+    <div class="flex items-center justify-between p-4 rounded-xl" style="background:${isCredit ? "#052e1a" : "#450a0a"};">
+      <div class="flex items-center space-x-4">
+        <div class="w-12 h-12 rounded-full flex items-center justify-center" style="background:${isCredit ? "#16A34A" : "#DC2626"};">
+          <i class="fas ${isCredit ? "fa-arrow-down" : "fa-arrow-up"} text-white"></i>
+        </div>
+        <div>
+          <p class="font-semibold" style="color:#fff;">${labelForEntry(entry)}</p>
+          <p class="text-xs" style="color:#6B7280;">${date}</p>
+        </div>
+      </div>
+      <span style="color:${isCredit ? "#4ADE80" : "#F87171"};" class="font-bold text-xl">
+        ${isCredit ? "+" : "-"}${entry.amount_thb} THB
+      </span>
+    </div>`;
+}
+
 async function loadTransactions() {
   const { data: entries, error } = await supabase
     .from("wallet_ledger")
@@ -63,6 +86,14 @@ async function loadTransactions() {
   if (el("monthlySpent")) el("monthlySpent").textContent = monthlySpent.toFixed(1);
   if (el("lifetimeEarned")) el("lifetimeEarned").textContent = lifetimeEarned.toFixed(1);
 
+  // Earn History tab: real credits only (rewards, transfers received, adjustments).
+  const earnEl = el("earnHistoryList");
+  if (earnEl) {
+    earnEl.innerHTML = credits.length
+      ? credits.map((entry) => renderEntry(entry)).join("")
+      : '<p class="text-center py-12" style="color:#6B7280;">No rewards earned yet. Rewards appear here after your orders are delivered.</p>';
+  }
+
   const listEl = el("transactionsList");
   if (!listEl) return;
 
@@ -72,30 +103,7 @@ async function loadTransactions() {
     return;
   }
 
-  listEl.innerHTML = rows
-    .map((entry) => {
-      const isCredit = entry.type === "credit";
-      const date = new Date(entry.created_at).toLocaleString("en-BW", {
-        dateStyle: "medium",
-        timeStyle: "short",
-      });
-      return `
-      <div class="flex items-center justify-between p-4 rounded-xl" style="background:${isCredit ? "#052e1a" : "#450a0a"};">
-        <div class="flex items-center space-x-4">
-          <div class="w-12 h-12 rounded-full flex items-center justify-center" style="background:${isCredit ? "#16A34A" : "#DC2626"};">
-            <i class="fas ${isCredit ? "fa-arrow-down" : "fa-arrow-up"} text-white"></i>
-          </div>
-          <div>
-            <p class="font-semibold" style="color:#fff;">${labelForEntry(entry)}</p>
-            <p class="text-xs" style="color:#6B7280;">${date}</p>
-          </div>
-        </div>
-        <span style="color:${isCredit ? "#4ADE80" : "#F87171"};" class="font-bold text-xl">
-          ${isCredit ? "+" : "-"}${entry.amount_thb} THB
-        </span>
-      </div>`;
-    })
-    .join("");
+  listEl.innerHTML = rows.map((entry) => renderEntry(entry)).join("");
 }
 
 window.BSTM.ready().then(async function (session) {

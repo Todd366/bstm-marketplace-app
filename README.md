@@ -1,8 +1,8 @@
 # BSTM Marketplace - Room 18
 
-# 🇧🇼 BSTM DIGITAL NATION - COMPLETE BUILD
+# 🇧🇼 BSTM DIGITAL ECOSYSTEM - COMPLETE BUILD
 
-**Africa's First Complete Digital Nation Ecosystem**
+**Africa's Complete Digital Ecosystem**
 
 Built by: Thobo Atlang Mosanako  
 Organization: BSTM (Botswana Smart Tech Makers)  
@@ -13,23 +13,23 @@ Contact: bstm366@gmail.com
 
 ## 🌟 **WHAT IS BSTM?**
 
-BSTM is a complete digital ecosystem connecting 63 rooms (services) under one nation:
+BSTM is a complete digital ecosystem connecting 63 rooms (services) under one ecosystem:
 
 - **Room 18:** Marketplace (e-commerce)
 - **Room 22:** Farm (organic produce)
 - **CabLink:** Ride-booking platform
 - **THB Wallet:** Digital currency (THoBoCoin)
-- **Government:** Admin & nation management
+- **Government:** Admin & ecosystem management
 - **Help Center:** Support & FAQ
 - **57 more rooms:** Coming soon
 
-**One account. One wallet. One digital nation.**
+**One account. One wallet. One digital ecosystem.**
 
 ---
 
 ## 📊 **CURRENT STATUS**
 
-**Version:** 2.0 - Complete Digital Nation Build  
+**Version:** 2.0 - Complete Digital Ecosystem Build  
 **Files:** 50+ production-ready files  
 **Active Rooms:** 6 / 63  
 **Features:** 100% complete  

@@ -10,7 +10,7 @@ const BSTMEcosystem = {
         // Core Platforms
         marketplace: {
             name: 'BSTM Marketplace',
-            url: 'https://todd366.github.io/bstm-marketplace-app/',
+            url: 'https://bstm-marketplace-app.vercel.app/',
             description: 'Main e-commerce platform',
             room: 18,
             status: 'active',

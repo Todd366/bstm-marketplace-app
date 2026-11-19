@@ -80,18 +80,6 @@ self.addEventListener('fetch', (event) => {
   );
 });
 
-// Background Sync for offline orders
-self.addEventListener('sync', (event) => {
-  if (event.tag === 'sync-orders') {
-    console.log('[SW] Syncing offline orders...');
-    event.waitUntil(syncOfflineOrders());
-  }
-});
-
-async function syncOfflineOrders() {
-  // TODO: Implement Supabase sync for offline orders
-  console.log('[SW] Orders synced!');
-}
 
 // Push Notifications
 self.addEventListener('push', (event) => {

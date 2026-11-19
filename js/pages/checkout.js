@@ -588,8 +588,6 @@ window.BSTM.ready().then(async function (session) {
     .select("thb_balance")
     .eq("id", session.user.id)
     .maybeSingle();
-  const balanceEl = document.getElementById("thb-balance-display");
-  if (balanceEl) balanceEl.textContent = Number(profile?.thb_balance || 0).toFixed(1);
 
   renderCart();
 
