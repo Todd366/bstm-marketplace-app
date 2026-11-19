@@ -59,7 +59,7 @@ window.BSTM.ready().then(async function (session) {
         '<div style="text-align:center;padding:40px 20px;">' +
         '<div style="font-size:48px;margin-bottom:12px;">🏪</div>' +
         '<p style="color:#6B7280;margin-bottom:20px;">You need to open a room before listing products.</p>' +
-        '<a href="open-room.html" style="background:linear-gradient(135deg,#7C3AED,#4F46E5);color:#fff;padding:14px 28px;border-radius:14px;font-weight:800;text-decoration:none;">Open My Room →</a></div>';
+        '<a href="open-room.html" style="background:linear-gradient(135deg,#00708E,#0A87A3);color:#fff;padding:14px 28px;border-radius:14px;font-weight:800;text-decoration:none;">Open My Room →</a></div>';
     }
     return;
   }
@@ -88,10 +88,10 @@ window.BSTM.ready().then(async function (session) {
       const label = r.closest("label");
       if (!label) return;
       if (r.checked) {
-        label.classList.add("border-purple-300", "bg-purple-50");
+        label.classList.add("border-brand-300", "bg-brand-50");
         label.classList.remove("border-gray-300");
       } else {
-        label.classList.remove("border-purple-300", "bg-purple-50");
+        label.classList.remove("border-brand-300", "bg-brand-50");
         label.classList.add("border-gray-300");
       }
     });
@@ -137,7 +137,7 @@ window.BSTM.ready().then(async function (session) {
     const picker = document.createElement("select");
     picker.id = "room-picker";
     picker.className =
-      "w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-purple-600";
+      "w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-brand-600";
     ownedRooms.forEach((r) => {
       const opt = document.createElement("option");
       opt.value = r.id;

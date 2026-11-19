@@ -58,13 +58,13 @@ function renderRooms() {
       const tpl = getRoomTemplate(r.category);
       return `
     <div class="room-card" onclick="window.location.href='room.html?id=${r.id}'"
-         style="background:#fff;border-radius:20px;overflow:hidden;border:1.5px solid #EDE9FE;cursor:pointer;">
+         style="background:#fff;border-radius:20px;overflow:hidden;border:1.5px solid #D7E3E8;cursor:pointer;">
       <div style="height:120px;background:${tpl.bannerBg};display:flex;align-items:center;justify-content:center;">
         <span style="font-size:48px;">${r.banner_emoji || "🏪"}</span>
       </div>
       <div style="padding:16px;">
         <div style="font-size:11px;color:#9CA3AF;font-weight:700;margin-bottom:4px;">ROOM ${r.room_number} · ${tpl.label.toUpperCase()}</div>
-        <div style="font-weight:900;color:#1E1B4B;font-size:16px;margin-bottom:6px;font-family:${tpl.font};">${escapeHtml(r.name)}</div>
+        <div style="font-weight:900;color:#122128;font-size:16px;margin-bottom:6px;font-family:${tpl.font};">${escapeHtml(r.name)}</div>
         <div style="font-size:12px;color:#9CA3AF;margin-bottom:10px;">${r.productCount} product${r.productCount === 1 ? "" : "s"}</div>
         <div style="display:block;background:${tpl.bannerBg};color:#fff;padding:10px;
                     border-radius:10px;font-weight:700;font-size:13px;text-align:center;">

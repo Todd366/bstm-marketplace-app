@@ -5,31 +5,34 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>My Wishlist - BSTM</title>
   <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#7C3AED">
+  <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32.png">
+  <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+  <meta name="theme-color" content="#00708E">
   <link href="css/tailwind.css" rel="stylesheet">
+  <link href="css/bstm-theme.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
   <style>
     @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap");
     * { font-family:"Inter",sans-serif; box-sizing:border-box; }
     .product-card { transition:all 0.3s cubic-bezier(0.34,1.56,0.64,1); }
-    .product-card:hover { transform:translateY(-6px); box-shadow:0 16px 40px rgba(124,58,237,0.15); }
+    .product-card:hover { transform:translateY(-6px); box-shadow:0 16px 40px rgba(0,112,142,0.15); }
   </style>
 </head>
-<body style="background:#F8F7FF;">
+<body style="background:#F2F7FA;">
 <div id="bstm-nav"></div>
 
 <div style="max-width:1100px;margin:0 auto;padding:32px 20px 60px;">
   <div style="margin-bottom:32px;">
-    <h1 style="font-size:32px;font-weight:900;color:#1E1B4B;margin:0 0 4px;"><i class="fas fa-heart" style="color:#EF4444;margin-right:10px;"></i>My Wishlist</h1>
+    <h1 style="font-size:32px;font-weight:900;color:#122128;margin:0 0 4px;"><i class="fas fa-heart" style="color:#EF4444;margin-right:10px;"></i>My Wishlist</h1>
     <p style="color:#9CA3AF;font-size:14px;margin:0;">Products you love, saved for later</p>
   </div>
 
   <!-- Auth wall -->
   <div id="auth-wall" style="display:none;text-align:center;padding:80px 20px;">
     <div style="font-size:56px;margin-bottom:16px;">🔒</div>
-    <h2 style="font-size:22px;font-weight:900;color:#1E1B4B;margin-bottom:8px;">Login to see your wishlist</h2>
+    <h2 style="font-size:22px;font-weight:900;color:#122128;margin-bottom:8px;">Login to see your wishlist</h2>
     <p style="color:#9CA3AF;margin-bottom:24px;">Save products you love and come back to them anytime</p>
-    <a href="login.html" style="background:linear-gradient(135deg,#7C3AED,#4F46E5);color:#fff;padding:14px 32px;border-radius:14px;font-weight:800;text-decoration:none;">Login →</a>
+    <a href="login.html" style="background:linear-gradient(135deg,#00708E,#0A87A3);color:#fff;padding:14px 32px;border-radius:14px;font-weight:800;text-decoration:none;">Login →</a>
   </div>
 
   <!-- Wishlist grid -->
@@ -37,9 +40,9 @@
     <div id="wishlist-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:20px;"></div>
     <div id="empty-wishlist" style="display:none;text-align:center;padding:80px 20px;">
       <i class="fas fa-heart-broken" style="font-size:64px;color:#E5E7EB;margin-bottom:20px;display:block;"></i>
-      <h2 style="font-size:22px;font-weight:900;color:#1E1B4B;margin-bottom:8px;">Your wishlist is empty</h2>
+      <h2 style="font-size:22px;font-weight:900;color:#122128;margin-bottom:8px;">Your wishlist is empty</h2>
       <p style="color:#9CA3AF;margin-bottom:24px;">Start adding products you love!</p>
-      <a href="marketplace.html" style="display:inline-block;background:linear-gradient(135deg,#7C3AED,#4F46E5);color:#fff;padding:14px 28px;border-radius:14px;font-weight:800;text-decoration:none;">Browse Mall</a>
+      <a href="marketplace.html" style="display:inline-block;background:linear-gradient(135deg,#00708E,#0A87A3);color:#fff;padding:14px 28px;border-radius:14px;font-weight:800;text-decoration:none;">Browse Mall</a>
     </div>
   </div>
 </div>

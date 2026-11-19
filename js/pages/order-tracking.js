@@ -104,7 +104,7 @@ function renderOrdersList(orders) {
       const statusColors = {
         pending: "bg-yellow-100 text-yellow-800",
         confirmed: "bg-blue-100 text-blue-800",
-        shipped: "bg-purple-100 text-purple-800",
+        shipped: "bg-brand-100 text-brand-800",
         delivered: "bg-green-100 text-green-800",
         cancelled: "bg-red-100 text-red-800",
       };
@@ -370,7 +370,7 @@ async function loadOrder(orderId, session) {
   });
 
   document.getElementById("delivery-method").innerHTML =
-    `<i class="fas fa-car text-purple-600 mr-2"></i>${
+    `<i class="fas fa-car text-brand-600 mr-2"></i>${
       order.delivery_method === "cablink" ? "CabLink Express" : escapeHtml(order.delivery_method || "—")
     }`;
 

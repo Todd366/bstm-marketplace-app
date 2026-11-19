@@ -208,8 +208,8 @@ window.BSTM.ready().then(async function (session) {
 
   function renderUserRow(u) {
     const roleColors = {
-      super_admin: "bg-purple-600 text-white",
-      admin: "bg-purple-100 text-purple-700",
+      super_admin: "bg-brand-600 text-white",
+      admin: "bg-brand-100 text-brand-700",
       agent: "bg-blue-100 text-blue-700",
       seller: "bg-green-100 text-green-700",
       buyer: "bg-gray-100 text-gray-600",
@@ -223,7 +223,7 @@ window.BSTM.ready().then(async function (session) {
       actions = `<button class="revoke-btn text-xs font-bold px-2 py-1 rounded-lg bg-red-100 text-red-700 hover:bg-red-200" data-id="${u.id}">Revoke</button>`;
     } else {
       actions = `
-        <button class="make-admin-btn text-xs font-bold px-2 py-1 rounded-lg bg-purple-100 text-purple-700 hover:bg-purple-200" data-id="${u.id}">Make Admin</button>
+        <button class="make-admin-btn text-xs font-bold px-2 py-1 rounded-lg bg-brand-100 text-brand-700 hover:bg-brand-200" data-id="${u.id}">Make Admin</button>
         <button class="make-agent-btn text-xs font-bold px-2 py-1 rounded-lg bg-blue-100 text-blue-700 hover:bg-blue-200" data-id="${u.id}">Make Agent</button>`;
     }
 

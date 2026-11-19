@@ -258,14 +258,14 @@ document.addEventListener("DOMContentLoaded", async () => {
       .map((q) => {
         const askerName = q.profiles?.email ? q.profiles.email.split("@")[0] : "A buyer";
         const answerBlock = q.answer
-          ? `<div class="mt-2 pl-4 border-l-2 border-purple-300">
-               <p class="text-xs font-bold text-purple-600 mb-1">Room's answer</p>
+          ? `<div class="mt-2 pl-4 border-l-2 border-brand-300">
+               <p class="text-xs font-bold text-brand-600 mb-1">Room's answer</p>
                <p class="text-sm text-gray-700">${escapeHtml(q.answer)}</p>
              </div>`
           : canAnswer
           ? `<div class="mt-2 flex gap-2">
                <input type="text" class="qa-answer-input flex-1 px-3 py-2 border rounded-lg text-sm" placeholder="Write an answer…" data-qid="${q.id}">
-               <button class="qa-answer-btn bg-purple-600 text-white px-4 py-2 rounded-lg text-sm font-semibold" data-qid="${q.id}">Answer</button>
+               <button class="qa-answer-btn bg-brand-600 text-white px-4 py-2 rounded-lg text-sm font-semibold" data-qid="${q.id}">Answer</button>
              </div>`
           : `<p class="text-xs text-gray-400 mt-1">Not answered yet.</p>`;
 

@@ -7,7 +7,7 @@ let allNotifications = [];
 let currentFilter = "all";
 
 const ICONS = {
-  order: { icon: "box", color: "purple" },
+  order: { icon: "box", color: "brand" },
   message: { icon: "comment", color: "blue" },
 };
 
@@ -65,10 +65,10 @@ async function markRead(id) {
 window.filterNotifications = function (filter) {
   currentFilter = filter;
   document.querySelectorAll(".notif-filter").forEach((btn) => {
-    btn.classList.remove("active", "text-purple-600", "border-purple-600", "border-b-2");
+    btn.classList.remove("active", "text-brand-600", "border-brand-600", "border-b-2");
     btn.classList.add("text-gray-600");
   });
-  event.target.classList.add("active", "text-purple-600", "border-purple-600", "border-b-2");
+  event.target.classList.add("active", "text-brand-600", "border-brand-600", "border-b-2");
   event.target.classList.remove("text-gray-600");
   render();
 };

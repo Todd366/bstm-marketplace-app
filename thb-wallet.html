@@ -5,15 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>THB Wallet - BSTM Digital Nation</title>
   <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#7C3AED">
+  <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32.png">
+  <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+  <meta name="theme-color" content="#00708E">
     <link href="css/tailwind.css" rel="stylesheet">
+  <link href="css/bstm-theme.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 
     <style>
-        .gradient-bg { background: linear-gradient(135deg, #7C3AED 0%, #4F46E5 100%); }
+        .gradient-bg { background: linear-gradient(135deg, #00708E 0%, #0A87A3 100%); }
         .thb-gradient { background: linear-gradient(135deg, #ffd700 0%, #ff8c00 100%); }
         .wallet-card { 
-            background: linear-gradient(135deg, #78350F 0%, #1E1B4B 60%, #111827 100%);
+            background: linear-gradient(135deg, #78350F 0%, #122128 60%, #111827 100%);
             border: 1px solid #EAB30833;
             position: relative;
             overflow: hidden;
@@ -149,8 +152,8 @@
             </button>
 
             <button onclick="openSendModal()" class="wx-card p-6 text-center transition-all" style="cursor:pointer;">
-                <div class="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-3" style="background:#1E1B4B;">
-                    <i class="fas fa-paper-plane text-2xl" style="color:#818CF8;"></i>
+                <div class="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-3" style="background:#122128;">
+                    <i class="fas fa-paper-plane text-2xl" style="color:#68BECF;"></i>
                 </div>
                 <p class="font-bold" style="color:#fff;">Send THB</p>
                 <p class="text-sm" style="color:#9CA3AF;">To friends</p>
@@ -377,16 +380,16 @@
             <form id="sendTHBForm" onsubmit="sendTHB(event)">
                 <div class="mb-6">
                     <label class="block text-gray-700 font-semibold mb-2">Recipient's Email</label>
-                    <input type="email" id="recipientAddress" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:border-purple-600" placeholder="friend@example.com">
+                    <input type="email" id="recipientAddress" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:border-brand-600" placeholder="friend@example.com">
                 </div>
 
                 <div class="mb-6">
                     <label class="block text-gray-700 font-semibold mb-2">Amount (THB)</label>
-                    <input type="number" id="sendAmount" step="0.1" min="0.1" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:border-purple-600" placeholder="0.0">
+                    <input type="number" id="sendAmount" step="0.1" min="0.1" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:border-brand-600" placeholder="0.0">
                     <p class="text-sm text-gray-600 mt-2">Available: <span id="availableTHB">0.0</span> THB</p>
                 </div>
 
-                <button type="submit" class="w-full bg-purple-600 hover:bg-purple-700 text-white py-4 rounded-xl font-bold text-lg">
+                <button type="submit" class="w-full bg-brand-600 hover:bg-brand-700 text-white py-4 rounded-xl font-bold text-lg">
                     <i class="fas fa-paper-plane mr-2"></i>Send THB
                 </button>
             </form>
@@ -413,7 +416,7 @@
             <form id="withdrawForm" onsubmit="withdrawTHB(event)">
                 <div class="mb-6">
                     <label class="block text-gray-700 font-semibold mb-2">Amount to Withdraw (THB)</label>
-                    <input type="number" id="withdrawAmount" step="0.1" min="1" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:border-purple-600" placeholder="0.0">
+                    <input type="number" id="withdrawAmount" step="0.1" min="1" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:border-brand-600" placeholder="0.0">
                     <p class="text-sm text-gray-600 mt-2">
                         You'll receive: P<span id="withdrawBWP">0.00</span> BWP
                     </p>
@@ -421,11 +424,11 @@
 
                 <div class="mb-6">
                     <label class="block text-gray-700 font-semibold mb-2">Payout Details</label>
-                    <input type="text" id="withdrawDetails" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:border-purple-600" placeholder="Mobile money number or bank account">
+                    <input type="text" id="withdrawDetails" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:border-brand-600" placeholder="Mobile money number or bank account">
                     <p class="text-xs text-gray-500 mt-2">No account linked yet — BSTM will contact you to confirm payout details.</p>
                 </div>
 
-                <button type="submit" class="w-full bg-purple-600 hover:bg-purple-700 text-white py-4 rounded-xl font-bold text-lg">
+                <button type="submit" class="w-full bg-brand-600 hover:bg-brand-700 text-white py-4 rounded-xl font-bold text-lg">
                     <i class="fas fa-university mr-2"></i>Withdraw
                 </button>
 

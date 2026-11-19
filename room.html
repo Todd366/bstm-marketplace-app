@@ -5,8 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Room - BSTM Digital Mall</title>
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#7C3AED">
+  <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32.png">
+  <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+    <meta name="theme-color" content="#00708E">
     <link href="css/tailwind.css" rel="stylesheet">
+  <link href="css/bstm-theme.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 </head>
 <body class="bg-gray-50">
@@ -15,7 +18,7 @@
     <div id="room-not-found" class="hidden" style="min-height:60vh;display:flex;align-items:center;justify-content:center;padding:40px;flex-direction:column;text-align:center;">
         <div style="font-size:56px;margin-bottom:16px;">🚪</div>
         <p style="color:#6B7280;font-size:15px;margin-bottom:24px;">This room doesn't exist or has closed.</p>
-        <a href="marketplace.html" style="background:linear-gradient(135deg,#7C3AED,#4F46E5);color:#fff;padding:14px 28px;border-radius:14px;font-weight:800;text-decoration:none;">Browse the Mall</a>
+        <a href="marketplace.html" style="background:linear-gradient(135deg,#00708E,#0A87A3);color:#fff;padding:14px 28px;border-radius:14px;font-weight:800;text-decoration:none;">Browse the Mall</a>
     </div>
 
     <div id="room-content" class="hidden">
@@ -37,7 +40,7 @@
 
         <div class="max-w-6xl mx-auto px-6 py-10">
             <div id="room-owner-actions" class="hidden mb-6">
-                <a href="upload-product.html" class="inline-block gradient-bg text-white px-6 py-3 rounded-xl font-bold" style="background:linear-gradient(135deg,#7C3AED,#4F46E5);">
+                <a href="upload-product.html" class="inline-block gradient-bg text-white px-6 py-3 rounded-xl font-bold" style="background:linear-gradient(135deg,#00708E,#0A87A3);">
                     + Add a Product to This Room
                 </a>
             </div>
@@ -63,15 +66,15 @@
             <!-- Q&A — real community questions, publicly visible, answerable by room owner/staff -->
             <div class="mt-10">
                 <h2 class="text-xl font-bold text-gray-800 mb-4">Questions &amp; Answers</h2>
-                <div id="qa-ask-box" class="hidden bg-purple-50 rounded-2xl p-5 mb-5">
+                <div id="qa-ask-box" class="hidden bg-brand-50 rounded-2xl p-5 mb-5">
                     <textarea id="qa-question-input" rows="2" placeholder="Ask this room a question…"
-                        class="w-full px-4 py-3 border-2 border-purple-200 rounded-xl focus:outline-none focus:border-purple-500 text-sm"></textarea>
+                        class="w-full px-4 py-3 border-2 border-brand-200 rounded-xl focus:outline-none focus:border-brand-500 text-sm"></textarea>
                     <div class="flex justify-between items-center mt-2">
                         <p id="qa-error" class="hidden text-red-600 text-xs"></p>
-                        <button id="qa-submit-btn" class="ml-auto bg-purple-600 hover:bg-purple-700 text-white px-5 py-2 rounded-xl font-semibold text-sm">Post Question</button>
+                        <button id="qa-submit-btn" class="ml-auto bg-brand-600 hover:bg-brand-700 text-white px-5 py-2 rounded-xl font-semibold text-sm">Post Question</button>
                     </div>
                 </div>
-                <a id="qa-login-prompt" href="login.html" class="hidden block text-sm text-purple-600 font-semibold mb-5">Log in to ask a question →</a>
+                <a id="qa-login-prompt" href="login.html" class="hidden block text-sm text-brand-600 font-semibold mb-5">Log in to ask a question →</a>
                 <div id="room-qa-list" class="space-y-4">
                     <p class="text-sm text-gray-400">Loading…</p>
                 </div>

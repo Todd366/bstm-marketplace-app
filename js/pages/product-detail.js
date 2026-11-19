@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       '<div style="text-align:center;padding:80px 20px;">' +
       '<div style="font-size:56px;margin-bottom:16px;">😕</div>' +
       '<p style="color:#9CA3AF;font-size:15px;margin-bottom:24px;">Product not found.</p>' +
-      '<a href="marketplace.html" style="background:linear-gradient(135deg,#7C3AED,#4F46E5);' +
+      '<a href="marketplace.html" style="background:linear-gradient(135deg,#00708E,#0A87A3);' +
       'color:#fff;padding:14px 28px;border-radius:14px;font-weight:800;text-decoration:none;">Browse Mall →</a></div>';
     return;
   }
@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       '<div style="text-align:center;padding:80px 20px;">' +
       '<div style="font-size:56px;margin-bottom:16px;">🚫</div>' +
       '<p style="color:#9CA3AF;font-size:15px;margin-bottom:24px;">This product is no longer available.</p>' +
-      '<a href="marketplace.html" style="background:linear-gradient(135deg,#7C3AED,#4F46E5);' +
+      '<a href="marketplace.html" style="background:linear-gradient(135deg,#00708E,#0A87A3);' +
       'color:#fff;padding:14px 28px;border-radius:14px;font-weight:800;text-decoration:none;">Browse Mall →</a></div>';
     return;
   }
@@ -121,7 +121,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             ${
               r.image
                 ? `<img src="${escapeHtml(r.image)}" alt="${escapeHtml(r.name)}" class="w-full h-48 object-cover">`
-                : `<div style="height:192px;background:#F5F3FF;display:flex;align-items:center;justify-content:center;font-size:40px;">🛍️</div>`
+                : `<div style="height:192px;background:#EAF5F8;display:flex;align-items:center;justify-content:center;font-size:40px;">🛍️</div>`
             }
             <div class="p-4">
               <h4 class="font-bold text-gray-800 mb-2">${escapeHtml(r.name)}</h4>

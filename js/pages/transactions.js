@@ -32,14 +32,14 @@ window.BSTM.ready().then(async function(session) {
 
   document.getElementById('tx-list').innerHTML = orders.map(function(o) {
     var date = new Date(o.created_at).toLocaleDateString('en-BW', {day:'numeric',month:'short',year:'numeric'});
-    var statusColor = o.status === 'delivered' ? '#059669' : o.status === 'pending' ? '#D97706' : '#7C3AED';
+    var statusColor = o.status === 'delivered' ? '#059669' : o.status === 'pending' ? '#D97706' : '#00708E';
     return '<div style="display:flex;justify-content:space-between;align-items:center;padding:16px 0;border-bottom:1px solid #F9FAFB;">'
       + '<div>'
-      + '<div style="font-weight:700;color:#1E1B4B;font-size:14px;">Order #' + String(o.id).slice(-8).toUpperCase() + '</div>'
+      + '<div style="font-weight:700;color:#122128;font-size:14px;">Order #' + String(o.id).slice(-8).toUpperCase() + '</div>'
       + '<div style="font-size:12px;color:#9CA3AF;margin-top:2px;">' + date + '</div>'
       + '</div>'
       + '<div style="text-align:right;">'
-      + '<div style="font-weight:900;color:#1E1B4B;">P' + Number(o.total_amount || 0).toFixed(2) + '</div>'
+      + '<div style="font-weight:900;color:#122128;">P' + Number(o.total_amount || 0).toFixed(2) + '</div>'
       + '<div style="font-size:11px;font-weight:700;color:' + statusColor + ';margin-top:2px;">' + (o.status || 'pending').toUpperCase() + '</div>'
       + '</div>'
       + '</div>';

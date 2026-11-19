@@ -11,7 +11,7 @@ import { escapeHtml } from "../core/sanitize.js";
 const STATUS_STYLES = {
   pending: "background:#FEF3C7;color:#92400E;",
   assigned: "background:#DBEAFE;color:#1E40AF;",
-  picked_up: "background:#E0E7FF;color:#4338CA;",
+  picked_up: "background:#E0F2F6;color:#00708E;",
   delivered: "background:#D1FAE5;color:#065F46;",
   cancelled: "background:#FEE2E2;color:#991B1B;",
 };
@@ -69,7 +69,7 @@ window.BSTM.ready().then(async function (session) {
     const listEl = document.getElementById("task-list");
     if (listEl)
       listEl.innerHTML =
-        '<p class="text-gray-500 text-sm"><a href="login.html?redirect=cablink.html" class="text-purple-600 font-semibold">Log in</a> to see your delivery tasks.</p>';
+        '<p class="text-gray-500 text-sm"><a href="login.html?redirect=cablink.html" class="text-brand-600 font-semibold">Log in</a> to see your delivery tasks.</p>';
     return;
   }
 

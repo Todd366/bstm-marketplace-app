@@ -5,11 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Terms & Privacy - BSTM Marketplace</title>
   <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#7C3AED">
+  <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32.png">
+  <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+  <meta name="theme-color" content="#00708E">
     <link href="css/tailwind.css" rel="stylesheet">
+  <link href="css/bstm-theme.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <style>
-        .gradient-bg { background: linear-gradient(135deg, #7C3AED 0%, #4F46E5 100%); }
+        .gradient-bg { background: linear-gradient(135deg, #00708E 0%, #0A87A3 100%); }
     </style>
 </head>
 <body class="bg-gray-50">
@@ -23,10 +26,10 @@
         <!-- Tab Navigation -->
         <div class="bg-white rounded-2xl shadow-lg mb-8">
             <div class="flex border-b">
-                <button onclick="showTab('terms')" id="termsTab" class="flex-1 py-4 font-bold text-purple-600 border-b-4 border-purple-600">
+                <button onclick="showTab('terms')" id="termsTab" class="flex-1 py-4 font-bold text-brand-600 border-b-4 border-brand-600">
                     Terms of Service
                 </button>
-                <button onclick="showTab('privacy')" id="privacyTab" class="flex-1 py-4 font-bold text-gray-600 hover:text-purple-600">
+                <button onclick="showTab('privacy')" id="privacyTab" class="flex-1 py-4 font-bold text-gray-600 hover:text-brand-600">
                     Privacy Policy
                 </button>
             </div>
@@ -249,16 +252,16 @@
         if (tab === 'terms') {
           document.getElementById('termsContent').classList.remove('hidden');
           document.getElementById('privacyContent').classList.add('hidden');
-          document.getElementById('termsTab').classList.add('text-purple-600', 'border-b-4', 'border-purple-600');
+          document.getElementById('termsTab').classList.add('text-brand-600', 'border-b-4', 'border-brand-600');
           document.getElementById('termsTab').classList.remove('text-gray-600');
-          document.getElementById('privacyTab').classList.remove('text-purple-600', 'border-b-4', 'border-purple-600');
+          document.getElementById('privacyTab').classList.remove('text-brand-600', 'border-b-4', 'border-brand-600');
           document.getElementById('privacyTab').classList.add('text-gray-600');
         } else {
           document.getElementById('privacyContent').classList.remove('hidden');
           document.getElementById('termsContent').classList.add('hidden');
-          document.getElementById('privacyTab').classList.add('text-purple-600', 'border-b-4', 'border-purple-600');
+          document.getElementById('privacyTab').classList.add('text-brand-600', 'border-b-4', 'border-brand-600');
           document.getElementById('privacyTab').classList.remove('text-gray-600');
-          document.getElementById('termsTab').classList.remove('text-purple-600', 'border-b-4', 'border-purple-600');
+          document.getElementById('termsTab').classList.remove('text-brand-600', 'border-b-4', 'border-brand-600');
           document.getElementById('termsTab').classList.add('text-gray-600');
         }
       }

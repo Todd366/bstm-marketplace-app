@@ -36,9 +36,9 @@ export function world({ providersOff = false } = {}) {
   return {
     profiles,
     rooms: [
-      { id: R.r1, seller_id: U.seller.id, room_number: 1, name: "Room One", description: "", category: null, banner_emoji: "🏬", banner_color: "#7C3AED", status: "active", created_at: iso(-9000) },
-      { id: R.r2, seller_id: U.seller2.id, room_number: 2, name: "Room Two", description: "", category: null, banner_emoji: "🏬", banner_color: "#7C3AED", status: "active", created_at: iso(-9000) },
-      { id: R.r3, seller_id: U.seller3.id, room_number: 3, name: "Room Three", description: "", category: null, banner_emoji: "🏬", banner_color: "#7C3AED", status: "active", created_at: iso(-9000) },
+      { id: R.r1, seller_id: U.seller.id, room_number: 1, name: "Room One", description: "", category: null, banner_emoji: "🏬", banner_color: "#00708E", status: "active", created_at: iso(-9000) },
+      { id: R.r2, seller_id: U.seller2.id, room_number: 2, name: "Room Two", description: "", category: null, banner_emoji: "🏬", banner_color: "#00708E", status: "active", created_at: iso(-9000) },
+      { id: R.r3, seller_id: U.seller3.id, room_number: 3, name: "Room Three", description: "", category: null, banner_emoji: "🏬", banner_color: "#00708E", status: "active", created_at: iso(-9000) },
     ],
     products: [
       { id: P.p1, name: "Alpha Mug", price: 100, image: null, seller_id: U.seller.id, created_at: iso(-8000), description: "", category: null, condition: "new", quantity: 10, location: "Gaborone", status: "active", room_id: R.r1, product_type: "physical", shelf: null },

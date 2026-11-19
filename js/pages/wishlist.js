@@ -12,17 +12,17 @@ function buildCard(item) {
   var p = normalizeProduct(item.products);
   if (!p) return "";
   return [
-    '<div style="background:#fff;border-radius:20px;overflow:hidden;border:1.5px solid #EDE9FE;transition:all 0.3s;">',
-      '<div style="height:160px;background:linear-gradient(135deg,#F5F3FF,#EEF2FF);display:flex;align-items:center;justify-content:center;overflow:hidden;">',
+    '<div style="background:#fff;border-radius:20px;overflow:hidden;border:1.5px solid #D7E3E8;transition:all 0.3s;">',
+      '<div style="height:160px;background:linear-gradient(135deg,#EAF5F8,#EAF5F8);display:flex;align-items:center;justify-content:center;overflow:hidden;">',
         p.image
           ? '<img src="' + escapeHtml(p.image) + '" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display=\'none\'">'
           : '<span style="font-size:48px;">📦</span>',
       '</div>',
       '<div style="padding:16px;">',
-        '<div style="font-weight:900;color:#1E1B4B;font-size:16px;margin-bottom:6px;">' + escapeHtml(p.title || "Product") + '</div>',
-        '<div style="font-size:22px;font-weight:900;color:#7C3AED;margin-bottom:12px;">P' + Number(p.price || 0).toFixed(2) + '</div>',
+        '<div style="font-weight:900;color:#122128;font-size:16px;margin-bottom:6px;">' + escapeHtml(p.title || "Product") + '</div>',
+        '<div style="font-size:22px;font-weight:900;color:#00708E;margin-bottom:12px;">P' + Number(p.price || 0).toFixed(2) + '</div>',
         '<div style="display:flex;gap:8px;">',
-          '<a href="product-detail.html?id=' + p.id + '" style="flex:1;background:linear-gradient(135deg,#7C3AED,#4F46E5);color:#fff;padding:10px;border-radius:10px;font-weight:700;font-size:13px;text-decoration:none;text-align:center;">View</a>',
+          '<a href="product-detail.html?id=' + p.id + '" style="flex:1;background:linear-gradient(135deg,#00708E,#0A87A3);color:#fff;padding:10px;border-radius:10px;font-weight:700;font-size:13px;text-decoration:none;text-align:center;">View</a>',
           '<button onclick="removeItem(\'' + item.user_id + '\',\'' + item.product_id + '\')" style="background:#FEE2E2;color:#991B1B;border:none;padding:10px 14px;border-radius:10px;font-size:13px;cursor:pointer;font-weight:700;">Remove</button>',
         '</div>',
       '</div>',

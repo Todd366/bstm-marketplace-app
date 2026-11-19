@@ -320,7 +320,7 @@ function retryPanel(orders) {
   if (!canRetry(orders)) {
     return (
       '<div class="ps-note">These orders were cancelled and the items released back to the shop. ' +
-      'You can place a new order from the <a href="marketplace.html" style="color:#6d28d9;font-weight:700;">Mall</a>.</div>'
+      'You can place a new order from the <a href="marketplace.html" style="color:#005A74;font-weight:700;">Mall</a>.</div>'
     );
   }
   if (S.retryMethods === null) return '<div class="ps-note">Loading payment options…</div>';

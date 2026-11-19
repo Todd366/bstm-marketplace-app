@@ -9,9 +9,10 @@ export default {
     extend: {
       colors: {
         brand: {
-          purple: '#7C3AED',
-          indigo: '#4F46E5',
-          ink: '#1E1B4B',
+          50: '#EAF5F8', 100: '#E0F2F6', 200: '#B6E0EA', 300: '#68BECF', 400: '#2FA0B8',
+          500: '#0A87A3', 600: '#00708E', 700: '#005A74', 800: '#064A5E', 900: '#06303C',
+          green: '#06502F',
+          ink: '#122128',
         },
       },
     },

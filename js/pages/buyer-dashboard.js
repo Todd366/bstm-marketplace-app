@@ -38,7 +38,7 @@ async function showPaymentDue(userId) {
       return (
         '<div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:6px 0;">' +
         '<span style="font-size:14px;color:#1F2937;"><b>' + escapeHtml(shortOrderRef(o.id)) + "</b> · " + escapeHtml(money(o.total_amount)) + escapeHtml(dueTxt) + "</span>" +
-        '<a href="' + escapeHtml(href) + '" style="background:#7C3AED;color:#fff;padding:8px 16px;border-radius:10px;font-weight:700;font-size:13px;text-decoration:none;">' + label + "</a></div>"
+        '<a href="' + escapeHtml(href) + '" style="background:#00708E;color:#fff;padding:8px 16px;border-radius:10px;font-weight:700;font-size:13px;text-decoration:none;">' + label + "</a></div>"
       );
     })
     .join("");
@@ -113,14 +113,14 @@ async function render(session) {
     if (!rooms || rooms.length === 0) {
       roomsGrid.innerHTML =
         '<p style="color:#9CA3AF;font-size:13px;">No rooms open yet — ' +
-        '<a href="open-room.html" style="color:#7C3AED;font-weight:700;">open the first one →</a></p>';
+        '<a href="open-room.html" style="color:#00708E;font-weight:700;">open the first one →</a></p>';
     } else {
       roomsGrid.innerHTML = rooms
         .map(
           (r) => `
         <a href="room.html?id=${r.id}" style="display:flex;align-items:center;gap:12px;background:#fff;border:1.5px solid #D1FAE5;border-radius:16px;padding:16px;text-decoration:none;">
           <div style="font-size:28px;">${escapeHtml(r.banner_emoji || "🏬")}</div>
-          <div><div style="font-size:13px;font-weight:800;color:#1E1B4B;">${escapeHtml(r.name)}</div>
+          <div><div style="font-size:13px;font-weight:800;color:#122128;">${escapeHtml(r.name)}</div>
           <div style="font-size:11px;color:#059669;font-weight:600;">● Open</div></div>
         </a>`
         )

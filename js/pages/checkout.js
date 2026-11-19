@@ -107,7 +107,7 @@ function renderPaymentMethods(methods) {
     left.appendChild(text);
 
     const icon = document.createElement("i");
-    icon.className = (m.kind === "manual" ? "fas fa-mobile-alt" : "fas fa-credit-card") + " text-purple-600 text-2xl";
+    icon.className = (m.kind === "manual" ? "fas fa-mobile-alt" : "fas fa-credit-card") + " text-brand-600 text-2xl";
     label.appendChild(left);
     label.appendChild(icon);
     wrap.appendChild(label);
@@ -168,7 +168,7 @@ function renderCart() {
   if (cart.length === 0) {
     itemsEl.innerHTML =
       '<p class="text-gray-500 text-sm">Your cart is empty. ' +
-      '<a href="marketplace.html" class="text-purple-600 font-semibold">Go shopping →</a></p>';
+      '<a href="marketplace.html" class="text-brand-600 font-semibold">Go shopping →</a></p>';
     if (placeOrderBtn) placeOrderBtn.disabled = true;
     if (subtotalEl) subtotalEl.textContent = "P0";
     if (totalEl) totalEl.textContent = "P0";
@@ -186,7 +186,7 @@ function renderCart() {
         ${
           multiRoom
             ? `<div class="flex items-center justify-between mb-2">
-                 <span class="text-xs font-bold text-purple-600 uppercase tracking-wide">🏬 ${escapeHtml(group.room_name)}</span>
+                 <span class="text-xs font-bold text-brand-600 uppercase tracking-wide">🏬 ${escapeHtml(group.room_name)}</span>
                  <span class="text-xs text-gray-400">Separate order — this seller ships independently</span>
                </div>`
             : ""
@@ -195,7 +195,7 @@ function renderCart() {
           .map(
             (item) => `
           <div class="flex items-center space-x-4 mb-2">
-            <img src="${escapeHtml(item.image || "")}" onerror="this.style.display='none'" alt="${escapeHtml(item.name)}" class="w-16 h-16 rounded-lg object-cover bg-purple-50">
+            <img src="${escapeHtml(item.image || "")}" onerror="this.style.display='none'" alt="${escapeHtml(item.name)}" class="w-16 h-16 rounded-lg object-cover bg-brand-50">
             <div class="flex-1">
               <h4 class="font-semibold text-gray-800">${escapeHtml(item.name)}</h4>
               <p class="text-sm text-gray-600">Qty: ${item.qty}</p>

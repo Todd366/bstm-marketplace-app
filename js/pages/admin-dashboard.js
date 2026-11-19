@@ -201,14 +201,14 @@ window.BSTM.ready().then(async function (session) {
           const btns = actions
             .map(
               (a) =>
-                `<button data-order-id="${o.id}" data-next-status="${a.next}" class="admin-order-btn text-xs font-semibold px-2 py-1 rounded ${a.next === "cancelled" ? "bg-red-100 text-red-700" : "bg-purple-100 text-purple-700"}">${a.label}</button>`
+                `<button data-order-id="${o.id}" data-next-status="${a.next}" class="admin-order-btn text-xs font-semibold px-2 py-1 rounded ${a.next === "cancelled" ? "bg-red-100 text-red-700" : "bg-brand-100 text-brand-700"}">${a.label}</button>`
             )
             .join(" ");
           return `
         <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg gap-2">
           <span class="text-sm font-semibold text-gray-800">#${o.id.split("-")[0].toUpperCase()}</span>
           <span class="text-xs text-gray-500 capitalize">${o.status}${payBadge ? " " + payBadge : ""}</span>
-          <span class="text-sm font-bold text-purple-600">P${Number(o.total_amount || 0).toFixed(2)}</span>
+          <span class="text-sm font-bold text-brand-600">P${Number(o.total_amount || 0).toFixed(2)}</span>
           <span class="flex gap-1">${btns}</span>
         </div>`;
         })
@@ -315,8 +315,8 @@ window.BSTM.ready().then(async function (session) {
     const COMMISSION_RATE = 0.05; // matches the 5% baseline commission
     const commission = gmv * COMMISSION_RATE;
     document.getElementById("revenue-breakdown").innerHTML = `
-      <div class="bg-purple-50 rounded-xl p-4">
-        <p class="text-2xl font-bold text-purple-700">P${gmv.toFixed(2)}</p>
+      <div class="bg-brand-50 rounded-xl p-4">
+        <p class="text-2xl font-bold text-brand-700">P${gmv.toFixed(2)}</p>
         <p class="text-xs text-gray-600">Gross Order Value</p>
       </div>
       <div class="bg-green-50 rounded-xl p-4">
@@ -358,8 +358,8 @@ window.BSTM.ready().then(async function (session) {
     const payCard =
       payQueue === null
         ? ""
-        : `<a href="admin-payments.html" class="block ${payReview > 0 ? "bg-red-50 hover:bg-red-100" : "bg-purple-50 hover:bg-purple-100"} rounded-xl p-4">
-        <p class="text-2xl font-bold ${payReview > 0 ? "text-red-700" : "text-purple-700"}">${payOpen}</p>
+        : `<a href="admin-payments.html" class="block ${payReview > 0 ? "bg-red-50 hover:bg-red-100" : "bg-brand-50 hover:bg-brand-100"} rounded-xl p-4">
+        <p class="text-2xl font-bold ${payReview > 0 ? "text-red-700" : "text-brand-700"}">${payOpen}</p>
         <p class="text-xs text-gray-600">Payments to confirm or review${payReview > 0 ? ` (${payReview} under review)` : ""}</p>
       </a>`;
 

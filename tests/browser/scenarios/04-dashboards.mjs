@@ -105,7 +105,7 @@ test("admin-dashboard: payments card counts the queue, turns red when something 
   await page.waitForSelector("text=Payments to confirm or review");
   const card = page.locator("#needs-attention-list a[href='admin-payments.html']");
   t.eq((await card.innerText()).replace(/\s+/g, " ").trim().startsWith("1 Payments to confirm or review"), true, "one open payment");
-  t.eq(await card.evaluate((e) => e.className.includes("bg-purple-50")), true, "neutral colour when nothing is in review");
+  t.eq(await card.evaluate((e) => e.className.includes("bg-brand-50")), true, "neutral colour when nothing is in review");
   const db2 = world();
   const o2 = onlineOrder(db2, { provider: "dpo", pay: "review" }); groupFor(db2, { provider: "dpo", status: "review", orders: [o2], reason: "amount_mismatch" });
   const p2 = await open(t, "/admin-dashboard.html", { user: U.admin, db: db2 });

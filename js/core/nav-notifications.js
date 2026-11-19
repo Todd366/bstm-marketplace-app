@@ -6,7 +6,7 @@ import { supabase } from "./supabase-client.js";
 import { escapeHtml } from "./sanitize.js";
 
 const ICONS = {
-  order: { icon: "📦", color: "#7C3AED" },
+  order: { icon: "📦", color: "#00708E" },
   message: { icon: "💬", color: "#2563EB" },
 };
 
@@ -39,12 +39,12 @@ function renderPanel() {
       const link = n.data?.link || "notifications-all.html";
       return `
         <a href="${link}" data-id="${n.id}" class="nav-notif-item"
-           style="display:flex;gap:10px;padding:10px 8px;border-radius:12px;text-decoration:none;${n.is_read ? "" : "background:#F5F3FF;"}">
+           style="display:flex;gap:10px;padding:10px 8px;border-radius:12px;text-decoration:none;${n.is_read ? "" : "background:#EAF5F8;"}">
           <div style="font-size:18px;flex-shrink:0;">${style.icon}</div>
           <div style="flex:1;min-width:0;">
-            <div style="font-size:12.5px;font-weight:700;color:#1E1B4B;">${escapeHtml(n.title)}</div>
+            <div style="font-size:12.5px;font-weight:700;color:#122128;">${escapeHtml(n.title)}</div>
             <div style="font-size:11.5px;color:#6B7280;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escapeHtml(n.body || "")}</div>
-            <div style="font-size:10px;color:#A78BFA;margin-top:2px;">${timeAgo(n.created_at)}</div>
+            <div style="font-size:10px;color:#68BECF;margin-top:2px;">${timeAgo(n.created_at)}</div>
           </div>
         </a>`;
     })

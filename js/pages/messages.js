@@ -42,7 +42,7 @@ async function loadConversationList() {
       return `
       <div class="p-4 hover:bg-gray-50 cursor-pointer conversation-item" data-id="${c.id}">
         <div class="flex items-center space-x-3">
-          <div class="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 font-bold">
+          <div class="w-12 h-12 rounded-full bg-brand-100 flex items-center justify-center text-brand-600 font-bold">
             ${isSeller ? "B" : "S"}
           </div>
           <div class="flex-1 min-w-0">
@@ -73,9 +73,9 @@ async function openConversation(conversationId, convos) {
   if (!currentConversation) return;
 
   document.querySelectorAll(".conversation-item").forEach((el) => {
-    el.classList.toggle("bg-purple-50", el.dataset.id === conversationId);
+    el.classList.toggle("bg-brand-50", el.dataset.id === conversationId);
     el.classList.toggle("border-l-4", el.dataset.id === conversationId);
-    el.classList.toggle("border-purple-600", el.dataset.id === conversationId);
+    el.classList.toggle("border-brand-600", el.dataset.id === conversationId);
   });
 
   const isSeller = currentConversation.seller_id === currentUserId;

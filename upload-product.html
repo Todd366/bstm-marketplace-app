@@ -5,19 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Add Product — BSTM Seller</title>
   <link href="css/tailwind.css" rel="stylesheet">
+  <link href="css/bstm-theme.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
   <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32.png">
+  <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
   <style>
     @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap");
     *{font-family:'Inter',sans-serif;box-sizing:border-box;}
-    html,body{overflow-x:hidden;max-width:100vw;background:#F8F7FF;}
-    .gradient-bg{background:linear-gradient(135deg,#7C3AED 0%,#4F46E5 100%);}
+    html,body{overflow-x:hidden;max-width:100vw;background:#F2F7FA;}
+    .gradient-bg{background:linear-gradient(135deg,#00708E 0%,#0A87A3 100%);}
     .image-preview{width:100px;height:100px;object-fit:cover;}
-    .drop-zone{border:2px dashed #DDD6FE;transition:all 0.3s;border-radius:12px;}
-    .drop-zone.dragover{border-color:#7C3AED;background:#F5F3FF;}
+    .drop-zone{border:2px dashed #B6E0EA;transition:all 0.3s;border-radius:12px;}
+    .drop-zone.dragover{border-color:#00708E;background:#EAF5F8;}
   </style>
 </head>
-<body style="background:#F8F7FF;">
+<body style="background:#F2F7FA;">
 <div id="bstm-nav"></div>
 
 
@@ -27,24 +30,24 @@
 
     <!-- Images -->
     <div class="bg-white rounded-2xl shadow-lg p-8">
-      <h2 class="text-2xl font-bold text-gray-800 mb-6"><i class="fas fa-images text-purple-600 mr-3"></i>Product Images</h2>
+      <h2 class="text-2xl font-bold text-gray-800 mb-6"><i class="fas fa-images text-brand-600 mr-3"></i>Product Images</h2>
       <div class="drop-zone p-8 text-center mb-6" id="dropZone" onclick="document.getElementById('imageInput').click()">
         <i class="fas fa-cloud-upload-alt text-6xl text-gray-400 mb-4 block"></i>
         <p class="text-gray-600 mb-2">Drag & drop images here or tap to browse</p>
         <p class="text-sm text-gray-500">Up to 5 images · JPG, PNG · Max 5MB each</p>
         <input type="file" id="imageInput" accept="image/*" multiple class="hidden">
-        <button type="button" onclick="event.stopPropagation();document.getElementById('imageInput').click()" class="mt-4 bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold">Choose Files</button>
+        <button type="button" onclick="event.stopPropagation();document.getElementById('imageInput').click()" class="mt-4 bg-brand-600 text-white px-6 py-3 rounded-lg font-semibold">Choose Files</button>
       </div>
       <div id="imagePreview" class="flex flex-wrap gap-3"></div>
     </div>
 
     <!-- Basic Info -->
     <div class="bg-white rounded-2xl shadow-lg p-8">
-      <h2 class="text-2xl font-bold text-gray-800 mb-6"><i class="fas fa-info-circle text-purple-600 mr-3"></i>Basic Information</h2>
+      <h2 class="text-2xl font-bold text-gray-800 mb-6"><i class="fas fa-info-circle text-brand-600 mr-3"></i>Basic Information</h2>
       <div class="mb-6">
         <label class="block text-gray-700 font-semibold mb-2">Listing Type *</label>
         <div class="grid grid-cols-2 gap-3">
-          <label class="flex items-center gap-2 border-2 border-purple-300 bg-purple-50 rounded-lg px-4 py-3 cursor-pointer">
+          <label class="flex items-center gap-2 border-2 border-brand-300 bg-brand-50 rounded-lg px-4 py-3 cursor-pointer">
             <input type="radio" name="productType" id="type-physical" value="physical" checked>
             <span class="font-semibold text-gray-800">📦 Physical Product</span>
           </label>
@@ -57,16 +60,16 @@
       </div>
       <div class="mb-6">
         <label class="block text-gray-700 font-semibold mb-2">Product Title *</label>
-        <input type="text" id="title" required maxlength="100" class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-purple-600" placeholder="e.g., Fresh Organic Tomatoes (5kg)">
+        <input type="text" id="title" required maxlength="100" class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-brand-600" placeholder="e.g., Fresh Organic Tomatoes (5kg)">
       </div>
       <div class="mb-6">
         <label class="block text-gray-700 font-semibold mb-2">Description *</label>
-        <textarea id="description" required rows="5" class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-purple-600" placeholder="Describe your product in detail..."></textarea>
+        <textarea id="description" required rows="5" class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-brand-600" placeholder="Describe your product in detail..."></textarea>
       </div>
       <div class="grid grid-cols-1 gap-6" id="category-condition-row">
         <div>
           <label class="block text-gray-700 font-semibold mb-2">Category *</label>
-          <select id="category" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-purple-600">
+          <select id="category" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-brand-600">
             <option value="">Select Category</option>
             <option value="fresh-produce">Fresh Produce (Room 22)</option>
             <option value="electronics">Electronics & Gadgets</option>
@@ -79,7 +82,7 @@
         </div>
         <div id="condition-field">
           <label class="block text-gray-700 font-semibold mb-2">Condition *</label>
-          <select id="condition" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-purple-600">
+          <select id="condition" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-brand-600">
             <option value="">Select Condition</option>
             <option value="new">New</option>
             <option value="like-new">Like New</option>
@@ -93,36 +96,36 @@
 
     <!-- Pricing -->
     <div class="bg-white rounded-2xl shadow-lg p-8">
-      <h2 class="text-2xl font-bold text-gray-800 mb-6"><i class="fas fa-tag text-purple-600 mr-3"></i>Pricing</h2>
+      <h2 class="text-2xl font-bold text-gray-800 mb-6"><i class="fas fa-tag text-brand-600 mr-3"></i>Pricing</h2>
       <div class="mb-6">
         <label class="block text-gray-700 font-semibold mb-2">Price (BWP) *</label>
         <div class="relative">
           <span class="absolute left-4 top-4 text-gray-500 font-bold">P</span>
-          <input type="number" id="price" required min="1" step="0.01" class="w-full pl-10 pr-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-purple-600" placeholder="0.00" oninput="calcEarnings(this.value)">
+          <input type="number" id="price" required min="1" step="0.01" class="w-full pl-10 pr-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-brand-600" placeholder="0.00" oninput="calcEarnings(this.value)">
         </div>
       </div>
-      <div class="bg-purple-50 border-2 border-purple-200 rounded-lg p-4">
+      <div class="bg-brand-50 border-2 border-brand-200 rounded-lg p-4">
         <div class="flex items-center justify-between">
           <div>
             <p class="font-semibold text-gray-800">BSTM Commission: 5%</p>
             <p class="text-sm text-gray-600">You'll receive 95% of the sale price</p>
           </div>
-          <p class="text-2xl font-bold text-purple-600" id="earnings">P0.00</p>
+          <p class="text-2xl font-bold text-brand-600" id="earnings">P0.00</p>
         </div>
       </div>
     </div>
 
     <!-- Inventory -->
     <div class="bg-white rounded-2xl shadow-lg p-8">
-      <h2 class="text-2xl font-bold text-gray-800 mb-6"><i class="fas fa-boxes text-purple-600 mr-3"></i>Inventory & Location</h2>
+      <h2 class="text-2xl font-bold text-gray-800 mb-6"><i class="fas fa-boxes text-brand-600 mr-3"></i>Inventory & Location</h2>
       <div class="grid grid-cols-1 gap-6">
         <div id="quantity-field">
           <label class="block text-gray-700 font-semibold mb-2">Quantity Available *</label>
-          <input type="number" id="quantity" required min="1" class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-purple-600" placeholder="0">
+          <input type="number" id="quantity" required min="1" class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-brand-600" placeholder="0">
         </div>
         <div>
           <label class="block text-gray-700 font-semibold mb-2">Location *</label>
-          <select id="location" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-purple-600">
+          <select id="location" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-brand-600">
             <option value="">Select Location</option>
             <option value="Gaborone">Gaborone</option>
             <option value="Francistown">Francistown</option>
@@ -134,7 +137,7 @@
         </div>
         <div>
           <label class="block text-gray-700 font-semibold mb-2">Shelf / Section <span class="text-gray-400 font-normal">(optional)</span></label>
-          <input type="text" id="shelf" maxlength="40" list="shelf-options" autocomplete="off" class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-purple-600" placeholder="e.g., Fresh Fruit, Winter Collection">
+          <input type="text" id="shelf" maxlength="40" list="shelf-options" autocomplete="off" class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-brand-600" placeholder="e.g., Fresh Fruit, Winter Collection">
           <datalist id="shelf-options"></datalist>
           <p class="text-xs text-gray-500 mt-2">Products with the same shelf name are grouped together in your room.</p>
         </div>

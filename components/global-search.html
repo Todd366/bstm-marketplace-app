@@ -4,12 +4,12 @@
     <!-- Search Input -->
     <div class="p-6 border-b">
       <div class="relative">
-        <i class="fas fa-search absolute left-6 top-5 text-purple-600 text-xl"></i>
+        <i class="fas fa-search absolute left-6 top-5 text-brand-600 text-xl"></i>
         <input 
           type="text" 
           id="globalSearchInput" 
           placeholder="Search products, rooms, help articles..." 
-          class="w-full pl-16 pr-12 py-4 text-xl border-2 border-purple-300 rounded-2xl focus:outline-none focus:border-purple-600"
+          class="w-full pl-16 pr-12 py-4 text-xl border-2 border-brand-300 rounded-2xl focus:outline-none focus:border-brand-600"
           autofocus
         >
         <button onclick="closeGlobalSearch()" class="absolute right-4 top-4 text-gray-400 hover:text-gray-600">
@@ -19,7 +19,7 @@
       
       <!-- Quick Filters -->
       <div class="flex space-x-2 mt-4">
-        <button onclick="filterSearch('all')" class="filter-btn active px-4 py-2 rounded-lg text-sm font-semibold bg-purple-600 text-white">
+        <button onclick="filterSearch('all')" class="filter-btn active px-4 py-2 rounded-lg text-sm font-semibold bg-brand-600 text-white">
           All
         </button>
         <button onclick="filterSearch('products')" class="filter-btn px-4 py-2 rounded-lg text-sm font-semibold bg-gray-100 text-gray-700 hover:bg-gray-200">
@@ -38,7 +38,7 @@
     <div id="searchResults" class="max-h-96 overflow-y-auto">
       <!-- Loading State -->
       <div id="searchLoading" class="hidden p-8 text-center">
-        <div class="animate-spin w-12 h-12 border-4 border-purple-600 border-t-transparent rounded-full mx-auto mb-4"></div>
+        <div class="animate-spin w-12 h-12 border-4 border-brand-600 border-t-transparent rounded-full mx-auto mb-4"></div>
         <p class="text-gray-600">Searching...</p>
       </div>
       

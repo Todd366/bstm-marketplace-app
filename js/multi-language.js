@@ -158,8 +158,8 @@ const MultiLanguage = {
         const enBtn = document.getElementById('lang-en-btn');
         const tnBtn = document.getElementById('lang-tn-btn');
         if (!enBtn || !tnBtn) return;
-        const active = 'background:#7C3AED;color:#fff;padding:4px 8px;border-radius:6px;font-size:11px;font-weight:700;';
-        const inactive = 'background:#F3F4F6;color:#374151;padding:4px 8px;border-radius:6px;font-size:11px;font-weight:700;';
+        const active = 'background:#fff;color:#00708E;padding:6px 10px;border-radius:8px;font-size:11px;font-weight:700;';
+        const inactive = 'background:rgba(255,255,255,0.16);color:#fff;padding:6px 10px;border-radius:8px;font-size:11px;font-weight:700;';
         enBtn.style.cssText = this.currentLanguage === 'en' ? active : inactive;
         tnBtn.style.cssText = this.currentLanguage === 'tn' ? active : inactive;
     }

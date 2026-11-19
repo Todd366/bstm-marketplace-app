@@ -5,19 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login - BSTM Digital Mall</title>
   <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#7C3AED">
+  <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32.png">
+  <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+  <meta name="theme-color" content="#00708E">
   <link href="css/tailwind.css" rel="stylesheet">
+  <link href="css/bstm-theme.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
   <style>
     @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap");
     * { font-family:"Inter",sans-serif; box-sizing:border-box; }
   </style>
 </head>
-<body style="background:linear-gradient(135deg,#7C3AED 0%,#4F46E5 100%);min-height:100vh;display:flex;flex-direction:column;">
+<body style="background:linear-gradient(135deg,#00708E 0%,#0A87A3 100%);min-height:100vh;display:flex;flex-direction:column;">
 
 <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:40px 20px;">
   <div style="background:#fff;border-radius:28px;box-shadow:0 24px 80px rgba(0,0,0,0.2);max-width:440px;width:100%;overflow:hidden;">
-    <div style="background:linear-gradient(135deg,#7C3AED,#4F46E5);padding:40px 32px;text-align:center;">
+    <div style="background:linear-gradient(135deg,#00708E,#0A87A3);padding:40px 32px;text-align:center;">
       <div style="width:64px;height:64px;background:rgba(255,255,255,0.2);border-radius:18px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;border:2px solid rgba(255,255,255,0.3);">
         <span style="font-size:28px;font-weight:900;color:#fff;">B</span>
       </div>
@@ -25,20 +28,20 @@
       <p style="color:rgba(255,255,255,0.7);font-size:13px;margin:0;">Botswana's Digital Nation</p>
     </div>
     <div style="padding:36px 32px;">
-      <h2 style="font-size:22px;font-weight:900;color:#1E1B4B;margin:0 0 6px;text-align:center;">Welcome Back</h2>
+      <h2 style="font-size:22px;font-weight:900;color:#122128;margin:0 0 6px;text-align:center;">Welcome Back</h2>
       <p style="color:#9CA3AF;font-size:14px;text-align:center;margin:0 0 28px;">Enter your email to receive a magic login link</p>
       <div id="status" style="display:none;padding:14px 16px;border-radius:14px;font-size:13px;font-weight:600;margin-bottom:20px;"></div>
       <form id="login-form">
         <label style="display:block;font-size:12px;font-weight:700;color:#374151;margin-bottom:6px;letter-spacing:0.5px;">EMAIL ADDRESS</label>
         <input type="email" id="email-input" placeholder="you@example.com" required
-          style="width:100%;padding:14px 16px;border:2px solid #EDE9FE;border-radius:14px;font-size:15px;color:#1E1B4B;margin-bottom:20px;transition:border 0.2s;outline:none;"
-          onfocus="this.style.borderColor='#7C3AED'" onblur="this.style.borderColor='#EDE9FE'">
+          style="width:100%;padding:14px 16px;border:2px solid #D7E3E8;border-radius:14px;font-size:15px;color:#122128;margin-bottom:20px;transition:border 0.2s;outline:none;"
+          onfocus="this.style.borderColor='#00708E'" onblur="this.style.borderColor='#D7E3E8'">
         <button type="submit" id="submit-btn"
-          style="width:100%;padding:16px;background:linear-gradient(135deg,#7C3AED,#4F46E5);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:800;cursor:pointer;box-shadow:0 6px 20px rgba(124,58,237,0.35);">
+          style="width:100%;padding:16px;background:linear-gradient(135deg,#00708E,#0A87A3);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:800;cursor:pointer;box-shadow:0 6px 20px rgba(0,112,142,0.35);">
           ✨ Send Magic Link
         </button>
       </form>
-      <div style="margin-top:24px;padding:16px;background:#F8F7FF;border-radius:14px;border:1px solid #EDE9FE;">
+      <div style="margin-top:24px;padding:16px;background:#F2F7FA;border-radius:14px;border:1px solid #D7E3E8;">
         <p style="font-size:12px;color:#9CA3AF;text-align:center;margin:0;line-height:1.6;">
           🔐 Passwordless login · Link expires in 15 minutes<br>
           Check spam folder if you do not see it

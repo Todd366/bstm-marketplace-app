@@ -27,8 +27,8 @@ export const ROOM_TEMPLATES = {
   electronics: {
     label: "Tech Store",
     bodyBg: "#0B1120",
-    bannerBg: "linear-gradient(135deg, #1E1B4B 0%, #312E81 100%)",
-    accent: "#818CF8",
+    bannerBg: "linear-gradient(135deg, #122128 0%, #064A5E 100%)",
+    accent: "#68BECF",
     font: "'Courier New', monospace",
     cardGrid: "grid-cols-2 md:grid-cols-4",
     cardStyle: "tech",
@@ -121,8 +121,8 @@ export const ROOM_TEMPLATES = {
 export const DEFAULT_ROOM_TEMPLATE = {
   label: "General Store",
   bodyBg: "#F9FAFB",
-  bannerBg: "linear-gradient(135deg, #7C3AED 0%, #4F46E5 100%)",
-  accent: "#7C3AED",
+  bannerBg: "linear-gradient(135deg, #00708E 0%, #0A87A3 100%)",
+  accent: "#00708E",
   font: "'Arial', sans-serif",
   cardGrid: "grid-cols-2 md:grid-cols-4",
   cardStyle: "catalog",

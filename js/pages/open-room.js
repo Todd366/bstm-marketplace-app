@@ -43,7 +43,7 @@ window.BSTM.ready().then(async function (session) {
       `<p class="font-semibold text-gray-800 mb-2">You already run ${owned.length} room${owned.length === 1 ? "" : "s"}:</p>` +
       `<ul class="list-disc list-inside text-gray-600 mb-2">${list}</ul>` +
       '<p class="text-gray-500">Each room is a separate business with its own products, sales and daily sheet. ' +
-      '<a href="seller-dashboard.html" class="text-purple-700 font-semibold">Go to my dashboard</a></p>';
+      '<a href="seller-dashboard.html" class="text-brand-700 font-semibold">Go to my dashboard</a></p>';
     note.style.display = "block";
   }
 

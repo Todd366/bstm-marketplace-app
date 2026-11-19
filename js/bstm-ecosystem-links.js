@@ -173,7 +173,7 @@ const BSTMEcosystem = {
                 const platform = this.properties[key];
                 html.push(`
                     <a href="${platform.url}" target="_blank" 
-                       class="flex items-center space-x-3 p-3 bg-white rounded-lg shadow hover:shadow-lg transition-all border-2 border-transparent hover:border-purple-300">
+                       class="flex items-center space-x-3 p-3 bg-white rounded-lg shadow hover:shadow-lg transition-all border-2 border-transparent hover:border-brand-300">
                         <span class="text-3xl">${platform.icon}</span>
                         <div class="flex-1">
                             <p class="font-semibold text-gray-800">${platform.name}</p>

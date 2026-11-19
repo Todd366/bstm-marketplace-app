@@ -23,7 +23,7 @@ function renderRoomTools(room, rooms) {
     a.textContent = text;
     a.style.cssText =
       "padding:8px 14px;border-radius:10px;font-weight:700;font-size:12px;text-decoration:none;border:1.5px solid " +
-      (active ? "#7C3AED;background:#7C3AED;color:#fff;" : "#DDD6FE;background:#F5F3FF;color:#7C3AED;");
+      (active ? "#00708E;background:#00708E;color:#fff;" : "#B6E0EA;background:#EAF5F8;color:#00708E;");
     return a;
   };
 
@@ -54,7 +54,7 @@ function renderProducts(products) {
   if (products.length === 0) {
     container.innerHTML =
       '<p style="color:#9CA3AF;font-size:14px;">You haven\'t listed any products yet. ' +
-      '<a href="upload-product.html" style="color:#7C3AED;font-weight:700;">List your first one →</a></p>';
+      '<a href="upload-product.html" style="color:#00708E;font-weight:700;">List your first one →</a></p>';
     return;
   }
 
@@ -62,19 +62,19 @@ function renderProducts(products) {
     .map((p) => {
       const isActive = p.status === "active";
       return `
-    <div style="background:#fff;border:1.5px solid #EDE9FE;border-radius:16px;padding:16px;">
+    <div style="background:#fff;border:1.5px solid #D7E3E8;border-radius:16px;padding:16px;">
       <div style="display:flex;align-items:center;gap:14px;margin-bottom:12px;">
-        <div style="width:56px;height:56px;border-radius:10px;background:#F5F3FF;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;">
+        <div style="width:56px;height:56px;border-radius:10px;background:#EAF5F8;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;">
           ${p.image ? `<img src="${escapeHtml(p.image)}" style="width:100%;height:100%;object-fit:cover;">` : '<span style="font-size:24px;">📦</span>'}
         </div>
         <div style="flex:1;min-width:0;">
-          <div style="font-weight:800;color:#1E1B4B;font-size:14px;">${escapeHtml(p.name)}</div>
+          <div style="font-weight:800;color:#122128;font-size:14px;">${escapeHtml(p.name)}</div>
           <div style="font-size:12px;color:${isActive ? "#9CA3AF" : "#DC2626"};">Qty: ${p.quantity ?? "—"} · ${p.status}</div>
         </div>
-        <div style="font-weight:900;color:#7C3AED;font-size:15px;">P${Number(p.price).toFixed(2)}</div>
+        <div style="font-weight:900;color:#00708E;font-size:15px;">P${Number(p.price).toFixed(2)}</div>
       </div>
       <div style="display:flex;gap:8px;">
-        <button onclick="openEditModal('${p.id}')" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid #DDD6FE;background:#F5F3FF;color:#7C3AED;font-weight:700;font-size:12px;">
+        <button onclick="openEditModal('${p.id}')" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid #B6E0EA;background:#EAF5F8;color:#00708E;font-weight:700;font-size:12px;">
           <i class="fas fa-edit"></i> Edit
         </button>
         <button onclick="toggleProductStatus('${p.id}', '${p.status}')" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid ${isActive ? "#FECACA" : "#BBF7D0"};background:${isActive ? "#FEF2F2" : "#F0FDF4"};color:${isActive ? "#DC2626" : "#16A34A"};font-weight:700;font-size:12px;">
@@ -297,7 +297,7 @@ async function loadSellerOrders(sellerId, roomId = null) {
       const btnHtml = waitingOnBuyer
         ? '<span class="text-sm font-semibold" style="color:#92400E;">Waiting for the buyer to pay — nothing to do yet.</span>'
         : action
-        ? `<button data-order-id="${order.id}" data-next-status="${action.next}" class="seller-advance-btn bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg text-sm font-semibold">${action.label}</button>`
+        ? `<button data-order-id="${order.id}" data-next-status="${action.next}" class="seller-advance-btn bg-brand-600 hover:bg-brand-700 text-white px-4 py-2 rounded-lg text-sm font-semibold">${action.label}</button>`
         : order.status === "cancelled"
         ? '<span class="text-red-500 text-sm font-semibold">Cancelled</span>'
         : '<span class="text-green-600 text-sm font-semibold">Delivered</span>';
@@ -412,7 +412,7 @@ async function loadRoomStaff(roomId) {
       <div class="flex justify-between items-center gap-2 py-2 border-b border-gray-100 last:border-0">
         <span class="text-sm text-gray-700">${escapeHtml(s.profiles?.email || "Unknown")}</span>
         <span class="flex items-center gap-3">
-          <span class="text-xs font-semibold text-purple-600">${escapeHtml(s.role_id)}</span>
+          <span class="text-xs font-semibold text-brand-600">${escapeHtml(s.role_id)}</span>
           ${
             s.role_id === "ROOM_OWNER"
               ? ""

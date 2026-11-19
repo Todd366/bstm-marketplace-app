@@ -44,7 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!section || !heading || !card) return;
 
       heading.textContent = room.name; // textContent — inherently safe
-      const color = escapeHtml(room.banner_color || "#7C3AED");
+      const color = escapeHtml(room.banner_color || "#00708E");
       const emoji = escapeHtml(room.banner_emoji || "🏬");
       card.innerHTML = `
         <div style="height:180px;background:${color};display:flex;align-items:center;justify-content:center;font-size:70px;">
@@ -52,7 +52,7 @@ document.addEventListener("DOMContentLoaded", () => {
         </div>
         <div style="padding:24px;text-align:left;">
           <p style="margin:12px 0;color:#666;">${escapeHtml(room.description || "Visit this room in the mall.")}</p>
-          <span style="font-weight:700;color:#7C3AED;">Enter Room →</span>
+          <span style="font-weight:700;color:#00708E;">Enter Room →</span>
         </div>`;
       card.addEventListener("click", () => {
         window.location.href = `room.html?id=${room.id}`;

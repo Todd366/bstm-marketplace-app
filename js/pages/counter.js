@@ -69,7 +69,7 @@ function renderProducts() {
   if (state.products.length === 0) {
     box.innerHTML =
       '<p style="color:#9CA3AF;font-size:14px;margin-top:14px;">This room has no products yet. Add some on the ' +
-      '<a href="upload-product.html?room=' + encodeURIComponent(state.room.id) + '" style="color:#7C3AED;font-weight:700;">upload page</a>, or use a custom item below.</p>';
+      '<a href="upload-product.html?room=' + encodeURIComponent(state.room.id) + '" style="color:#00708E;font-weight:700;">upload page</a>, or use a custom item below.</p>';
     return;
   }
   if (list.length === 0) {
@@ -147,7 +147,7 @@ function renderCart() {
           : "";
         return `<div style="border-bottom:1px solid #F3F4F6;padding:8px 0;">
           <div style="display:flex;justify-content:space-between;gap:8px;">
-            <span style="font-weight:700;color:#1E1B4B;font-size:14px;">${escapeHtml(l.name)}${l.product_id ? "" : ' <span style="font-size:11px;color:#9CA3AF;">(custom)</span>'}</span>
+            <span style="font-weight:700;color:#122128;font-size:14px;">${escapeHtml(l.name)}${l.product_id ? "" : ' <span style="font-size:11px;color:#9CA3AF;">(custom)</span>'}</span>
             <span style="font-weight:800;">${money((cents(l.unit_price) * l.qty) / 100)}</span>
           </div>
           <div style="display:flex;align-items:center;gap:8px;margin-top:6px;">

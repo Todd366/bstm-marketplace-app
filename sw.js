@@ -1,12 +1,13 @@
 // BSTM Marketplace Service Worker
 // Version 1.2.0
 
-const CACHE_NAME = 'bstm-marketplace-v1.2';
+const CACHE_NAME = 'bstm-marketplace-v1.3';
 const urlsToCache = [
   './',
   './index.html',
   './manifest.json',
   './css/tailwind.css',
+  './css/bstm-theme.css',
   'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css'
 ];
 

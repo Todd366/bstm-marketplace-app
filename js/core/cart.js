@@ -142,7 +142,7 @@ window.addToCart = function (item) {
   toast.textContent = `Added to cart (${count} item${count === 1 ? "" : "s"})`;
   toast.style.cssText =
     "position:fixed;bottom:24px;left:50%;transform:translateX(-50%);" +
-    "background:#1E1B4B;color:#fff;padding:12px 20px;border-radius:12px;" +
+    "background:#122128;color:#fff;padding:12px 20px;border-radius:12px;" +
     "font-weight:600;font-size:14px;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,0.2);";
   document.body.appendChild(toast);
   setTimeout(() => toast.remove(), 2000);
