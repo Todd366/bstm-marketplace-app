@@ -1,7 +1,7 @@
 {
-  "name": "bstm-digital-nation",
+  "name": "bstm-digital-mall",
   "version": "2.0.0",
-  "description": "Africa's Digital Ecosystem",
+  "description": "BSTM Digital Mall - part of the BSTM Ecosystem",
   "scripts": {
     "test": "node tests/browser/run.mjs",
     "lint": "htmlhint **/*.html",

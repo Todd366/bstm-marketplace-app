@@ -1,4 +1,4 @@
-<!-- BSTM Universal Navigation (RESTORED ORIGINAL FULL VERSION) -->
+<!-- BSTM Universal Navigation: 5 groups (Shop, Sell, Me, Admin, Help), role-filtered by js/app.js -->
 
 <style>
   #bstm-nav-bar {
@@ -101,7 +101,42 @@
     border-radius:2px;
   }
 
-  @media(max-width:900px){
+  #desktop-nav { align-items:center; flex-wrap:nowrap; }
+  .nav-link { white-space:nowrap; }
+  .nav-link.is-active { background:rgba(255,255,255,0.22); color:#fff; }
+
+  /* dropdown groups: native <details>, no script needed to open */
+  .nav-group { position:relative; }
+  .nav-group > summary { list-style:none; cursor:pointer; }
+  .nav-group > summary::-webkit-details-marker { display:none; }
+  .nav-group > summary::after { content:"\25BE"; margin-left:5px; font-size:10px; opacity:.9; }
+  .nav-group[open] > summary { background:rgba(255,255,255,0.16); color:#fff; }
+  .nav-menu {
+    position:absolute; top:calc(100% + 8px); left:0; min-width:220px; z-index:300;
+    background:#fff; border:1px solid #D7E3E8; border-radius:12px; padding:6px;
+    box-shadow:0 12px 28px rgba(0,0,0,0.16);
+  }
+  .nav-menu a {
+    display:block; padding:10px 12px; border-radius:8px; color:#122128;
+    font-size:13px; font-weight:600; text-decoration:none;
+  }
+  .nav-menu a:hover, .nav-menu a:focus-visible, .nav-menu a.is-active { background:#EAF5F8; color:#00708E; }
+
+  .nav-cart-count {
+    display:inline-block; margin-left:6px; min-width:18px; padding:1px 6px; border-radius:999px;
+    background:#fff; color:#00708E; font-size:11px; font-weight:800; line-height:16px; text-align:center;
+  }
+  .nav-cart-count[hidden] { display:none; }
+  #mobile-menu .nav-cart-count { background:#00708E; color:#fff; }
+
+  #mobile-menu .mm-head {
+    margin:14px 6px 4px; padding-top:10px; border-top:1px solid #E5EEF1;
+    font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#5B6B73;
+  }
+  #mobile-menu .mm-head:first-child { margin-top:2px; border-top:none; padding-top:0; }
+  #mobile-menu a.is-active { background:#EAF5F8; color:#00708E; }
+
+  @media(max-width:1100px){
     #desktop-nav { display:none; }
   }
 
@@ -137,45 +172,52 @@
         </a>
 
         <!-- DESKTOP NAV (role-filtered by app.js) -->
-        <nav id="desktop-nav">
+        <nav id="desktop-nav" aria-label="Main">
 
-          <a class="nav-link" href="index.html" data-i18n="nav.home" data-roles="public">Home</a>
           <a class="nav-link" href="marketplace.html" data-i18n="nav.marketplace" data-roles="public">Mall</a>
           <a class="nav-link" href="agriculture.html" data-i18n="nav.farm" data-roles="public">Farm</a>
-
           <a class="nav-link" href="cablink.html" data-i18n="nav.cablink" data-roles="auth">CabLink</a>
           <a class="nav-link" href="thb-wallet.html" data-i18n="nav.wallet" data-roles="auth">Wallet</a>
-          <a class="nav-link" href="transactions.html" data-roles="auth">Transactions</a>
-          <a class="nav-link" href="earnings.html" data-roles="seller,admin,super_admin">Earnings</a>
+          <a class="nav-link" href="checkout.html" data-roles="auth">Cart<span class="nav-cart-count" hidden></span></a>
 
-          <a class="nav-link" href="buyer-dashboard.html" data-roles="auth">Buyer</a>
-          <a class="nav-link" href="seller-dashboard.html" data-roles="seller,admin,super_admin">Seller</a>
+          <details class="nav-group" data-roles="auth">
+            <summary class="nav-link">Sell</summary>
+            <div class="nav-menu">
+              <a href="seller-dashboard.html" data-roles="seller,admin,super_admin">Seller Dashboard</a>
+              <a href="upload-product.html" data-roles="seller,admin,super_admin">Add Product</a>
+              <a href="counter.html" data-roles="seller,admin,super_admin">Counter Sale</a>
+              <a href="daily-sheet.html" data-roles="seller,admin,super_admin">Daily Sheet</a>
+              <a href="earnings.html" data-roles="seller,admin,super_admin">Earnings</a>
+              <a href="analytics.html" data-roles="seller,admin,super_admin">Analytics</a>
+              <a href="open-room.html" data-roles="auth">Open a Room</a>
+            </div>
+          </details>
 
-          <a class="nav-link" href="open-room.html" data-roles="auth">Open Room</a>
-          <a class="nav-link" href="upload-product.html" data-roles="seller,admin,super_admin">Upload</a>
-          <a class="nav-link" href="counter.html" data-roles="seller,admin,super_admin">Counter</a>
-          <a class="nav-link" href="daily-sheet.html" data-roles="seller,admin,super_admin">Daily Sheet</a>
-          <a class="nav-link" href="checkout.html" data-roles="auth">Checkout</a>
-          <a class="nav-link" href="order-tracking.html" data-roles="auth">Tracking</a>
+          <details class="nav-group" data-roles="auth">
+            <summary class="nav-link">Me</summary>
+            <div class="nav-menu">
+              <a href="buyer-dashboard.html" data-roles="auth">My Orders</a>
+              <a href="wishlist.html" data-roles="auth">Wishlist</a>
+              <a href="messages.html" data-roles="auth">Messages</a>
+              <a href="notifications-all.html" data-roles="auth">Notifications</a>
+              <a href="transactions.html" data-roles="auth">Transactions</a>
+              <a href="kyc-verification.html" data-roles="auth">Verify Identity</a>
+              <a href="settings.html" data-roles="auth">Settings</a>
+              <a href="profile.html" data-roles="auth">Profile</a>
+            </div>
+          </details>
 
-          <a class="nav-link" href="messages.html" data-roles="auth">Messages</a>
-          <a class="nav-link" href="notifications-all.html" data-roles="auth">Notifications</a>
-          <a class="nav-link" href="wishlist.html" data-roles="auth">Wishlist</a>
+          <details class="nav-group" data-roles="admin,agent,super_admin,government">
+            <summary class="nav-link">Admin</summary>
+            <div class="nav-menu">
+              <a href="admin-dashboard.html" data-roles="admin,agent,super_admin">Admin</a>
+              <a href="admin-payments.html" data-roles="admin,super_admin">Payments</a>
+              <a href="monitoring-dashboard.html" data-roles="admin,super_admin,government">Monitoring</a>
+              <a href="gov-dashboard.html" data-roles="super_admin">Control Center</a>
+            </div>
+          </details>
 
-          <a class="nav-link" href="analytics.html" data-roles="seller,admin,super_admin">Analytics</a>
-          <a class="nav-link" href="monitoring-dashboard.html" data-roles="admin,super_admin,government">Monitoring</a>
-
-          <a class="nav-link" href="admin-dashboard.html" data-roles="admin,agent,super_admin">Admin</a>
-          <a class="nav-link" href="admin-payments.html" data-roles="admin,super_admin">Payments</a>
-          <a class="nav-link" href="gov-dashboard.html" data-roles="super_admin">Control Center</a>
-
-          <a class="nav-link" href="kyc-verification.html" data-roles="auth">KYC</a>
-
-          <a class="nav-link" href="help.html" data-roles="public">Help</a>
-          <a class="nav-link" href="terms.html" data-roles="public">Terms</a>
-
-          <a class="nav-link" href="settings.html" data-roles="auth">Settings</a>
-          <a class="nav-link" href="profile.html" data-roles="auth">Profile</a>
+          <a class="nav-link" href="help.html" data-i18n="nav.help" data-roles="public">Help</a>
 
         </nav>
 
@@ -225,46 +267,45 @@
     </div>
   </div>
 
-  <!-- MOBILE MENU (FULL RESTORED LIST 30+) -->
+  <!-- MOBILE MENU (grouped; sections and links are role-filtered by app.js) -->
   <div id="mobile-menu">
 
+    <div class="mm-head" data-roles="public">Shop</div>
     <a href="index.html" data-roles="public">🏠 Home</a>
     <a href="marketplace.html" data-roles="public">🏬 Mall</a>
     <a href="agriculture.html" data-roles="public">🌾 Farm</a>
-
     <a href="cablink.html" data-roles="auth">🚕 CabLink</a>
     <a href="thb-wallet.html" data-roles="auth">💰 Wallet</a>
-    <a href="transactions.html" data-roles="auth">📊 Transactions</a>
-    <a href="earnings.html" data-roles="seller,admin,super_admin">💸 Earnings</a>
+    <a href="checkout.html" data-roles="auth">🛒 Cart<span class="nav-cart-count" hidden></span></a>
 
-    <a href="buyer-dashboard.html" data-roles="auth">👤 Buyer</a>
-    <a href="seller-dashboard.html" data-roles="seller,admin,super_admin">🛒 Seller</a>
-
-    <a href="open-room.html" data-roles="auth">🏪 Open Room</a>
-    <a href="upload-product.html" data-roles="seller,admin,super_admin">📤 Upload</a>
-    <a href="counter.html" data-roles="seller,admin,super_admin">🧮 Counter</a>
+    <div class="mm-head" data-roles="auth">Sell</div>
+    <a href="seller-dashboard.html" data-roles="seller,admin,super_admin">🛒 Seller Dashboard</a>
+    <a href="upload-product.html" data-roles="seller,admin,super_admin">📤 Add Product</a>
+    <a href="counter.html" data-roles="seller,admin,super_admin">🧮 Counter Sale</a>
     <a href="daily-sheet.html" data-roles="seller,admin,super_admin">📒 Daily Sheet</a>
-    <a href="checkout.html" data-roles="auth">🧾 Checkout</a>
-    <a href="order-tracking.html" data-roles="auth">📍 Tracking</a>
+    <a href="earnings.html" data-roles="seller,admin,super_admin">💸 Earnings</a>
+    <a href="analytics.html" data-roles="seller,admin,super_admin">📈 Analytics</a>
+    <a href="open-room.html" data-roles="auth">🏪 Open a Room</a>
 
+    <div class="mm-head" data-roles="auth">My Account</div>
+    <a href="buyer-dashboard.html" data-roles="auth">📦 My Orders</a>
+    <a href="wishlist.html" data-roles="auth">❤️ Wishlist</a>
     <a href="messages.html" data-roles="auth">💬 Messages</a>
     <a href="notifications-all.html" data-roles="auth">🔔 Notifications</a>
-    <a href="wishlist.html" data-roles="auth">❤️ Wishlist</a>
-
-    <a href="analytics.html" data-roles="seller,admin,super_admin">📊 Analytics</a>
-    <a href="monitoring-dashboard.html" data-roles="admin,super_admin,government">📡 Monitoring</a>
-
-    <a href="admin-dashboard.html" data-roles="admin,agent,super_admin">🧠 Admin</a>
-    <a href="admin-payments.html" data-roles="admin,super_admin">💳 Payments</a>
-    <a href="gov-dashboard.html" data-roles="super_admin">🎛 Control Center</a>
-
-    <a href="kyc-verification.html" data-roles="auth">🪪 KYC</a>
-
-    <a href="help.html" data-roles="public">❓ Help</a>
-    <a href="terms.html" data-roles="public">📘 Terms</a>
-
+    <a href="transactions.html" data-roles="auth">📊 Transactions</a>
+    <a href="kyc-verification.html" data-roles="auth">🪪 Verify Identity</a>
     <a href="settings.html" data-roles="auth">⚙️ Settings</a>
     <a href="profile.html" data-roles="auth">👤 Profile</a>
+
+    <div class="mm-head" data-roles="admin,agent,super_admin,government">Admin</div>
+    <a href="admin-dashboard.html" data-roles="admin,agent,super_admin">🧠 Admin</a>
+    <a href="admin-payments.html" data-roles="admin,super_admin">💳 Payments</a>
+    <a href="monitoring-dashboard.html" data-roles="admin,super_admin,government">📡 Monitoring</a>
+    <a href="gov-dashboard.html" data-roles="super_admin">🎛 Control Center</a>
+
+    <div class="mm-head" data-roles="public">Help</div>
+    <a href="help.html" data-roles="public">❓ Help</a>
+    <a href="terms.html" data-roles="public">📘 Terms</a>
 
   </div>
 

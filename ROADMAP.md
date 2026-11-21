@@ -1,6 +1,6 @@
 # BSTM Digital Mall — ROADMAP
 
-Written 2026-11-09 by Claude (senior-architect session) for Todd. The next session must **re-inspect before trusting this file**: it is context, not proof.
+Written 2026-11-09 by Claude (senior-architect session) for Todd; sections 2b, 5, 9 and 10 refreshed 2026-11-20. The next session must **re-inspect before trusting this file**: it is context, not proof.
 Lines in "My rules" and "Decisions only I can make" are Todd's own statements, in first person. Everything else is Claude's finding.
 
 Labels: **CONFIRMED** (seen in live data/code) · **VERIFIED** (checked by running something) · **INFERRED** (reasoned, not run) · **PROPOSED** (suggestion) · **UNKNOWN** (needs a fact) · **BLOCKED** (cause named).
@@ -27,6 +27,16 @@ Labels: **CONFIRMED** (seen in live data/code) · **VERIFIED** (checked by runni
 | 58 tables in `public`. Old `database/schema.sql` and `database/schema/*.sql` are stale against them. | VERIFIED / CONFIRMED |
 | Reward trigger does not exist; `credit_purchase_reward` does not check that the order is delivered; 10 order rewards exist in `wallet_ledger` and 8 of them are for orders that are not delivered. | VERIFIED |
 | Security advisors: 1 ERROR `seller_public_info` exposes auth.users data to anon; 2 ERROR security-definer views (`seller_public_info`, `seller_verification`); 22 SECURITY DEFINER functions executable by anon; 46 by signed-in users; leaked-password protection off; `pg_net` in `public`. The 35 "RLS enabled, no policy" notices are `activation.*` (another project) and the server-only payment tables (intended). | VERIFIED (advisor run 2026-11-09) |
+
+## 2b. State on 2026-11-20
+
+| Fact | Label |
+|---|---|
+| Production = commit `4045c84` ("release 2c": real data, no invented figures), state READY. Release 2d (grouped menu + CI + migration mirror) is built and tested but not yet pushed when this was written. | VERIFIED (Vercel, 2026-11-20) |
+| Live database: 15 orders, 22 order items, 13 wallet ledger rows, 633 units in stock, 0 open stock reservations, 0 pending orders without items. Cron jobs active: `payments-expire-stale`, `keep-cablink-warm`, `cablink-daily-backup`, `stock-reservations-release`. | VERIFIED (SQL, 2026-11-20) |
+| Security advisors: the internal trigger function `order_items_consume_reservation` is no longer callable through the API. Open: `seller_public_info` exposes auth.users-derived data to anon (ERROR) and is SECURITY DEFINER together with `seller_verification` (2 ERRORs); `can_manage_room`, `handle_new_user`, `is_staff` callable by anon (they are used inside row-level-security policies, so revoking blindly could break reads); leaked-password protection off; `pg_net` in `public`. | VERIFIED (advisors, 2026-11-20) |
+| Checkout order of steps (reserve stock, create order, add items) matches the Stage 2a trigger, so buying still works. Proven in SQL; a real signed-in checkout on production has not been run. | VERIFIED (code + SQL) / UNKNOWN (live browser) |
+
 
 ## 3. What this release (payments frontend) is
 
@@ -58,10 +68,10 @@ The server side of payments was already live and unused. This release adds the p
 ### Before real money moves (PROPOSED order)
 | # | Item | Label / state |
 |---|---|---|
-| 1 | **Reward trigger.** `credit_purchase_reward` has no order-state check; 8 of 10 existing rewards are for orders that were not delivered. Fix: trigger `award_purchase_reward_on_delivery` after update of `status` on `orders` (1% of item total, once per order, checked through `wallet_ledger`), harden the function to return `order_not_delivered`, catch-up for delivered orders. | **BLOCKED**: the database confirmation gate cancelled it. Needs my explicit approval, or I paste the SQL in the Supabase SQL editor myself. Not re-routed. |
-| 2 | **Batch-1 migration** (staff privilege/PII hole, `seller_public_info`, `set_user_role`, `agent_permissions`, reward + stock restore, notifications). Saved in the project as `claude/batch1-migration-unapplied.md`. | **BLOCKED**, unapplied. Written 2026-10-16: every statement must be re-verified against today's schema first (payments added columns, triggers and functions since). |
+| 1 | ~~Reward trigger.~~ | **DONE 2026-11-20** (Stage 2a): reward (1%, once per order, none for own-room buyers) is credited by a database trigger when an order becomes `delivered`. Proven in a rolled-back transaction (13 checks) and re-verified live. 1 delivered order that pre-dates the trigger has no reward; whether to back-fill it is a decision for Todd. |
+| 2 | **Batch-1 migration** (staff privilege/PII hole, `seller_public_info`, `set_user_role`, `agent_permissions`, notifications). Saved in the project as `claude/batch1-migration-unapplied.md`. | **PARTLY SUPERSEDED**: Stage 1 (2026-11-14) and Stage 2a (2026-11-20) cover the reward, stock and privilege items. The rest is unapplied and must be re-verified statement by statement against today's schema before any use. |
 | 3 | **Server-side CabLink dispatch after payment.** Today the hand-off runs from the buyer's browser, so it depends on the buyer coming back to the page. The dispatch function is buyer-only by design. | PROPOSED. Needs a service-role path (payments function calls dispatch after `payments_apply_outcome`). |
-| 4 | **`place_order` RPC** (server-side order + stock + items in one transaction) and revoke `decrement_product_stock` / `restore_product_stock` from signed-in users. Today any signed-in user can call them for any product; a failed `order_items` insert can leave an empty order. | CONFIRMED gap, PROPOSED fix. |
+| 4 | ~~`place_order` RPC~~ | **Mostly DONE 2026-11-20** (Stage 2a): stock is now reserved per buyer (20 minutes, released by cron every 5 minutes), an order line must be covered by that reservation (no ordering more than exists), nobody can give back stock they did not reserve, and stock returns exactly once when an order is cancelled. Still open: server-side check of the delivery fee, cleanup of an order whose items failed to save (none exist today). |
 | 5 | `MARKETPLACE_API_KEY` secret set on both the Mall and CabLink sides? | UNKNOWN (secrets are unreadable by tools). 0 of the 12 delivery requests ever reached CabLink (VERIFIED 2026-11-09). |
 | 6 | Admin revenue figures (Gross Order Value, 5% Platform Commission, Seller Payout (est.), per-room revenue) still add up every order including cancelled and unpaid online ones. Only the top tile says "all statuses". They will mislead once online orders exist. | CONFIRMED (code), PROPOSED fix (same filter as the seller fix). |
 
@@ -83,10 +93,10 @@ The server side of payments was already live and unused. This release adds the p
 - Real signed-in session on production (till sale, void, daily sheet, shelf product) has never been run. UNKNOWN until done.
 
 ### Repo hygiene
-- **CI.** The old GitHub workflow was archived (it could not pass: `npm ci` with no lock file). Replace with a small working one: HTMLHint + a `pk_live_`/`sk_live_` secret grep + the browser tests (Playwright is not available in Termux, so CI is where they run). PROPOSED. CI run history could not be read (GitHub API 403): UNKNOWN.
+- **CI.** Added as the second commit of release 2d: `.github/workflows/browser-tests.yml` installs Playwright + Chromium and runs `node tests/browser/run.mjs` on every push to `main` and every pull request. It is a separate commit because GitHub refuses workflow files pushed with a token that lacks the `workflow` permission; if that happened, the release script says so and the Mall release itself is unaffected. UNVERIFIED until its first run on GitHub (Claude cannot read GitHub Actions results): look under the repo's Actions tab. HTMLHint and a `pk_live_`/`sk_live_` secret grep are still PROPOSED.
 - `.env.production` is untracked from this release. If it ever held a real key, that key is in git history: rotate it. UNKNOWN whether it ever did; the current values are placeholder-shaped.
 - `README.md` lists files that do not exist (`bstm-auth.js`, `paystack.js`, …). Rewrite from the real tree. CONFIRMED.
-- `database/schema.sql` and `database/schema/*.sql` are stale. The live database is the authority. A read-only mirror of 108 migrations (343 KB, redacted) is in the project as `claude/migrations-mirror.sql`; it was **not** added to the repo in this release because it is too large to paste through Termux in one block. PROPOSED: ship it as a zip I send you, unzipped by one block into `database/migrations/`.
+- `database/schema.sql` and `database/schema/*.sql` are stale. The live database is the authority. `database/migrations/` now holds the two hardening migrations as applied (Stage 1, 2026-11-14; Stage 2a, 2026-11-20). The full 108-migration mirror stays in the project as `claude/migrations-mirror.sql`. PROPOSED: ship it as a zip, unzipped by one block.
 - Orphans left in place: `components/global-search.html` (its script is archived and was fake), `js/pages/*` that no page loads are archived already.
 - `css/tailwind.css` is a purged build: classes not already used (`uppercase`, `opacity-60`, `break-all`, …) do nothing. New pages carry their own scoped styles. Rebuild with `npm run build:css` when adding classes.
 
@@ -108,8 +118,14 @@ One Supabase project serves several of my systems. Tables outside the Mall (`for
 
 ## 9. How the tests work
 
-`node tests/browser/run.mjs [name-filter]` (needs Node + Playwright, which Claude sessions have; Termux does not). It serves the repo, drives Chromium, replaces `supabase-js` with `tests/browser/harness/stub-supabase.js`, and emulates the server contract in `tests/browser/harness/backend.js`. Scenarios are in `tests/browser/scenarios/` (checkout, payment-status, order-tracking, dashboards, admin-payments, nav, wallet). `REPORT=file.json` writes the result. Update `harness/schema.cjs` from the live column list when the database changes, or the stub will wrongly accept or reject columns.
+`node tests/browser/run.mjs [name-filter]` (needs Node + Playwright, which Claude sessions have; Termux does not; GitHub runs it on every push). 88 scenarios, 556 checks passing on 2026-11-20. It serves the repo, drives Chromium, replaces `supabase-js` with `tests/browser/harness/stub-supabase.js`, and emulates the server contract in `tests/browser/harness/backend.js`. Scenarios are in `tests/browser/scenarios/` (checkout, payment-status, order-tracking, dashboards, admin-payments, nav, wallet). `REPORT=file.json` writes the result. Update `harness/schema.cjs` from the live column list when the database changes, or the stub will wrongly accept or reject columns.
 
 ## 10. Release log
 
 - 2026-11-09: payments frontend + seller-revenue fix + wallet sign-in + archive + tests + this roadmap. Base `e59022d`. Verified by 78 browser scenarios (498 checks) in the build sandbox; not yet pushed when this was written — check `git log` and the Vercel deployment list for the truth.
+
+- 2026-11-14: Stage 1 database hardening (`database/migrations/20261114_stage1_mall_hardening.sql`): forged order items, KYC self-approval, transfer hijack, orders trusting the browser, over-broad grants, public views, missing indexes. 25 checks PASS in a rolled-back transaction, re-proven live.
+- 2026-11-19: release 2a (`bade3ab`): BSTM ecosystem theme and logo across the Mall.
+- 2026-11-19: release 2c (`4045c84`): removed invented figures, sample transactions and placeholders (hub counts, wallet history, footer, messages tile, service worker); "BSTM Ecosystem" wording. 81 scenarios.
+- 2026-11-20: Stage 2a database (`database/migrations/20261120_stage2a_stock_reservations_rewards.sql`): stock reservations, stock back on cancel, reward on delivery. 13 checks PASS in a rolled-back transaction, re-verified live. No frontend release needed.
+- 2026-11-20: release 2d: grouped menu (Shop, Sell, Me, Admin, Help; role-filtered; cart count; current page highlighted; phone menu with section headings; switches to the phone menu below 1100 px), GitHub Actions browser tests (second commit), migration mirror in the repo, package renamed `bstm-digital-mall`, ROADMAP refreshed. 88 scenarios, 556 checks.
