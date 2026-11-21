@@ -1,114 +1,213 @@
 import { test, open, settle } from "../run.mjs";
-import { U, world } from "../fixtures.mjs";
+import { U, R, world } from "../fixtures.mjs";
 
-const vis = (page, sel) => page.locator(sel).evaluateAll((els) => els.map((e) => e.style.display !== "none"));
+// Five workspaces (Buyer, Seller, Agent, Admin, Government): each has its own menu, home page and pages.
+// js/core/workspaces.js is the single definition; these scenarios drive the real pages.
 
-for (const [label, user, expected] of [
-  ["logged out", null, false], ["buyer", U.buyer, false], ["seller", U.seller, false], ["agent", U.agent, false],
-  ["admin", U.admin, true], ["super_admin", U.superAdmin, true],
-]) {
-  test(`nav: Payments link ${expected ? "is shown to" : "is hidden from"} ${label} (desktop + mobile menu)`, async (t) => {
-    const page = await open(t, "/index.html", { user, db: world() });
-    await page.waitForSelector("#desktop-nav a");
-    await settle(page, 700);
-    t.eq(await vis(page, '#desktop-nav a[href="admin-payments.html"]'), [expected], "desktop link");
-    t.eq(await vis(page, '#mobile-menu a[href="admin-payments.html"]'), [expected], "mobile menu link");
-    const adminLink = label === "agent" || expected;
-    t.eq(await vis(page, '#desktop-nav a[href="admin-dashboard.html"]'), [adminLink], "Admin link unchanged (agent, admin, super_admin)");
-    t.eq(await vis(page, '#desktop-nav a[href="gov-dashboard.html"]'), [label === "super_admin"], "Control Center unchanged (super_admin only)");
+const GOV = { id: "00000000-0000-4000-8000-000000000009", email: "gov@test.bw", role: "government", phone: null };
+const staffBuyer = () => { const db = world(); db.room_roles.push({ id: "rr-1", room_id: R.r1, user_id: U.buyer.id, role_id: "EMPLOYEE" }); return db; };
+const govWorld = () => { const db = world(); db.profiles.push({ ...GOV, thb_balance: 0, created_at: "2026-01-01T00:00:00Z", location: null, notification_prefs: null, wallet_address: null }); return db; };
+
+const top = (page) =>
+  page.locator("#desktop-nav > a, #desktop-nav > details").evaluateAll((els) =>
+    els.map((e) => (e.tagName === "DETAILS" ? e.querySelector("summary").innerText : (e.childNodes[0].textContent || e.innerText)).trim()));
+const inMore = (page) => page.locator("#desktop-nav .nav-menu a").evaluateAll((els) => els.map((e) => e.textContent.trim()));
+const where = (page) => page.evaluate(() => document.getElementById("bstm-nav-bar").dataset.workspace);
+const chip = async (page) => (await page.locator("#ws-switch .ws-chip").innerText()).replace(/\s+/g, " ").trim();
+const count = (page, sel) => page.locator(sel).count();
+async function ready(page, w = 800) { await page.waitForSelector("#desktop-nav a"); await settle(page, w); }
+async function phone(page) { await page.setViewportSize({ width: 390, height: 800 }); await page.waitForSelector("#menu-btn"); await settle(page, 700); await page.click("#menu-btn"); await page.waitForSelector("#mobile-menu.open"); }
+const ADMIN_ONLY = ["admin-dashboard.html", "admin-payments.html", "monitoring-dashboard.html", "gov-dashboard.html"];
+const SELLER_ONLY = ["seller-dashboard.html", "upload-product.html", "counter.html", "daily-sheet.html", "earnings.html", "analytics.html"];
+
+test("workspaces: a logged-out visitor sees the public menu only and no workspace switch", async (t) => {
+  const page = await open(t, "/index.html", { user: null, db: world() });
+  await ready(page, 500);
+  t.eq(await top(page), ["Marketplace", "Farm", "Help"], "public menu");
+  t.eq(await where(page), "public", "no workspace");
+  t.eq(await page.locator("#ws-switch").isVisible(), false, "switch hidden");
+  await phone(page);
+  t.eq(await page.locator("#mobile-menu .ws-phone").count(), 0, "no workspace block on the phone menu");
+});
+
+test("workspaces: a buyer has only the Buyer workspace; no seller or admin page appears in any menu", async (t) => {
+  const page = await open(t, "/buyer-dashboard.html", { user: U.buyer, db: world() });
+  await ready(page);
+  t.eq(await where(page), "buyer", "workspace");
+  t.eq(await chip(page), "🛍️ Buyer", "chip");
+  t.eq(await top(page), ["Mall", "Farm", "CabLink", "My Orders", "Wallet", "Cart", "More"].map((x) => x).map((x) => (x === "Mall" ? "Marketplace" : x === "Wallet" ? "THB Wallet" : x)), "buyer menu");
+  for (const h of [...ADMIN_ONLY, ...SELLER_ONLY]) t.eq(await count(page, `#desktop-nav a[href="${h}"], #mobile-menu a[href="${h}"]`), 0, `${h} not in the buyer's menus`);
+  await page.click("#ws-switch summary");
+  t.eq(await page.locator("#ws-switch .ws-option[href='open-room.html']").isVisible(), true, "a buyer is offered 'Start selling'");
+  t.eq(await count(page, "#ws-switch .ws-option[data-ws]"), 0, "no other workspace to switch to");
+});
+
+test("workspaces: a seller works in a Seller workspace with no buyer clutter, and switches to Buyer and back", async (t) => {
+  const page = await open(t, "/seller-dashboard.html", { user: U.seller, db: world() });
+  await ready(page, 1000);
+  t.eq(await where(page), "seller", "workspace");
+  t.eq(await chip(page), "🏪 Seller", "chip");
+  t.eq(await top(page), ["My Room", "Add Product", "Counter Sale", "Daily Sheet", "Earnings", "More"], "seller menu");
+  t.eq(await inMore(page), ["Analytics", "Messages", "Help"], "More group");
+  for (const h of ["checkout.html", "thb-wallet.html", "wishlist.html", "cablink.html", ...ADMIN_ONLY]) t.eq(await count(page, `#desktop-nav a[href="${h}"]`), 0, `${h} is not in the Seller menu`);
+  await page.click("#ws-switch summary");
+  await page.click("#ws-switch .ws-option[data-ws='buyer']");
+  await page.waitForURL(/buyer-dashboard\.html/);
+  await ready(page, 1000);
+  t.eq(await where(page), "buyer", "now Buyer");
+  t.eq(await count(page, '#desktop-nav a[href="counter.html"]'), 0, "no Counter Sale in the Buyer menu");
+  await page.goto(new URL("/settings.html", page.url()).href);
+  await ready(page, 1000);
+  t.eq(await where(page), "buyer", "a shared account page keeps the workspace you were in");
+  await page.goto(new URL("/earnings.html", page.url()).href);
+  await ready(page, 1000);
+  t.eq(await where(page), "seller", "a seller page puts you in the Seller workspace");
+  await page.goto(new URL("/marketplace.html", page.url()).href);
+  await ready(page, 1000);
+  await page.goto(new URL("/messages.html", page.url()).href);
+  await ready(page, 1000);
+  t.eq(await where(page), "buyer", "after browsing the Mall, a shared page stays in Buyer");
+});
+
+test("workspaces: room staff keep profiles.role buyer but get the Seller workspace", async (t) => {
+  const page = await open(t, "/buyer-dashboard.html", { user: U.buyer, db: staffBuyer() });
+  await ready(page, 1200);
+  await page.click("#ws-switch summary");
+  t.eq(await page.locator("#ws-switch .ws-option[data-ws='seller']").isVisible(), true, "Seller offered to room staff");
+  t.eq(await page.evaluate(() => window.BSTM.workspaceHome()), "seller-dashboard.html", "their login home is the Seller workspace");
+});
+
+test("workspaces: an agent has an Agent workspace with only the agent desk", async (t) => {
+  const page = await open(t, "/admin-dashboard.html", { user: U.agent, db: world() });
+  await ready(page, 1000);
+  t.eq(await where(page), "agent", "workspace");
+  t.eq(await top(page), ["Agent Desk", "Messages", "Help"], "agent menu");
+  for (const h of ["admin-payments.html", "gov-dashboard.html", "monitoring-dashboard.html"]) t.eq(await count(page, `#desktop-nav a[href="${h}"], #mobile-menu a[href="${h}"]`), 0, `${h} not shown to an agent`);
+  await page.click("#ws-switch summary");
+  t.eq(await page.locator("#ws-switch .ws-option[data-ws='buyer']").isVisible(), true, "an agent can still switch to Buyer");
+});
+
+for (const [label, user, withControl] of [["admin", U.admin, false], ["super_admin", U.superAdmin, true]]) {
+  test(`workspaces: ${label} has an Admin workspace (Payments${withControl ? ", Control Center" : ""})`, async (t) => {
+    const page = await open(t, "/admin-payments.html", { user, db: world() });
+    await ready(page, 1000);
+    t.eq(await where(page), "admin", "workspace");
+    t.eq(await top(page), ["Admin", "Payments", "Monitoring", ...(withControl ? ["Control Center"] : []), "Help"], "admin menu");
+    t.eq(await count(page, '#desktop-nav a[href="gov-dashboard.html"]'), withControl ? 1 : 0, "Control Center is super_admin only");
+    t.eq(await count(page, "#desktop-nav a[href='checkout.html']"), 0, "no Cart in the Admin workspace");
+    t.eq(await page.evaluate(() => window.BSTM.workspaceHome()), "admin-dashboard.html", "login home");
   });
 }
 
-test("nav: on a phone, the admin opens the menu and sees Payments; a buyer does not", async (t) => {
-  for (const [user, expected] of [[U.admin, true], [U.buyer, false]]) {
-    const page = await open(t, "/index.html", { user, db: world() });
-    await page.setViewportSize({ width: 390, height: 800 });
-    await page.waitForSelector("#menu-btn"); await settle(page, 600);
-    await page.click("#menu-btn");
-    await page.waitForSelector("#mobile-menu.open");
-    t.eq(await page.locator('#mobile-menu a[href="admin-payments.html"]').isVisible(), expected, `${user.role}: Payments link visible in the open phone menu`);
+test("workspaces: government has a Government workspace with Monitoring only", async (t) => {
+  const page = await open(t, "/monitoring-dashboard.html", { user: GOV, db: govWorld() });
+  await ready(page, 1000);
+  t.eq(await where(page), "government", "workspace");
+  t.eq(await top(page), ["Monitoring", "Help"], "government menu");
+  t.eq(await page.evaluate(() => window.BSTM.workspaceHome()), "monitoring-dashboard.html", "login home");
+});
+
+test("workspaces: login home for every kind of person", async (t) => {
+  for (const [label, user, db, home] of [
+    ["buyer", U.buyer, world(), "buyer-dashboard.html"], ["seller", U.seller, world(), "seller-dashboard.html"],
+    ["agent", U.agent, world(), "admin-dashboard.html"], ["admin", U.admin, world(), "admin-dashboard.html"],
+    ["government", GOV, govWorld(), "monitoring-dashboard.html"],
+  ]) {
+    const page = await open(t, "/help.html", { user, db });
+    await ready(page, 900);
+    t.eq(await page.evaluate(() => window.BSTM.workspaceHome()), home, `${label} lands in ${home}`);
   }
 });
 
-// ---- grouped navigation (release 2d): Shop / Sell / Me / Admin / Help ----
-const topLevelVisible = (page) =>
-  page.locator("#desktop-nav > a, #desktop-nav > details").evaluateAll((els) =>
-    els.filter((e) => e.style.display !== "none").map((e) => (e.tagName === "DETAILS" ? e.querySelector("summary").innerText : e.innerText).trim()));
-
-test("nav: logged-out visitor sees only Marketplace, Farm and Help (no Sell/Me/Admin groups, no Cart)", async (t) => {
-  const page = await open(t, "/index.html", { user: null, db: world() });
-  await page.waitForSelector("#desktop-nav a"); await settle(page, 500);
-  t.eq(await topLevelVisible(page), ["Marketplace", "Farm", "Help"], "top-level items");
+test("workspaces: signing in sends a seller straight to the Seller workspace", async (t) => {
+  const page = await open(t, "/login.html", { user: U.seller, db: world() });
+  await page.waitForURL(/seller-dashboard\.html/, { timeout: 10000 });
+  t.ok(true, "redirected to seller-dashboard.html");
 });
 
-test("nav: buyer sees Marketplace, Farm, CabLink, THB Wallet, Cart, Sell, Me, Help (no Admin); Sell holds only Open a Room", async (t) => {
-  const page = await open(t, "/index.html", { user: U.buyer, db: world() });
-  await page.waitForSelector("#desktop-nav a"); await settle(page, 700);
-  t.eq(await topLevelVisible(page), ["Marketplace", "Farm", "CabLink", "THB Wallet", "Cart", "Sell", "Me", "Help"], "top-level items");
-  await page.click("#desktop-nav details:has(a[href='open-room.html']) summary");
-  t.eq(await page.locator("#desktop-nav .nav-menu a[href='open-room.html']").isVisible(), true, "Open a Room visible");
-  t.eq(await page.locator("#desktop-nav .nav-menu a[href='seller-dashboard.html']").isVisible(), false, "Seller Dashboard hidden from a buyer");
-  t.eq(await page.locator("#desktop-nav .nav-menu a[href='upload-product.html']").isVisible(), false, "Add Product hidden from a buyer");
-});
-
-test("nav: seller sees the full Sell menu; admin sees the Admin group", async (t) => {
-  let page = await open(t, "/index.html", { user: U.seller, db: world() });
-  await page.waitForSelector("#desktop-nav a"); await settle(page, 700);
-  await page.click("#desktop-nav details:has(a[href='open-room.html']) summary");
-  for (const h of ["seller-dashboard.html", "upload-product.html", "counter.html", "daily-sheet.html", "earnings.html", "analytics.html", "open-room.html"]) {
-    t.eq(await page.locator(`#desktop-nav .nav-menu a[href='${h}']`).isVisible(), true, `seller sees ${h}`);
-  }
-  t.ok(!(await topLevelVisible(page)).includes("Admin"), "seller has no Admin group");
-  page = await open(t, "/index.html", { user: U.admin, db: world() });
-  await page.waitForSelector("#desktop-nav a"); await settle(page, 700);
-  t.ok((await topLevelVisible(page)).includes("Admin"), "admin has the Admin group");
-});
-
-test("nav: dropdown closes on outside click and on Escape; only one open at a time", async (t) => {
-  const page = await open(t, "/index.html", { user: U.seller, db: world() });
-  await page.waitForSelector("#desktop-nav a"); await settle(page, 700);
-  const sell = "#desktop-nav details:has(a[href='open-room.html'])", me = "#desktop-nav details:has(a[href='profile.html'])";
-  await page.click(`${sell} summary`);
-  t.eq(await page.locator(sell).evaluate((e) => e.open), true, "Sell opens");
-  await page.click(`${me} summary`);
-  t.eq([await page.locator(sell).evaluate((e) => e.open), await page.locator(me).evaluate((e) => e.open)], [false, true], "opening Me closes Sell");
-  await page.keyboard.press("Escape");
-  t.eq(await page.locator(me).evaluate((e) => e.open), false, "Escape closes");
-  await page.click(`${me} summary`);
-  await page.click("h1, main, body", { position: { x: 5, y: 400 } });
-  t.eq(await page.locator(me).evaluate((e) => e.open), false, "outside click closes");
-});
-
-test("nav: current page is highlighted (aria-current) in the menu", async (t) => {
-  const page = await open(t, "/marketplace.html", { user: U.buyer, db: world() });
-  await page.waitForSelector("#desktop-nav a"); await settle(page, 700);
-  t.eq(await page.locator("#desktop-nav a[href='marketplace.html']").getAttribute("aria-current"), "page", "Mall is current");
-  t.eq(await page.locator("#desktop-nav a[href='farm.html'], #desktop-nav a[href='agriculture.html']").first().getAttribute("aria-current"), null, "Farm is not");
-});
-
-test("nav: cart count badge follows the real cart (desktop + phone menu)", async (t) => {
+test("workspaces: the cart count belongs to the Buyer workspace only", async (t) => {
   const cart = [{ id: "a", name: "A", price: 10, qty: 2 }, { id: "b", name: "B", price: 5, qty: 3 }];
-  let page = await open(t, "/index.html", { user: U.buyer, db: world(), cart });
-  await page.waitForSelector("#desktop-nav a"); await settle(page, 700);
-  t.eq((await page.locator("#desktop-nav .nav-cart-count").innerText()).trim(), "5", "desktop badge shows 5");
-  t.eq((await page.locator("#mobile-menu .nav-cart-count").textContent()).trim(), "5", "phone menu badge shows 5");
-  page = await open(t, "/index.html", { user: U.buyer, db: world() });
-  await page.waitForSelector("#desktop-nav a"); await settle(page, 700);
+  let page = await open(t, "/marketplace.html", { user: U.buyer, db: world(), cart });
+  await ready(page);
+  t.eq((await page.locator("#desktop-nav .nav-cart-count").innerText()).trim(), "5", "desktop badge");
+  await phone(page);
+  t.eq((await page.locator("#mobile-menu .nav-cart-count").textContent()).trim(), "5", "phone badge");
+  page = await open(t, "/marketplace.html", { user: U.buyer, db: world() });
+  await ready(page);
   t.eq(await page.locator("#desktop-nav .nav-cart-count").isVisible(), false, "empty cart: no badge");
+  page = await open(t, "/seller-dashboard.html", { user: U.seller, db: world(), cart });
+  await ready(page, 1000);
+  t.eq(await count(page, ".nav-cart-count"), 0, "no cart badge in the Seller workspace");
 });
 
-test("nav: phone menu is grouped under section headings, filtered by role", async (t) => {
-  const heads = (page) => page.locator("#mobile-menu .mm-head").evaluateAll((els) => els.filter((e) => e.style.display !== "none").map((e) => e.textContent.trim()));
-  let page = await open(t, "/index.html", { user: null, db: world() });
-  await page.setViewportSize({ width: 390, height: 800 });
-  await page.waitForSelector("#menu-btn"); await settle(page, 600);
-  t.eq(await heads(page), ["Shop", "Help"], "logged out sections");
-  page = await open(t, "/index.html", { user: U.admin, db: world() });
-  await page.setViewportSize({ width: 390, height: 800 });
-  await page.waitForSelector("#menu-btn"); await settle(page, 700);
-  t.eq(await heads(page), ["Shop", "Sell", "My Account", "Admin", "Help"], "admin sections");
-  page = await open(t, "/index.html", { user: U.buyer, db: world() });
-  await page.setViewportSize({ width: 390, height: 800 });
-  await page.waitForSelector("#menu-btn"); await settle(page, 700);
-  t.eq(await heads(page), ["Shop", "Sell", "My Account", "Help"], "buyer sections");
+test("workspaces: the switch and More menus close on outside click and Escape; one open at a time", async (t) => {
+  const page = await open(t, "/seller-dashboard.html", { user: U.seller, db: world() });
+  await ready(page, 1000);
+  const sw = "#ws-switch details", more = "#desktop-nav details";
+  await page.click(`${sw} summary`);
+  t.eq(await page.locator(sw).evaluate((e) => e.open), true, "switch opens");
+  await page.click(`${more} summary`);
+  t.eq([await page.locator(sw).evaluate((e) => e.open), await page.locator(more).evaluate((e) => e.open)], [false, true], "opening More closes the switch");
+  await page.keyboard.press("Escape");
+  t.eq(await page.locator(more).evaluate((e) => e.open), false, "Escape closes");
+  await page.click(`${more} summary`);
+  await page.click("body", { position: { x: 5, y: 500 } });
+  t.eq(await page.locator(more).evaluate((e) => e.open), false, "outside click closes");
 });
+
+test("workspaces: the page you are on is highlighted in its own menu", async (t) => {
+  const page = await open(t, "/earnings.html", { user: U.seller, db: world() });
+  await ready(page, 1000);
+  t.eq(await page.locator("#desktop-nav a[href='earnings.html']").getAttribute("aria-current"), "page", "Earnings is current");
+  t.eq(await page.locator("#desktop-nav a[href='counter.html']").getAttribute("aria-current"), null, "Counter Sale is not");
+});
+
+test("workspaces: phone menu shows the workspace, a switch between workspaces, then only that workspace's links and the account pages", async (t) => {
+  const page = await open(t, "/seller-dashboard.html", { user: U.seller, db: world() });
+  await ready(page, 1000);
+  await phone(page);
+  t.eq((await page.locator("#mobile-menu .ws-phone-label").innerText()).trim().includes("Seller"), true, "workspace named at the top");
+  t.eq(await page.locator("#mobile-menu .ws-seg").evaluateAll((els) => els.map((e) => e.dataset.ws)), ["buyer", "seller"], "switch buttons");
+  t.eq(await page.locator("#mobile-menu a[href='counter.html']").isVisible(), true, "Counter Sale in the Seller phone menu");
+  t.eq(await count(page, "#mobile-menu a[href='checkout.html'], #mobile-menu a[href='thb-wallet.html']"), 0, "no buyer links");
+  t.eq(await page.locator("#mobile-menu a[href='settings.html']").isVisible(), true, "account pages are always there");
+  await page.click("#mobile-menu .ws-seg[data-ws='buyer']");
+  await page.waitForURL(/buyer-dashboard\.html/);
+  t.ok(true, "phone switch goes to the Buyer home");
+});
+
+test("workspaces: the user menu holds only personal pages (no workspace pages)", async (t) => {
+  const page = await open(t, "/seller-dashboard.html", { user: U.seller, db: world() });
+  await ready(page, 1000);
+  const hrefs = await page.locator("#nav-user-dropdown a").evaluateAll((els) => els.map((e) => e.getAttribute("href")));
+  t.eq(hrefs, ["profile.html", "settings.html", "notifications-all.html", "kyc-verification.html"], "personal pages only");
+});
+
+test("workspaces: the workspace you choose with the switch is where the next login starts", async (t) => {
+  const page = await open(t, "/seller-dashboard.html", { user: U.seller, db: world() });
+  await ready(page, 1000);
+  t.eq(await page.evaluate(() => window.BSTM.workspaceHome()), "seller-dashboard.html", "default for a seller");
+  await page.click("#ws-switch summary");
+  await page.click("#ws-switch .ws-option[data-ws='buyer']");
+  await page.waitForURL(/buyer-dashboard\.html/);
+  await ready(page, 1000);
+  t.eq(await page.evaluate(() => window.BSTM.workspaceHome()), "buyer-dashboard.html", "after choosing Buyer, login starts in Buyer");
+});
+
+for (const [label, user, db, path] of [
+  ["buyer", U.buyer, () => world(), "/marketplace.html"], ["seller", U.seller, () => world(), "/seller-dashboard.html"],
+  ["agent", U.agent, () => world(), "/admin-dashboard.html"], ["admin", U.superAdmin, () => world(), "/admin-payments.html"],
+  ["government", GOV, govWorld, "/monitoring-dashboard.html"],
+]) {
+  test(`workspaces: the ${label} header fits a small phone (360 and 390 px wide, no sideways scrolling)`, async (t) => {
+    const page = await open(t, path, { user, db: db() });
+    await ready(page, 1000);
+    for (const w of [360, 390]) {
+      await page.setViewportSize({ width: w, height: 760 });
+      await settle(page, 300);
+      const over = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+      t.ok(over <= 0, `${w}px: no horizontal overflow (over by ${over}px)`);
+      t.eq(await page.locator("#ws-switch .ws-chip").isVisible(), true, `${w}px: workspace chip visible`);
+    }
+  });
+}

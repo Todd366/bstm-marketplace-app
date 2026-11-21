@@ -43,19 +43,6 @@
     });
   }
 
-  function markActiveLinks() {
-    const here = (location.pathname.split("/").pop() || "index.html").toLowerCase();
-    document.querySelectorAll("#bstm-nav-bar a[href]").forEach((a) => {
-      const target = (a.getAttribute("href") || "").split("?")[0].split("#")[0].toLowerCase();
-      if (target && target === here) {
-        a.classList.add("is-active");
-        a.setAttribute("aria-current", "page");
-        const group = a.closest(".nav-group");
-        if (group) group.querySelector("summary").classList.add("is-active");
-      }
-    });
-  }
-
   let groupsBound = false;
   function bindGroups() {
     if (groupsBound) return;
@@ -65,6 +52,14 @@
         if (!g.contains(e.target)) g.open = false;
       });
     });
+    // workspace switch (desktop dropdown rows and phone-menu buttons)
+    document.addEventListener("click", (e) => {
+      const el = e.target.closest && e.target.closest("[data-ws]");
+      if (el && window.BSTM && window.BSTM.setWorkspace && el.matches(".ws-option, .ws-seg")) {
+        e.preventDefault();
+        window.BSTM.setWorkspace(el.dataset.ws);
+      }
+    });
     document.addEventListener("keydown", (e) => {
       if (e.key !== "Escape") return;
       document.querySelectorAll(".nav-group[open]").forEach((g) => { g.open = false; });
@@ -72,6 +67,7 @@
   }
 
   window.addEventListener("bstm:cartUpdated", updateCartCount);
+  window.addEventListener("bstm:navRendered", updateCartCount);
   window.addEventListener("storage", updateCartCount);
 
   function bindNav() {
@@ -86,7 +82,6 @@
 
     navBound = true;
     updateCartCount();
-    markActiveLinks();
     bindGroups();
 
     btn.addEventListener("click", (e) => {

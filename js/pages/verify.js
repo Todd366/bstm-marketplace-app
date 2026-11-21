@@ -14,18 +14,27 @@ function show(state) {
 function startCountdown() {
   var n = 3;
   var el = document.getElementById("countdown");
-  var destination = localStorage.getItem("bstm_post_login_redirect") || "buyer-dashboard.html";
+  var destination = localStorage.getItem("bstm_post_login_redirect") || "";
   localStorage.removeItem("bstm_post_login_redirect");
 
   var manualLink = document.getElementById("manual-continue-link");
-  if (manualLink) manualLink.href = destination;
+
+  // No saved destination: send the person to their own workspace home (Buyer, Seller or Admin).
+  var homePromise = destination
+    ? Promise.resolve(destination)
+    : Promise.resolve(window.BSTM && window.BSTM.workspaceHome ? window.BSTM.workspaceHome() : "buyer-dashboard.html")
+        .catch(function() { return "buyer-dashboard.html"; });
+  homePromise.then(function(dest) {
+    destination = dest || "buyer-dashboard.html";
+    if (manualLink) manualLink.href = destination;
+  });
 
   var iv = setInterval(function() {
     n--;
     if (el) el.textContent = n;
     if (n <= 0) {
       clearInterval(iv);
-      window.location.href = destination;
+      homePromise.then(function() { window.location.href = destination; });
     }
   }, 1000);
 }

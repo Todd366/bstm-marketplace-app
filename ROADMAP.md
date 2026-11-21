@@ -32,11 +32,26 @@ Labels: **CONFIRMED** (seen in live data/code) · **VERIFIED** (checked by runni
 
 | Fact | Label |
 |---|---|
-| Production = commit `4045c84` ("release 2c": real data, no invented figures), state READY. Release 2d (grouped menu + CI + migration mirror) is built and tested but not yet pushed when this was written. | VERIFIED (Vercel, 2026-11-20) |
+| Production = commit `b138ff4` (release 2d: grouped menu, migration mirror, GitHub test workflow), READY. Release 3a (workspaces) is built and tested but not yet pushed when this was written. | VERIFIED (Vercel, 2026-11-21) |
 | Live database: 15 orders, 22 order items, 13 wallet ledger rows, 633 units in stock, 0 open stock reservations, 0 pending orders without items. Cron jobs active: `payments-expire-stale`, `keep-cablink-warm`, `cablink-daily-backup`, `stock-reservations-release`. | VERIFIED (SQL, 2026-11-20) |
 | Security advisors: the internal trigger function `order_items_consume_reservation` is no longer callable through the API. Open: `seller_public_info` exposes auth.users-derived data to anon (ERROR) and is SECURITY DEFINER together with `seller_verification` (2 ERRORs); `can_manage_room`, `handle_new_user`, `is_staff` callable by anon (they are used inside row-level-security policies, so revoking blindly could break reads); leaked-password protection off; `pg_net` in `public`. | VERIFIED (advisors, 2026-11-20) |
 | Checkout order of steps (reserve stock, create order, add items) matches the Stage 2a trigger, so buying still works. Proven in SQL; a real signed-in checkout on production has not been run. | VERIFIED (code + SQL) / UNKNOWN (live browser) |
 
+
+## 2c. Workspaces (release 3a, 2026-11-21)
+
+Todd's rule: the app has separate workspaces that share one infrastructure, and each has its own pathway from login to the end (own menu, own home, own pages). Nothing was deleted; existing pages were organised. Single definition: `js/core/workspaces.js` (which page belongs to which workspace, each workspace's menu, home page and accent colour).
+
+| Workspace | Who has it | Home (where login starts) | Menu |
+|---|---|---|---|
+| Buyer | everyone signed in | `buyer-dashboard.html` | Mall, Farm, CabLink, My Orders, Wallet, Cart, More (Wishlist, Messages, Transactions, Help) |
+| Seller | role seller / admin / super_admin, or any room staff (same rule as `requireSellerAccess`) | `seller-dashboard.html` | My Room, Add Product, Counter Sale, Daily Sheet, Earnings, More (Analytics, Messages, Help) |
+| Agent | role `agent` (field agents; sections set by `agent_permissions`) | `admin-dashboard.html` | Agent Desk, Messages, Help |
+| Admin | role admin, super_admin | `admin-dashboard.html` | Admin, Payments, Monitoring, Control Center (super_admin), Help |
+| Government | role government | `monitoring-dashboard.html` | Monitoring, Help |
+
+Rules: a page that belongs to a workspace puts you in it (shared pages such as the admin dashboard keep your current one); shared personal pages (profile, settings, notifications, identity) keep the workspace you are working in (this tab); the workspace you choose with the switch is where your next login starts, otherwise your main one (staff, then room, then Buyer). A buyer with no room is offered "Start selling" in the switch. Personal pages live in the user menu and the phone menu. The five workspace names are INFERRED from the roles in the database (Todd named Buyer, Seller, Admin, field Agents and said "four to five"); if he wants different groupings, only `workspaces.js` changes.
+Verified: 95 browser scenarios, 618 checks (menus per role, switching, login home, cart badge only in Buyer, phone menu, header fits 360 px and 390 px). Not yet seen on a real phone.
 
 ## 3. What this release (payments frontend) is
 
@@ -129,3 +144,4 @@ One Supabase project serves several of my systems. Tables outside the Mall (`for
 - 2026-11-19: release 2c (`4045c84`): removed invented figures, sample transactions and placeholders (hub counts, wallet history, footer, messages tile, service worker); "BSTM Ecosystem" wording. 81 scenarios.
 - 2026-11-20: Stage 2a database (`database/migrations/20261120_stage2a_stock_reservations_rewards.sql`): stock reservations, stock back on cancel, reward on delivery. 13 checks PASS in a rolled-back transaction, re-verified live. No frontend release needed.
 - 2026-11-20: release 2d: grouped menu (Shop, Sell, Me, Admin, Help; role-filtered; cart count; current page highlighted; phone menu with section headings; switches to the phone menu below 1100 px), GitHub Actions browser tests (second commit), migration mirror in the repo, package renamed `bstm-digital-mall`, ROADMAP refreshed. 88 scenarios, 556 checks.
+- 2026-11-21: release 3a: five separate workspaces (Buyer, Seller, Agent, Admin, Government), each with its own menu, home page and login landing, a workspace switch in the header and phone menu; replaces the single grouped menu of 2d. See section 2c.

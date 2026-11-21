@@ -1,4 +1,4 @@
-<!-- BSTM Universal Navigation: 5 groups (Shop, Sell, Me, Admin, Help), role-filtered by js/app.js -->
+<!-- BSTM Universal Navigation: three workspaces (Buyer, Seller, Admin), each with its own menu; see js/core/workspaces.js -->
 
 <style>
   #bstm-nav-bar {
@@ -136,8 +136,55 @@
   #mobile-menu .mm-head:first-child { margin-top:2px; border-top:none; padding-top:0; }
   #mobile-menu a.is-active { background:#EAF5F8; color:#00708E; }
 
+
+  /* workspace switch */
+  #ws-switch { display:flex; align-items:center; }
+  #ws-switch[hidden] { display:none; }
+  .ws-chip {
+    display:inline-flex; align-items:center; gap:6px; padding:7px 12px; border-radius:999px;
+    background:rgba(255,255,255,0.18); color:#fff; font-size:12px; font-weight:800; letter-spacing:.02em;
+    border:1px solid rgba(255,255,255,0.35); white-space:nowrap; list-style:none; cursor:pointer;
+  }
+  .ws-chip.ws-static { cursor:default; }
+  .ws-group > summary::after { content:"\25BE"; margin-left:2px; font-size:10px; }
+  .ws-menu { min-width:260px; }
+  .ws-current { padding:10px 12px 8px; font-size:12px; color:#122128; border-bottom:1px solid #E5EEF1; margin-bottom:4px; }
+  .ws-current small, .ws-option small { display:block; margin-top:2px; font-size:11px; font-weight:500; color:#5B6B73; }
+  .ws-option {
+    display:block; width:100%; text-align:left; padding:10px 12px; border:none; background:none; border-radius:8px;
+    font-size:13px; font-weight:700; color:#122128; cursor:pointer; text-decoration:none; font-family:inherit;
+  }
+  .ws-option:hover, .ws-option:focus-visible { background:#EAF5F8; color:#00708E; }
+  #mobile-menu .ws-phone { margin:0 0 10px; padding:12px; border-radius:14px; background:#EAF5F8; }
+  #mobile-menu .ws-phone-label { font-size:12px; font-weight:800; color:#00708E; margin-bottom:8px; }
+  #mobile-menu .ws-segs { display:flex; gap:6px; flex-wrap:wrap; }
+  #mobile-menu .ws-seg {
+    flex:1 1 90px; min-height:44px; padding:8px 10px; border-radius:10px; border:1px solid #BFD9E2; background:#fff;
+    font-size:13px; font-weight:700; color:#122128; cursor:pointer; font-family:inherit;
+  }
+  #mobile-menu .ws-seg.on { background:#00708E; border-color:#00708E; color:#fff; }
+  #mobile-menu a.ws-start { margin-top:8px; background:#fff; border:1px solid #BFD9E2; font-size:13px; }
+
   @media(max-width:1100px){
     #desktop-nav { display:none; }
+    /* below 1100px the switch lives in the menu button (workspace block at the top); the chip only shows where you are */
+    .ws-group > .nav-menu { display:none !important; }
+    .ws-group > summary { pointer-events:none; }
+    .ws-group > summary::after { display:none; }
+  }
+  @media(max-width:480px){
+    .ws-label { display:none; }
+    .ws-chip { padding:7px 9px; }
+  }
+  /* small phones: the logo tile stays, its wordmark makes room for the workspace chip */
+  @media(max-width:420px){
+    #bstm-nav-bar a[href="index.html"] > div:last-child { display:none; }
+    #bstm-nav-bar > div { padding:0 8px !important; }
+    .nav-right { gap:2px !important; }
+    .nav-right #lang-en-btn, .nav-right #lang-tn-btn { padding:6px 7px !important; }
+    #nav-user-name { max-width:72px !important; padding:10px 8px !important; }
+    #nav-login-btn { padding:9px 10px !important; }
+    #bstm-nav-bar > div > div > div:first-child { gap:8px !important; }
   }
 
   /* phones: keep the whole header inside the screen (verified at 390px wide) */
@@ -172,54 +219,10 @@
         </a>
 
         <!-- DESKTOP NAV (role-filtered by app.js) -->
-        <nav id="desktop-nav" aria-label="Main">
+        <div id="ws-switch" hidden></div>
 
-          <a class="nav-link" href="marketplace.html" data-i18n="nav.marketplace" data-roles="public">Mall</a>
-          <a class="nav-link" href="agriculture.html" data-i18n="nav.farm" data-roles="public">Farm</a>
-          <a class="nav-link" href="cablink.html" data-i18n="nav.cablink" data-roles="auth">CabLink</a>
-          <a class="nav-link" href="thb-wallet.html" data-i18n="nav.wallet" data-roles="auth">Wallet</a>
-          <a class="nav-link" href="checkout.html" data-roles="auth">Cart<span class="nav-cart-count" hidden></span></a>
-
-          <details class="nav-group" data-roles="auth">
-            <summary class="nav-link">Sell</summary>
-            <div class="nav-menu">
-              <a href="seller-dashboard.html" data-roles="seller,admin,super_admin">Seller Dashboard</a>
-              <a href="upload-product.html" data-roles="seller,admin,super_admin">Add Product</a>
-              <a href="counter.html" data-roles="seller,admin,super_admin">Counter Sale</a>
-              <a href="daily-sheet.html" data-roles="seller,admin,super_admin">Daily Sheet</a>
-              <a href="earnings.html" data-roles="seller,admin,super_admin">Earnings</a>
-              <a href="analytics.html" data-roles="seller,admin,super_admin">Analytics</a>
-              <a href="open-room.html" data-roles="auth">Open a Room</a>
-            </div>
-          </details>
-
-          <details class="nav-group" data-roles="auth">
-            <summary class="nav-link">Me</summary>
-            <div class="nav-menu">
-              <a href="buyer-dashboard.html" data-roles="auth">My Orders</a>
-              <a href="wishlist.html" data-roles="auth">Wishlist</a>
-              <a href="messages.html" data-roles="auth">Messages</a>
-              <a href="notifications-all.html" data-roles="auth">Notifications</a>
-              <a href="transactions.html" data-roles="auth">Transactions</a>
-              <a href="kyc-verification.html" data-roles="auth">Verify Identity</a>
-              <a href="settings.html" data-roles="auth">Settings</a>
-              <a href="profile.html" data-roles="auth">Profile</a>
-            </div>
-          </details>
-
-          <details class="nav-group" data-roles="admin,agent,super_admin,government">
-            <summary class="nav-link">Admin</summary>
-            <div class="nav-menu">
-              <a href="admin-dashboard.html" data-roles="admin,agent,super_admin">Admin</a>
-              <a href="admin-payments.html" data-roles="admin,super_admin">Payments</a>
-              <a href="monitoring-dashboard.html" data-roles="admin,super_admin,government">Monitoring</a>
-              <a href="gov-dashboard.html" data-roles="super_admin">Control Center</a>
-            </div>
-          </details>
-
-          <a class="nav-link" href="help.html" data-i18n="nav.help" data-roles="public">Help</a>
-
-        </nav>
+        <!-- DESKTOP NAV: painted by js/core/workspaces.js for the current workspace -->
+        <nav id="desktop-nav" aria-label="Main"></nav>
 
       </div>
 
@@ -246,7 +249,9 @@
           <div id="nav-user-dropdown"
                style="display:none;position:absolute;top:calc(100% + 6px);right:0;background:#fff;border:1px solid #D7E3E8;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,0.12);min-width:160px;overflow:hidden;z-index:200;">
             <a href="profile.html" style="display:block;padding:12px 16px;color:#374151;text-decoration:none;font-size:13px;font-weight:600;">👤 Profile</a>
-            <a href="buyer-dashboard.html" style="display:block;padding:12px 16px;color:#374151;text-decoration:none;font-size:13px;font-weight:600;">📦 My Orders</a>
+            <a href="settings.html" style="display:block;padding:12px 16px;color:#374151;text-decoration:none;font-size:13px;font-weight:600;">⚙️ Settings</a>
+            <a href="notifications-all.html" style="display:block;padding:12px 16px;color:#374151;text-decoration:none;font-size:13px;font-weight:600;">🔔 Notifications</a>
+            <a href="kyc-verification.html" style="display:block;padding:12px 16px;color:#374151;text-decoration:none;font-size:13px;font-weight:600;">🪪 Verify Identity</a>
             <button id="nav-logout-btn" onclick="window.BSTM.logout()"
                     style="display:block;width:100%;text-align:left;padding:12px 16px;color:#DC2626;background:none;border:none;border-top:1px solid #F3F4F6;font-size:13px;font-weight:600;cursor:pointer;">🚪 Logout</button>
           </div>
@@ -267,47 +272,8 @@
     </div>
   </div>
 
-  <!-- MOBILE MENU (grouped; sections and links are role-filtered by app.js) -->
-  <div id="mobile-menu">
-
-    <div class="mm-head" data-roles="public">Shop</div>
-    <a href="index.html" data-roles="public">🏠 Home</a>
-    <a href="marketplace.html" data-roles="public">🏬 Mall</a>
-    <a href="agriculture.html" data-roles="public">🌾 Farm</a>
-    <a href="cablink.html" data-roles="auth">🚕 CabLink</a>
-    <a href="thb-wallet.html" data-roles="auth">💰 Wallet</a>
-    <a href="checkout.html" data-roles="auth">🛒 Cart<span class="nav-cart-count" hidden></span></a>
-
-    <div class="mm-head" data-roles="auth">Sell</div>
-    <a href="seller-dashboard.html" data-roles="seller,admin,super_admin">🛒 Seller Dashboard</a>
-    <a href="upload-product.html" data-roles="seller,admin,super_admin">📤 Add Product</a>
-    <a href="counter.html" data-roles="seller,admin,super_admin">🧮 Counter Sale</a>
-    <a href="daily-sheet.html" data-roles="seller,admin,super_admin">📒 Daily Sheet</a>
-    <a href="earnings.html" data-roles="seller,admin,super_admin">💸 Earnings</a>
-    <a href="analytics.html" data-roles="seller,admin,super_admin">📈 Analytics</a>
-    <a href="open-room.html" data-roles="auth">🏪 Open a Room</a>
-
-    <div class="mm-head" data-roles="auth">My Account</div>
-    <a href="buyer-dashboard.html" data-roles="auth">📦 My Orders</a>
-    <a href="wishlist.html" data-roles="auth">❤️ Wishlist</a>
-    <a href="messages.html" data-roles="auth">💬 Messages</a>
-    <a href="notifications-all.html" data-roles="auth">🔔 Notifications</a>
-    <a href="transactions.html" data-roles="auth">📊 Transactions</a>
-    <a href="kyc-verification.html" data-roles="auth">🪪 Verify Identity</a>
-    <a href="settings.html" data-roles="auth">⚙️ Settings</a>
-    <a href="profile.html" data-roles="auth">👤 Profile</a>
-
-    <div class="mm-head" data-roles="admin,agent,super_admin,government">Admin</div>
-    <a href="admin-dashboard.html" data-roles="admin,agent,super_admin">🧠 Admin</a>
-    <a href="admin-payments.html" data-roles="admin,super_admin">💳 Payments</a>
-    <a href="monitoring-dashboard.html" data-roles="admin,super_admin,government">📡 Monitoring</a>
-    <a href="gov-dashboard.html" data-roles="super_admin">🎛 Control Center</a>
-
-    <div class="mm-head" data-roles="public">Help</div>
-    <a href="help.html" data-roles="public">❓ Help</a>
-    <a href="terms.html" data-roles="public">📘 Terms</a>
-
-  </div>
+  <!-- MOBILE MENU: workspace switch + that workspace's links, painted by js/core/workspaces.js -->
+  <div id="mobile-menu"></div>
 
 </div>
 

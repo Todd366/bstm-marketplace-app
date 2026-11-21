@@ -12,7 +12,7 @@ var VERIFY_URL = window.location.origin + window.location.pathname.replace(/logi
 
 // Preserve where the user was trying to go before being sent to log in
 // (e.g. login.html?redirect=checkout.html) so verify.html can send them
-// back there instead of always landing on buyer-dashboard.html.
+// back there instead of landing in their own workspace.
 var redirectTarget = new URLSearchParams(window.location.search).get("redirect");
 if (redirectTarget) {
   localStorage.setItem("bstm_post_login_redirect", redirectTarget);
@@ -46,7 +46,11 @@ function friendlyError(message) {
 // Wait for BSTM to be ready before checking session
 // Uses event instead of direct call to avoid race condition
 window.addEventListener('bstm:ready', function(e) {
-  if (e.detail) window.location.href = "buyer-dashboard.html";
+  if (!e.detail) return;
+  // each person lands in their own workspace (Buyer, Seller or Admin)
+  Promise.resolve(window.BSTM && window.BSTM.workspaceHome ? window.BSTM.workspaceHome() : "buyer-dashboard.html")
+    .then(function(dest) { window.location.href = dest || "buyer-dashboard.html"; })
+    .catch(function() { window.location.href = "buyer-dashboard.html"; });
 });
 
 // Module is already deferred — DOM is ready, no DOMContentLoaded needed
