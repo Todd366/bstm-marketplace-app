@@ -12,9 +12,7 @@
   <link href="css/bstm-theme.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <style>
-        .gradient-bg { background: linear-gradient(135deg, #00708E 0%, #0A87A3 100%); }
-        .cablink-gradient { background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%); }
-        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+        .cablink-gradient { background: var(--bstm-grad); }
         .status-pill { display:inline-block; padding:4px 12px; border-radius:999px; font-size:12px; font-weight:700; }
     </style>
 </head>
@@ -28,12 +26,12 @@
                 <span class="font-bold text-sm">🚗 CABLINK TASKS</span>
             </div>
             <h1 class="text-4xl md:text-5xl font-bold mb-4">Get a Room's Order Delivered</h1>
-            <p class="text-lg text-blue-100 mb-2 max-w-2xl">
+            <p class="text-lg text-brand-100 mb-2 max-w-2xl">
                 Create a pickup-and-delivery task here, then hand it off to the real CabLink driver app —
                 CabLink matches it with the right driver and vehicle for the job.
             </p>
             <a href="https://cab-link-pwa.vercel.app" target="_blank"
-               class="inline-flex items-center gap-2 mt-4 bg-white text-blue-600 hover:bg-blue-50 px-6 py-3 rounded-xl font-bold shadow-lg transition-all">
+               class="inline-flex items-center gap-2 mt-4 bg-white text-brand-600 hover:bg-brand-50 px-6 py-3 rounded-xl font-bold shadow-lg transition-all">
                 <i class="fas fa-external-link-alt"></i> Open CabLink Driver App
             </a>
         </div>
@@ -42,7 +40,7 @@
     <div class="max-w-5xl mx-auto px-6 py-10">
 
         <!-- Info: deliveries are automatic now -->
-        <div class="bg-blue-50 border-2 border-blue-200 rounded-2xl p-6 mb-10">
+        <div class="bg-brand-50 border-2 border-brand-200 rounded-2xl p-6 mb-10">
             <h2 class="text-lg font-bold text-gray-800 mb-1">Deliveries now happen automatically</h2>
             <p class="text-gray-600 text-sm">
                 When you choose CabLink delivery at checkout, a pickup task is created and sent to a real

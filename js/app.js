@@ -5,7 +5,7 @@ import "./multi-language.js"; // registers window.MultiLanguage globally
 import "./form-validation.js"; // registers window.FormValidator globally
 import "./toast-notifications.js"; // registers window.Toast globally
 import "./core/nav-notifications.js"; // wires the real notification bell in nav.html
-import { availableWorkspaces, resolveWorkspace, homeFor, renderWorkspaceNav, pageFile, WORKSPACES } from "./core/workspaces.js";
+import { availableWorkspaces, resolveWorkspace, homeFor, renderWorkspaceNav, renderWorkspaceFooter, pageFile, WORKSPACES } from "./core/workspaces.js";
 
 // ============================================
 // BSTM APP CORE (SINGLE SOURCE OF TRUTH)
@@ -74,6 +74,7 @@ function renderNav() {
     writeStore(sessionStorage, WS_NOW_KEY, { uid: st.session.user.id, ws: st.current });
     if (staffKnown) writeStore(localStorage, WS_KEY, { uid: st.session.user.id, staff: st.isRoomStaff, ...(st.mine ? {} : { ws: null }) });
   }
+  renderWorkspaceFooter(st);
   if (renderWorkspaceNav(st)) {
     if (window.MultiLanguage && window.MultiLanguage.applyTranslations) window.MultiLanguage.applyTranslations();
     window.dispatchEvent(new CustomEvent("bstm:navRendered", { detail: { workspace: st.current, available: st.available } }));

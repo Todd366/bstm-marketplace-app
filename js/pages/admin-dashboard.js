@@ -18,7 +18,7 @@ window.BSTM.ready().then(async function (session) {
   const STAFF_ROLES = ["admin", "agent", "super_admin"];
   if (!profile || !STAFF_ROLES.includes(profile.role)) {
     alert("This dashboard is restricted to administrators.");
-    window.location.href = "buyer-dashboard.html";
+    window.location.href = (await window.BSTM.workspaceHome().catch(() => null)) || "buyer-dashboard.html";
     return;
   }
 
@@ -323,8 +323,8 @@ window.BSTM.ready().then(async function (session) {
         <p class="text-2xl font-bold text-green-700">P${commission.toFixed(2)}</p>
         <p class="text-xs text-gray-600">Platform Commission (5%)</p>
       </div>
-      <div class="bg-blue-50 rounded-xl p-4">
-        <p class="text-2xl font-bold text-blue-700">P${(gmv - commission).toFixed(2)}</p>
+      <div class="bg-brand-50 rounded-xl p-4">
+        <p class="text-2xl font-bold text-brand-700">P${(gmv - commission).toFixed(2)}</p>
         <p class="text-xs text-gray-600">Seller Payout (est.)</p>
       </div>`;
   }
@@ -412,3 +412,12 @@ window.BSTM.ready().then(async function (session) {
 window.handleLogout = function () {
   if (confirm("Logout?")) window.BSTM.logout();
 };
+
+
+// The agent workspace shares this page with Admin but is its own desk: name it for what it is.
+window.addEventListener("bstm:navRendered", (e) => {
+  if (!e.detail || e.detail.workspace !== "agent") return;
+  const h1 = document.querySelector("h1");
+  if (h1) h1.textContent = "🧭 Agent Desk";
+  document.title = "Agent Desk - BSTM Digital Mall";
+});

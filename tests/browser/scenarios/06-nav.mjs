@@ -211,3 +211,22 @@ for (const [label, user, db, path] of [
     }
   });
 }
+
+const footer = (page) => page.locator("#footer-quick-links a, #footer-support-links a").evaluateAll((els) => els.map((e) => e.getAttribute("href")));
+test("workspaces: the footer follows the workspace (no Seller Dashboard for a buyer, no Buyer Dashboard for a seller, no Login once signed in)", async (t) => {
+  let page = await open(t, "/marketplace.html", { user: null, db: world() });
+  await page.waitForSelector("#footer-support-links a"); await settle(page, 500);
+  t.eq(await footer(page), ["index.html", "marketplace.html", "agriculture.html", "ecosystem-hub.html", "help.html", "terms.html", "login.html"], "logged out");
+  page = await open(t, "/marketplace.html", { user: U.buyer, db: world() });
+  await page.waitForSelector("#footer-support-links a"); await settle(page, 900);
+  t.eq(await footer(page), ["index.html", "marketplace.html", "buyer-dashboard.html", "thb-wallet.html", "ecosystem-hub.html", "help.html", "terms.html"], "buyer");
+  page = await open(t, "/seller-dashboard.html", { user: U.seller, db: world() });
+  await page.waitForSelector("#footer-support-links a"); await settle(page, 900);
+  t.eq(await footer(page), ["seller-dashboard.html", "upload-product.html", "counter.html", "earnings.html", "help.html", "terms.html"], "seller");
+  page = await open(t, "/admin-dashboard.html", { user: U.agent, db: world() });
+  await page.waitForSelector("#footer-support-links a"); await settle(page, 900);
+  t.eq(await footer(page), ["admin-dashboard.html", "help.html", "terms.html"], "agent");
+  page = await open(t, "/admin-dashboard.html", { user: U.admin, db: world() });
+  await page.waitForSelector("#footer-support-links a"); await settle(page, 900);
+  t.eq(await footer(page), ["admin-dashboard.html", "admin-payments.html", "monitoring-dashboard.html", "help.html", "terms.html"], "admin");
+});

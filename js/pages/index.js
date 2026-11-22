@@ -44,10 +44,9 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!section || !heading || !card) return;
 
       heading.textContent = room.name; // textContent — inherently safe
-      const color = escapeHtml(room.banner_color || "#00708E");
-      const emoji = escapeHtml(room.banner_emoji || "🏬");
+            const emoji = escapeHtml(room.banner_emoji || "🏬");
       card.innerHTML = `
-        <div style="height:180px;background:${color};display:flex;align-items:center;justify-content:center;font-size:70px;">
+        <div style="height:180px;background:var(--bstm-grad);display:flex;align-items:center;justify-content:center;font-size:70px;">
           ${emoji}
         </div>
         <div style="padding:24px;text-align:left;">

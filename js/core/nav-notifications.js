@@ -7,7 +7,7 @@ import { escapeHtml } from "./sanitize.js";
 
 const ICONS = {
   order: { icon: "📦", color: "#00708E" },
-  message: { icon: "💬", color: "#2563EB" },
+  message: { icon: "💬", color: "#00708E" },
 };
 
 let wired = false;

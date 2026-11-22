@@ -11,10 +11,8 @@
   <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32.png">
   <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
   <style>
-    @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap");
-    *{font-family:'Inter',sans-serif;box-sizing:border-box;}
+    * { box-sizing:border-box; }
     html,body{overflow-x:hidden;max-width:100vw;}
-    .gradient-bg{background:linear-gradient(135deg,#00708E 0%,#0A87A3 100%);}
     .faq-answer{max-height:0;overflow:hidden;transition:max-height 0.35s ease;}
     .faq-answer.active{max-height:600px;}
     .faq-icon{transition:transform 0.3s;}
@@ -32,7 +30,7 @@
   <!-- Quick Links -->
   <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
     <a href="#buying" class="bg-white rounded-2xl shadow-lg p-8 text-center hover:shadow-2xl transition-all">
-      <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4"><i class="fas fa-shopping-cart text-blue-600 text-2xl"></i></div>
+      <div class="w-16 h-16 bg-brand-100 rounded-full flex items-center justify-center mx-auto mb-4"><i class="fas fa-shopping-cart text-brand-600 text-2xl"></i></div>
       <h3 class="text-xl font-bold text-gray-800 mb-2">Buying</h3>
       <p class="text-sm text-gray-600">How to purchase products</p>
     </a>
@@ -55,7 +53,7 @@
 
   <!-- Buying FAQ -->
   <div id="buying" class="bg-white rounded-2xl shadow-lg p-8 mb-8">
-    <h2 class="text-3xl font-bold text-gray-800 mb-8"><i class="fas fa-shopping-cart text-blue-600 mr-3"></i>Buying on BSTM</h2>
+    <h2 class="text-3xl font-bold text-gray-800 mb-8"><i class="fas fa-shopping-cart text-brand-600 mr-3"></i>Buying on BSTM</h2>
     <div class="space-y-2">
       <div class="faq-item border rounded-xl overflow-hidden">
         <button class="w-full flex justify-between items-center p-5 text-left font-semibold text-gray-800 hover:bg-gray-50" onclick="toggleFaq(this)">

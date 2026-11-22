@@ -12,15 +12,14 @@
   <link href="css/bstm-theme.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
   <style>
-    @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap");
-    * { font-family:"Inter",sans-serif; box-sizing:border-box; }
+    * { box-sizing:border-box; }
   </style>
 </head>
-<body style="background:linear-gradient(135deg,#00708E 0%,#0A87A3 100%);min-height:100vh;display:flex;flex-direction:column;">
+<body style="background:var(--bstm-grad);min-height:100vh;display:flex;flex-direction:column;">
 
 <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:40px 20px;">
   <div style="background:#fff;border-radius:28px;box-shadow:0 24px 80px rgba(0,0,0,0.2);max-width:440px;width:100%;overflow:hidden;">
-    <div style="background:linear-gradient(135deg,#00708E,#0A87A3);padding:40px 32px;text-align:center;">
+    <div style="background:var(--bstm-grad);padding:40px 32px;text-align:center;">
       <div style="width:64px;height:64px;background:rgba(255,255,255,0.2);border-radius:18px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;border:2px solid rgba(255,255,255,0.3);">
         <span style="font-size:28px;font-weight:900;color:#fff;">B</span>
       </div>
@@ -37,7 +36,7 @@
           style="width:100%;padding:14px 16px;border:2px solid #D7E3E8;border-radius:14px;font-size:15px;color:#122128;margin-bottom:20px;transition:border 0.2s;outline:none;"
           onfocus="this.style.borderColor='#00708E'" onblur="this.style.borderColor='#D7E3E8'">
         <button type="submit" id="submit-btn"
-          style="width:100%;padding:16px;background:linear-gradient(135deg,#00708E,#0A87A3);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:800;cursor:pointer;box-shadow:0 6px 20px rgba(0,112,142,0.35);">
+          style="width:100%;padding:16px;background:var(--bstm-grad);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:800;cursor:pointer;box-shadow:0 6px 20px rgba(0,112,142,0.35);">
           ✨ Send Magic Link
         </button>
       </form>

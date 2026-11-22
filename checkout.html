@@ -12,8 +12,7 @@
   <link href="css/bstm-theme.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 <style>
-        .gradient-bg { background: linear-gradient(135deg, #00708E 0%, #0A87A3 100%); }
-        .step-active { background: linear-gradient(135deg, #00708E 0%, #0A87A3 100%); color: white; }
+        .step-active { background: var(--bstm-grad); color: white; }
         .step-inactive { background: #e5e7eb; color: #6b7280; }
         .pay-opt { display:flex; align-items:center; justify-content:space-between; padding:16px; border:2px solid #d1d5db; border-radius:8px; cursor:pointer; }
         .pay-opt:hover { border-color:#68BECF; }
@@ -100,7 +99,7 @@
                     <h2 class="text-2xl font-bold text-gray-800 mb-6">
                         <i class="fas fa-shipping-fast text-brand-600 mr-3"></i>Delivery Method
                     </h2>
-                    <p id="service-delivery-note" class="hidden bg-blue-50 text-blue-700 text-sm rounded-lg p-3 mb-4">
+                    <p id="service-delivery-note" class="hidden bg-brand-50 text-brand-700 text-sm rounded-lg p-3 mb-4">
                         🛠️ One or more items in your cart are services — no delivery is needed for those, the seller will contact you to arrange it. Delivery method below only applies to physical items.
                     </p>
                     <div class="space-y-4">

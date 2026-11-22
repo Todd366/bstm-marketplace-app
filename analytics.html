@@ -12,7 +12,6 @@
   <link href="css/bstm-theme.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <style>
-        .gradient-bg { background: linear-gradient(135deg, #00708E 0%, #0A87A3 100%); }
         .metric-card { transition: all 0.3s ease; }
         .metric-card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
     </style>
@@ -23,7 +22,7 @@
     <div id="auth-wall" style="display:none;min-height:60vh;align-items:center;justify-content:center;padding:40px;flex-direction:column;text-align:center;">
         <div style="font-size:56px;margin-bottom:16px;">🔒</div>
         <p style="color:#6B7280;font-size:15px;margin-bottom:24px;">Please log in to view your analytics.</p>
-        <a href="login.html?redirect=analytics.html" style="background:linear-gradient(135deg,#00708E,#0A87A3);color:#fff;padding:14px 28px;border-radius:14px;font-weight:800;text-decoration:none;">Log In</a>
+        <a href="login.html?redirect=analytics.html" style="background:var(--bstm-grad);color:#fff;padding:14px 28px;border-radius:14px;font-weight:800;text-decoration:none;">Log In</a>
     </div>
 
     <div id="analytics-content" class="max-w-7xl mx-auto px-6 py-8" style="display:none;">
@@ -52,8 +51,8 @@
             </div>
 
             <div class="bg-white rounded-2xl shadow-lg p-6 metric-card">
-                <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
-                    <i class="fas fa-box text-blue-600 text-xl"></i>
+                <div class="w-12 h-12 bg-brand-100 rounded-lg flex items-center justify-center mb-4">
+                    <i class="fas fa-box text-brand-600 text-xl"></i>
                 </div>
                 <h3 class="text-gray-600 text-sm mb-1">Products Listed</h3>
                 <p class="text-3xl font-bold text-gray-800" id="stat-products">—</p>

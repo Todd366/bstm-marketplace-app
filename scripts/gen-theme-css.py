@@ -143,11 +143,13 @@ TOKENS = """
   --bstm-green:#06502F;--bstm-green-logo:#005B32;
   --bstm-bg:#F2F7FA;--bstm-surface:#FFFFFF;--bstm-border:#D7DEE4;
   --bstm-ink:#122128;--bstm-muted:#54656D;
+  --bstm-grad:linear-gradient(135deg,#00708E 0%,#0A87A3 100%);
   --bstm-radius-card:24px;--bstm-radius-btn:16px;
   --bstm-font:Roboto,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
 }
 html{-webkit-text-size-adjust:100%}
-body{font-family:var(--bstm-font);color:var(--bstm-ink)}
+body,button,input,select,textarea{font-family:var(--bstm-font)}
+body{color:var(--bstm-ink)}
 :focus-visible{outline:3px solid var(--bstm-teal-300);outline-offset:2px}
 @media (pointer:coarse){
   input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea,button[type=submit]{min-height:44px}
@@ -156,7 +158,8 @@ body{font-family:var(--bstm-font);color:var(--bstm-ink)}
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
 }
 /* shared pieces matching the CabLink / Activation look */
-.bstm-hero{background:linear-gradient(160deg,#0A5447 0%,#076275 55%,#1F839B 100%);color:#fff}
+.gradient-bg{background:var(--bstm-grad)}
+.bstm-hero{background:var(--bstm-grad);color:#fff}
 .bstm-card{background:var(--bstm-surface);border:1px solid var(--bstm-border);border-radius:var(--bstm-radius-card)}
 .bstm-btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 22px;border-radius:var(--bstm-radius-btn);font-weight:700;background:var(--bstm-teal-700);color:#fff;border:2px solid var(--bstm-teal-700)}
 .bstm-btn:hover{background:var(--bstm-teal-800);border-color:var(--bstm-teal-800)}

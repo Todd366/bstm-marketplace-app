@@ -41,7 +41,7 @@ export const WORKSPACES = {
     label: "Seller",
     icon: "🏪",
     tagline: "Run your room: products, sales and earnings",
-    accent: "#F5B301",
+    accent: "#68BECF",
     home: "seller-dashboard.html",
     menu: [
       { href: "seller-dashboard.html", label: "My Room", icon: "🏪" },
@@ -63,7 +63,7 @@ export const WORKSPACES = {
     label: "Agent",
     icon: "🧭",
     tagline: "Your field-agent desk: the sections you were given",
-    accent: "#E76F51",
+    accent: "#E0F2F6",
     home: "admin-dashboard.html",
     menu: [
       { href: "admin-dashboard.html", label: "Agent Desk", icon: "🧭", roles: ["agent"] },
@@ -76,7 +76,7 @@ export const WORKSPACES = {
     label: "Admin",
     icon: "🛡️",
     tagline: "Oversee payments, people and the platform",
-    accent: "#CBD5E1",
+    accent: "#FFFFFF",
     home: "admin-dashboard.html",
     menu: [
       { href: "admin-dashboard.html", label: "Admin", icon: "🧠", roles: ["admin", "super_admin"] },
@@ -91,7 +91,7 @@ export const WORKSPACES = {
     label: "Government",
     icon: "🏛️",
     tagline: "Monitor the platform",
-    accent: "#94A3B8",
+    accent: "#2FA0B8",
     home: "monitoring-dashboard.html",
     menu: [
       { href: "monitoring-dashboard.html", label: "Monitoring", icon: "📡", roles: ["government"] },
@@ -122,9 +122,9 @@ export const ACCOUNT_MENU = [
 export const PAGE_WORKSPACE = {
   // buyer
   "index.html": "buyer", "marketplace.html": "buyer", "agriculture.html": "buyer", "cablink.html": "buyer",
-  "product-detail.html": "buyer", "room.html": "buyer", "checkout.html": "buyer", "order-tracking.html": "buyer",
+  "product-detail.html": ["buyer", "seller"], "room.html": ["buyer", "seller"], // a seller previewing their own room stays in Seller "checkout.html": "buyer", "order-tracking.html": "buyer",
   "payment-status.html": "buyer", "buyer-dashboard.html": "buyer", "wishlist.html": "buyer",
-  "thb-wallet.html": "buyer", "transactions.html": "buyer", "ecosystem-hub.html": "buyer",
+  "thb-wallet.html": ["buyer", "seller"], "transactions.html": "buyer", "ecosystem-hub.html": "buyer",
   // seller
   "seller-dashboard.html": "seller", "upload-product.html": "seller", "counter.html": "seller",
   "daily-sheet.html": "seller", "earnings.html": "seller", "analytics.html": "seller", "open-room.html": "seller",
@@ -274,5 +274,40 @@ export function renderWorkspaceNav(state, doc = document) {
       if (group) group.querySelector("summary").classList.add("is-active");
     }
   });
+  return true;
+}
+
+// ---- footer: links follow the workspace too (no Seller Dashboard for a buyer, no Login once signed in) ----
+const FOOTER_QUICK = {
+  public: [["index.html", "Home"], ["marketplace.html", "Marketplace"], ["agriculture.html", "Farm"], ["ecosystem-hub.html", "🌐 BSTM Ecosystem"]],
+  buyer: [["index.html", "Home"], ["marketplace.html", "Marketplace"], ["buyer-dashboard.html", "My Orders"], ["thb-wallet.html", "Wallet"], ["ecosystem-hub.html", "🌐 BSTM Ecosystem"]],
+  seller: [["seller-dashboard.html", "My Room"], ["upload-product.html", "Add Product"], ["counter.html", "Counter Sale"], ["earnings.html", "Earnings"]],
+  agent: [["admin-dashboard.html", "Agent Desk"]],
+  admin: [["admin-dashboard.html", "Admin"], ["admin-payments.html", "Payments"], ["monitoring-dashboard.html", "Monitoring"]],
+  government: [["monitoring-dashboard.html", "Monitoring"]],
+};
+
+export function footerLinks(state) {
+  const key = state.session ? state.current : "public";
+  const quick = (FOOTER_QUICK[key] || FOOTER_QUICK.buyer).filter(([href]) => {
+    // links to pages this role cannot use are not offered
+    const role = state.role;
+    if (href === "admin-payments.html") return role === "admin" || role === "super_admin";
+    if (href === "monitoring-dashboard.html" && key === "admin") return role === "admin" || role === "super_admin";
+    return true;
+  });
+  const support = [["help.html", "Help Center"], ["terms.html", "Terms"]];
+  if (!state.session) support.push(["login.html", "Login"]);
+  return { quick, support };
+}
+
+export function renderWorkspaceFooter(state, doc = document) {
+  const q = doc.getElementById("footer-quick-links");
+  const sup = doc.getElementById("footer-support-links");
+  if (!q || !sup) return false;
+  const { quick, support } = footerLinks(state);
+  const a = ([href, label]) => `<a href="${href}" style="display:block;color:#E0F2F6;margin:6px 0;text-decoration:none;">${esc(label)}</a>`;
+  q.innerHTML = quick.map(a).join("");
+  sup.innerHTML = support.map(a).join("");
   return true;
 }

@@ -210,7 +210,7 @@ window.BSTM.ready().then(async function (session) {
     const roleColors = {
       super_admin: "bg-brand-600 text-white",
       admin: "bg-brand-100 text-brand-700",
-      agent: "bg-blue-100 text-blue-700",
+      agent: "bg-brand-100 text-brand-700",
       seller: "bg-green-100 text-green-700",
       buyer: "bg-gray-100 text-gray-600",
     };
@@ -224,7 +224,7 @@ window.BSTM.ready().then(async function (session) {
     } else {
       actions = `
         <button class="make-admin-btn text-xs font-bold px-2 py-1 rounded-lg bg-brand-100 text-brand-700 hover:bg-brand-200" data-id="${u.id}">Make Admin</button>
-        <button class="make-agent-btn text-xs font-bold px-2 py-1 rounded-lg bg-blue-100 text-blue-700 hover:bg-blue-200" data-id="${u.id}">Make Agent</button>`;
+        <button class="make-agent-btn text-xs font-bold px-2 py-1 rounded-lg bg-brand-100 text-brand-700 hover:bg-brand-200" data-id="${u.id}">Make Agent</button>`;
     }
 
     const permBox =
@@ -244,7 +244,7 @@ window.BSTM.ready().then(async function (session) {
           <div class="grid grid-cols-2 gap-1.5 mb-3 text-xs">
             ${ADMIN_PERMISSIONS.map((p) => `<label class="flex items-center gap-1.5"><input type="checkbox" class="agent-perm-cb" value="${p}"> ${escapeHtml(PERMISSION_LABELS[p])}</label>`).join("")}
           </div>
-          <button class="confirm-agent-btn text-xs font-bold px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white" data-id="${u.id}">Confirm</button>
+          <button class="confirm-agent-btn text-xs font-bold px-3 py-1.5 rounded-lg bg-brand-600 hover:bg-brand-700 text-white" data-id="${u.id}">Confirm</button>
         </div>
       </div>`;
   }

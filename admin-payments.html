@@ -13,7 +13,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <style>
         /* This page carries its own styles: css/tailwind.css is a purged build and lacks many utility classes. */
-        .ap-head { background: linear-gradient(135deg, #00708E 0%, #0A87A3 100%); color: #fff; padding: 18px 20px; }
+        .ap-head { background: var(--bstm-grad); color: #fff; padding: 18px 20px; }
         .ap-head-in { max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
         .ap-head h1 { font-size: 22px; font-weight: 800; margin: 0; }
         .ap-head p { font-size: 13px; opacity: .8; margin: 2px 0 0; }
@@ -27,18 +27,18 @@
         .ap-banner { border-radius: 12px; padding: 12px 14px; font-size: 14px; margin-bottom: 14px; }
         .ap-banner.bad { background: #fef2f2; border: 1px solid #fca5a5; color: #991b1b; }
         .ap-banner.ok { background: #f0fdf4; border: 1px solid #86efac; color: #166534; }
-        .ap-banner.info { background: #eff6ff; border: 1px solid #93c5fd; color: #1e40af; }
+        .ap-banner.info { background: #EAF5F8; border: 1px solid #68BECF; color: #064A5E; }
         .ap-card { border: 2px solid #f3f4f6; border-radius: 14px; padding: 14px 16px; margin-bottom: 12px; }
-        .ap-card.review { border-color: #fdba74; background: #fff7ed; }
+        .ap-card.review { border-color: #FCD34D; background: #FFFBEB; }
         .ap-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap; }
         .ap-title { font-size: 16px; font-weight: 800; color: #1f2937; }
         .ap-meta { font-size: 13px; color: #4b5563; margin-top: 2px; word-break: break-word; }
         .ap-amount { font-size: 20px; font-weight: 900; color: #0A87A3; }
         .ap-pill { display: inline-block; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 999px; background: #e5e7eb; color: #374151; vertical-align: middle; }
-        .ap-pill.live, .ap-pill.on { background: #dcfce7; color: #166534; } .ap-pill.sandbox { background: #dbeafe; color: #1e40af; }
-        .ap-pill.off { background: #e5e7eb; color: #374151; } .ap-pill.warn, .ap-pill.review { background: #ffedd5; color: #9a3412; }
+        .ap-pill.live, .ap-pill.on { background: #dcfce7; color: #166534; } .ap-pill.sandbox { background: #E0F2F6; color: #064A5E; }
+        .ap-pill.off { background: #e5e7eb; color: #374151; } .ap-pill.warn, .ap-pill.review { background: #FEF3C7; color: #92400E; }
         .ap-pill.bad { background: #fee2e2; color: #991b1b; } .ap-pill.wait { background: #fef3c7; color: #92400e; }
-        .ap-btn { background: linear-gradient(135deg, #00708E 0%, #0A87A3 100%); color: #fff; font-weight: 700; font-size: 13px; padding: 9px 16px; border-radius: 10px; border: 0; cursor: pointer; }
+        .ap-btn { background: var(--bstm-grad); color: #fff; font-weight: 700; font-size: 13px; padding: 9px 16px; border-radius: 10px; border: 0; cursor: pointer; }
         .ap-btn:disabled { opacity: .55; cursor: not-allowed; }
         .ap-btn.ok { background: #16a34a; } .ap-btn.bad { background: #dc2626; } .ap-btn.alt { background: #fff; color: #005A74; border: 2px solid #B6E0EA; }
         .ap-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }

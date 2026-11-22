@@ -11,8 +11,7 @@
   <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32.png">
   <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
   <style>
-    @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap");
-    * { font-family:"Inter",sans-serif; box-sizing:border-box; }
+    * { box-sizing:border-box; }
     html,body { overflow-x:hidden; max-width:100vw; background:#F2F7FA; }
     .stat-card { background:#fff; border-radius:20px; padding:24px; border:1.5px solid #F3F4F6; }
     .action-btn { display:block;background:#fff;border:1.5px solid #D7E3E8;border-radius:16px;padding:20px;text-align:center;cursor:pointer;transition:all 0.2s;text-decoration:none; }
@@ -27,13 +26,13 @@
   <div style="font-size:56px;margin-bottom:16px;">🔒</div>
   <h2 style="font-size:24px;font-weight:900;color:#122128;margin-bottom:8px;">Login Required</h2>
   <p style="color:#9CA3AF;margin-bottom:24px;">You need to login to access seller features</p>
-  <a href="login.html" style="background:linear-gradient(135deg,#00708E,#0A87A3);color:#fff;padding:14px 32px;border-radius:14px;font-weight:800;text-decoration:none;">Login →</a>
+  <a href="login.html" style="background:var(--bstm-grad);color:#fff;padding:14px 32px;border-radius:14px;font-weight:800;text-decoration:none;">Login →</a>
 </div>
 
 <div id="seller-content" style="display:none;max-width:1100px;margin:0 auto;padding:32px 20px 60px;">
 
   <!-- Header -->
-  <div style="background:linear-gradient(135deg,#059669,#34D399);border-radius:24px;padding:32px;color:#fff;margin-bottom:28px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;">
+  <div style="background:var(--bstm-grad);border-radius:24px;padding:32px;color:#fff;margin-bottom:28px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;">
     <div>
       <p style="color:rgba(255,255,255,0.7);font-size:13px;font-weight:600;margin:0 0 4px;letter-spacing:0.5px;">SELLER DASHBOARD</p>
       <h1 style="font-size:28px;font-weight:900;margin:0 0 4px;">Hello, <span id="seller-name">...</span> 🛒</h1>
@@ -47,7 +46,7 @@
     <div style="font-size:48px;margin-bottom:12px;">🏪</div>
     <h2 style="font-size:22px;font-weight:900;color:#122128;margin-bottom:8px;">Open Your Room in the BSTM Mall</h2>
     <p style="color:#9CA3AF;font-size:14px;margin-bottom:24px;max-width:400px;margin-left:auto;margin-right:auto;">Get your own branded storefront and start selling to thousands of Botswana shoppers. Every sale earns you THB rewards.</p>
-    <a href="open-room.html" style="display:inline-block;background:linear-gradient(135deg,#00708E,#0A87A3);color:#fff;padding:14px 32px;border-radius:14px;font-weight:800;text-decoration:none;box-shadow:0 6px 20px rgba(0,112,142,0.35);">+ Open My Room</a>
+    <a href="open-room.html" style="display:inline-block;background:var(--bstm-grad);color:#fff;padding:14px 32px;border-radius:14px;font-weight:800;text-decoration:none;box-shadow:0 6px 20px rgba(0,112,142,0.35);">+ Open My Room</a>
   </div>
 
   <!-- My Room (shown instead, once opened) -->
@@ -63,7 +62,7 @@
   </div>
 
   <!-- Stats -->
-  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px;margin-bottom:28px;">
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:16px;margin-bottom:28px;">
     <div class="stat-card">
       <div style="font-size:28px;margin-bottom:8px;">💰</div>
       <div style="font-size:26px;font-weight:900;color:#122128;" id="stat-revenue">P0.00</div>
@@ -86,6 +85,12 @@
     </div>
   </div>
 
+  <!-- Orders To Fulfill (first: the daily job) -->
+  <h2 id="orders-to-fulfill" style="font-size:18px;font-weight:900;color:#122128;margin:0 0 16px;scroll-margin-top:80px;">Orders To Fulfill</h2>
+  <div id="seller-orders-list" style="margin-bottom:28px;">
+    <p style="color:#9CA3AF;font-size:14px;">Loading orders…</p>
+  </div>
+
   <!-- My Products -->
   <div style="display:flex;justify-content:space-between;align-items:center;margin:28px 0 16px;">
     <h2 style="font-size:18px;font-weight:900;color:#122128;margin:0;">My Products</h2>
@@ -95,6 +100,24 @@
     <p style="color:#9CA3AF;font-size:14px;">Loading your products…</p>
   </div>
 
+  <!-- Seller Tools -->
+  <h2 style="font-size:18px;font-weight:900;color:#122128;margin:0 0 16px;">Seller Tools</h2>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;">
+    <a href="upload-product.html" class="action-btn"><div style="font-size:28px;margin-bottom:8px;">📤</div><div style="font-size:13px;font-weight:700;color:#122128;">Upload Product</div></a>
+    <a href="#orders-to-fulfill" class="action-btn"><div style="font-size:28px;margin-bottom:8px;">📦</div><div style="font-size:13px;font-weight:700;color:#122128;">Orders To Fulfill</div></a>
+    <a href="analytics.html" class="action-btn"><div style="font-size:28px;margin-bottom:8px;">📊</div><div style="font-size:13px;font-weight:700;color:#122128;">Analytics</div></a>
+    <a href="messages.html" class="action-btn"><div style="font-size:28px;margin-bottom:8px;">💬</div><div style="font-size:13px;font-weight:700;color:#122128;">Messages</div></a>
+    <a href="kyc-verification.html" class="action-btn"><div style="font-size:28px;margin-bottom:8px;">✅</div><div style="font-size:13px;font-weight:700;color:#122128;">KYC Verify</div></a>
+    <a href="thb-wallet.html" class="action-btn"><div style="font-size:28px;margin-bottom:8px;">💰</div><div style="font-size:13px;font-weight:700;color:#122128;">Withdraw THB</div></a>
+  </div>
+</div>
+
+<div id="bstm-footer"></div>
+<script src="components/smart-loader.js"></script>
+<script type="module" src="js/app.js?v=1792108428"></script>
+
+<script type="module" src="js/pages/seller-dashboard.js?v=1792108428"></script>
+  <!-- Room setup: staff and business info (rarely changed, so last) -->
   <!-- Room Staff -->
   <div id="room-staff-section">
   <h2 style="font-size:18px;font-weight:900;color:#122128;margin:0 0 16px;">Room Staff</h2>
@@ -147,29 +170,6 @@
   </div>
   </div>
 
-  <!-- Orders To Fulfill -->
-  <h2 style="font-size:18px;font-weight:900;color:#122128;margin:0 0 16px;">Orders To Fulfill</h2>
-  <div id="seller-orders-list" style="margin-bottom:28px;">
-    <p style="color:#9CA3AF;font-size:14px;">Loading orders…</p>
-  </div>
-
-  <!-- Quick Actions -->
-  <h2 style="font-size:18px;font-weight:900;color:#122128;margin:0 0 16px;">Seller Tools</h2>
-  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;">
-    <a href="upload-product.html" class="action-btn"><div style="font-size:28px;margin-bottom:8px;">📤</div><div style="font-size:13px;font-weight:700;color:#122128;">Upload Product</div></a>
-    <a href="order-tracking.html" class="action-btn"><div style="font-size:28px;margin-bottom:8px;">📦</div><div style="font-size:13px;font-weight:700;color:#122128;">Orders</div></a>
-    <a href="analytics.html" class="action-btn"><div style="font-size:28px;margin-bottom:8px;">📊</div><div style="font-size:13px;font-weight:700;color:#122128;">Analytics</div></a>
-    <a href="messages.html" class="action-btn"><div style="font-size:28px;margin-bottom:8px;">💬</div><div style="font-size:13px;font-weight:700;color:#122128;">Messages</div></a>
-    <a href="kyc-verification.html" class="action-btn"><div style="font-size:28px;margin-bottom:8px;">✅</div><div style="font-size:13px;font-weight:700;color:#122128;">KYC Verify</div></a>
-    <a href="thb-wallet.html" class="action-btn"><div style="font-size:28px;margin-bottom:8px;">💰</div><div style="font-size:13px;font-weight:700;color:#122128;">Withdraw THB</div></a>
-  </div>
-</div>
-
-<div id="bstm-footer"></div>
-<script src="components/smart-loader.js"></script>
-<script type="module" src="js/app.js?v=1792108428"></script>
-
-<script type="module" src="js/pages/seller-dashboard.js?v=1792108428"></script>
   <!-- Edit Product Modal -->
   <div id="edit-product-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:50;align-items:center;justify-content:center;padding:20px;">
     <div style="background:#fff;border-radius:20px;padding:24px;max-width:420px;width:100%;max-height:90vh;overflow-y:auto;">

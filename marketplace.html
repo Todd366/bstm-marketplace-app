@@ -12,8 +12,7 @@
   <link href="css/bstm-theme.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
   <style>
-    @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap");
-    *{font-family:"Inter",sans-serif;box-sizing:border-box;}
+    * { box-sizing:border-box; }
     @keyframes slideUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
     @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
     .room-card{animation:slideUp 0.4s ease both;transition:all 0.3s cubic-bezier(0.34,1.56,0.64,1);cursor:pointer;}
@@ -29,7 +28,7 @@
 <div id="bstm-nav"></div>
 
 <!-- HERO -->
-<div style="background:linear-gradient(135deg,#00708E,#0A87A3);padding:48px 24px 64px;position:relative;overflow:hidden;">
+<div style="background:var(--bstm-grad);padding:48px 24px 64px;position:relative;overflow:hidden;">
   <div style="position:absolute;inset:0;opacity:0.08;"><svg width="100%" height="100%"><defs><pattern id="p" width="50" height="50" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1.5" fill="#fff"/></pattern></defs><rect width="100%" height="100%" fill="url(#p)"/></svg></div>
   <div style="position:relative;max-width:700px;margin:0 auto;text-align:center;">
     <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.25);padding:6px 16px;border-radius:50px;margin-bottom:16px;">
@@ -66,7 +65,7 @@
 <div style="max-width:1280px;margin:0 auto;padding:32px 20px 60px;">
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;">
     <h2 style="font-size:22px;font-weight:900;color:#122128;">Mall Directory</h2>
-    <a href="seller-dashboard.html" style="background:linear-gradient(135deg,#00708E,#0A87A3);color:#fff;padding:10px 20px;border-radius:12px;font-weight:700;font-size:13px;text-decoration:none;box-shadow:0 4px 12px rgba(0,112,142,0.3);">+ Open Your Room</a>
+    <a href="seller-dashboard.html" style="background:var(--bstm-grad);color:#fff;padding:10px 20px;border-radius:12px;font-weight:700;font-size:13px;text-decoration:none;box-shadow:0 4px 12px rgba(0,112,142,0.3);">+ Open Your Room</a>
   </div>
   <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:20px;" id="rooms-grid"></div>
   <div id="no-results" style="display:none;text-align:center;padding:80px 20px;color:#B6E0EA;">
@@ -81,7 +80,7 @@
   <h2 style="color:#fff;font-size:28px;font-weight:900;margin-bottom:8px;">Own a Business in Botswana?</h2>
   <p style="color:#68BECF;margin-bottom:28px;font-size:15px;">Open your room. Sell to thousands. Earn THB on every transaction.</p>
   <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
-    <a href="seller-dashboard.html" style="background:linear-gradient(135deg,#00708E,#0A87A3);color:#fff;padding:14px 32px;border-radius:14px;font-weight:800;text-decoration:none;box-shadow:0 6px 20px rgba(0,112,142,0.4);">Open My Room →</a>
+    <a href="seller-dashboard.html" style="background:var(--bstm-grad);color:#fff;padding:14px 32px;border-radius:14px;font-weight:800;text-decoration:none;box-shadow:0 6px 20px rgba(0,112,142,0.4);">Open My Room →</a>
     <a href="upload-product.html" style="background:rgba(255,255,255,0.1);color:#fff;border:1px solid rgba(255,255,255,0.25);padding:14px 32px;border-radius:14px;font-weight:700;text-decoration:none;">List a Product</a>
   </div>
 </div>

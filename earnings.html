@@ -11,8 +11,7 @@
   <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32.png">
   <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
   <style>
-    @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap");
-    *{font-family:'Inter',sans-serif;box-sizing:border-box;}
+    * { box-sizing:border-box; }
     html,body{overflow-x:hidden;max-width:100vw;background:#F2F7FA;}
   </style>
 </head>
@@ -28,12 +27,12 @@
   <div id="auth-wall" style="display:none;text-align:center;padding:80px 20px;">
     <div style="font-size:56px;margin-bottom:16px;">🔒</div>
     <h2 style="font-size:22px;font-weight:900;color:#122128;margin-bottom:8px;">Login Required</h2>
-    <a href="login.html" style="background:linear-gradient(135deg,#00708E,#0A87A3);color:#fff;padding:14px 32px;border-radius:14px;font-weight:800;text-decoration:none;">Login →</a>
+    <a href="login.html" style="background:var(--bstm-grad);color:#fff;padding:14px 32px;border-radius:14px;font-weight:800;text-decoration:none;">Login →</a>
   </div>
 
   <div id="earnings-content" style="display:none;">
     <!-- Earnings summary -->
-    <div style="background:linear-gradient(135deg,#059669,#34D399);border-radius:24px;padding:28px;color:#fff;margin-bottom:20px;">
+    <div style="background:var(--bstm-grad);border-radius:24px;padding:28px;color:#fff;margin-bottom:20px;">
       <div style="font-size:13px;opacity:0.8;margin-bottom:8px;">Total Earnings</div>
       <div style="font-size:40px;font-weight:900;margin-bottom:4px;">P<span id="total-earnings">0.00</span></div>
       <div style="font-size:13px;opacity:0.75;">Lifetime seller revenue (after 5% commission)</div>
@@ -59,14 +58,14 @@
       <div style="display:flex;gap:12px;flex-wrap:wrap;">
         <a href="thb-wallet.html" style="background:#FEF9C3;color:#92400E;padding:12px 20px;border-radius:12px;font-weight:700;text-decoration:none;font-size:14px;">💰 View THB Wallet</a>
         <a href="upload-product.html" style="background:#F0FDF4;color:#166534;padding:12px 20px;border-radius:12px;font-weight:700;text-decoration:none;font-size:14px;">📤 List New Product</a>
-        <a href="analytics.html" style="background:#EFF6FF;color:#1D4ED8;padding:12px 20px;border-radius:12px;font-weight:700;text-decoration:none;font-size:14px;">📊 Analytics</a>
+        <a href="analytics.html" style="background:#EAF5F8;color:#005A74;padding:12px 20px;border-radius:12px;font-weight:700;text-decoration:none;font-size:14px;">📊 Analytics</a>
       </div>
     </div>
 
     <div style="background:#EAF5F8;border-radius:16px;padding:20px;text-align:center;">
       <p style="color:#00708E;font-size:14px;font-weight:600;margin-bottom:4px;">Withdraw your earnings</p>
       <p style="color:#9CA3AF;font-size:13px;margin-bottom:16px;">Convert your balance to BWP and withdraw to your bank account</p>
-      <a href="thb-wallet.html" style="background:linear-gradient(135deg,#00708E,#0A87A3);color:#fff;padding:12px 28px;border-radius:12px;font-weight:800;text-decoration:none;">Withdraw Funds →</a>
+      <a href="thb-wallet.html" style="background:var(--bstm-grad);color:#fff;padding:12px 28px;border-radius:12px;font-weight:800;text-decoration:none;">Withdraw Funds →</a>
     </div>
   </div>
 </div>

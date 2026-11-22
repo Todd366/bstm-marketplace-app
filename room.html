@@ -15,10 +15,12 @@
 <body class="bg-gray-50">
     <div id="bstm-nav"></div>
 
-    <div id="room-not-found" class="hidden" style="min-height:60vh;display:flex;align-items:center;justify-content:center;padding:40px;flex-direction:column;text-align:center;">
-        <div style="font-size:56px;margin-bottom:16px;">🚪</div>
-        <p style="color:#6B7280;font-size:15px;margin-bottom:24px;">This room doesn't exist or has closed.</p>
-        <a href="marketplace.html" style="background:linear-gradient(135deg,#00708E,#0A87A3);color:#fff;padding:14px 28px;border-radius:14px;font-weight:800;text-decoration:none;">Browse the Mall</a>
+    <div id="room-not-found" class="hidden">
+        <div style="min-height:60vh;display:flex;align-items:center;justify-content:center;padding:40px;flex-direction:column;text-align:center;">
+            <div style="font-size:56px;margin-bottom:16px;">🚪</div>
+            <p style="color:var(--bstm-muted);font-size:15px;margin-bottom:24px;">This room doesn't exist or has closed.</p>
+            <a href="marketplace.html" style="background:var(--bstm-grad);color:#fff;padding:14px 28px;border-radius:14px;font-weight:800;text-decoration:none;">Browse the Mall</a>
+        </div>
     </div>
 
     <div id="room-content" class="hidden">
@@ -40,7 +42,7 @@
 
         <div class="max-w-6xl mx-auto px-6 py-10">
             <div id="room-owner-actions" class="hidden mb-6">
-                <a href="upload-product.html" class="inline-block gradient-bg text-white px-6 py-3 rounded-xl font-bold" style="background:linear-gradient(135deg,#00708E,#0A87A3);">
+                <a href="upload-product.html" class="inline-block gradient-bg text-white px-6 py-3 rounded-xl font-bold" style="background:var(--bstm-grad);">
                     + Add a Product to This Room
                 </a>
             </div>

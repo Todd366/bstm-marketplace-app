@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       '<div style="text-align:center;padding:80px 20px;">' +
       '<div style="font-size:56px;margin-bottom:16px;">😕</div>' +
       '<p style="color:#9CA3AF;font-size:15px;margin-bottom:24px;">Product not found.</p>' +
-      '<a href="marketplace.html" style="background:linear-gradient(135deg,#00708E,#0A87A3);' +
+      '<a href="marketplace.html" style="background:var(--bstm-grad);' +
       'color:#fff;padding:14px 28px;border-radius:14px;font-weight:800;text-decoration:none;">Browse Mall →</a></div>';
     return;
   }
@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       '<div style="text-align:center;padding:80px 20px;">' +
       '<div style="font-size:56px;margin-bottom:16px;">🚫</div>' +
       '<p style="color:#9CA3AF;font-size:15px;margin-bottom:24px;">This product is no longer available.</p>' +
-      '<a href="marketplace.html" style="background:linear-gradient(135deg,#00708E,#0A87A3);' +
+      '<a href="marketplace.html" style="background:var(--bstm-grad);' +
       'color:#fff;padding:14px 28px;border-radius:14px;font-weight:800;text-decoration:none;">Browse Mall →</a></div>';
     return;
   }

@@ -39,8 +39,8 @@ async function checkHealth() {
 
   const log = document.getElementById("errorLog");
   const entries = [];
-  if (!dbHealthy) entries.push(`<p class="text-red-400 text-sm">⚠ Database query failed: ${error.message}</p>`);
-  entries.push('<p class="text-yellow-400 text-sm">⚠ Paystack not configured — payments are disabled</p>');
+  if (!dbHealthy) entries.push(`<p class="text-red-700 text-sm">⚠ Database query failed: ${error.message}</p>`);
+  entries.push('<p class="text-yellow-800 text-sm">⚠ Paystack not configured — payments are disabled</p>');
   log.innerHTML = entries.join("");
 
   const lastUpdate = document.getElementById("lastUpdate");
@@ -60,7 +60,7 @@ window.BSTM.ready().then(async function (session) {
   const { data: profile } = await getProfile(session.user.id);
   if (!profile || !["admin", "super_admin", "government"].includes(profile.role)) {
     alert("This dashboard is restricted to BSTM staff.");
-    window.location.href = "buyer-dashboard.html";
+    window.location.href = (await window.BSTM.workspaceHome().catch(() => null)) || "buyer-dashboard.html";
     return;
   }
 

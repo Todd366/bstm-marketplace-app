@@ -36,17 +36,17 @@ function renderEntry(entry) {
       timeStyle: "short",
     });
     return `
-    <div class="flex items-center justify-between p-4 rounded-xl" style="background:${isCredit ? "#052e1a" : "#450a0a"};">
+    <div class="flex items-center justify-between p-4 rounded-xl" style="background:${isCredit ? "#F0FDF4" : "#FEF2F2"};">
       <div class="flex items-center space-x-4">
         <div class="w-12 h-12 rounded-full flex items-center justify-center" style="background:${isCredit ? "#16A34A" : "#DC2626"};">
           <i class="fas ${isCredit ? "fa-arrow-down" : "fa-arrow-up"} text-white"></i>
         </div>
         <div>
-          <p class="font-semibold" style="color:#fff;">${labelForEntry(entry)}</p>
-          <p class="text-xs" style="color:#6B7280;">${date}</p>
+          <p class="font-semibold" style="color:var(--bstm-ink);">${labelForEntry(entry)}</p>
+          <p class="text-xs" style="color:var(--bstm-muted);">${date}</p>
         </div>
       </div>
-      <span style="color:${isCredit ? "#4ADE80" : "#F87171"};" class="font-bold text-xl">
+      <span style="color:${isCredit ? "#166534" : "#B91C1C"};" class="font-bold text-xl">
         ${isCredit ? "+" : "-"}${entry.amount_thb} THB
       </span>
     </div>`;
@@ -91,7 +91,7 @@ async function loadTransactions() {
   if (earnEl) {
     earnEl.innerHTML = credits.length
       ? credits.map((entry) => renderEntry(entry)).join("")
-      : '<p class="text-center py-12" style="color:#6B7280;">No rewards earned yet. Rewards appear here after your orders are delivered.</p>';
+      : '<p class="text-center py-12" style="color:var(--bstm-muted);">No rewards earned yet. Rewards appear here after your orders are delivered.</p>';
   }
 
   const listEl = el("transactionsList");
@@ -99,7 +99,7 @@ async function loadTransactions() {
 
   if (rows.length === 0) {
     listEl.innerHTML =
-      '<p class="text-center py-12" style="color:#6B7280;">No transactions yet. Start earning THB!</p>';
+      '<p class="text-center py-12" style="color:var(--bstm-muted);">No transactions yet. Start earning THB!</p>';
     return;
   }
 

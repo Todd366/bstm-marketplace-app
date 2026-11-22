@@ -13,11 +13,9 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 
     <style>
-        .gradient-bg { background: linear-gradient(135deg, #00708E 0%, #0A87A3 100%); }
-        .thb-gradient { background: linear-gradient(135deg, #ffd700 0%, #ff8c00 100%); }
-        .wallet-card { 
-            background: linear-gradient(135deg, #78350F 0%, #122128 60%, #111827 100%);
-            border: 1px solid #EAB30833;
+        .wallet-card {
+            background: var(--bstm-grad);
+            border: 1px solid rgba(255,255,255,0.2);
             position: relative;
             overflow: hidden;
         }
@@ -31,28 +29,23 @@
             background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
         }
         .crypto-shine {
-            background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.3) 50%, transparent 70%);
-            background-size: 200% 200%;
+            background-image: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.18) 50%, transparent 70%), var(--bstm-grad);
+            background-size: 200% 200%, auto;
             animation: shine 3s infinite;
         }
         @keyframes shine {
-            0% { background-position: -200% 0; }
-            100% { background-position: 200% 0; }
+            0% { background-position: -200% 0, 0 0; }
+            100% { background-position: 200% 0, 0 0; }
         }
-        /* Dark BSTM-X-style theme for the wallet page shell — added
-           alongside the existing gradient/wallet-card styles above, not
-           replacing them. Inline hex values are used throughout below
-           rather than new Tailwind utility classes (slate-900 etc.) since
-           this project's css/tailwind.css is a pre-built static file and
-           unused utility classes were purged from it — new class names
-           would silently render unstyled without a rebuild step. */
-        body.wallet-dark { background: #0B1120; }
-        .wx-card { background: #111827; border: 1px solid #1F2937; border-radius: 20px; }
-        .wx-input { background: #1F2937; border: 1px solid #374151; color: #fff; border-radius: 10px; padding: 12px 16px; width: 100%; }
-        .wx-input::placeholder { color: #6B7280; }
-        .wx-input:focus { outline: none; border-color: #EAB308; }
-        .wx-btn-primary { background: #EAB308; color: #0B1120; font-weight: 800; border-radius: 12px; }
-        .wx-btn-secondary { background: #1F2937; color: #E5E7EB; font-weight: 700; border-radius: 12px; border: 1px solid #374151; }
+        /* Wallet page shell uses the same light BSTM theme as every other page.
+           Inline values reference the theme tokens in css/bstm-theme.css. */
+        body.wallet-dark { background: var(--bstm-bg); }
+        .wx-card { background: var(--bstm-surface); border: 1px solid var(--bstm-border); border-radius: 20px; }
+        .wx-input { background: #fff; border: 1px solid var(--bstm-border); color: var(--bstm-ink); border-radius: 10px; padding: 12px 16px; width: 100%; }
+        .wx-input::placeholder { color: var(--bstm-muted); }
+        .wx-input:focus { outline: none; border-color: var(--bstm-teal-600); }
+        .wx-btn-primary { background: var(--bstm-teal-700); color: #fff; font-weight: 800; border-radius: 12px; }
+        .wx-btn-secondary { background: #fff; color: var(--bstm-teal-700); font-weight: 700; border-radius: 12px; border: 1px solid var(--bstm-teal-200); }
     </style>
 </head>
 <body class="bg-gray-50 wallet-dark">
@@ -66,10 +59,10 @@
         <div class="mb-8">
             <div class="flex items-center justify-between">
                 <div>
-                    <h1 class="text-4xl font-bold mb-2" style="color:#fff;">💰 THoBoCoin Wallet</h1>
-                    <p style="color:#9CA3AF;">Manage your digital currency across the BSTM Ecosystem</p>
+                    <h1 class="text-4xl font-bold mb-2" style="color:var(--bstm-ink);">💰 THoBoCoin Wallet</h1>
+                    <p style="color:var(--bstm-muted);">Manage your digital currency across the BSTM Ecosystem</p>
                 </div>
-                <a href="help.html#thb" class="font-semibold" style="color:#EAB308;">
+                <a href="help.html#thb" class="font-semibold" style="color:var(--bstm-teal-700);">
                     <i class="fas fa-question-circle mr-2"></i>What is THB?
                 </a>
             </div>
@@ -80,20 +73,20 @@
             <div class="relative z-10">
                 <div class="flex items-center justify-between mb-8">
                     <div>
-                        <p class="text-sm text-blue-200 mb-2">BSTM Rewards Balance</p>
+                        <p class="text-sm text-brand-200 mb-2">BSTM Rewards Balance</p>
                         <div class="flex items-baseline space-x-3">
                             <h2 class="text-6xl font-bold" id="walletTHBBalance">0.0</h2>
-                            <span class="text-3xl text-yellow-300">THB pts</span>
+                            <span class="text-3xl text-brand-200">THB pts</span>
                         </div>
-                        <p class="text-blue-200 mt-2">
+                        <p class="text-brand-200 mt-2">
                             ≈ P<span id="walletBWPEquivalent">0.00</span> BWP
                         </p>
                     </div>
                     <div class="text-right">
-                        <div class="w-20 h-20 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center mb-2">
+                        <div class="w-20 h-20 rounded-full flex items-center justify-center mb-2" style="background:rgba(255,255,255,0.2);">
                             <i class="fas fa-coins text-4xl text-white"></i>
                         </div>
-                        <p class="text-xs text-blue-200">Internal balance</p>
+                        <p class="text-xs text-brand-200">Internal balance</p>
                     </div>
                 </div>
 
@@ -102,7 +95,7 @@
                 <!-- links your address for identity only — no tokens move -->
                 <!-- through this app. -->
                 <div class="bg-white bg-opacity-10 rounded-xl p-4 backdrop-blur-sm mb-4">
-                    <p class="text-sm text-blue-100">
+                    <p class="text-sm text-brand-100">
                         <i class="fas fa-info-circle mr-2"></i>
                         This is your BSTM Mall rewards balance — separate from the on-chain
                         THoBoCoin token.
@@ -111,11 +104,11 @@
 
                 <div id="wallet-not-connected" class="bg-white bg-opacity-10 rounded-xl p-4 backdrop-blur-sm">
                     <div class="flex items-center justify-between flex-wrap gap-3">
-                        <p class="text-sm text-blue-100">
+                        <p class="text-sm text-brand-100">
                             <i class="fas fa-wallet mr-2"></i>
                             No wallet connected — link your MetaMask for identity only, no tokens move.
                         </p>
-                        <button id="connect-wallet-btn" class="bg-orange-500 hover:bg-orange-600 text-white px-5 py-2 rounded-lg font-bold text-sm whitespace-nowrap">
+                        <button id="connect-wallet-btn" class="bg-white text-brand-700 hover:bg-brand-50 px-5 py-2 rounded-lg font-bold text-sm whitespace-nowrap">
                             Connect MetaMask
                         </button>
                     </div>
@@ -124,15 +117,15 @@
 
                 <div id="wallet-connected" class="hidden bg-white bg-opacity-10 rounded-xl p-4 backdrop-blur-sm">
                     <div class="flex items-center justify-between flex-wrap gap-3">
-                        <p class="text-sm text-blue-100 font-mono" id="connected-wallet-address">
+                        <p class="text-sm text-brand-100 font-mono" id="connected-wallet-address">
                             <i class="fas fa-check-circle text-green-400 mr-2"></i>
                         </p>
-                        <button id="disconnect-wallet-btn" class="text-blue-200 hover:text-white text-xs underline">
+                        <button id="disconnect-wallet-btn" class="text-brand-200 hover:text-white text-xs underline">
                             Disconnect
                         </button>
                     </div>
                     <div class="mt-3 pt-3" style="border-top:1px solid rgba(255,255,255,0.15);">
-                        <p class="text-xs" style="color:#FCD34D;">
+                        <p class="text-xs" style="color:var(--bstm-teal-200);">
                             <i class="fas fa-link mr-1"></i>Real on-chain THoBoCoin (BSC Testnet, same contract as BSTM-X)
                         </p>
                         <p class="text-2xl font-bold" style="color:#fff;" id="onchain-thb-balance">Loading…</p>
@@ -144,27 +137,27 @@
         <!-- Quick Actions -->
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
             <button onclick="openEarnModal()" class="wx-card p-6 text-center transition-all" style="cursor:pointer;">
-                <div class="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-3" style="background:#052e1a;">
-                    <i class="fas fa-plus text-2xl" style="color:#22C55E;"></i>
+                <div class="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-3" style="background:var(--bstm-teal-100);">
+                    <i class="fas fa-plus text-2xl" style="color:var(--bstm-green-logo);"></i>
                 </div>
-                <p class="font-bold" style="color:#fff;">Earn THB</p>
-                <p class="text-sm" style="color:#9CA3AF;">Shop &amp; earn</p>
+                <p class="font-bold" style="color:var(--bstm-ink);">Earn THB</p>
+                <p class="text-sm" style="color:var(--bstm-muted);">Shop &amp; earn</p>
             </button>
 
             <button onclick="openSendModal()" class="wx-card p-6 text-center transition-all" style="cursor:pointer;">
-                <div class="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-3" style="background:#122128;">
-                    <i class="fas fa-paper-plane text-2xl" style="color:#68BECF;"></i>
+                <div class="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-3" style="background:var(--bstm-teal-100);">
+                    <i class="fas fa-paper-plane text-2xl" style="color:var(--bstm-teal-700);"></i>
                 </div>
-                <p class="font-bold" style="color:#fff;">Send THB</p>
-                <p class="text-sm" style="color:#9CA3AF;">To friends</p>
+                <p class="font-bold" style="color:var(--bstm-ink);">Send THB</p>
+                <p class="text-sm" style="color:var(--bstm-muted);">To friends</p>
             </button>
 
             <button onclick="openWithdrawModal()" class="wx-card p-6 text-center transition-all" style="cursor:pointer;">
-                <div class="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-3" style="background:#3B0764;">
-                    <i class="fas fa-download text-2xl" style="color:#C084FC;"></i>
+                <div class="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-3" style="background:var(--bstm-teal-100);">
+                    <i class="fas fa-download text-2xl" style="color:var(--bstm-teal-800);"></i>
                 </div>
-                <p class="font-bold" style="color:#fff;">Withdraw</p>
-                <p class="text-sm" style="color:#9CA3AF;">To bank</p>
+                <p class="font-bold" style="color:var(--bstm-ink);">Withdraw</p>
+                <p class="text-sm" style="color:var(--bstm-muted);">To bank</p>
             </button>
         </div>
 
@@ -175,10 +168,10 @@
                     <div class="w-12 h-12 rounded-full flex items-center justify-center" style="background:#16A34A;">
                         <i class="fas fa-arrow-down text-white text-xl"></i>
                     </div>
-                    <span class="font-bold text-sm" style="color:#4ADE80;">This Month</span>
+                    <span class="font-bold text-sm" style="color:#166534;">This Month</span>
                 </div>
-                <p class="text-3xl font-bold" style="color:#fff;" id="monthlyEarned">0.0</p>
-                <p class="text-sm" style="color:#9CA3AF;">THB Earned</p>
+                <p class="text-3xl font-bold" style="color:var(--bstm-ink);" id="monthlyEarned">0.0</p>
+                <p class="text-sm" style="color:var(--bstm-muted);">THB Earned</p>
             </div>
 
             <div class="wx-card p-6">
@@ -186,32 +179,32 @@
                     <div class="w-12 h-12 rounded-full flex items-center justify-center" style="background:#DC2626;">
                         <i class="fas fa-arrow-up text-white text-xl"></i>
                     </div>
-                    <span class="font-bold text-sm" style="color:#F87171;">This Month</span>
+                    <span class="font-bold text-sm" style="color:#B91C1C;">This Month</span>
                 </div>
-                <p class="text-3xl font-bold" style="color:#fff;" id="monthlySpent">0.0</p>
-                <p class="text-sm" style="color:#9CA3AF;">THB Spent</p>
+                <p class="text-3xl font-bold" style="color:var(--bstm-ink);" id="monthlySpent">0.0</p>
+                <p class="text-sm" style="color:var(--bstm-muted);">THB Spent</p>
             </div>
 
             <div class="wx-card p-6">
                 <div class="flex items-center justify-between mb-4">
-                    <div class="w-12 h-12 rounded-full flex items-center justify-center" style="background:#EAB308;">
+                    <div class="w-12 h-12 rounded-full flex items-center justify-center" style="background:var(--bstm-teal-600);">
                         <i class="fas fa-chart-line text-white text-xl"></i>
                     </div>
-                    <span class="font-bold text-sm" style="color:#EAB308;">Lifetime</span>
+                    <span class="font-bold text-sm" style="color:var(--bstm-teal-700);">Lifetime</span>
                 </div>
-                <p class="text-3xl font-bold" style="color:#fff;" id="lifetimeEarned">0.0</p>
-                <p class="text-sm" style="color:#9CA3AF;">Total Earned</p>
+                <p class="text-3xl font-bold" style="color:var(--bstm-ink);" id="lifetimeEarned">0.0</p>
+                <p class="text-sm" style="color:var(--bstm-muted);">Total Earned</p>
             </div>
         </div>
 
         <!-- Tabs: Transactions / Earn History -->
         <div class="wx-card overflow-hidden">
-            <div style="border-bottom:1px solid #1F2937;">
+            <div style="border-bottom:1px solid var(--bstm-border);">
                 <div class="flex">
-                    <button onclick="switchWalletTab('transactions')" class="wallet-tab active flex-1 py-4 font-bold" style="color:#EAB308;border-bottom:2px solid #EAB308;">
+                    <button onclick="switchWalletTab('transactions')" class="wallet-tab active flex-1 py-4 font-bold" style="color:var(--bstm-teal-700);border-bottom:2px solid var(--bstm-teal-600);">
                         Transactions
                     </button>
-                    <button onclick="switchWalletTab('earn')" class="wallet-tab flex-1 py-4 font-bold" style="color:#9CA3AF;">
+                    <button onclick="switchWalletTab('earn')" class="wallet-tab flex-1 py-4 font-bold" style="color:var(--bstm-muted);">
                         Earn History
                     </button>
                 </div>
@@ -220,14 +213,14 @@
             <!-- Transactions Tab -->
             <div id="transactionsTab" class="p-6">
                 <div class="space-y-4" id="transactionsList">
-                    <p class="text-center py-12" style="color:#6B7280;">No transactions yet. Start earning THB!</p>
+                    <p class="text-center py-12" style="color:var(--bstm-muted);">No transactions yet. Start earning THB!</p>
                 </div>
             </div>
 
             <!-- Earn History Tab -->
             <div id="earnTab" class="p-6 hidden">
                 <div class="space-y-4" id="earnHistoryList">
-                    <p class="text-center py-12" style="color:#6B7280;">No rewards earned yet. Rewards appear here after your orders are delivered.</p>
+                    <p class="text-center py-12" style="color:var(--bstm-muted);">No rewards earned yet. Rewards appear here after your orders are delivered.</p>
                 </div>
             </div>
         </div>
@@ -264,9 +257,9 @@
                     <i class="fas fa-chevron-right text-gray-400"></i>
                 </a>
 
-                <a href="https://cab-link-pwa.vercel.app/" target="_blank" class="flex items-center justify-between p-4 bg-blue-50 rounded-xl hover:bg-blue-100 transition-all">
+                <a href="https://cab-link-pwa.vercel.app/" target="_blank" class="flex items-center justify-between p-4 bg-brand-50 rounded-xl hover:bg-brand-100 transition-all">
                     <div class="flex items-center space-x-4">
-                        <div class="w-14 h-14 bg-blue-500 rounded-full flex items-center justify-center">
+                        <div class="w-14 h-14 bg-brand-500 rounded-full flex items-center justify-center">
                             <i class="fas fa-car text-white text-xl"></i>
                         </div>
                         <div>
@@ -277,9 +270,9 @@
                     <i class="fas fa-chevron-right text-gray-400"></i>
                 </a>
 
-                <a href="agriculture.html" class="flex items-center justify-between p-4 bg-yellow-50 rounded-xl hover:bg-yellow-100 transition-all">
+                <a href="agriculture.html" class="flex items-center justify-between p-4 bg-brand-50 rounded-xl hover:bg-brand-100 transition-all">
                     <div class="flex items-center space-x-4">
-                        <div class="w-14 h-14 bg-yellow-500 rounded-full flex items-center justify-center">
+                        <div class="w-14 h-14 bg-brand-600 rounded-full flex items-center justify-center">
                             <i class="fas fa-leaf text-white text-xl"></i>
                         </div>
                         <div>
@@ -375,12 +368,12 @@
         // Update buttons
         document.querySelectorAll('.wallet-tab').forEach(t => {
             t.classList.remove('active');
-            t.style.color = '#9CA3AF';
+            t.style.color = '#54656D';
             t.style.borderBottom = 'none';
         });
         event.target.classList.add('active');
-        event.target.style.color = '#EAB308';
-        event.target.style.borderBottom = '2px solid #EAB308';
+        event.target.style.color = '#005A74';
+        event.target.style.borderBottom = '2px solid #00708E';
 
         // Show/hide tabs
         document.getElementById('transactionsTab').classList.add('hidden');

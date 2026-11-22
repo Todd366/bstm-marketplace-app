@@ -11,10 +11,10 @@ function renderCard(p, tpl) {
 
   if (tpl.cardStyle === "market") {
     return `
-      <a href="product-detail.html?id=${p.id}" style="display:block;background:#fff;border:2px solid #D9C9A3;border-radius:10px;overflow:hidden;text-decoration:none;">
-        <div style="aspect-ratio:1;background:#F3EEE0;">${img}</div>
+      <a href="product-detail.html?id=${p.id}" style="display:block;background:#fff;border:1px solid var(--bstm-border);border-radius:10px;overflow:hidden;text-decoration:none;">
+        <div style="aspect-ratio:1;background:var(--bstm-teal-50);">${img}</div>
         <div style="padding:10px;font-family:${tpl.font};">
-          <div style="font-weight:700;color:#292524;font-size:13px;">${escapeHtml(p.name)}</div>
+          <div style="font-weight:700;color:var(--bstm-ink);font-size:13px;">${escapeHtml(p.name)}</div>
           <div style="color:${tpl.accent};font-weight:900;margin-top:4px;">P${Number(p.price).toFixed(2)}</div>
         </div>
       </a>`;
@@ -22,10 +22,10 @@ function renderCard(p, tpl) {
 
   if (tpl.cardStyle === "tech") {
     return `
-      <a href="product-detail.html?id=${p.id}" style="display:block;background:#1E293B;border:1px solid #334155;border-radius:8px;overflow:hidden;text-decoration:none;">
-        <div style="aspect-ratio:1;background:#0F172A;">${img}</div>
+      <a href="product-detail.html?id=${p.id}" style="display:block;background:#fff;border:1px solid var(--bstm-border);border-radius:8px;overflow:hidden;text-decoration:none;">
+        <div style="aspect-ratio:1;background:var(--bstm-teal-50);">${img}</div>
         <div style="padding:10px;font-family:${tpl.font};">
-          <div style="font-weight:600;color:#E2E8F0;font-size:12px;">${escapeHtml(p.name)}</div>
+          <div style="font-weight:600;color:var(--bstm-ink);font-size:12px;">${escapeHtml(p.name)}</div>
           <div style="color:${tpl.accent};font-weight:900;margin-top:6px;font-size:14px;">P${Number(p.price).toFixed(2)}</div>
         </div>
       </a>`;
@@ -34,9 +34,9 @@ function renderCard(p, tpl) {
   if (tpl.cardStyle === "boutique") {
     return `
       <a href="product-detail.html?id=${p.id}" style="display:block;text-decoration:none;">
-        <div style="aspect-ratio:3/4;background:#F5E6EC;border-radius:2px;overflow:hidden;">${img}</div>
+        <div style="aspect-ratio:3/4;background:var(--bstm-teal-50);border-radius:2px;overflow:hidden;">${img}</div>
         <div style="padding:12px 4px;font-family:${tpl.font};text-align:center;">
-          <div style="color:#57534E;font-size:13px;letter-spacing:0.5px;">${escapeHtml(p.name)}</div>
+          <div style="color:var(--bstm-muted);font-size:13px;letter-spacing:0.5px;">${escapeHtml(p.name)}</div>
           <div style="color:${tpl.accent};font-weight:700;margin-top:4px;">P${Number(p.price).toFixed(2)}</div>
         </div>
       </a>`;
@@ -44,10 +44,10 @@ function renderCard(p, tpl) {
 
   if (tpl.cardStyle === "showroom") {
     return `
-      <a href="product-detail.html?id=${p.id}" style="display:block;background:#1F2937;border-radius:14px;overflow:hidden;text-decoration:none;">
-        <div style="aspect-ratio:16/9;background:#111827;">${img}</div>
+      <a href="product-detail.html?id=${p.id}" style="display:block;background:#fff;border:1px solid var(--bstm-border);border-radius:14px;overflow:hidden;text-decoration:none;">
+        <div style="aspect-ratio:16/9;background:var(--bstm-teal-50);">${img}</div>
         <div style="padding:16px;">
-          <div style="color:#F3F4F6;font-weight:700;font-size:15px;">${escapeHtml(p.name)}</div>
+          <div style="color:var(--bstm-ink);font-weight:700;font-size:15px;">${escapeHtml(p.name)}</div>
           <div style="color:${tpl.accent};font-weight:900;margin-top:6px;font-size:18px;">P${Number(p.price).toFixed(2)}</div>
         </div>
       </a>`;
@@ -56,9 +56,9 @@ function renderCard(p, tpl) {
   if (tpl.cardStyle === "service-list") {
     return `
       <a href="product-detail.html?id=${p.id}" style="display:flex;align-items:center;gap:16px;background:#fff;border-radius:12px;padding:16px;text-decoration:none;box-shadow:0 1px 4px rgba(0,0,0,0.06);">
-        <div style="width:64px;height:64px;border-radius:10px;overflow:hidden;flex-shrink:0;background:#EFF6FF;">${img}</div>
+        <div style="width:64px;height:64px;border-radius:10px;overflow:hidden;flex-shrink:0;background:var(--bstm-teal-50);">${img}</div>
         <div style="flex:1;">
-          <div style="color:#1F2937;font-weight:700;">${escapeHtml(p.name)}</div>
+          <div style="color:var(--bstm-ink);font-weight:700;">${escapeHtml(p.name)}</div>
         </div>
         <div style="color:${tpl.accent};font-weight:900;">P${Number(p.price).toFixed(2)}</div>
       </a>`;
@@ -67,9 +67,9 @@ function renderCard(p, tpl) {
   // catalog (default / home)
   return `
     <a href="product-detail.html?id=${p.id}" style="display:block;background:#fff;border-radius:14px;overflow:hidden;text-decoration:none;box-shadow:0 1px 6px rgba(0,0,0,0.06);">
-      <div style="aspect-ratio:1;background:#F3F4F6;">${img}</div>
+      <div style="aspect-ratio:1;background:var(--bstm-teal-50);">${img}</div>
       <div style="padding:12px;">
-        <div style="color:#374151;font-weight:700;font-size:13px;">${escapeHtml(p.name)}</div>
+        <div style="color:var(--bstm-ink);font-weight:700;font-size:13px;">${escapeHtml(p.name)}</div>
         <div style="color:${tpl.accent};font-weight:900;margin-top:4px;">P${Number(p.price).toFixed(2)}</div>
       </div>
     </a>`;
@@ -101,7 +101,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   document.title = `${room.name} — BSTM Mall`;
   logEvent("room_view", { roomId: room.id, metadata: { room_name: room.name, category: room.category } });
   document.body.style.background = tpl.bodyBg;
-  if (tpl.dark) document.body.classList.add("dark-room");
 
   document.getElementById("room-content").classList.remove("hidden");
   document.getElementById("room-banner").style.background = tpl.bannerBg;
@@ -126,7 +125,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   if (!products || products.length === 0) {
     grid.className = `grid ${tpl.cardGrid} gap-5`;
-    grid.innerHTML = `<p style="color:${tpl.dark ? "#9CA3AF" : "#9CA3AF"};font-size:14px;grid-column:1/-1;">No products yet.</p>`;
+    grid.innerHTML = `<p style="color:var(--bstm-muted);font-size:14px;grid-column:1/-1;">No products yet.</p>`;
   } else {
     const hasShelves = products.some((p) => p.shelf);
     if (!hasShelves) {
@@ -146,7 +145,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         .map(
           ([shelfName, items]) => `
           <div style="margin-bottom:32px;">
-            <h3 style="font-size:18px;font-weight:800;margin-bottom:12px;color:${tpl.dark ? "#F3F4F6" : "#1F2937"};">${escapeHtml(shelfName)}</h3>
+            <h3 style="font-size:18px;font-weight:800;margin-bottom:12px;color:var(--bstm-ink);">${escapeHtml(shelfName)}</h3>
             <div class="grid ${tpl.cardGrid} gap-5">
               ${items.map((p) => renderCard(p, tpl)).join("")}
             </div>
@@ -159,7 +158,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const heading = document.getElementById("room-products-heading");
   if (heading) {
     heading.textContent = tpl.cardStyle === "service-list" ? "Services Offered" : "Products";
-    heading.style.color = tpl.dark ? "#F3F4F6" : "#1F2937";
+    heading.style.color = "var(--bstm-ink)";
     heading.style.fontFamily = tpl.font;
   }
 

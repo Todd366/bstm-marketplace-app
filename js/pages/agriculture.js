@@ -39,14 +39,14 @@ document.addEventListener("DOMContentLoaded", async function () {
     .map(
       (r) => `
     <a href="room.html?id=${r.id}" style="background:#fff;border-radius:18px;overflow:hidden;
-       border:1.5px solid #A7F3D0;text-decoration:none;display:block;transition:box-shadow 0.2s;">
-      <div style="height:110px;background:${escapeHtml(r.banner_color || "#059669")};
+       border:1px solid var(--bstm-border);text-decoration:none;display:block;transition:box-shadow 0.2s;">
+      <div style="height:110px;background:var(--bstm-grad);
            display:flex;align-items:center;justify-content:center;font-size:40px;">
         ${escapeHtml(r.banner_emoji || "🌾")}
       </div>
       <div style="padding:14px;">
         <div style="font-weight:800;color:#122128;font-size:14px;">${escapeHtml(r.name)}</div>
-        <div style="font-size:12px;color:#6B7280;margin-top:4px;">${escapeHtml(r.description || "")}</div>
+        <div style="font-size:12px;color:var(--bstm-muted);margin-top:4px;">${escapeHtml(r.description || "")}</div>
       </div>
     </a>`
     )
@@ -75,7 +75,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
         <div style="padding:12px;">
           <div style="font-weight:700;color:#122128;font-size:13px;">${escapeHtml(p.name)}</div>
-          <div style="font-weight:900;color:#059669;font-size:15px;margin-top:4px;">P${Number(p.price || 0).toFixed(2)}</div>
+          <div style="font-weight:900;color:#00708E;font-size:15px;margin-top:4px;">P${Number(p.price || 0).toFixed(2)}</div>
           ${p.quantity <= 0 ? '<div style="font-size:11px;color:#DC2626;font-weight:700;margin-top:2px;">Out of stock</div>' : ""}
         </div>
       </a>`

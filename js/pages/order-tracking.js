@@ -103,7 +103,7 @@ function renderOrdersList(orders) {
     .map((o) => {
       const statusColors = {
         pending: "bg-yellow-100 text-yellow-800",
-        confirmed: "bg-blue-100 text-blue-800",
+        confirmed: "bg-brand-100 text-brand-800",
         shipped: "bg-brand-100 text-brand-800",
         delivered: "bg-green-100 text-green-800",
         cancelled: "bg-red-100 text-red-800",
@@ -162,7 +162,7 @@ function setBanner(order) {
   if (order.status === "cancelled") {
     paint("#fef2f2", "#fca5a5", "#dc2626", "fa-times", "Order Cancelled", "This order was cancelled.", false);
   } else if (order.payment_status === "review") {
-    paint("#fff7ed", "#fdba74", "#ea580c", "fa-search", "Payment under review", "Please don't pay again — our team is checking your payment.", false);
+    paint("#FFFBEB", "#FCD34D", "#D97706", "fa-search", "Payment under review", "Please don't pay again — our team is checking your payment.", false);
   } else if (awaitingPayment(order)) {
     const inProgress = order.payment_status === "pending";
     paint(
@@ -220,7 +220,7 @@ function renderPaymentPanel(order) {
 
   if (order.status === "cancelled") {
     if (order.payment_status === "refunded") show("Payment refunded", "This order was cancelled and your payment was refunded.", null, ["#d1d5db", "#f9fafb"]);
-    else if (order.payment_status === "review") show("Payment under review", "This order was cancelled but a payment needs checking. Please don't pay again — our team will contact you.", null, ["#fdba74", "#fff7ed"]);
+    else if (order.payment_status === "review") show("Payment under review", "This order was cancelled but a payment needs checking. Please don't pay again — our team will contact you.", null, ["#FCD34D", "#FFFBEB"]);
     return;
   }
 
@@ -232,10 +232,10 @@ function renderPaymentPanel(order) {
       show("Payment didn't go through", due ? `Your order is still reserved until ${due}. Try again with the same or another method.` : "Try again with the same or another method.", "Try again", ["#fca5a5", "#fef2f2"]);
       break;
     case "pending":
-      show("Payment in progress", "We're waiting for the payment provider or our team to confirm your payment.", "View payment", ["#93c5fd", "#eff6ff"]);
+      show("Payment in progress", "We're waiting for the payment provider or our team to confirm your payment.", "View payment", ["#68BECF", "#EAF5F8"]);
       break;
     case "review":
-      show("Payment under review", "Please don't pay again. Our team is checking your payment and will contact you.", "View payment", ["#fdba74", "#fff7ed"]);
+      show("Payment under review", "Please don't pay again. Our team is checking your payment and will contact you.", "View payment", ["#FCD34D", "#FFFBEB"]);
       break;
     case "refunded":
       show("Payment refunded", "This payment was refunded.", null, ["#d1d5db", "#f9fafb"]);

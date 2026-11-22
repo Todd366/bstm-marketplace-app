@@ -10,7 +10,7 @@ import { escapeHtml } from "../core/sanitize.js";
 
 const STATUS_STYLES = {
   pending: "background:#FEF3C7;color:#92400E;",
-  assigned: "background:#DBEAFE;color:#1E40AF;",
+  assigned: "background:#E0F2F6;color:#064A5E;",
   picked_up: "background:#E0F2F6;color:#00708E;",
   delivered: "background:#D1FAE5;color:#065F46;",
   cancelled: "background:#FEE2E2;color:#991B1B;",

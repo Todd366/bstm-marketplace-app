@@ -59,7 +59,7 @@ window.BSTM.ready().then(async function (session) {
         '<div style="text-align:center;padding:40px 20px;">' +
         '<div style="font-size:48px;margin-bottom:12px;">🏪</div>' +
         '<p style="color:#6B7280;margin-bottom:20px;">You need to open a room before listing products.</p>' +
-        '<a href="open-room.html" style="background:linear-gradient(135deg,#00708E,#0A87A3);color:#fff;padding:14px 28px;border-radius:14px;font-weight:800;text-decoration:none;">Open My Room →</a></div>';
+        '<a href="open-room.html" style="background:var(--bstm-grad);color:#fff;padding:14px 28px;border-radius:14px;font-weight:800;text-decoration:none;">Open My Room →</a></div>';
     }
     return;
   }

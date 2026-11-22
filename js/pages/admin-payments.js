@@ -154,7 +154,7 @@ function queueCard(g) {
     `<div class="ap-meta">${esc(buyer)}</div>` +
     `<div class="ap-meta">${esc(shortGroupRef(g.id))} · ${n} order${n === 1 ? "" : "s"} · started ${esc(ago(g.created_at))}${g.expires_at ? " · window ends " + esc(when(g.expires_at)) : ""}</div>` +
     (g.payer_reference ? `<div class="ap-meta">Buyer's reference: <b>${esc(g.payer_reference)}</b></div>` : g.kind === "manual" ? '<div class="ap-meta">No reference sent yet.</div>' : "") +
-    (isReview && g.failure_reason ? `<div class="ap-meta" style="color:#9a3412;">Why: ${esc(g.failure_reason)}</div>` : "") +
+    (isReview && g.failure_reason ? `<div class="ap-meta" style="color:#92400E;">Why: ${esc(g.failure_reason)}</div>` : "") +
     `</div><div class="ap-amount">${esc(money(g.amount))}</div></div>` +
     '<div class="ap-actions">' +
     (canConfirm

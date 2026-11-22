@@ -11,10 +11,16 @@ function show(state) {
   });
 }
 
+// Only this app's own pages may be a post-login destination (blocks login.html?redirect=https://other-site).
+function safeRedirect(v) {
+  v = String(v || "").trim();
+  return /^[A-Za-z0-9][A-Za-z0-9._-]*\.html(\?[A-Za-z0-9=&._%~,-]*)?(#[A-Za-z0-9_-]*)?$/.test(v) ? v : "";
+}
+
 function startCountdown() {
   var n = 3;
   var el = document.getElementById("countdown");
-  var destination = localStorage.getItem("bstm_post_login_redirect") || "";
+  var destination = safeRedirect(localStorage.getItem("bstm_post_login_redirect"));
   localStorage.removeItem("bstm_post_login_redirect");
 
   var manualLink = document.getElementById("manual-continue-link");

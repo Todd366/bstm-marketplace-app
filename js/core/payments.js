@@ -30,11 +30,11 @@ export function money(n) {
 // Order-level payment state (orders.payment_status)
 export const ORDER_PAYMENT = {
   unpaid: { label: "Awaiting payment", bg: "#FEF3C7", fg: "#92400E" },
-  pending: { label: "Payment in progress", bg: "#DBEAFE", fg: "#1E40AF" },
+  pending: { label: "Payment in progress", bg: "#E0F2F6", fg: "#064A5E" },
   paid: { label: "Paid", bg: "#DCFCE7", fg: "#166534" },
   failed: { label: "Payment failed", bg: "#FEE2E2", fg: "#991B1B" },
   refunded: { label: "Refunded", bg: "#E5E7EB", fg: "#374151" },
-  review: { label: "Payment under review", bg: "#FFEDD5", fg: "#9A3412" },
+  review: { label: "Payment under review", bg: "#FEF3C7", fg: "#92400E" },
 };
 
 // True for an order that must be paid online before the seller can act on it.
