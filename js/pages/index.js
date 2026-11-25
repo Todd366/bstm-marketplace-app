@@ -4,6 +4,18 @@
 import { supabase } from "../core/supabase-client.js";
 import { escapeHtml } from "../core/sanitize.js";
 
+// First visit in this browser and not signed in: the welcome page explains the workspaces before anything else.
+// (welcome.html marks the browser as welcomed, so this happens once.)
+(async () => {
+  try {
+    if (localStorage.getItem("bstm_welcomed")) return;
+    const session = await window.BSTM.ready();
+    if (!session) window.location.replace("welcome.html");
+  } catch (e) {
+    /* storage blocked or app not ready: just show the Mall */
+  }
+})();
+
 document.addEventListener("DOMContentLoaded", () => {
   console.log("[BSTM] index.js loaded");
 

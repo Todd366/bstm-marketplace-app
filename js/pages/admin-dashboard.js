@@ -18,7 +18,7 @@ window.BSTM.ready().then(async function (session) {
   const STAFF_ROLES = ["admin", "agent", "super_admin"];
   if (!profile || !STAFF_ROLES.includes(profile.role)) {
     alert("This dashboard is restricted to administrators.");
-    window.location.href = (await window.BSTM.workspaceHome().catch(() => null)) || "buyer-dashboard.html";
+    window.location.href = (await window.BSTM.workspaceHome().catch(() => null)) || "welcome.html";
     return;
   }
 

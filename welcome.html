@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome - BSTM Digital Mall</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32.png">
+  <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+  <meta name="theme-color" content="#00708E">
+  <link href="css/tailwind.css" rel="stylesheet">
+  <link href="css/bstm-theme.css" rel="stylesheet">
+  <style>
+    * { box-sizing:border-box; }
+    .w-card { background:#fff; border:2px solid #D7E3E8; border-radius:20px; padding:22px; display:flex; flex-direction:column; gap:10px; }
+    .w-card h3 { margin:0; font-size:20px; font-weight:900; color:#122128; }
+    .w-card p { margin:0; font-size:14px; color:#4B5563; line-height:1.5; }
+    .w-btn { display:block; text-align:center; padding:13px 16px; border-radius:12px; font-weight:800; font-size:15px; text-decoration:none; min-height:44px; cursor:pointer; border:2px solid #00708E; }
+    .w-btn.primary { background:var(--bstm-grad); color:#fff; }
+    .w-btn.ghost { background:#fff; color:#00708E; }
+    .w-step { display:flex; gap:12px; align-items:flex-start; font-size:14px; color:#374151; line-height:1.5; }
+    .w-step b.n { flex:none; width:26px; height:26px; border-radius:50%; background:#E0F2F6; color:#00708E; display:flex; align-items:center; justify-content:center; font-size:13px; }
+    #staff-links a { display:block; padding:12px 14px; border:1px solid #D7E3E8; border-radius:12px; margin-top:8px; color:#122128; text-decoration:none; font-weight:700; font-size:14px; }
+  </style>
+</head>
+<body style="background:#F2F7FA;min-height:100vh;margin:0;">
+
+<header style="background:var(--bstm-grad);padding:28px 20px;text-align:center;">
+  <div style="width:56px;height:56px;background:rgba(255,255,255,0.2);border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;border:2px solid rgba(255,255,255,0.3);">
+    <span style="font-size:26px;font-weight:900;color:#fff;">B</span>
+  </div>
+  <h1 style="color:#fff;font-size:24px;font-weight:900;margin:0 0 4px;">BSTM Digital Mall</h1>
+  <p style="color:rgba(255,255,255,0.85);font-size:13px;margin:0;">Botswana's Digital Ecosystem</p>
+</header>
+
+<main style="max-width:880px;margin:0 auto;padding:28px 18px 40px;">
+  <div id="signed-in-bar" hidden style="display:none;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;background:#fff;border:1px solid #D7E3E8;border-radius:14px;padding:12px 16px;margin-bottom:20px;font-size:14px;color:#374151;">
+    <span>Signed in as <b id="who"></b></span>
+    <button type="button" id="signout" style="background:none;border:none;color:#00708E;font-weight:800;cursor:pointer;font-size:14px;min-height:44px;">Sign out</button>
+  </div>
+
+  <div id="idle-note" role="status" hidden style="background:#FEF3C7;color:#92400E;border:1px solid #FDE68A;border-radius:14px;padding:12px 16px;margin-bottom:20px;font-size:14px;font-weight:600;">You were signed out after 30 minutes without activity. Sign in again to continue.</div>
+
+  <h2 style="font-size:26px;font-weight:900;color:#122128;margin:0 0 8px;">Choose your workspace</h2>
+  <p style="font-size:15px;color:#4B5563;margin:0 0 20px;line-height:1.6;">
+    BSTM Digital Mall is made of separate workspaces. Each one has its own account, its own sign-in and its own pages:
+    what belongs to one workspace is never shown in another. You use your email address to sign in, with no password.
+  </p>
+
+  <div style="display:grid;gap:14px;margin-bottom:24px;">
+    <div class="w-step"><b class="n">1</b><span><b>Pick the workspace you need now.</b> Shopping is Buyer. Running a room in the Mall is Seller.</span></div>
+    <div class="w-step"><b class="n">2</b><span><b>Create an account in that workspace</b> (you accept the Terms and Privacy Policy), or sign in if you already have one.</span></div>
+    <div class="w-step"><b class="n">3</b><span><b>Need another workspace later?</b> Create an account there too. Once you hold both, a switch in the header moves you between them.</span></div>
+  </div>
+
+  <div id="chooser" style="display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));"></div>
+
+  <details id="staff" style="margin-top:22px;background:#fff;border:1px solid #D7E3E8;border-radius:16px;padding:14px 18px;">
+    <summary style="cursor:pointer;font-weight:800;color:#122128;font-size:15px;min-height:30px;">BSTM staff and government sign-in</summary>
+    <p style="font-size:13px;color:#4B5563;margin:10px 0 0;line-height:1.5;">Agent, Administrator and Government accounts are created by BSTM. They cannot be created here.</p>
+    <div id="staff-links"></div>
+  </details>
+
+  <p style="margin:26px 0 0;text-align:center;font-size:13px;color:#4B5563;">
+    <a href="marketplace.html" style="color:#00708E;font-weight:700;">Look around the Mall first</a> ·
+    <a href="help.html" style="color:#00708E;font-weight:700;">Help</a> ·
+    <a href="terms.html" style="color:#00708E;font-weight:700;">Terms and Privacy Policy</a>
+  </p>
+</main>
+
+<script type="module" src="js/app.js?v=1792108428"></script>
+<script type="module" src="js/pages/welcome.js?v=1792108428"></script>
+</body>
+</html>

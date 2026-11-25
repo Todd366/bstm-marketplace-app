@@ -52,6 +52,7 @@ export const WORKSPACES = {
       {
         group: "More", icon: "⋯", items: [
           { href: "analytics.html", label: "Analytics", icon: "📈" },
+          { href: "kyc-verification.html", label: "Seller Verification", icon: "🪪" },
           { href: "messages.html", label: "Messages", icon: "💬" },
           { href: "help.html", label: "Help", icon: "❓", i18n: "nav.help" },
         ],
@@ -111,7 +112,6 @@ export const PUBLIC_MENU = [
 export const ACCOUNT_MENU = [
   { href: "profile.html", label: "Profile", icon: "👤" },
   { href: "notifications-all.html", label: "Notifications", icon: "🔔" },
-  { href: "kyc-verification.html", label: "Verify Identity", icon: "🪪" },
   { href: "settings.html", label: "Settings", icon: "⚙️" },
 ];
 
@@ -122,12 +122,12 @@ export const ACCOUNT_MENU = [
 export const PAGE_WORKSPACE = {
   // buyer
   "index.html": "buyer", "marketplace.html": "buyer", "agriculture.html": "buyer", "cablink.html": "buyer",
-  "product-detail.html": ["buyer", "seller"], "room.html": ["buyer", "seller"], // a seller previewing their own room stays in Seller "checkout.html": "buyer", "order-tracking.html": "buyer",
-  "payment-status.html": "buyer", "buyer-dashboard.html": "buyer", "wishlist.html": "buyer",
-  "thb-wallet.html": ["buyer", "seller"], "transactions.html": "buyer", "ecosystem-hub.html": "buyer",
+  "product-detail.html": ["buyer", "seller"], "room.html": ["buyer", "seller"], // a seller previewing their own room stays in Seller
+  "checkout.html": "buyer", "order-tracking.html": "buyer", "payment-status.html": "buyer", "buyer-dashboard.html": "buyer", "wishlist.html": "buyer",
+  "thb-wallet.html": "buyer", "transactions.html": "buyer", "ecosystem-hub.html": "buyer",
   // seller
   "seller-dashboard.html": "seller", "upload-product.html": "seller", "counter.html": "seller",
-  "daily-sheet.html": "seller", "earnings.html": "seller", "analytics.html": "seller", "open-room.html": "seller",
+  "daily-sheet.html": "seller", "kyc-verification.html": "seller", "earnings.html": "seller", "analytics.html": "seller", "open-room.html": "seller",
   // staff
   "admin-dashboard.html": ["admin", "agent"], "admin-payments.html": "admin",
   "monitoring-dashboard.html": ["admin", "government"], "gov-dashboard.html": "admin",
@@ -141,14 +141,76 @@ export function pageFile(pathname) {
   return (f || "index.html").toLowerCase();
 }
 
-// Which workspaces this person has. Everyone signed in has Buyer.
-export function availableWorkspaces({ role, isRoomStaff } = {}) {
+// Which workspaces this person has: exactly the ones they hold an ACTIVE account in
+// (public.workspace_accounts). No account in a workspace = no way into it, no menu entry, no switch.
+export function availableWorkspaces({ accounts } = {}) {
+  const have = Array.isArray(accounts) ? accounts : [];
+  return ORDER.filter((id) => have.includes(id));
+}
+
+// ids of the ACTIVE accounts in a list of workspace_accounts rows
+export function activeIds(rows) {
+  return ORDER.filter((id) => (rows || []).some((r) => r.workspace === id && r.status === "active"));
+}
+
+// Same rule the database used before workspace accounts existed. Used ONLY if the accounts table cannot be read,
+// so a database hiccup never locks everyone out (the server still enforces what each account may do).
+export function legacyAccounts({ role, isRoomStaff } = {}) {
   const out = ["buyer"];
   if (SELLER_ROLES.includes(role) || isRoomStaff) out.push("seller");
   if (role === "agent") out.push("agent");
   if (role === "admin" || role === "super_admin") out.push("admin");
   if (role === "government") out.push("government");
-  return ORDER.filter((id) => out.includes(id));
+  return out;
+}
+
+// ---- doors: every workspace has its own way in ----
+// The version of the Terms and Privacy Policy (terms.html) that acceptance is recorded against: the "Last updated" date
+// of that page. Change it together with terms.html; everyone is then asked to accept again at their next page load.
+export const TERMS_VERSION = "2026-03-17";
+// Buyer and Seller accounts are created by the person. Agent, Admin and Government accounts are created by BSTM only.
+export const SELF_REGISTER = ["buyer", "seller"];
+
+export const DOORS = {
+  buyer: { cta: "Shop in the Mall", blurb: "Browse rooms, buy, pay and track your orders." },
+  seller: { cta: "Sell in the Mall", blurb: "Open a room, list products, take orders and see your earnings." },
+  agent: { cta: "Field agent sign-in", blurb: "For BSTM field agents." },
+  admin: { cta: "Administrator sign-in", blurb: "For BSTM administrators." },
+  government: { cta: "Government sign-in", blurb: "For government monitoring access." },
+};
+
+export function doorUrl(wsId, { mode = "login", redirect } = {}) {
+  const q = new URLSearchParams({ workspace: wsId });
+  if (mode === "register" && SELF_REGISTER.includes(wsId)) q.set("mode", "register");
+  if (redirect) q.set("redirect", redirect);
+  return "login.html?" + q.toString();
+}
+
+// Pages anyone may open whatever accounts they hold: the doors themselves, legal text, help, 404.
+export const OPEN_PAGES = ["welcome.html", "login.html", "verify.html", "terms.html", "help.html", "404.html"];
+
+// Page gate (pure). rows = this person's workspace_accounts rows, or null when they could not be read
+// (then nobody is ever locked out: the server still decides what each account may do).
+//  - a page of a workspace you hold no active account in  -> that workspace's door
+//  - a shared account page with no account at all          -> the workspace chooser
+//  - an account whose Terms acceptance is older than TERMS_VERSION -> that workspace's door (accept, then continue)
+export function gateFor({ page, rows, current, redirect }) {
+  if (!Array.isArray(rows) || OPEN_PAGES.includes(page)) return null;
+  const active = rows.filter((r) => r.status === "active");
+  const own = [].concat(PAGE_WORKSPACE[page] || []);
+  if (own.length && !own.some((id) => active.some((r) => r.workspace === id))) {
+    return { reason: "no-account", ws: own[0], to: doorUrl(own[0], { redirect }) };
+  }
+  if (!own.length && !active.length) return { reason: "no-account", ws: null, to: "welcome.html" };
+  const row = active.find((r) => r.workspace === current);
+  if (row && row.terms_version !== TERMS_VERSION) return { reason: "terms", ws: current, to: doorUrl(current, { redirect }) };
+  return null;
+}
+
+// The workspace a page belongs to; null for shared account/public pages and for pages two workspaces share (the person chooses).
+export function workspaceForPage(page) {
+  const v = [].concat(PAGE_WORKSPACE[String(page || "").toLowerCase()] || []);
+  return v.length === 1 ? v[0] : null;
 }
 
 // Default home for someone with no remembered choice: staff first, then room people, then Buyer.
@@ -226,9 +288,12 @@ export function renderWorkspaceNav(state, doc = document) {
   desktop.innerHTML = desktopHtml(items);
 
   // ---- workspace switch (desktop chip + phone menu header) ----
+  // the logo takes you home: your workspace's home when signed in, the public start page otherwise
+  const logo = doc.getElementById("nav-logo");
+  if (logo) logo.setAttribute("href", loggedIn ? ws.home : "index.html");
+
   const switchEl = doc.getElementById("ws-switch");
   const options = loggedIn ? state.available.map((id) => WORKSPACES[id]) : [];
-  const canOpenRoom = loggedIn && !state.available.includes("seller");
   let chip = "";
   let phoneHead = "";
   if (loggedIn) {
@@ -236,19 +301,15 @@ export function renderWorkspaceNav(state, doc = document) {
     const rows = others
       .map((o) => `<button type="button" class="ws-option" data-ws="${o.id}">${o.icon} ${esc(o.label)} workspace<small>${esc(o.tagline)}</small></button>`)
       .join("");
-    const open = canOpenRoom
-      ? `<a class="ws-option" href="open-room.html">➕ Start selling<small>Open your own room</small></a>`
-      : "";
-    if (others.length || canOpenRoom) {
-      chip = `<details class="nav-group ws-group"><summary class="ws-chip" aria-label="Workspace: ${esc(ws.label)}. Switch workspace">${ws.icon}<span class="ws-label"> ${esc(ws.label)}</span></summary><div class="nav-menu ws-menu"><div class="ws-current">You are in the <b>${esc(ws.label)}</b> workspace<small>${esc(ws.tagline)}</small></div>${rows}${open}</div></details>`;
+    if (others.length) {
+      chip = `<details class="nav-group ws-group"><summary class="ws-chip" aria-label="Workspace: ${esc(ws.label)}. Switch workspace">${ws.icon}<span class="ws-label"> ${esc(ws.label)}</span></summary><div class="nav-menu ws-menu"><div class="ws-current">You are in the <b>${esc(ws.label)}</b> workspace<small>${esc(ws.tagline)}</small></div>${rows}</div></details>`;
     } else {
       chip = `<span class="ws-chip ws-static" title="${esc(ws.tagline)}">${ws.icon}<span class="ws-label"> ${esc(ws.label)}</span></span>`;
     }
     const seg = options
       .map((o) => `<button type="button" class="ws-seg${o.id === ws.id ? " on" : ""}" data-ws="${o.id}" aria-pressed="${o.id === ws.id}">${o.icon} ${esc(o.label)}</button>`)
       .join("");
-    const startSelling = canOpenRoom ? `<a class="ws-start" href="open-room.html">➕ Start selling: open your own room</a>` : "";
-    phoneHead = `<div class="ws-phone"><div class="ws-phone-label">${ws.icon} ${esc(ws.label)} workspace</div>${options.length > 1 ? `<div class="ws-segs">${seg}</div>` : ""}${startSelling}</div>`;
+    phoneHead = `<div class="ws-phone"><div class="ws-phone-label">${ws.icon} ${esc(ws.label)} workspace</div>${options.length > 1 ? `<div class="ws-segs">${seg}</div>` : ""}</div>`;
   }
   if (switchEl) {
     switchEl.innerHTML = chip;
@@ -297,7 +358,7 @@ export function footerLinks(state) {
     return true;
   });
   const support = [["help.html", "Help Center"], ["terms.html", "Terms"]];
-  if (!state.session) support.push(["login.html", "Login"]);
+  if (!state.session) support.push(["welcome.html", "Sign in"]);
   return { quick, support };
 }
 

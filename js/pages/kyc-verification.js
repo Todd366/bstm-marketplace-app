@@ -139,7 +139,7 @@ window.BSTM.ready().then(async function (session) {
     alert(
       "KYC Application Submitted!\n\nYour application is under review. You'll receive an email within 24-48 hours."
     );
-    window.location.href = (await window.BSTM.workspaceHome().catch(() => null)) || "buyer-dashboard.html";
+    window.location.href = (await window.BSTM.workspaceHome().catch(() => null)) || "welcome.html";
   };
 });
 

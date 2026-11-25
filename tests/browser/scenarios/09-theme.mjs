@@ -4,13 +4,14 @@
 // or a text font other than the theme font. Status colours (green = ok, amber = warning, red = problem) and
 // neutrals are part of the theme.   THEME_REPORT=1 prints every offender instead of only failing.
 import { test, open, settle } from "../run.mjs";
-import { U, world, R, P, CART, iso } from "../fixtures.mjs";
+import { U, world, R, P, CART, iso, accountRows } from "../fixtures.mjs";
 
 const GOV = { id: "00000000-0000-4000-8000-000000000009", email: "gov@test.bw", role: "government", phone: null };
 const CATS = ["agriculture", "fresh-produce", "electronics", "fashion", "home", "vehicles", "services", "food-beverage", "catering", "retail", "car-wash"];
 
 function themedWorld() {
   const db = world();
+  db.workspace_accounts.push(...accountRows(GOV, ["government"]));
   db.profiles.push({ ...GOV, thb_balance: 0, created_at: iso(-20000), location: null, notification_prefs: null, wallet_address: null });
   CATS.forEach((c, i) => db.rooms.push({ id: `00000000-0000-4000-8000-0000000003${String(i).padStart(2, "0")}`, seller_id: U.seller.id, room_number: 10 + i, name: `Room ${c}`, description: "x", category: c, banner_emoji: "🏬", banner_color: "#00708E", status: "active", created_at: iso(-100 - i) }));
   return db;
@@ -18,11 +19,11 @@ function themedWorld() {
 
 // page, role (null = logged out), extra open options
 const PAGES = [
-  ["index.html", null], ["marketplace.html", null], ["help.html", null], ["terms.html", null], ["login.html", null], ["verify.html", null],
+  ["index.html", null], ["marketplace.html", null], ["help.html", null], ["terms.html", null], ["login.html?workspace=buyer", null], ["login.html?workspace=seller&mode=register", null, { tag: "register" }], ["login.html?workspace=admin", null, { tag: "staff door" }], ["welcome.html", null], ["verify.html", null],
   ["agriculture.html", null], ["cablink.html", null], ["ecosystem-hub.html", null], ["404.html", null],
   [`room.html?id=${R.r1}`, null], [`product-detail.html?id=${P.p1}`, null],
   ["buyer-dashboard.html", U.buyer], ["thb-wallet.html", U.buyer], ["transactions.html", U.buyer], ["wishlist.html", U.buyer], ["messages.html", U.buyer],
-  ["profile.html", U.buyer], ["settings.html", U.buyer], ["kyc-verification.html", U.buyer], ["notifications-all.html", U.buyer], ["open-room.html", U.buyer],
+  ["profile.html", U.buyer], ["settings.html", U.buyer], ["kyc-verification.html", U.seller], ["notifications-all.html", U.buyer], ["open-room.html", U.seller],
   ["checkout.html", U.buyer, { cart: CART.two }], ["order-tracking.html", U.buyer], ["payment-status.html", U.buyer],
   ["seller-dashboard.html", U.seller], ["upload-product.html", U.seller], ["earnings.html", U.seller], ["analytics.html", U.seller],
   ["admin-dashboard.html", U.admin], ["admin-payments.html", U.admin], ["admin-dashboard.html", U.agent, { tag: "agent" }], ["admin-dashboard.html", U.superAdmin, { tag: "super" }],

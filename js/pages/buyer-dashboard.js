@@ -107,8 +107,7 @@ async function render(session) {
   if (roomsGrid) {
     if (!rooms || rooms.length === 0) {
       roomsGrid.innerHTML =
-        '<p style="color:#9CA3AF;font-size:13px;">No rooms open yet — ' +
-        '<a href="open-room.html" style="color:#00708E;font-weight:700;">open the first one →</a></p>';
+        '<p style="color:#9CA3AF;font-size:13px;">No rooms are open yet.</p>';
     } else {
       roomsGrid.innerHTML = rooms
         .map(

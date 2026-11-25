@@ -5,15 +5,16 @@ import "./multi-language.js"; // registers window.MultiLanguage globally
 import "./form-validation.js"; // registers window.FormValidator globally
 import "./toast-notifications.js"; // registers window.Toast globally
 import "./core/nav-notifications.js"; // wires the real notification bell in nav.html
-import { availableWorkspaces, resolveWorkspace, homeFor, renderWorkspaceNav, renderWorkspaceFooter, pageFile, WORKSPACES } from "./core/workspaces.js";
+import { availableWorkspaces, legacyAccounts, activeIds, gateFor, doorUrl, resolveWorkspace, homeFor, renderWorkspaceNav, renderWorkspaceFooter, pageFile, WORKSPACES } from "./core/workspaces.js";
+import { WS_KEY, WS_NOW_KEY, DOOR_KEY, readStore, writeStore, fetchAccounts, activate } from "./core/door.js";
 
 // ============================================
 // BSTM APP CORE (SINGLE SOURCE OF TRUTH)
 // ============================================
 
 let currentSession = null;
-let currentRole = null; // resolved once per session, used for nav filtering
-let currentIsRoomStaff = false; // owns or works in at least one room (profiles.role stays "buyer")
+let currentRole = null; // profiles.role: used for staff pages and the Control Center only (workspaces come from accounts)
+let currentIsRoomStaff = false; // only read when the accounts table cannot be (legacy fallback)
 let isBootstrapped = false;
 let readyResolve;
 
@@ -22,62 +23,64 @@ const readyPromise = new Promise((resolve) => {
 });
 
 // ===============================
-// WORKSPACES (Buyer / Seller / Admin)
+// WORKSPACES (Buyer / Seller / Agent / Admin / Government)
 // ===============================
-// Each person works inside ONE workspace at a time: its own menu, home page and
-// pages (see js/core/workspaces.js). Everyone has Buyer; room people also have
-// Seller; staff also have Admin. A page that belongs to a workspace puts you in
-// it; shared account pages keep the workspace you were in; the choice is
-// remembered in this browser (and used for the first paint on the next visit).
-const WS_KEY = "bstm_workspace"; // remembered across visits: { uid, ws (a choice made with the switch), staff }
-const WS_NOW_KEY = "bstm_workspace_now"; // this tab only: the workspace you are working in right now
+// Each person works inside ONE workspace at a time: its own menu, home page and pages (js/core/workspaces.js).
+// A workspace exists for you only if you hold an ACTIVE ACCOUNT in it (public.workspace_accounts): each account is
+// created at that workspace's own door (js/core/door.js, login.html, welcome.html). A page that belongs to a workspace
+// puts you in it; shared account pages keep the workspace you were in; a page of a workspace you hold no account in
+// sends you to that workspace's door. The choice is remembered in this browser.
 let currentWorkspace = "buyer";
 let sessionChecked = false; // paint the menu only once we know who is signed in (no flash of the wrong menu)
-let staffKnown = false; // room membership checked yet this page load?
-let staffPromise = Promise.resolve(false);
-
-function readStore(storage, key) {
-  try {
-    return JSON.parse(storage.getItem(key) || "null") || {};
-  } catch (e) {
-    return {};
-  }
-}
-
-function writeStore(storage, key, patch) {
-  try {
-    storage.setItem(key, JSON.stringify({ ...readStore(storage, key), ...patch }));
-  } catch (e) {
-    /* storage blocked: the workspace still works for this page load */
-  }
-}
+let accountRows = null; // this person's workspace_accounts rows (null = not read / unreadable)
+let accountsOk = false; // the server read succeeded (otherwise the pre-accounts rule applies and nothing is gated)
+let accountsKnown = false; // read finished this page load (ok or not)
+let accountsPromise = Promise.resolve([]);
+let gateDone = false;
 
 function workspaceState() {
   const store = readStore(localStorage, WS_KEY);
   const now = readStore(sessionStorage, WS_NOW_KEY);
   const uid = currentSession ? currentSession.user.id : null;
   const mine = !!uid && store.uid === uid;
-  const isRoomStaff = staffKnown ? currentIsRoomStaff : !!(mine && store.staff);
-  const available = currentSession ? availableWorkspaces({ role: currentRole, isRoomStaff }) : [];
+  let ids = [];
+  if (currentSession) {
+    if (accountsKnown) ids = accountsOk ? activeIds(accountRows) : legacyAccounts({ role: currentRole, isRoomStaff: currentIsRoomStaff });
+    else ids = mine && Array.isArray(store.accounts) ? store.accounts : [];
+  }
+  const available = availableWorkspaces({ accounts: ids });
   // a page that belongs to a workspace wins; shared account pages keep the workspace you are working in
-  // (this tab), then the one you chose with the switch, then the default for your roles.
+  // (this tab), then the one you chose with the switch, then the default for your accounts.
   const stored = now.uid === uid && now.ws ? now.ws : mine ? store.ws : null;
   const current = currentSession ? resolveWorkspace({ page: pageFile(location.pathname), available, stored }) : "buyer";
-  return { session: currentSession, role: currentRole, available, current, mine, choice: mine ? store.ws : null, isRoomStaff };
+  return { session: currentSession, role: currentRole, available, current, mine, choice: mine ? store.ws : null, known: accountsKnown || (mine && Array.isArray(store.accounts)) };
 }
 
 function renderNav() {
   if (!sessionChecked) return;
   const st = workspaceState();
+  if (st.session && !st.known) return; // accounts not known yet: paint once, correctly
   currentWorkspace = st.current;
   if (st.session) {
     writeStore(sessionStorage, WS_NOW_KEY, { uid: st.session.user.id, ws: st.current });
-    if (staffKnown) writeStore(localStorage, WS_KEY, { uid: st.session.user.id, staff: st.isRoomStaff, ...(st.mine ? {} : { ws: null }) });
+    if (accountsKnown) writeStore(localStorage, WS_KEY, { uid: st.session.user.id, accounts: st.available, ...(st.mine ? {} : { ws: null }) });
   }
   renderWorkspaceFooter(st);
   if (renderWorkspaceNav(st)) {
     if (window.MultiLanguage && window.MultiLanguage.applyTranslations) window.MultiLanguage.applyTranslations();
     window.dispatchEvent(new CustomEvent("bstm:navRendered", { detail: { workspace: st.current, available: st.available } }));
+  }
+}
+
+// A person who signs in is held to the page gate once per page load (js/core/workspaces.js gateFor).
+function runGate() {
+  if (gateDone || !currentSession || !accountsKnown || !accountsOk) return;
+  const st = workspaceState();
+  const page = pageFile(location.pathname);
+  const g = gateFor({ page, rows: accountRows, current: st.current, redirect: page + location.search });
+  if (g) {
+    gateDone = true;
+    window.location.replace(g.to);
   }
 }
 
@@ -91,9 +94,8 @@ function filterNavByRole() {
     if (currentSession) {
       if (allowed.includes("auth")) visible = true;
       if (currentRole && allowed.includes(currentRole)) visible = true;
-      // Room owners and room staff keep profiles.role = "buyer" (role changes
-      // are locked), so seller tools are shown by room membership instead.
-      if (currentIsRoomStaff && allowed.includes("seller")) visible = true;
+      // seller tools are shown to people who hold a Seller account
+      if (allowed.includes("seller") && workspaceState().available.includes("seller")) visible = true;
     }
     el.style.display = visible ? "" : "none";
   });
@@ -143,8 +145,7 @@ async function resolveRole(userId) {
   return profile.role || null;
 }
 
-// True when this person owns a room or holds any room_roles row. Runs in the
-// background (never blocks BSTM.ready()) and re-applies the nav when done.
+// Legacy fallback only (accounts table unreadable): does this person own a room or hold any room_roles row?
 async function resolveRoomStaff(userId) {
   try {
     const [roles, owned] = await Promise.all([
@@ -158,25 +159,86 @@ async function resolveRoomStaff(userId) {
   }
 }
 
-function refreshRoomStaff(session) {
+// Reads this person's workspace accounts (never blocks BSTM.ready()); re-applies the nav and runs the page gate when done.
+function loadAccounts(session) {
   if (!session) {
+    accountRows = null;
+    accountsOk = false;
+    accountsKnown = true;
     currentIsRoomStaff = false;
-    staffKnown = true;
-    staffPromise = Promise.resolve(false);
-    return;
+    accountsPromise = Promise.resolve([]);
+    return accountsPromise;
   }
-  staffPromise = resolveRoomStaff(session.user.id).then((isStaff) => {
-    currentIsRoomStaff = isStaff;
-    staffKnown = true;
-    filterNavByRole();
-    return isStaff;
-  });
+  accountsKnown = false;
+  accountsPromise = fetchAccounts(supabase, session.user.id)
+    .then(async (res) => {
+      accountsOk = res.ok;
+      accountRows = res.ok ? res.rows : null;
+      if (!res.ok) {
+        console.warn("[BSTM] Workspace accounts unreadable, using the role rule:", res.error);
+        currentIsRoomStaff = await resolveRoomStaff(session.user.id);
+      }
+      accountsKnown = true;
+      if (!checkIdle()) {
+        touchActivity();
+        filterNavByRole();
+        runGate();
+      }
+      return workspaceState().available;
+    })
+    .catch((err) => {
+      console.warn("[BSTM] Accounts check failed:", err);
+      accountsKnown = true;
+      return workspaceState().available;
+    });
+  return accountsPromise;
 }
 
 // Nav is injected asynchronously by smart-loader.js and may finish
 // before or after session bootstrap — re-apply filtering whichever
 // happens second, so a role is never left unapplied by a race.
 window.addEventListener("bstm:componentLoaded", filterNavByRole);
+
+// ===============================
+// IDLE SIGN-OUT (staff workspaces)
+// ===============================
+// Agent, Admin and Government sessions end after 30 minutes without activity (privileged access should not stay
+// open on an unattended device). Buyer and Seller sessions are not timed out. Activity is shared across tabs
+// through localStorage, and checked when a page opens and once a minute.
+const IDLE_KEY = "bstm_last_active";
+const STAFF_WORKSPACES = ["agent", "admin", "government"];
+const STAFF_IDLE_MS = 30 * 60 * 1000;
+let lastWrite = 0;
+
+function touchActivity() {
+  const now = Date.now();
+  if (now - lastWrite < 15000) return;
+  lastWrite = now;
+  try {
+    localStorage.setItem(IDLE_KEY, String(now));
+  } catch (e) {
+    /* storage blocked: no shared clock, nothing to time out */
+  }
+}
+
+function checkIdle() {
+  if (!currentSession || !accountsKnown) return false;
+  if (!STAFF_WORKSPACES.includes(workspaceState().current)) return false;
+  let last = 0;
+  try {
+    last = Number(localStorage.getItem(IDLE_KEY)) || 0;
+  } catch (e) {
+    return false;
+  }
+  if (last && Date.now() - last > STAFF_IDLE_MS) {
+    window.BSTM.logout({ reason: "idle" });
+    return true;
+  }
+  return false;
+}
+
+["pointerdown", "keydown", "scroll", "touchstart"].forEach((ev) => window.addEventListener(ev, touchActivity, { passive: true }));
+setInterval(checkIdle, 60 * 1000);
 
 // ===============================
 // BOOTSTRAP SESSION
@@ -200,7 +262,7 @@ async function bootstrap() {
     requestAnimationFrame(() => updateNav(currentSession));
 
     readyResolve(currentSession);
-    refreshRoomStaff(currentSession);
+    loadAccounts(currentSession);
 
     window.dispatchEvent(
       new CustomEvent("bstm:ready", {
@@ -210,9 +272,10 @@ async function bootstrap() {
 
     // AUTH LISTENER (single source)
     supabase.auth.onAuthStateChange(async (event, session) => {
+      const changed = (session ? session.user.id : null) !== (currentSession ? currentSession.user.id : null);
       currentSession = session;
       currentRole = session ? await resolveRole(session.user.id) : null;
-      refreshRoomStaff(session);
+      if (changed || event === "SIGNED_IN") loadAccounts(session);
 
       requestAnimationFrame(() => updateNav(session));
 
@@ -269,36 +332,52 @@ window.BSTM = {
   getUser: () => currentSession?.user || null,
   isLoggedIn: () => !!currentSession,
 
-  // ---- workspaces ----
+  // ---- workspaces (one account per workspace) ----
   workspace: () => currentWorkspace,
   workspaces: () => workspaceState().available,
-  // Where this person's own workspace starts (used right after login).
+  hasWorkspace: (id) => workspaceState().available.includes(id),
+  accountsReady: () => accountsPromise,
+  refreshAccounts: () => loadAccounts(currentSession),
+  doorUrl,
+  // Where this person's own workspace starts (used right after login). No account anywhere = the chooser.
   workspaceHome: async () => {
     await readyPromise;
-    if (!currentSession) return "login.html";
-    await staffPromise;
+    if (!currentSession) return "welcome.html";
+    await accountsPromise;
+    // the page gate is already taking this person to a door: do not let a page's own fallback redirect override it
+    if (gateDone) return new Promise(() => {});
     const st = workspaceState();
-    // login lands in the workspace you last chose with the switch, otherwise your main one (staff > room > buyer)
+    if (!st.available.length) return "welcome.html";
+    // login lands in the workspace you last chose with the switch, otherwise your main one (staff > seller > buyer)
     return homeFor(resolveWorkspace({ page: "", available: st.available, stored: st.choice }));
   },
+  // Switch between workspaces you hold accounts in (never to one you do not).
   setWorkspace: (id) => {
     const st = workspaceState();
     if (!WORKSPACES[id] || !st.available.includes(id)) return false;
-    writeStore(localStorage, WS_KEY, { uid: currentSession.user.id, ws: id, staff: st.isRoomStaff });
-    writeStore(sessionStorage, WS_NOW_KEY, { uid: currentSession.user.id, ws: id });
+    activate(currentSession.user.id, id, st.available);
     window.location.href = homeFor(id);
     return true;
   },
 
-  logout: async () => {
+  logout: async (opts) => {
     try {
       await supabase.auth.signOut();
     } catch (e) {
       console.warn("[BSTM] Logout error:", e);
     }
-
+    // leave nothing of this person's workspaces behind in this browser
+    try {
+      sessionStorage.removeItem(WS_NOW_KEY);
+      localStorage.removeItem(WS_KEY);
+      localStorage.removeItem(DOOR_KEY);
+      localStorage.removeItem("bstm_post_login_redirect");
+      localStorage.removeItem(IDLE_KEY);
+    } catch (e) {
+      /* storage blocked */
+    }
     currentSession = null;
-    window.location.href = "login.html";
+    window.location.href = opts && opts.reason === "idle" ? "welcome.html?reason=idle" : "welcome.html";
   },
 };
 

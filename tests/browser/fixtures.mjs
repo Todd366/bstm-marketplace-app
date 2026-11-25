@@ -29,12 +29,21 @@ export function providers() {
   ];
 }
 
+import { TERMS_VERSION } from "../../js/core/workspaces.js";
+export { TERMS_VERSION };
+// the workspace accounts each fixture person holds (as the Stage 3 backfill gives them)
+const ACCOUNTS = { buyer: ["buyer"], buyer2: ["buyer"], seller: ["buyer", "seller"], seller2: ["buyer", "seller"], seller3: ["buyer", "seller"], admin: ["buyer", "seller", "admin"], superAdmin: ["buyer", "seller", "admin"], agent: ["agent"] };
+export function accountRows(user, workspaces, extra = {}) {
+  return workspaces.map((w) => ({ user_id: user.id, workspace: w, status: "active", registered_via: "migrated", registered_at: iso(-20000), terms_version: TERMS_VERSION, terms_accepted_at: iso(-20000), ...extra }));
+}
 export function world({ providersOff = false } = {}) {
   const prov = providers();
   if (providersOff) prov.forEach((p) => (p.enabled = false));
   const profiles = Object.values(U).map((u) => ({ ...u, thb_balance: 0, created_at: iso(-20000), location: null, notification_prefs: null, wallet_address: null }));
+  const workspace_accounts = Object.entries(ACCOUNTS).flatMap(([k, w]) => accountRows(U[k], w));
   return {
     profiles,
+    workspace_accounts,
     rooms: [
       { id: R.r1, seller_id: U.seller.id, room_number: 1, name: "Room One", description: "", category: null, banner_emoji: "🏬", banner_color: "#00708E", status: "active", created_at: iso(-9000) },
       { id: R.r2, seller_id: U.seller2.id, room_number: 2, name: "Room Two", description: "", category: null, banner_emoji: "🏬", banner_color: "#00708E", status: "active", created_at: iso(-9000) },

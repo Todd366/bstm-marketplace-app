@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login - BSTM Digital Mall</title>
+  <title>Sign in - BSTM Digital Mall</title>
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32.png">
   <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
@@ -19,58 +19,65 @@
 
 <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:40px 20px;">
   <div style="background:#fff;border-radius:28px;box-shadow:0 24px 80px rgba(0,0,0,0.2);max-width:440px;width:100%;overflow:hidden;">
-    <div style="background:var(--bstm-grad);padding:40px 32px;text-align:center;">
-      <div style="width:64px;height:64px;background:rgba(255,255,255,0.2);border-radius:18px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;border:2px solid rgba(255,255,255,0.3);">
-        <span style="font-size:28px;font-weight:900;color:#fff;">B</span>
-      </div>
-      <h1 style="color:#fff;font-size:24px;font-weight:900;margin:0 0 4px;">BSTM Digital Mall</h1>
-      <p style="color:rgba(255,255,255,0.7);font-size:13px;margin:0;">Botswana's Digital Ecosystem</p>
+    <div style="background:var(--bstm-grad);padding:32px 32px 28px;text-align:center;">
+      <div id="door-icon" style="width:64px;height:64px;background:rgba(255,255,255,0.2);border-radius:18px;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;border:2px solid rgba(255,255,255,0.3);font-size:30px;color:#fff;font-weight:900;">B</div>
+      <h1 id="door-name" style="color:#fff;font-size:24px;font-weight:900;margin:0 0 4px;">BSTM Digital Mall</h1>
+      <p id="door-tagline" style="color:rgba(255,255,255,0.85);font-size:13px;margin:0;">Botswana's Digital Ecosystem</p>
     </div>
-    <div style="padding:36px 32px;">
-      <h2 style="font-size:22px;font-weight:900;color:#122128;margin:0 0 6px;text-align:center;">Welcome Back</h2>
-      <p style="color:#9CA3AF;font-size:14px;text-align:center;margin:0 0 28px;">Enter your email to receive a magic login link</p>
-      <div id="status" style="display:none;padding:14px 16px;border-radius:14px;font-size:13px;font-weight:600;margin-bottom:20px;"></div>
-      <form id="login-form">
-        <label style="display:block;font-size:12px;font-weight:700;color:#374151;margin-bottom:6px;letter-spacing:0.5px;">EMAIL ADDRESS</label>
-        <input type="email" id="email-input" placeholder="you@example.com" required
-          style="width:100%;padding:14px 16px;border:2px solid #D7E3E8;border-radius:14px;font-size:15px;color:#122128;margin-bottom:20px;transition:border 0.2s;outline:none;"
+    <div style="padding:28px 32px 32px;">
+      <div id="tabs" role="tablist" style="display:none;gap:8px;margin-bottom:22px;background:#F2F7FA;border-radius:14px;padding:4px;">
+        <button type="button" role="tab" id="tab-login" style="flex:1;padding:11px;border:none;border-radius:11px;font-weight:800;font-size:14px;cursor:pointer;min-height:44px;">Sign in</button>
+        <button type="button" role="tab" id="tab-register" style="flex:1;padding:11px;border:none;border-radius:11px;font-weight:800;font-size:14px;cursor:pointer;min-height:44px;">Create account</button>
+      </div>
+      <h2 id="door-title" style="font-size:22px;font-weight:900;color:#122128;margin:0 0 6px;text-align:center;"></h2>
+      <p id="door-sub" style="color:#4B5563;font-size:14px;text-align:center;margin:0 0 22px;line-height:1.5;"></p>
+      <div id="status" role="status" style="display:none;padding:14px 16px;border-radius:14px;font-size:13px;font-weight:600;margin-bottom:20px;"></div>
+
+      <form id="login-form" style="display:none;">
+        <label for="email-input" style="display:block;font-size:12px;font-weight:700;color:#374151;margin-bottom:6px;letter-spacing:0.5px;">EMAIL ADDRESS</label>
+        <input type="email" id="email-input" placeholder="you@example.com" required autocomplete="email"
+          style="width:100%;padding:14px 16px;border:2px solid #D7E3E8;border-radius:14px;font-size:15px;color:#122128;margin-bottom:16px;transition:border 0.2s;outline:none;"
           onfocus="this.style.borderColor='#00708E'" onblur="this.style.borderColor='#D7E3E8'">
+        <label id="terms-row" style="display:none;align-items:flex-start;gap:10px;font-size:13px;color:#374151;line-height:1.5;margin-bottom:16px;cursor:pointer;">
+          <input type="checkbox" id="terms-check" style="width:20px;height:20px;margin-top:1px;flex:none;">
+          <span>I have read and accept the <a href="terms.html" target="_blank" rel="noopener" style="color:#00708E;font-weight:700;">Terms and Privacy Policy</a>.</span>
+        </label>
         <button type="submit" id="submit-btn"
           style="width:100%;padding:16px;background:var(--bstm-grad);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:800;cursor:pointer;box-shadow:0 6px 20px rgba(0,112,142,0.35);">
-          ✨ Send Magic Link
+          Send sign-in link
         </button>
       </form>
-      <div style="margin-top:24px;padding:16px;background:#F2F7FA;border-radius:14px;border:1px solid #D7E3E8;">
-        <p style="font-size:12px;color:#9CA3AF;text-align:center;margin:0;line-height:1.6;">
-          🔐 Passwordless login · Link expires in 15 minutes<br>
-          Check spam folder if you do not see it
+
+      <div id="panel-sent" style="display:none;text-align:center;">
+        <p id="sent-text" style="font-size:14px;color:#374151;line-height:1.6;margin:0 0 14px;"></p>
+        <button type="button" id="sent-again" style="background:none;border:none;color:#00708E;font-weight:800;cursor:pointer;font-size:14px;min-height:44px;">Use a different email</button>
+      </div>
+
+      <div id="panel-action" style="display:none;">
+        <label id="act-terms-row" style="display:none;align-items:flex-start;gap:10px;font-size:13px;color:#374151;line-height:1.5;margin-bottom:16px;cursor:pointer;">
+          <input type="checkbox" id="act-terms-check" style="width:20px;height:20px;margin-top:1px;flex:none;">
+          <span>I have read and accept the <a href="terms.html" target="_blank" rel="noopener" style="color:#00708E;font-weight:700;">Terms and Privacy Policy</a>.</span>
+        </label>
+        <button type="button" id="act-btn"
+          style="width:100%;padding:16px;background:var(--bstm-grad);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:800;cursor:pointer;box-shadow:0 6px 20px rgba(0,112,142,0.35);"></button>
+      </div>
+
+      <div id="door-note" style="margin-top:22px;padding:14px 16px;background:#F2F7FA;border-radius:14px;border:1px solid #D7E3E8;">
+        <p style="font-size:12px;color:#4B5563;text-align:center;margin:0;line-height:1.6;">
+          Passwordless sign-in · The link expires in 15 minutes<br>
+          Check your spam folder if you do not see it
         </p>
       </div>
-      <div style="margin-top:20px;text-align:center;">
-        <a href="index.html" style="font-size:13px;color:#9CA3AF;text-decoration:none;"><i class="fas fa-arrow-left mr-1"></i> Back to Mall</a>
+      <div style="margin-top:18px;text-align:center;font-size:13px;line-height:2;">
+        <a href="welcome.html" id="other-ws" style="color:#00708E;font-weight:700;text-decoration:none;">Choose a different workspace</a>
+        <span id="signout-wrap" style="display:none;"> · <button type="button" id="signout-link" style="background:none;border:none;color:#00708E;font-weight:700;cursor:pointer;font-size:13px;padding:0;">Sign out</button></span>
       </div>
     </div>
   </div>
 </div>
 
-
 <script type="module" src="js/app.js?v=1792108428"></script>
 <script type="module" src="js/pages/login.js?v=1792108428"></script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 </body>
 

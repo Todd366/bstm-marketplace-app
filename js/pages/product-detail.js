@@ -216,7 +216,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     wishBtn.addEventListener("click", async function () {
       const session = await window.BSTM.ready();
       if (!session) {
-        window.location.href = "login.html?redirect=" + encodeURIComponent(window.location.href);
+        window.location.href = "login.html?workspace=buyer&redirect=" + encodeURIComponent(window.location.pathname.split("/").pop() + window.location.search);
         return;
       }
 
@@ -269,7 +269,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     chatBtn.addEventListener("click", async function () {
       const session = await window.BSTM.ready();
       if (!session) {
-        window.location.href = "login.html?redirect=" + encodeURIComponent(window.location.href);
+        window.location.href = "login.html?workspace=buyer&redirect=" + encodeURIComponent(window.location.pathname.split("/").pop() + window.location.search);
         return;
       }
       if (!p.seller_id) {

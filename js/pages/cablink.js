@@ -69,7 +69,7 @@ window.BSTM.ready().then(async function (session) {
     const listEl = document.getElementById("task-list");
     if (listEl)
       listEl.innerHTML =
-        '<p class="text-gray-500 text-sm"><a href="login.html?redirect=cablink.html" class="text-brand-600 font-semibold">Log in</a> to see your delivery tasks.</p>';
+        '<p class="text-gray-500 text-sm"><a href="login.html?workspace=buyer&redirect=cablink.html" class="text-brand-600 font-semibold">Log in</a> to see your delivery tasks.</p>';
     return;
   }
 

@@ -86,6 +86,7 @@ class Q {
   async _run() {
     const id = W.__LOG.length;
     try {
+      if (this.T === "workspace_accounts" && this.kind === "select" && (W.__SCEN || {}).accountsDown) return { data: null, error: { message: "accounts down (scenario)" }, count: null, status: 500 };
       const r = this.kind === "rpc" ? await this._rpc() : this._exec();
       W.__LOG.push({ kind: this.kind, T: this.T, args: this.args, filters: this.f, ok: !r.error }); save(); return r;
     } catch (e) {
@@ -154,10 +155,11 @@ export function createClient(url, key) {
     from: (T) => ({ select: (s, o) => new Q("select", T).select(s, o), insert: (o) => new Q("insert", T, o), update: (o) => new Q("update", T, o), upsert: (o) => new Q("upsert", T, o), delete: () => new Q("delete", T) }),
     rpc: (n, a) => new Q("rpc", n, a),
     auth: {
-      getSession: async () => ({ data: { session: W.__SESSION || null }, error: null }),
-      getUser: async () => ({ data: { user: (W.__SESSION || {}).user || null }, error: null }),
+      getSession: async () => ({ data: { session: (!sessionStorage.getItem("__SIGNED_OUT") && W.__SESSION) || null }, error: null }),
+      getUser: async () => ({ data: { user: (!sessionStorage.getItem("__SIGNED_OUT") && (W.__SESSION || {}).user) || null }, error: null }),
+      signInWithOtp: async (a) => { const l = JSON.parse(sessionStorage.getItem("__OTP") || "[]"); l.push(a); sessionStorage.setItem("__OTP", JSON.stringify(l)); return { data: {}, error: null }; },
       onAuthStateChange: () => ({ data: { subscription: { unsubscribe() {} } } }),
-      signOut: async () => { W.__SESSION = null; return { error: null }; },
+      signOut: async () => { W.__SESSION = null; sessionStorage.setItem("__SIGNED_OUT", "1"); return { error: null }; },
       signInWithPassword: async () => ({ data: null, error: perr("stub", "signIn not supported in harness") }),
     },
     functions: { invoke: async (name, opt) => { const h = (W.__FN || {})[name]; W.__LOG.push({ kind: "fn", T: name, args: opt && opt.body }); save(); if (!h) { viol("function not stubbed: " + name); return { data: null, error: { message: "stub: no function " + name } }; } return await h(opt && opt.body); } },

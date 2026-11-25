@@ -102,6 +102,21 @@
   // ---- database functions (RPC) ----
   const need = (c, m) => { if (!c) throw serr(m); };
   W.__RPC = {
+    register_workspace({ p_workspace, p_terms_version }) {
+      need(me(), "Sign in first");
+      need(["buyer", "seller"].includes(p_workspace), "Accounts for this workspace are created by BSTM");
+      need(String(p_terms_version || "").trim(), "You must accept the Terms and Privacy Policy");
+      const t = T("workspace_accounts"); let r = t.find((x) => x.user_id === me().id && x.workspace === p_workspace);
+      if (r) { need(r.status === "active", "This account is suspended"); r.terms_version = String(p_terms_version).trim(); r.terms_accepted_at = new Date().toISOString(); }
+      else { r = { user_id: me().id, workspace: p_workspace, status: "active", registered_via: "self", registered_at: new Date().toISOString(), terms_version: String(p_terms_version).trim(), terms_accepted_at: new Date().toISOString() }; t.push(r); }
+      persist(); return r;
+    },
+    accept_terms({ p_workspace, p_terms_version }) {
+      need(me(), "Sign in first");
+      need(String(p_terms_version || "").trim(), "You must accept the Terms and Privacy Policy");
+      const r = T("workspace_accounts").find((x) => x.user_id === me().id && x.workspace === p_workspace && x.status === "active"); need(r, "No active " + p_workspace + " account");
+      r.terms_version = String(p_terms_version).trim(); r.terms_accepted_at = new Date().toISOString(); persist(); return r;
+    },
     decrement_product_stock({ p_product_id, p_qty }) {
       const p = T("products").find((x) => x.id === p_product_id);
       if (!p) return true;

@@ -1,12 +1,12 @@
 import { test, open, settle } from "../run.mjs";
-import { U, R, world } from "../fixtures.mjs";
+import { U, R, world, accountRows } from "../fixtures.mjs";
 
 // Five workspaces (Buyer, Seller, Agent, Admin, Government): each has its own menu, home page and pages.
 // js/core/workspaces.js is the single definition; these scenarios drive the real pages.
 
 const GOV = { id: "00000000-0000-4000-8000-000000000009", email: "gov@test.bw", role: "government", phone: null };
-const staffBuyer = () => { const db = world(); db.room_roles.push({ id: "rr-1", room_id: R.r1, user_id: U.buyer.id, role_id: "EMPLOYEE" }); return db; };
-const govWorld = () => { const db = world(); db.profiles.push({ ...GOV, thb_balance: 0, created_at: "2026-01-01T00:00:00Z", location: null, notification_prefs: null, wallet_address: null }); return db; };
+const staffBuyer = () => { const db = world(); db.workspace_accounts.push(...accountRows(U.buyer, ["seller"])); db.room_roles.push({ id: "rr-1", room_id: R.r1, user_id: U.buyer.id, role_id: "EMPLOYEE" }); return db; };
+const govWorld = () => { const db = world(); db.workspace_accounts.push(...accountRows(GOV, ["government"])); db.profiles.push({ ...GOV, thb_balance: 0, created_at: "2026-01-01T00:00:00Z", location: null, notification_prefs: null, wallet_address: null }); return db; };
 
 const top = (page) =>
   page.locator("#desktop-nav > a, #desktop-nav > details").evaluateAll((els) =>
@@ -37,9 +37,7 @@ test("workspaces: a buyer has only the Buyer workspace; no seller or admin page 
   t.eq(await chip(page), "🛍️ Buyer", "chip");
   t.eq(await top(page), ["Mall", "Farm", "CabLink", "My Orders", "Wallet", "Cart", "More"].map((x) => x).map((x) => (x === "Mall" ? "Marketplace" : x === "Wallet" ? "THB Wallet" : x)), "buyer menu");
   for (const h of [...ADMIN_ONLY, ...SELLER_ONLY]) t.eq(await count(page, `#desktop-nav a[href="${h}"], #mobile-menu a[href="${h}"]`), 0, `${h} not in the buyer's menus`);
-  await page.click("#ws-switch summary");
-  t.eq(await page.locator("#ws-switch .ws-option[href='open-room.html']").isVisible(), true, "a buyer is offered 'Start selling'");
-  t.eq(await count(page, "#ws-switch .ws-option[data-ws]"), 0, "no other workspace to switch to");
+  t.eq(await count(page, "#ws-switch summary"), 0, "one account = nothing to switch to");
 });
 
 test("workspaces: a seller works in a Seller workspace with no buyer clutter, and switches to Buyer and back", async (t) => {
@@ -48,7 +46,7 @@ test("workspaces: a seller works in a Seller workspace with no buyer clutter, an
   t.eq(await where(page), "seller", "workspace");
   t.eq(await chip(page), "🏪 Seller", "chip");
   t.eq(await top(page), ["My Room", "Add Product", "Counter Sale", "Daily Sheet", "Earnings", "More"], "seller menu");
-  t.eq(await inMore(page), ["Analytics", "Messages", "Help"], "More group");
+  t.eq(await inMore(page), ["Analytics", "Seller Verification", "Messages", "Help"], "More group");
   for (const h of ["checkout.html", "thb-wallet.html", "wishlist.html", "cablink.html", ...ADMIN_ONLY]) t.eq(await count(page, `#desktop-nav a[href="${h}"]`), 0, `${h} is not in the Seller menu`);
   await page.click("#ws-switch summary");
   await page.click("#ws-switch .ws-option[data-ws='buyer']");
@@ -83,8 +81,8 @@ test("workspaces: an agent has an Agent workspace with only the agent desk", asy
   t.eq(await where(page), "agent", "workspace");
   t.eq(await top(page), ["Agent Desk", "Messages", "Help"], "agent menu");
   for (const h of ["admin-payments.html", "gov-dashboard.html", "monitoring-dashboard.html"]) t.eq(await count(page, `#desktop-nav a[href="${h}"], #mobile-menu a[href="${h}"]`), 0, `${h} not shown to an agent`);
-  await page.click("#ws-switch summary");
-  t.eq(await page.locator("#ws-switch .ws-option[data-ws='buyer']").isVisible(), true, "an agent can still switch to Buyer");
+  t.eq(await count(page, "#ws-switch summary"), 0, "an agent holds one account: no switch");
+  t.eq(await count(page, "#desktop-nav a[href='marketplace.html'], #desktop-nav a[href='checkout.html']"), 0, "no Mall or Cart in the Agent workspace");
 });
 
 for (const [label, user, withControl] of [["admin", U.admin, false], ["super_admin", U.superAdmin, true]]) {
@@ -120,7 +118,7 @@ test("workspaces: login home for every kind of person", async (t) => {
 });
 
 test("workspaces: signing in sends a seller straight to the Seller workspace", async (t) => {
-  const page = await open(t, "/login.html", { user: U.seller, db: world() });
+  const page = await open(t, "/login.html?workspace=seller", { user: U.seller, db: world() });
   await page.waitForURL(/seller-dashboard\.html/, { timeout: 10000 });
   t.ok(true, "redirected to seller-dashboard.html");
 });
@@ -180,7 +178,7 @@ test("workspaces: the user menu holds only personal pages (no workspace pages)",
   const page = await open(t, "/seller-dashboard.html", { user: U.seller, db: world() });
   await ready(page, 1000);
   const hrefs = await page.locator("#nav-user-dropdown a").evaluateAll((els) => els.map((e) => e.getAttribute("href")));
-  t.eq(hrefs, ["profile.html", "settings.html", "notifications-all.html", "kyc-verification.html"], "personal pages only");
+  t.eq(hrefs, ["profile.html", "settings.html", "notifications-all.html"], "personal pages only");
 });
 
 test("workspaces: the workspace you choose with the switch is where the next login starts", async (t) => {
@@ -216,7 +214,7 @@ const footer = (page) => page.locator("#footer-quick-links a, #footer-support-li
 test("workspaces: the footer follows the workspace (no Seller Dashboard for a buyer, no Buyer Dashboard for a seller, no Login once signed in)", async (t) => {
   let page = await open(t, "/marketplace.html", { user: null, db: world() });
   await page.waitForSelector("#footer-support-links a"); await settle(page, 500);
-  t.eq(await footer(page), ["index.html", "marketplace.html", "agriculture.html", "ecosystem-hub.html", "help.html", "terms.html", "login.html"], "logged out");
+  t.eq(await footer(page), ["index.html", "marketplace.html", "agriculture.html", "ecosystem-hub.html", "help.html", "terms.html", "welcome.html"], "logged out");
   page = await open(t, "/marketplace.html", { user: U.buyer, db: world() });
   await page.waitForSelector("#footer-support-links a"); await settle(page, 900);
   t.eq(await footer(page), ["index.html", "marketplace.html", "buyer-dashboard.html", "thb-wallet.html", "ecosystem-hub.html", "help.html", "terms.html"], "buyer");

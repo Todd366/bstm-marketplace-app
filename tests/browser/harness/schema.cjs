@@ -6,6 +6,7 @@ orders:"id buyer_id product_id status created_at total_amount delivery_name deli
 reviews:"id product_id order_id buyer_id rating comment created_at",
 messages:"id conversation_id sender_id body created_at",
 products:"id name price image seller_id created_at description category condition quantity location status room_id product_type shelf",
+workspace_accounts:"user_id workspace status registered_via registered_at terms_version terms_accepted_at",
 profiles:"id email role thb_balance created_at phone location notification_prefs wallet_address",
 wishlist:"user_id product_id created_at",
 referrals:"id referrer_id referee_id code created_at",

@@ -70,28 +70,23 @@ export async function requireRole(allowedRoles, redirectTo = "buyer-dashboard.ht
   return { session, profile };
 }
 
-// Seller-tool pages (seller-dashboard, analytics, earnings, upload-product)
-// need to admit room staff too — an employee added via add_room_employee
-// keeps profiles.role = "buyer" but should still reach these pages.
-// Returns { session, profile } on success, or null after redirecting away.
-export async function requireSellerAccess(redirectTo = "buyer-dashboard.html") {
+// Seller-tool pages (seller-dashboard, analytics, earnings, upload-product) belong to the Seller workspace: you need
+// an active Seller ACCOUNT (created at the Seller door; room employees and owners have one). Anyone else is sent to the
+// Seller door, where they can sign in or create that account. Returns { session, profile } or null after redirecting.
+export async function requireSellerAccess() {
+  const page = window.location.pathname.split("/").pop() + window.location.search;
   const session = await window.BSTM.ready();
   if (!session) {
-    window.location.href = "login.html?redirect=" + encodeURIComponent(window.location.pathname);
+    window.location.href = window.BSTM.doorUrl("seller", { redirect: page });
+    return null;
+  }
+  await window.BSTM.accountsReady();
+  if (!window.BSTM.hasWorkspace("seller")) {
+    window.location.href = window.BSTM.doorUrl("seller", { redirect: page });
     return null;
   }
   const { data: profile } = await getProfile(session.user.id);
-  const role = profile?.role || "buyer";
-  if (["seller", "admin", "super_admin"].includes(role)) return { session, profile };
-
-  const { count } = await supabase
-    .from("room_roles")
-    .select("room_id", { count: "exact", head: true })
-    .eq("user_id", session.user.id);
-  if ((count || 0) > 0) return { session, profile };
-
-  window.location.href = redirectTo;
-  return null;
+  return { session, profile };
 }
 // Live columns: id, name, price, image, seller_id, created_at
 // ============================================

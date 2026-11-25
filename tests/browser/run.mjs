@@ -57,7 +57,7 @@ export async function open(t, pathAndQuery, opts = {}) {
   const ctx = await browser.newContext({ serviceWorkers: "block", viewport: { width: 1280, height: 900 } });
   const db = opts.db || world();
   const session = opts.user === undefined ? null : opts.user === null ? null : sessionFor(opts.user);
-  const boot = { SCHEMA, FK, db, session, scen: opts.scen || {}, cart: opts.cart || null, local: opts.local || {} };
+  const boot = { SCHEMA, FK, db, session, scen: opts.scen || {}, cart: opts.cart || null, local: { bstm_welcomed: "1", ...(opts.local || {}) } };
   await ctx.addInitScript(({ SCHEMA, FK, db, session, scen, cart, local }) => {
     window.__SCHEMA = SCHEMA; window.__FK = FK; window.__DB_INIT = db; window.__SESSION = session;
     try {
